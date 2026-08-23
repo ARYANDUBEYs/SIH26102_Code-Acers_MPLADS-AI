@@ -1,6 +1,13 @@
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python
 __pycache__/
 *.py[cod]
-*.class
+*$py.class
 .env
 .venv
 env/
