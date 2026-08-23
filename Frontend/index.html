@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPLADS-AI | Ministry of Statistics & Programme Implementation (MoSPI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#0ea5e9',
+                            900: '#0c4a6e',
+                            dark: '#0B1120',
+                            card: '#111827',
+                            border: '#1F2937'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#090D16] text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- TOP NAVBAR -->
+    <header class="bg-[#0F172A]/90 backdrop-blur border-b border-slate-800 sticky top-0 z-50 px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('landing')">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-lg shadow-lg shadow-sky-500/20">
+                AI
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                    MPLADS-AI <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">MoSPI Intelligence</span>
+                </h1>
+                <p class="text-xs text-slate-400">Ministry of Statistics & Programme Implementation</p>
+            </div>
+        </div>
+
+        <nav class="hidden md:flex items-center space-x-1">
+            <button onclick="switchView('landing')" class="nav-link active px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Landing</button>
+            <button onclick="switchView('admin-dashboard')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">MoSPI Admin</button>
+            <button onclick="switchView('map-view')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">India Risk Map</button>
+            <button onclick="switchView('risk-queue')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">High-Risk Queue</button>
+            <button onclick="switchView('forensics')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Image Forensics</button>
+            <button onclick="switchView('cartel')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Cartel Matrix</button>
+            <button onclick="switchView('citizen-portal')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Citizen Portal</button>
+        </nav>
+
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Backend: <span id="backend-status">Connecting...</span>
+            </div>
+            <button onclick="openLoginModal()" class="px-4 py-1.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-semibold rounded-lg shadow-md shadow-sky-500/20 transition">
+                SPOC Login
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
+
+        <!-- 1. LANDING PAGE VIEW -->
+        <section id="view-landing" class="view-section space-y-12">
+            <div class="text-center space-y-6 py-12 max-w-3xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-semibold">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> Smart India Hackathon 2026 | PS SIH26102
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                    AI-Powered <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-300 to-purple-400">MPLADS Monitoring</span> & Fraud Prevention
+                </h2>
+                <p class="text-slate-400 text-base md:text-lg leading-relaxed">
+                    An intelligent governance platform providing automated anomaly detection, duplicate image forensics, contractor cartel analysis, and public transparency for the ₹2,500+ Cr MPLAD Scheme.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <button onclick="switchView('admin-dashboard')" class="px-6 py-3 bg-sky-500 hover:bg-sky-400 text-white font-semibold rounded-xl shadow-lg shadow-sky-500/25 flex items-center gap-2 transition">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Explore MoSPI Dashboard
+                    </button>
+                    <button onclick="switchView('forensics')" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl border border-slate-700 flex items-center gap-2 transition">
+                        <i data-lucide="image" class="w-5 h-5"></i> Try Image Forensics Demo
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-[#0F172A] border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-sky-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400"><i data-lucide="radar" class="w-6 h-6"></i></div>
+                    <h3 class="text-lg font-bold text-white">Multi-Factor Risk Scoring</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Calculates normalized 0-100 Composite Risk Indices by correlating financial disbursements with ground milestone completion percentages.</p>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-sky-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400"><i data-lucide="copy-check" class="w-6 h-6"></i></div>
+                    <h3 class="text-lg font-bold text-white">Dual-Stage Photo Forensics</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Employs perceptual gradient hashing and color feature vectors to uncover duplicate and recycled site photographs across different fund claims.</p>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-sky-500/50 transition">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400"><i data-lucide="network" class="w-6 h-6"></i></div>
+                    <h3 class="text-lg font-bold text-white">Cartel & Collusion Matrix</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Bipartite network graphs identify contractor monopolies, shared bidding rings, and tender concentration beyond statutory thresholds.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MOSPI ADMIN DASHBOARD VIEW -->
+        <section id="view-admin-dashboard" class="view-section hidden space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Projects</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">12,482</h4>
+                        <p class="text-xs text-emerald-400 flex items-center mt-1"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +18% from last year</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center"><i data-lucide="folder-kanban" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Sanctioned</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">₹2,486 Cr</h4>
+                        <p class="text-xs text-emerald-400 flex items-center mt-1"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> 92% fund utilization</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center"><i data-lucide="indian-rupee" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Anomalies Flagged</p>
+                        <h4 class="text-2xl font-bold text-amber-400 mt-1">183</h4>
+                        <p class="text-xs text-amber-400/80 flex items-center mt-1"><i data-lucide="alert-triangle" class="w-3 h-3 mr-1"></i> Auto-held for review</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center"><i data-lucide="alert-circle" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">High-Risk Projects</p>
+                        <h4 class="text-2xl font-bold text-red-400 mt-1">96</h4>
+                        <p class="text-xs text-red-400/80 flex items-center mt-1"><i data-lucide="shield-alert" class="w-3 h-3 mr-1"></i> Critical SLA delay</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center"><i data-lucide="siren" class="w-6 h-6"></i></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl space-y-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-4 h-4 text-sky-400"></i> Monthly Anomaly Trends</h3>
+                    <div class="h-64"><canvas id="anomalyTrendChart"></canvas></div>
+                </div>
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl space-y-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="pie-chart" class="w-4 h-4 text-purple-400"></i> Anomaly Category Distribution</h3>
+                    <div class="h-64"><canvas id="anomalyCategoryChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. INDIA RISK MAP VIEW -->
+        <section id="view-map-view" class="view-section hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-white">India District Risk GIS Map</h2>
+                    <p class="text-xs text-slate-400">Geospatial anomaly clustering across Indian Parliamentary Constituencies</p>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-medium">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> Low Risk (0-30)</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500"></span> Medium Risk (31-60)</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500"></span> Critical Risk (>60)</span>
+                </div>
+            </div>
+            <div class="bg-[#0F172A] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                <div id="indiaMap" class="h-[500px] w-full"></div>
+            </div>
+        </section>
+
+        <!-- 4. HIGH-RISK PROJECT QUEUE -->
+        <section id="view-risk-queue" class="view-section hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-white">High-Risk Priority Queue</h2>
+                    <p class="text-xs text-slate-400">Projects flagged by the AI engine requiring District Officer pre-screening</p>
+                </div>
+            </div>
+
+            <div class="bg-[#0F172A] border border-slate-800 rounded-xl overflow-hidden">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-900/80 text-slate-400 border-b border-slate-800 uppercase tracking-wider font-semibold">
+                        <tr>
+                            <th class="p-3.5">Project ID</th>
+                            <th class="p-3.5">Title</th>
+                            <th class="p-3.5">District</th>
+                            <th class="p-3.5">Sanctioned</th>
+                            <th class="p-3.5">AI Risk Score</th>
+                            <th class="p-3.5">Primary Anomaly</th>
+                            <th class="p-3.5">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="risk-table-body" class="divide-y divide-slate-800">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5. IMAGE FORENSICS VIEW -->
+        <section id="view-forensics" class="view-section hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-white">AI Image Evidence & Forensics Engine</h2>
+                <p class="text-xs text-slate-400">Detect duplicate re-used site photographs and verify GPS EXIF geo-boundaries</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl space-y-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="scan" class="w-4 h-4 text-sky-400"></i> Side-by-Side Photographic Verification</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border border-dashed border-slate-700 rounded-xl p-3 text-center bg-slate-900/50 space-y-2">
+                            <p class="text-xs font-semibold text-slate-300">Uploaded Photo (Current Claim)</p>
+                            <img src="https://images.unsplash.com/photo-1590496793929-36417d3117de?w=400" class="w-full h-36 object-cover rounded-lg">
+                            <p class="text-[11px] text-slate-400">Project: MPLAD-26-1021</p>
+                        </div>
+                        <div class="border border-dashed border-slate-700 rounded-xl p-3 text-center bg-slate-900/50 space-y-2">
+                            <p class="text-xs font-semibold text-slate-300">Matched Repository Photo (2025)</p>
+                            <img src="https://images.unsplash.com/photo-1590496793929-36417d3117de?w=400" class="w-full h-36 object-cover rounded-lg border-2 border-red-500/50">
+                            <p class="text-[11px] text-red-400 font-semibold">Project: MPLAD-25-7789</p>
+                        </div>
+                    </div>
+                    <button onclick="runForensicsDemo()" class="w-full py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition">
+                        <i data-lucide="cpu" class="w-4 h-4"></i> Run AI Forensic Feature Match
+                    </button>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 p-5 rounded-xl space-y-4 flex flex-col justify-between">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> AI Forensic Audit Verdict</h3>
+                    <div id="forensics-verdict-box" class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-400">Visual Fingerprint Similarity:</span>
+                            <span class="text-sm font-bold text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded">96.4% MATCH</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-400">GPS Boundary Deviation:</span>
+                            <span class="text-sm font-semibold text-emerald-400">24.8 meters (Valid)</span>
+                        </div>
+                        <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-xs text-red-300 font-medium leading-relaxed">
+                            🚨 <b>CRITICAL FRAUD SIGNAL:</b> Exact visual hash matches a previously completed road project in Nandurbar from 2025. Recommended: Immediate site physical audit.
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-800 flex gap-3">
+                        <button class="flex-1 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 font-semibold text-xs rounded-lg border border-red-500/30">Disallow Claim</button>
+                        <button class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-lg border border-slate-700">Download Audit PDF</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CARTEL MATRIX VIEW -->
+        <section id="view-cartel" class="view-section hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Contractor Cartel & Monopoly Matrix</h2>
+                    <p class="text-xs text-slate-400">Graph network analysis uncovering vendor collusion and local tender monopolies</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Select District:</span>
+                    <select id="cartel-district-select" onchange="loadCartelData()" class="bg-slate-900 border border-slate-700 text-white text-xs rounded-lg px-3 py-1.5 focus:outline-none">
+                        <option value="Nandurbar">Nandurbar (Maharashtra)</option>
+                        <option value="Gaya">Gaya (Bihar)</option>
+                        <option value="Barmer">Barmer (Rajasthan)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-[#0F172A] border border-slate-800 rounded-xl p-4 shadow-xl">
+                    <div id="cartelNetwork" class="h-[480px] w-full bg-slate-950/40 rounded-lg"></div>
+                </div>
+
+                <div class="bg-[#0F172A] border border-slate-800 rounded-xl p-5 space-y-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2"><i data-lucide="alert-octagon" class="w-4 h-4 text-red-400"></i> Monopoly Risk Alerts</h3>
+                    <div id="monopoly-list" class="space-y-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. CITIZEN PORTAL VIEW -->
+        <section id="view-citizen-portal" class="view-section hidden space-y-6">
+            <div class="max-w-2xl mx-auto bg-[#0F172A] border border-slate-800 p-6 rounded-2xl space-y-5 shadow-2xl">
+                <div class="border-b border-slate-800 pb-4">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2"><i data-lucide="camera" class="w-5 h-5 text-sky-400"></i> Citizen Project Feedback & Geo-Report</h2>
+                    <p class="text-xs text-slate-400">Submit real-time geo-tagged photographic evidence of MPLADS ground work</p>
+                </div>
+
+                <form onsubmit="handleCitizenSubmit(event)" class="space-y-4 text-xs">
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Project ID or Scheme Name</label>
+                        <input type="text" required placeholder="e.g. MPLAD-26-1021" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:border-sky-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Upload Site Photograph (Geo-Tagged)</label>
+                        <input type="file" accept="image/*" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-400 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-sky-500 file:text-white">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Observations / Issue Description</label>
+                        <textarea rows="3" placeholder="Describe ground observations..." class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:border-sky-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-sky-500/20 transition">
+                        Submit Citizen Grievance
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-[#0F172A]/50 py-4 px-6 text-center text-xs text-slate-500">
+        MPLADS-AI Intelligent Risk Platform | Smart India Hackathon 2026 | Team Code-Acers
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
