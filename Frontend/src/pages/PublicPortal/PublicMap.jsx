@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera } from 'lucide-react';
+import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera, Layers } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatINR } from '../../utils/helpers';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Automatically fixes map tile sizing upon loading
-function MapAutoResizer() {
+function MapResizer() {
   const map = useMap();
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       map.invalidateSize();
     }, 200);
+    return () => clearTimeout(timer);
   }, [map]);
   return null;
 }
@@ -53,7 +53,7 @@ export const PublicMap = () => {
               <span className="font-extrabold text-base tracking-tight text-slate-900">
                 MPLADS <span className="text-blue-600">Public Map</span>
               </span>
-              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator • English Map</p>
+              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator (English)</p>
             </div>
           </Link>
 
@@ -75,8 +75,8 @@ export const PublicMap = () => {
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Public India Project GIS Map</h2>
-            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in all Indian states (English)</p>
+            <h2 className="text-lg font-bold text-slate-900">Public Project Map (English India Map)</h2>
+            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in your area with English location labels</p>
           </div>
 
           <div className="flex items-center gap-3 text-xs bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
@@ -92,16 +92,15 @@ export const PublicMap = () => {
           </div>
         </div>
 
-        <div className="w-full bg-slate-900 border border-slate-200 rounded-2xl overflow-hidden shadow-xl h-[600px] relative">
+        <div className="w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md h-[600px] relative">
           <MapContainer
             center={[22.5937, 78.9629]}
             zoom={5}
-            style={{ height: '600px', width: '100%' }}
+            style={{ height: '100%', width: '100%' }}
           >
-            <MapAutoResizer />
-            {/* Pure English CartoDB Voyager Map Tiles */}
+            <MapResizer />
             <TileLayer
-              attribution='&copy; OpenStreetMap contributors &copy; CARTO'
+              attribution='&copy; <a href="https://carto.com/">CARTO</a> (English Tiles)'
               url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             />
 
@@ -116,7 +115,7 @@ export const PublicMap = () => {
                   radius={9}
                   pathOptions={{
                     fillColor: color,
-                    fillOpacity: 0.9,
+                    fillOpacity: 0.85,
                     color: '#ffffff',
                     weight: 2,
                   }}

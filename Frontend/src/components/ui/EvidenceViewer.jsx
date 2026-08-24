@@ -1,131 +1,80 @@
 import React, { useState, useRef } from 'react';
-import { ShieldAlert, ShieldCheck, CheckCircle, MapPin, Calendar, Smartphone, FileSearch, Sparkles, Upload, RefreshCw, ZoomIn, FileText } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, CheckCircle, MapPin, Calendar, Smartphone, FileSearch, Sparkles, Upload, RefreshCw, Layers } from 'lucide-react';
 import { cn } from '../../utils/helpers';
 
-// 100% Self-Contained Vector Photo Assets (Guaranteed to NEVER break or fail to load)
-const ROAD_CLAIM_PHOTO = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
-  <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%231e3a8a"/><stop offset="100%" stop-color="%2360a5fa"/></linearGradient>
-    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23334155"/><stop offset="100%" stop-color="%230f172a"/></linearGradient>
-  </defs>
-  <rect width="800" height="600" fill="%23020617"/>
-  <rect width="800" height="280" fill="url(%23sky)"/>
-  <polygon points="120,600 360,260 440,260 680,600" fill="url(%23road)"/>
-  <polygon points="100,600 350,260 360,260 120,600" fill="%23e2e8f0"/>
-  <polygon points="680,600 440,260 450,260 700,600" fill="%23e2e8f0"/>
-  <line x1="400" y1="260" x2="400" y2="600" stroke="%23fbbf24" stroke-width="8" stroke-dasharray="30,20"/>
-  <!-- Construction Machinery & Cones -->
-  <polygon points="260,540 280,480 300,540" fill="%23f97316"/>
-  <polygon points="500,540 520,480 540,540" fill="%23f97316"/>
-  <!-- Site Signboard -->
-  <rect x="520" y="300" width="220" height="110" rx="8" fill="%230f172a" stroke="%2338bdf8" stroke-width="3"/>
-  <text x="535" y="330" fill="%2338bdf8" font-family="sans-serif" font-size="14" font-weight="bold">MoSPI / MPLADS SCHEME</text>
-  <text x="535" y="355" fill="%23ffffff" font-family="sans-serif" font-size="12">Rural Road Paving (Phase-2)</text>
-  <text x="535" y="380" fill="%2394a3b8" font-family="sans-serif" font-size="11">Work ID: MPLAD-2026-00124</text>
-  <text x="535" y="398" fill="%234ade80" font-family="sans-serif" font-size="10">GPS: 25.3190 N, 82.9810 E</text>
-</svg>`;
+const DEFAULT_ROAD_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><rect width='800' height='600' fill='%231e293b'/><polygon points='120,600 360,220 440,220 680,600' fill='%23334155'/><line x1='400' y1='220' x2='400' y2='600' stroke='%23fbbf24' stroke-width='8' stroke-dasharray='25,18'/><rect y='0' width='800' height='220' fill='%230f172a'/><circle cx='660' cy='90' r='45' fill='%23f59e0b' opacity='0.9'/><rect x='40' y='30' width='380' height='65' rx='8' fill='%230f172a' stroke='%2338bdf8' stroke-width='2'/><text x='55' y='60' fill='%23f8fafc' font-family='Arial,sans-serif' font-size='18' font-weight='bold'>MPLADS: Rural Road Infrastructure</text><text x='55' y='82' fill='%2338bdf8' font-family='Arial,sans-serif' font-size='13'>Chiraigaon Block, Varanasi (UP)</text></svg>";
 
-const ROAD_ARCHIVE_PHOTO = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
-  <defs>
-    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%231e3a8a"/><stop offset="100%" stop-color="%2360a5fa"/></linearGradient>
-    <linearGradient id="road2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23334155"/><stop offset="100%" stop-color="%230f172a"/></linearGradient>
-  </defs>
-  <rect width="800" height="600" fill="%23020617"/>
-  <rect width="800" height="280" fill="url(%23sky2)"/>
-  <polygon points="120,600 360,260 440,260 680,600" fill="url(%23road2)"/>
-  <polygon points="100,600 350,260 360,260 120,600" fill="%23e2e8f0"/>
-  <polygon points="680,600 440,260 450,260 700,600" fill="%23e2e8f0"/>
-  <line x1="400" y1="260" x2="400" y2="600" stroke="%23fbbf24" stroke-width="8" stroke-dasharray="30,20"/>
-  <polygon points="260,540 280,480 300,540" fill="%23f97316"/>
-  <polygon points="500,540 520,480 540,540" fill="%23f97316"/>
-  <!-- Historical Signboard -->
-  <rect x="520" y="300" width="220" height="110" rx="8" fill="%23450a0a" stroke="%23f87171" stroke-width="3"/>
-  <text x="535" y="330" fill="%23f87171" font-family="sans-serif" font-size="14" font-weight="bold">ARCHIVE: JAUNPUR (2024)</text>
-  <text x="535" y="355" fill="%23ffffff" font-family="sans-serif" font-size="12">Gram Panchayat Link Road</text>
-  <text x="535" y="380" fill="%23fca5a5" font-family="sans-serif" font-size="11">Work ID: MPLAD-2024-00892</text>
-  <text x="535" y="398" fill="%23ef4444" font-family="sans-serif" font-size="10">Completed: 12 Nov 2024</text>
-</svg>`;
+const DEFAULT_HALL_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><rect width='800' height='600' fill='%230f172a'/><rect x='160' y='200' width='480' height='360' fill='%231e293b' stroke='%2338bdf8' stroke-width='3'/><polygon points='120,200 400,60 680,200' fill='%230284c7'/><rect x='330' y='360' width='140' height='200' fill='%230369a1'/><rect x='40' y='30' width='380' height='65' rx='8' fill='%230f172a' stroke='%23a855f7' stroke-width='2'/><text x='55' y='60' fill='%23f8fafc' font-family='Arial,sans-serif' font-size='18' font-weight='bold'>MPLADS: Community Center Hall</text><text x='55' y='82' fill='%23a855f7' font-family='Arial,sans-serif' font-size='13'>Sector 4, Rohini, North West Delhi</text></svg>";
 
-const GENUINE_WATER_PHOTO = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
-  <rect width="800" height="600" fill="%23020617"/>
-  <rect width="800" height="280" fill="%230369a1"/>
-  <!-- Solar RO Plant -->
-  <rect x="250" y="240" width="300" height="300" rx="16" fill="%231e293b" stroke="%2338bdf8" stroke-width="4"/>
-  <circle cx="400" cy="360" r="70" fill="%230284c7" stroke="%2338bdf8" stroke-width="3"/>
-  <rect x="180" y="140" width="140" height="90" fill="%230f172a" stroke="%23fbbf24" stroke-width="2"/>
-  <text x="280" y="280" fill="%2338bdf8" font-family="sans-serif" font-size="16" font-weight="bold">SOLAR RO WATER PLANT</text>
-  <text x="320" y="470" fill="%23ffffff" font-family="sans-serif" font-size="14">Capacity: 5000 LPH</text>
-</svg>`;
+const DEFAULT_WATER_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><rect width='800' height='600' fill='%230f172a'/><rect x='240' y='180' width='320' height='320' rx='20' fill='%231e293b' stroke='%230ea5e9' stroke-width='3'/><circle cx='400' cy='320' r='100' fill='%230284c7'/><rect x='40' y='30' width='380' height='65' rx='8' fill='%230f172a' stroke='%230ea5e9' stroke-width='2'/><text x='55' y='60' fill='%23f8fafc' font-family='Arial,sans-serif' font-size='18' font-weight='bold'>MPLADS: Solar Drinking Water RO</text><text x='55' y='82' fill='%230ea5e9' font-family='Arial,sans-serif' font-size='13'>Banswara Tribal Block, Rajasthan</text></svg>";
 
 export const EvidenceViewer = ({
-  uploadedImage,
-  matchedImage,
+  uploadedImage: initialUploaded,
+  matchedImage: initialMatched,
   uploadedMeta = {},
   matchedMeta = {},
   similarity: initialSimilarity = 96,
   className = '',
 }) => {
-  const [uploadedImg, setUploadedImg] = useState(ROAD_CLAIM_PHOTO);
-  const [matchedImg, setMatchedImg] = useState(ROAD_ARCHIVE_PHOTO);
-  const [similarity, setSimilarity] = useState(96);
+  const [uploadedImg, setUploadedImg] = useState(DEFAULT_ROAD_IMG);
+  const [matchedImg, setMatchedImg] = useState(DEFAULT_ROAD_IMG);
+  const [similarity, setSimilarity] = useState(initialSimilarity);
   const [isMatching, setIsMatching] = useState(false);
-  const [activePreset, setActivePreset] = useState('road_dup');
+  const [uploadedFileMeta, setUploadedFileMeta] = useState(uploadedMeta);
   
   const uploadInputRef = useRef(null);
   const matchInputRef = useRef(null);
 
-  // Manual Photo Upload Handler
   const handleUploadedChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         setUploadedImg(reader.result);
-        setActivePreset('custom');
+        setUploadedFileMeta({
+          ...uploadedFileMeta,
+          device: 'Manual User Upload',
+          fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+          timestamp: 'Just now (Interactive Demo)',
+          gps: '25.3190° N, 82.9810° E (User Uploaded)'
+        });
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Manual Reference Photo Upload Handler
   const handleMatchedChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         setMatchedImg(reader.result);
-        setActivePreset('custom');
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Run AI Comparison
   const handleRunAiComparison = () => {
     setIsMatching(true);
     setTimeout(() => {
-      if (activePreset === 'road_dup') {
-        setSimilarity(96);
-      } else if (activePreset === 'genuine') {
-        setSimilarity(14);
-      } else {
-        const sim = uploadedImg === matchedImg ? 98 : Math.floor(Math.random() * 25) + 15;
-        setSimilarity(sim);
-      }
+      const calculatedSim = uploadedImg === matchedImg ? 96 : Math.floor(Math.random() * 20) + 12;
+      setSimilarity(calculatedSim);
       setIsMatching(false);
     }, 700);
   };
 
-  // Load Preset Case Studies
   const loadPreset = (type) => {
-    setActivePreset(type);
     if (type === 'road_dup') {
-      setUploadedImg(ROAD_CLAIM_PHOTO);
-      setMatchedImg(ROAD_ARCHIVE_PHOTO);
+      setUploadedImg(DEFAULT_ROAD_IMG);
+      setMatchedImg(DEFAULT_ROAD_IMG);
       setSimilarity(96);
-    } else if (type === 'genuine') {
-      setUploadedImg(ROAD_CLAIM_PHOTO);
-      setMatchedImg(GENUINE_WATER_PHOTO);
+    } else if (type === 'hall_dup') {
+      setUploadedImg(DEFAULT_HALL_IMG);
+      setMatchedImg(DEFAULT_HALL_IMG);
+      setSimilarity(91);
+    } else {
+      setUploadedImg(DEFAULT_ROAD_IMG);
+      setMatchedImg(DEFAULT_WATER_IMG);
       setSimilarity(14);
     }
   };
@@ -133,7 +82,7 @@ export const EvidenceViewer = ({
   const isFraud = similarity >= 75;
 
   return (
-    <div className={cn('flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl', className)}>
+    <div className={cn('flex flex-col bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl', className)}>
       {/* Header Banner */}
       <div className="flex flex-wrap items-center justify-between p-4 bg-slate-950 border-b border-slate-800 gap-3">
         <div className="flex items-center gap-2.5">
@@ -141,10 +90,10 @@ export const EvidenceViewer = ({
             {isFraud ? <ShieldAlert className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
           </div>
           <div>
-            <h4 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <span>AI Forensic Evidence Verification Lab</span>
-              <span className={cn('px-2.5 py-0.5 rounded text-[10px] font-mono font-bold border', isFraud ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30')}>
-                {isFraud ? 'CRITICAL FRAUD MATCH (RECYCLED PHOTO)' : 'VERIFIED GENUINE WORK'}
+            <h4 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+              <span>AI Forensic Photo Analysis Lab</span>
+              <span className={cn('px-2 py-0.5 rounded text-[11px] font-mono font-bold border', isFraud ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30')}>
+                {isFraud ? 'CRITICAL MATCH (RECYCLED PHOTO)' : 'VERIFIED GENUINE WORK'}
               </span>
             </h4>
             <p className="text-xs text-slate-400">Deep Feature Alignment, Perceptual Gradient Hash & EXIF Forensic Engine</p>
@@ -152,10 +101,10 @@ export const EvidenceViewer = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className={cn('flex items-center gap-2 px-3.5 py-1.5 border rounded-xl shadow-lg', isFraud ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400')}>
+          <div className={cn('flex items-center gap-1.5 px-3 py-1.5 border rounded-lg', isFraud ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400')}>
             <Sparkles className="w-4 h-4" />
-            <span className="text-xs text-slate-300 font-medium">Neural Match:</span>
-            <span className="text-base font-black font-mono">{similarity}%</span>
+            <span className="text-xs text-slate-300">Neural Match:</span>
+            <span className="text-sm font-extrabold font-mono">{similarity}%</span>
           </div>
         </div>
       </div>
@@ -164,33 +113,17 @@ export const EvidenceViewer = ({
       <div className="p-3.5 bg-slate-950/80 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
           <span className="text-slate-400 font-semibold">Test Presets:</span>
-          <button 
-            onClick={() => loadPreset('road_dup')} 
-            className={cn("px-3 py-1.5 rounded-lg border font-semibold transition flex items-center gap-1.5", activePreset === 'road_dup' ? "bg-rose-500 text-white border-rose-600 shadow-md shadow-rose-500/20" : "bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800")}
-          >
-            🚨 Flagship Fraud Case (96% Match)
-          </button>
-          <button 
-            onClick={() => loadPreset('genuine')} 
-            className={cn("px-3 py-1.5 rounded-lg border font-semibold transition flex items-center gap-1.5", activePreset === 'genuine' ? "bg-emerald-600 text-white border-emerald-700 shadow-md shadow-emerald-600/20" : "bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800")}
-          >
-            ✅ Distinct Authentic Work (14% Match)
-          </button>
+          <button type="button" onClick={() => loadPreset('road_dup')} className="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded border border-rose-500/30 font-medium">🚨 Road Duplicate (96%)</button>
+          <button type="button" onClick={() => loadPreset('hall_dup')} className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded border border-amber-500/30 font-medium">⚠️ Hall Recycled (91%)</button>
+          <button type="button" onClick={() => loadPreset('genuine')} className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded border border-emerald-500/30 font-medium">✅ Genuine Distinct (14%)</button>
         </div>
 
         <div className="flex items-center gap-2">
-          <button 
-            onClick={() => uploadInputRef.current?.click()} 
-            className="px-3 py-1.5 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 rounded-lg border border-sky-500/30 font-semibold flex items-center gap-1.5 transition"
-          >
-            <Upload className="w-3.5 h-3.5" /> Upload Your Own Photo
+          <button type="button" onClick={() => uploadInputRef.current?.click()} className="px-3 py-1.5 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 rounded-lg border border-sky-500/30 font-semibold flex items-center gap-1.5">
+            <Upload className="w-3.5 h-3.5" /> Upload Custom Photo
           </button>
-          <button 
-            onClick={handleRunAiComparison} 
-            disabled={isMatching} 
-            className="px-4 py-1.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-lg shadow-md shadow-sky-500/20 flex items-center gap-1.5 transition"
-          >
-            <RefreshCw className={cn("w-3.5 h-3.5", isMatching && "animate-spin")} /> {isMatching ? 'Running Neural Match...' : 'Run Live AI Match'}
+          <button type="button" onClick={handleRunAiComparison} disabled={isMatching} className="px-4 py-1.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-lg shadow flex items-center gap-1.5">
+            <RefreshCw className={cn("w-3.5 h-3.5", isMatching && "animate-spin")} /> {isMatching ? 'Analyzing...' : 'Run Live AI Match'}
           </button>
           <input type="file" ref={uploadInputRef} onChange={handleUploadedChange} accept="image/*" className="hidden" />
           <input type="file" ref={matchInputRef} onChange={handleMatchedChange} accept="image/*" className="hidden" />
@@ -203,37 +136,37 @@ export const EvidenceViewer = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-              1. Current Uploaded Progress Photo
+              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              1. Current Claim Photo
             </span>
-            <button onClick={() => uploadInputRef.current?.click()} className="text-[11px] text-sky-400 hover:underline flex items-center gap-1">
-              <Upload className="w-3 h-3" /> Select New File
+            <button type="button" onClick={() => uploadInputRef.current?.click()} className="text-[11px] text-sky-400 hover:underline flex items-center gap-1">
+              <Upload className="w-3 h-3" /> Change File
             </button>
           </div>
 
-          <div className="relative rounded-xl overflow-hidden border-2 border-slate-700 bg-slate-950 aspect-[4/3] group shadow-inner">
+          <div className="relative rounded-lg overflow-hidden border-2 border-slate-700 bg-slate-950 aspect-[4/3] group shadow-inner">
             <img
               src={uploadedImg}
               alt="Uploaded Project Progress"
               className="w-full h-full object-cover"
             />
-            <div className="absolute top-3 left-3 bg-slate-950/90 backdrop-blur-md px-2.5 py-1 rounded text-xs font-mono text-blue-400 border border-slate-700 shadow">
+            <div className="absolute top-3 left-3 bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded text-xs font-mono text-blue-400 border border-slate-700">
               Submitted: 20 Aug 2026
             </div>
           </div>
 
-          <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 space-y-2 text-xs text-slate-300">
+          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3 space-y-1.5 text-xs text-slate-300">
             <div className="flex items-center justify-between">
               <span className="text-slate-400 flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-emerald-400" /> GPS Coordinates:
+                <MapPin className="w-3.5 h-3.5 text-emerald-400" /> GPS Tag:
               </span>
-              <span className="font-mono text-slate-200">25.3190° N, 82.9810° E (Varanasi, UP)</span>
+              <span className="font-mono text-slate-200">{uploadedFileMeta.gps || '25.3190° N, 82.9810° E'}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-slate-400 flex items-center gap-1.5">
-                <Smartphone className="w-3.5 h-3.5 text-blue-400" /> Capture Device:
+                <Smartphone className="w-3.5 h-3.5 text-blue-400" /> Device / File:
               </span>
-              <span className="font-mono text-slate-200">Realme 9 Pro 5G (EXIF Authenticated)</span>
+              <span className="font-mono text-slate-200">{uploadedFileMeta.device || 'Realme 9 Pro (5G)'}</span>
             </div>
           </div>
         </div>
@@ -242,41 +175,41 @@ export const EvidenceViewer = ({
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-rose-300 flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
               2. Matched Historical Archive Photo
             </span>
-            <button onClick={() => matchInputRef.current?.click()} className="text-[11px] text-rose-400 hover:underline flex items-center gap-1">
-              <Upload className="w-3 h-3" /> Select Reference File
+            <button type="button" onClick={() => matchInputRef.current?.click()} className="text-[11px] text-rose-400 hover:underline flex items-center gap-1">
+              <Upload className="w-3.5 h-3.5" /> Change Reference
             </button>
           </div>
 
-          <div className={cn("relative rounded-xl overflow-hidden border-2 bg-slate-950 aspect-[4/3] group shadow-inner", isFraud ? "border-rose-500/80 shadow-rose-500/10" : "border-emerald-500/80 shadow-emerald-500/10")}>
+          <div className={cn("relative rounded-lg overflow-hidden border-2 bg-slate-950 aspect-[4/3] group shadow-inner", isFraud ? "border-rose-500/70" : "border-emerald-500/70")}>
             <img
               src={matchedImg}
               alt="Matched Prior Project Photo"
               className="w-full h-full object-cover"
             />
-            <div className="absolute top-3 left-3 bg-slate-950/90 backdrop-blur-md px-2.5 py-1 rounded text-xs font-mono text-rose-400 border border-rose-500/40 shadow">
+            <div className="absolute top-3 left-3 bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded text-xs font-mono text-rose-400 border border-rose-500/40">
               Archived: 12 Nov 2024 (Jaunpur District)
             </div>
-            <div className={cn("absolute bottom-3 right-3 text-white font-mono text-xs font-bold px-3 py-1 rounded-lg shadow-lg", isFraud ? "bg-rose-600" : "bg-emerald-600")}>
+            <div className={cn("absolute bottom-3 right-3 text-white font-mono text-xs font-bold px-2.5 py-1 rounded shadow", isFraud ? "bg-rose-600/90" : "bg-emerald-600/90")}>
               {similarity}% {isFraud ? 'Exact Structure Match' : 'Distinct Fingerprint'}
             </div>
           </div>
 
-          <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 space-y-2 text-xs text-slate-300">
+          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3 space-y-1.5 text-xs text-slate-300">
             <div className="flex items-center justify-between">
               <span className="text-slate-400 flex items-center gap-1.5">
-                <FileSearch className="w-3.5 h-3.5 text-purple-400" /> Source Work ID:
+                <FileSearch className="w-3.5 h-3.5 text-purple-400" /> Source Work:
               </span>
-              <span className="font-mono text-slate-200">MPLAD-2024-00892 (Jaunpur Road)</span>
+              <span className="font-medium text-slate-200">Gram Panchayat Road, Jaunpur</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-slate-400 flex items-center gap-1.5">
                 <ShieldAlert className="w-3.5 h-3.5 text-rose-400" /> Verification Result:
               </span>
               <span className={cn("font-bold", isFraud ? "text-rose-400" : "text-emerald-400")}>
-                {isFraud ? 'SUSPICIOUS DUPLICATE RECYCLED PHOTO' : 'PASS - UNIQUE PHYSICAL MILESTONE'}
+                {isFraud ? 'SUSPICIOUS DUPLICATE EVIDENCE' : 'PASS - AUTHENTIC SITE PROGRESS'}
               </span>
             </div>
           </div>
