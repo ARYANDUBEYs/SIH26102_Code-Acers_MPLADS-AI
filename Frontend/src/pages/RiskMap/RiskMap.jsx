@@ -144,7 +144,7 @@ export const RiskMap = () => {
               {/* Dark CartoDB Map Tiles */}
               <TileLayer
                 attribution='&copy; <a href="https://carto.com/">CartoDB</a> Dark Matter'
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
               />
 
               {filteredStates.map((st) => {

@@ -90,3 +90,17 @@
 .dark .leaflet-popup-tip {
   background: #1E293B !important;
 }
+
+/* Leaflet Full-Width & English Map Fix */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 560px !important;
+  background-color: #0f172a !important;
+}
+.leaflet-pane {
+  z-index: 10 !important;
+}
+.leaflet-tile {
+  filter: brightness(0.95) contrast(1.05);
+}

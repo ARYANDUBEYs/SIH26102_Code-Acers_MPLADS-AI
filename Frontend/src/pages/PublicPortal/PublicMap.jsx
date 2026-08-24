@@ -4,15 +4,16 @@ import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera } fr
 import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatINR } from '../../utils/helpers';
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-function MapResizer() {
+// Automatically fixes map tile sizing upon loading
+function MapAutoResizer() {
   const map = useMap();
   useEffect(() => {
     setTimeout(() => {
       map.invalidateSize();
-    }, 250);
+    }, 200);
   }, [map]);
   return null;
 }
@@ -52,7 +53,7 @@ export const PublicMap = () => {
               <span className="font-extrabold text-base tracking-tight text-slate-900">
                 MPLADS <span className="text-blue-600">Public Map</span>
               </span>
-              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator</p>
+              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator • English Map</p>
             </div>
           </Link>
 
@@ -74,8 +75,8 @@ export const PublicMap = () => {
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Public Project Map</h2>
-            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in your area</p>
+            <h2 className="text-lg font-bold text-slate-900">Public India Project GIS Map</h2>
+            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in all Indian states (English)</p>
           </div>
 
           <div className="flex items-center gap-3 text-xs bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
@@ -91,16 +92,17 @@ export const PublicMap = () => {
           </div>
         </div>
 
-        <div className="flex-1 w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md min-h-[580px] relative">
+        <div className="w-full bg-slate-900 border border-slate-200 rounded-2xl overflow-hidden shadow-xl h-[600px] relative">
           <MapContainer
             center={[22.5937, 78.9629]}
             zoom={5}
-            style={{ height: '580px', width: '100%' }}
+            style={{ height: '600px', width: '100%' }}
           >
-            <MapResizer />
+            <MapAutoResizer />
+            {/* Pure English CartoDB Voyager Map Tiles */}
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; OpenStreetMap contributors &copy; CARTO'
+              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             />
 
             {projects.map((p) => {
@@ -111,10 +113,10 @@ export const PublicMap = () => {
                 <CircleMarker
                   key={p.id}
                   center={coords}
-                  radius={8}
+                  radius={9}
                   pathOptions={{
                     fillColor: color,
-                    fillOpacity: 0.85,
+                    fillOpacity: 0.9,
                     color: '#ffffff',
                     weight: 2,
                   }}
