@@ -1,3 +1,4 @@
+import 'leaflet/dist/leaflet.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera } from 'lucide-react';

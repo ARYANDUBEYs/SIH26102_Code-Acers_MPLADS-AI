@@ -110,6 +110,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00231',
     name: 'Multi-purpose Community Hall Construction',
+    images: { uploaded: 'https://images.unsplash.com/photo-1577495508048-b635879837f1?w=800&auto=format&fit=crop&q=80' },
     category: 'Community Assets',
     location: 'Sector 4, Rohini',
     district: 'North West Delhi',
@@ -148,6 +149,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00451',
     name: 'Solar Drinking Water RO Plant & Borewell',
+    images: { uploaded: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=800&auto=format&fit=crop&q=80' },
     category: 'Drinking Water & Sanitation',
     location: 'Banswara Tribal Block',
     district: 'Banswara',
@@ -186,6 +188,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00089',
     name: 'Digital Smart Classroom Lab & Computer Setup',
+    images: { uploaded: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&auto=format&fit=crop&q=80' },
     category: 'Education & Skill Development',
     location: 'Govt Model Higher Secondary School',
     district: 'Patna',
@@ -214,6 +217,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00342',
     name: 'Primary Health Centre (PHC) Medical Oxygen Pipeline',
+    images: { uploaded: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80' },
     category: 'Public Health',
     location: 'Baramati Rural Hospital',
     district: 'Pune',
