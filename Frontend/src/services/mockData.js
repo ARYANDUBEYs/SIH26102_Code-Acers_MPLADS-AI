@@ -43,8 +43,8 @@ export const MOCK_PROJECTS = [
     slaDaysLeft: 4,
     slaUrgency: 'HIGH',
     images: {
-      uploaded: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=800&auto=format&fit=crop&q=80',
-      matched: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=800&auto=format&fit=crop&q=80',
+      uploaded: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.3dm7d3iD_CNAtTQMp22DUQHaEu%3Fr%3D0%26pid%3DApi&f=1&ipt=08e3923244a23d76cd19ec9fff62db7b1fc3c11e2572fd1aa59a7624b944bb79&ipo=images',
+      matched: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.3dm7d3iD_CNAtTQMp22DUQHaEu%3Fr%3D0%26pid%3DApi&f=1&ipt=08e3923244a23d76cd19ec9fff62db7b1fc3c11e2572fd1aa59a7624b944bb79&ipo=images',
       uploadedMeta: {
         timestamp: '2026-08-20 16:42 IST',
         device: 'Realme 9 Pro (5G)',
