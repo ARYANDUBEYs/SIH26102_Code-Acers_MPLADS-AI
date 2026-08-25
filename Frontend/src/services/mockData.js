@@ -110,7 +110,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00231',
     name: 'Multi-purpose Community Hall Construction',
-    images: { uploaded: 'https://images.unsplash.com/photo-1577495508048-b635879837f1?w=800&auto=format&fit=crop&q=80' },
+    images: { uploaded: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80' },
     category: 'Community Assets',
     location: 'Sector 4, Rohini',
     district: 'North West Delhi',
@@ -149,7 +149,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00451',
     name: 'Solar Drinking Water RO Plant & Borewell',
-    images: { uploaded: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=800&auto=format&fit=crop&q=80' },
+    images: { uploaded: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80' },
     category: 'Drinking Water & Sanitation',
     location: 'Banswara Tribal Block',
     district: 'Banswara',
