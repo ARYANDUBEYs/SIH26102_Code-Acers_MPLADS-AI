@@ -4,103 +4,116 @@
 
 @layer base {
   :root {
-    --bg-primary: #0B1220;
-    --bg-secondary: #111827;
-    --card-bg: #1E293B;
-    --border-color: #334155;
+    --bg-primary: #F8FAFC;
+    --bg-secondary: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --border-color: #E2E8F0;
   }
 
   body {
-    @apply bg-[#0B1220] text-slate-100 font-sans;
+    @apply bg-gov-canvas text-slate-800 font-sans antialiased;
     overflow-x: hidden;
   }
 
-  /* Custom Scrollbar for Command Center */
+  /* Custom Government Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0B1220;
+    background: #F1F5F9;
   }
   ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #CBD5E1;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: #94A3B8;
   }
 }
 
-/* Glassmorphism effects */
+/* Institutional Panels */
+.gov-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+}
+
 .glass-panel {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
 }
 
 .glass-panel-glow {
-  background: rgba(30, 41, 59, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  box-shadow: 0 0 25px -5px rgba(37, 99, 235, 0.15);
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08);
 }
 
-/* Light Theme for Public Portal */
+/* Light Theme overrides */
 .public-theme {
-  --bg-primary: #F8FAFC;
-  --bg-secondary: #FFFFFF;
-  --card-bg: #FFFFFF;
-  --border-color: #E2E8F0;
   background-color: #F8FAFC;
   color: #0F172A;
 }
 
-/* Pulse animation for high risk tags */
-@keyframes criticalPulse {
+/* ── Custom Micro-Animation Keyframes ───────────────────────────── */
+
+/* 1. Digital Forensic Laser Scanner */
+@keyframes scanLine {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 98%;
+    opacity: 0;
+  }
+}
+
+.animate-scanner {
+  animation: scanLine 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 2. Cartel Network Bipartite SVG Flow */
+@keyframes flowDash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.animate-flow-dash {
+  animation: flowDash 1.4s linear infinite;
+}
+
+@keyframes flowDashReverse {
+  to {
+    stroke-dashoffset: 28;
+  }
+}
+
+.animate-flow-dash-reverse {
+  animation: flowDashReverse 1.4s linear infinite;
+}
+
+/* 3. Soft Subtle Audit Pulse */
+@keyframes pulseSubtle {
   0%, 100% {
     opacity: 1;
     transform: scale(1);
   }
   50% {
-    opacity: 0.8;
-    transform: scale(1.05);
+    opacity: 0.85;
+    transform: scale(1.02);
   }
 }
 
-.animate-critical-pulse {
-  animation: criticalPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Leaflet dark/light map styling overrides */
-.leaflet-container {
-  font-family: inherit;
-  border-radius: 0.5rem;
-  z-index: 10;
-}
-.dark .leaflet-popup-content-wrapper {
-  background: #1E293B !important;
-  color: #F8FAFC !important;
-  border: 1px solid #334155 !important;
-  border-radius: 0.5rem !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-}
-.dark .leaflet-popup-tip {
-  background: #1E293B !important;
-}
-
-/* Leaflet Full-Width & English Map Fix */
-.leaflet-container {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 560px !important;
-  background-color: #0f172a !important;
-}
-.leaflet-pane {
-  z-index: 10 !important;
-}
-.leaflet-tile {
-  filter: brightness(0.95) contrast(1.05);
+.animate-pulse-subtle {
+  animation: pulseSubtle 2.5s ease-in-out infinite;
 }

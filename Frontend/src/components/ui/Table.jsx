@@ -51,7 +51,7 @@ export const Table = ({
 
   if (isLoading) {
     return (
-      <div className="w-full bg-slate-900 border border-slate-800 rounded-xl p-8">
+      <div className="w-full bg-white border border-slate-200 rounded-xl p-8 shadow-gov-card">
         <Loader text="Loading Project Intelligence..." />
       </div>
     );
@@ -62,17 +62,17 @@ export const Table = ({
   }
 
   return (
-    <div className={cn('w-full flex flex-col bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-card-dark', className)}>
+    <div className={cn('w-full flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-gov-card', className)}>
       <div className="w-full overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="border-b border-slate-800 bg-slate-950/70 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
+            <tr className="border-b border-slate-200 bg-slate-50 text-slate-700 uppercase text-[11px] font-bold tracking-wider">
               {columns.map((col, idx) => (
                 <th
                   key={idx}
                   className={cn(
                     'px-4 py-3.5 select-none',
-                    col.sortable && 'cursor-pointer hover:text-slate-200 transition-colors',
+                    col.sortable && 'cursor-pointer hover:text-slate-900 transition-colors',
                     col.className
                   )}
                   onClick={() => col.sortable && handleSort(col.accessor)}
@@ -80,11 +80,11 @@ export const Table = ({
                   <div className="flex items-center gap-1.5">
                     <span>{col.header}</span>
                     {col.sortable && (
-                      <span className="text-slate-500">
+                      <span className="text-slate-400">
                         {sortField === col.accessor ? (
-                          sortOrder === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-400" /> : <ArrowDown className="w-3 h-3 text-blue-400" />
+                          sortOrder === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-blue-600" /> : <ArrowDown className="w-3.5 h-3.5 text-blue-600" />
                         ) : (
-                          <ArrowUpDown className="w-3 h-3 opacity-40 hover:opacity-100" />
+                          <ArrowUpDown className="w-3.5 h-3.5 opacity-50 hover:opacity-100" />
                         )}
                       </span>
                     )}
@@ -93,19 +93,19 @@ export const Table = ({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-slate-100 text-slate-800">
             {paginatedData.map((row, rowIdx) => (
               <tr
                 key={row.id || rowIdx}
                 onClick={() => onRowClick && onRowClick(row)}
                 className={cn(
                   'transition-colors duration-150',
-                  onRowClick ? 'cursor-pointer hover:bg-slate-800/60' : 'hover:bg-slate-800/30',
-                  rowIdx % 2 === 1 && 'bg-slate-900/40'
+                  onRowClick ? 'cursor-pointer hover:bg-blue-50/50' : 'hover:bg-slate-50/80',
+                  rowIdx % 2 === 1 && 'bg-slate-50/30'
                 )}
               >
                 {columns.map((col, colIdx) => (
-                  <td key={colIdx} className={cn('px-4 py-3.5 text-slate-200 align-middle', col.cellClassName)}>
+                  <td key={colIdx} className={cn('px-4 py-3.5 text-slate-800 align-middle', col.cellClassName)}>
                     {col.cell ? col.cell(row) : row[col.accessor]}
                   </td>
                 ))}
@@ -116,29 +116,28 @@ export const Table = ({
       </div>
 
       {enablePagination && totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-slate-800 bg-slate-950/50 text-xs text-slate-400">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 bg-slate-50 text-xs text-slate-600">
           <div>
-            Showing <span className="font-semibold text-slate-200">{(currentPage - 1) * rowsPerPage + 1}</span> to{' '}
-            <span className="font-semibold text-slate-200">
-              {Math.min(currentPage * rowsPerPage, sortedData.length)}
-            </span>{' '}
-            of <span className="font-semibold text-slate-200">{sortedData.length}</span> records
+            Showing <span className="font-semibold text-slate-900">{(currentPage - 1) * rowsPerPage + 1}</span> to{' '}
+            <span className="font-semibold text-slate-900">{Math.min(currentPage * rowsPerPage, sortedData.length)}</span> of{' '}
+            <span className="font-semibold text-slate-900">{sortedData.length}</span> records
           </div>
-          <div className="flex items-center gap-1.5">
+
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-1 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="px-2 py-1 font-mono font-medium text-slate-300">
-              {currentPage} / {totalPages}
+            <span className="font-medium text-slate-700">
+              Page {currentPage} of {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-1 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

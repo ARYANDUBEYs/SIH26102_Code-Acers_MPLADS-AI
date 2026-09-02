@@ -60,7 +60,7 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gov-darkest text-slate-100 flex flex-col selection:bg-blue-600">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-blue-600 selection:text-white">
       <Navbar />
 
       <div className="flex-1 flex w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">

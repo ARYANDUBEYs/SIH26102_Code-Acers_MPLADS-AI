@@ -16,11 +16,11 @@ import {
   MessageSquareWarning,
   Sliders,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  FileCheck2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
-import { ROLES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
 export const Sidebar = () => {
@@ -29,30 +29,30 @@ export const Sidebar = () => {
   const location = useLocation();
 
   const adminNavItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { label: 'Analytics', path: '/analytics', icon: BarChart3 },
-    { label: 'India Risk Map', path: '/risk-map', icon: Map },
-    { label: 'High-Risk Queue', path: '/high-risk', icon: AlertOctagon, badge: '42', badgeColor: 'bg-rose-500/20 text-rose-400 border border-rose-500/30' },
-    { label: 'Cartel Matrix', path: '/cartel-matrix', icon: Network, highlight: true },
-    { label: 'All Projects', path: '/projects', icon: FolderGit2 },
-    { label: 'AI Evidence Verification', path: '/evidence', icon: Camera },
-    { label: 'SLA Monitoring', path: '/sla', icon: Clock, badge: '12', badgeColor: 'bg-amber-500/20 text-amber-400 border border-amber-500/30' },
+    { label: 'Executive Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { label: 'Intelligence Analytics', path: '/analytics', icon: BarChart3 },
+    { label: 'National Risk Map', path: '/risk-map', icon: Map },
+    { label: 'High-Risk Audit Queue', path: '/high-risk', icon: AlertOctagon, badge: '42', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
+    { label: 'Cartel & Monopoly Matrix', path: '/cartel-matrix', icon: Network, highlight: true },
+    { label: 'All Works Directory', path: '/projects', icon: FolderGit2 },
+    { label: 'AI Forensic Evidence Lab', path: '/evidence', icon: Camera, highlight: true },
+    { label: 'SLA Delay Escalations', path: '/sla', icon: Clock, badge: '12', badgeColor: 'bg-amber-50 text-amber-800 border border-amber-200' },
   ];
 
   const districtNavItems = [
     { label: 'District Overview', path: '/district', icon: LayoutDashboard },
-    { label: 'Pending Projects', path: '/district/pending', icon: CheckSquare, badge: '24', badgeColor: 'bg-blue-500/20 text-blue-400 border border-blue-500/30' },
-    { label: 'SLA Alerts', path: '/sla', icon: Clock, badge: '7', badgeColor: 'bg-rose-500/20 text-rose-400 border border-rose-500/30' },
+    { label: 'Pending Sanctions', path: '/district/pending', icon: CheckSquare, badge: '24', badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200' },
+    { label: 'SLA Risk Alerts', path: '/sla', icon: Clock, badge: '7', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
     { label: 'AI Pre-Screening', path: '/district/pre-screening', icon: Sparkles, highlight: true },
-    { label: 'Photo Validation', path: '/district/photo-validation', icon: Camera },
-    { label: 'District Projects', path: '/projects', icon: FolderGit2 },
+    { label: 'Photo Integrity Validation', path: '/district/photo-validation', icon: Camera, highlight: true },
+    { label: 'Constituency Works', path: '/projects', icon: FolderGit2 },
   ];
 
   const citizenNavItems = [
-    { label: 'Public Portal', path: '/public', icon: ShieldCheck },
-    { label: 'Interactive Project Map', path: '/public/map', icon: Map },
-    { label: 'Search Projects', path: '/public/search', icon: Search },
-    { label: 'Report Project Issue', path: '/public/report', icon: MessageSquareWarning, highlight: true },
+    { label: 'Public Vigilance Portal', path: '/public', icon: ShieldCheck },
+    { label: 'Geospatial Work Explorer', path: '/public/map', icon: Map },
+    { label: 'Search Local Works', path: '/public/search', icon: Search },
+    { label: 'Submit Citizen Grievance', path: '/public/report', icon: MessageSquareWarning, highlight: true },
   ];
 
   const navItems = isCitizen
@@ -67,24 +67,24 @@ export const Sidebar = () => {
       {isMobileMenuOpen && (
         <div
           onClick={() => setIsMobileMenuOpen(false)}
-          className="fixed inset-0 bg-slate-950/80 z-30 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-slate-900/40 z-30 lg:hidden backdrop-blur-xs"
         />
       )}
 
       <aside
         className={cn(
-          'fixed lg:sticky top-16 z-30 h-[calc(100vh-4rem)] w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between transition-transform duration-300 ease-in-out',
+          'fixed lg:sticky top-16 z-30 h-[calc(100vh-4rem)] w-64 bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-300 ease-in-out',
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         {/* Navigation list */}
-        <div className="p-4 space-y-6 overflow-y-auto flex-1">
+        <div className="p-3.5 space-y-6 overflow-y-auto flex-1">
           <div>
-            <div className="px-3 mb-2 flex items-center justify-between">
+            <div className="px-3 mb-2.5 flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                {isCitizen ? 'Citizen Navigation' : isDistrictOfficer ? 'District Officer Suite' : 'National Command'}
+                {isCitizen ? 'Citizen Navigation' : isDistrictOfficer ? 'District Officer Suite' : 'National Command Suite'}
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50" />
             </div>
 
             <nav className="space-y-1">
@@ -98,18 +98,18 @@ export const Sidebar = () => {
                     to={item.path}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150',
+                      'group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150',
                       isActive
-                        ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-sm font-semibold'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent'
+                        ? 'bg-blue-50 text-blue-900 border border-blue-200 font-semibold shadow-gov-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
                     )}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <Icon
                         className={cn(
                           'w-4 h-4 shrink-0 transition-colors',
-                          isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-200',
-                          item.highlight && !isActive && 'text-cyan-400'
+                          isActive ? 'text-blue-700' : 'text-slate-400 group-hover:text-slate-700',
+                          item.highlight && !isActive && 'text-blue-600'
                         )}
                       />
                       <span className="truncate">{item.label}</span>
@@ -125,35 +125,18 @@ export const Sidebar = () => {
               })}
             </nav>
           </div>
-
-          {/* Quick Demo Scenario Highlight Box */}
-          <div className="p-3 bg-gradient-to-br from-blue-950/40 to-slate-900 border border-blue-900/40 rounded-xl space-y-2">
-            <div className="flex items-center gap-2 text-blue-400 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Flagship Demo Case</span>
-            </div>
-            <p className="text-[11px] text-slate-400 leading-snug">
-              Investigate high-risk rural road <strong className="text-slate-200">MPLAD-00124</strong> with 96% duplicate image forensic match.
-            </p>
-            <NavLink
-              to="/project/MPLAD-2026-00124"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="inline-flex items-center gap-1 text-[11px] font-medium text-cyan-400 hover:text-cyan-300 hover:underline"
-            >
-              <span>Launch Demo Flow</span>
-              <ChevronRight className="w-3 h-3" />
-            </NavLink>
-          </div>
         </div>
 
-        {/* Footer info in sidebar */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950">
-          <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span>AI Engine v3.4</span>
-            <span className="text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Live Sync
-            </span>
+        {/* Bottom Institutional Info Box */}
+        <div className="p-3 border-t border-slate-100 bg-slate-50/70">
+          <div className="p-2.5 rounded-lg bg-white border border-slate-200 shadow-gov-sm text-xs">
+            <div className="flex items-center justify-between font-semibold text-slate-800">
+              <span>e-SAKSHI Sync</span>
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200 font-mono">LIVE</span>
+            </div>
+            <p className="text-[10px] text-slate-500 mt-1 leading-tight">
+              Continuous Audit Layer active for 784 Parliamentary Constituencies.
+            </p>
           </div>
         </div>
       </aside>
