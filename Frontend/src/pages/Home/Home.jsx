@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ShieldCheck,
@@ -18,12 +18,14 @@ import {
   AlertOctagon
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
-import { NATIONAL_KPIS } from '../../services/mockData';
+import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { ROLES } from '../../utils/constants';
 
 export const Home = () => {
   const { switchRole } = useAuth();
+  const [nationalKpis, setNationalKpis] = useState({ projectsMonitored: 0, totalFundsCr: '0.00', anomaliesDetected: 0, highRiskProjects: 0 });
+  useEffect(() => { api.getNationalKPIs().then(res => { if (res.success) setNationalKpis(res.data); }).catch(() => {}); }, []);
   const navigate = useNavigate();
 
   const handleLaunchAdminDemo = () => {
@@ -270,7 +272,7 @@ export const Home = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-center">
           <div className="p-6 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-gov-card">
             <span className="text-3xl sm:text-4xl font-black font-mono text-[#0B2545]">
-              {NATIONAL_KPIS.projectsMonitored.toLocaleString()}
+              {nationalKpis.projectsMonitored.toLocaleString()}
             </span>
             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Works Monitored</p>
             <p className="text-[11px] text-slate-500">Across 28 States & 8 UTs</p>
@@ -278,7 +280,7 @@ export const Home = () => {
 
           <div className="p-6 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-gov-card">
             <span className="text-3xl sm:text-4xl font-black font-mono text-blue-700">
-              ₹{NATIONAL_KPIS.totalFundsCr} Cr
+              ₹{nationalKpis.totalFundsCr} Cr
             </span>
             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Sanctioned Value</p>
             <p className="text-[11px] text-slate-500">Tracked in FY 2025-26</p>
@@ -286,7 +288,7 @@ export const Home = () => {
 
           <div className="p-6 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-gov-card">
             <span className="text-3xl sm:text-4xl font-black font-mono text-amber-700">
-              {NATIONAL_KPIS.anomaliesDetected}
+              {nationalKpis.anomaliesDetected}
             </span>
             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Anomalies Detected</p>
             <p className="text-[11px] text-slate-500">Early Detection Rate 94%</p>
@@ -294,7 +296,7 @@ export const Home = () => {
 
           <div className="p-6 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-gov-card">
             <span className="text-3xl sm:text-4xl font-black font-mono text-rose-700">
-              {NATIONAL_KPIS.highRiskProjects}
+              {nationalKpis.highRiskProjects}
             </span>
             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">High Risk Dossiers</p>
             <p className="text-[11px] text-slate-500">Under Active Audit Review</p>

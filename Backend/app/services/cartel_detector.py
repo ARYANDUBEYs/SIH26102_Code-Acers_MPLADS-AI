@@ -15,6 +15,7 @@ class CartelDetectorEngine:
         """
         G = nx.Graph()
         vendor_totals = {}
+        vendor_project_counts = {}
         district_total_funds = 0.0
         
         nodes: List[CartelNode] = []
@@ -29,6 +30,7 @@ class CartelDetectorEngine:
             
             district_total_funds += amount
             vendor_totals[v_id] = vendor_totals.get(v_id, 0.0) + amount
+            vendor_project_counts[v_id] = vendor_project_counts.get(v_id, 0) + 1
             
             # Add Project Node
             G.add_node(p_id, node_type="project", label=p_title, amount=amount)
@@ -45,9 +47,13 @@ class CartelDetectorEngine:
             ))
 
         monopoly_vendors = []
+        monopoly_vendor_ids = set()
         for v_id, total in vendor_totals.items():
             market_share = (total / district_total_funds) if district_total_funds > 0 else 0.0
-            is_monopoly = market_share >= settings.VENDOR_MONOPOLY_CONCENTRATION_LIMIT
+            # A single-project district cannot establish a meaningful monopoly.
+            is_monopoly = (vendor_project_counts[v_id] >= 2 and market_share >= settings.VENDOR_MONOPOLY_CONCENTRATION_LIMIT)
+            if is_monopoly:
+                monopoly_vendor_ids.add(v_id)
             
             v_name = next((p["contractor_name"] for p in projects_data if p["contractor_id"] == v_id), v_id)
             
@@ -74,7 +80,7 @@ class CartelDetectorEngine:
                 id=p["project_id"],
                 label=p["title"],
                 type="project",
-                risk_level="MEDIUM" if float(p.get("risk_score", 0.0)) > 50 else "LOW",
+                risk_level="MEDIUM" if p["contractor_id"] in monopoly_vendor_ids else "LOW",
                 total_amount=float(p["sanctioned_amount"])
             ))
 

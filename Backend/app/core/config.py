@@ -23,7 +23,24 @@ class SystemSettings(BaseSettings):
     DUPLICATE_IMAGE_SIMILARITY_CUTOFF: float = 0.82
     VENDOR_MONOPOLY_CONCENTRATION_LIMIT: float = 0.35
 
+    # ML blend: how much weight the trained IsolationForest gets vs the rule-based
+    # formula for financial/timeline scores. 0 = pure rules, 1 = pure ML.
+    ML_BLEND_WEIGHT: float = 0.5
+    DUPLICATE_TITLE_SIMILARITY_CUTOFF: float = 0.65
+    OVERRUN_PROBABILITY_ALERT_CUTOFF: float = 0.65
+    TAMPER_ELA_SUSPICION_CUTOFF: float = 35.0
+    MAX_IMAGE_BYTES: int = 10 * 1024 * 1024
+
+    # MongoDB. If MONGODB_URI is unset/unreachable, the app transparently falls
+    # back to the in-memory SAMPLE_PROJECTS_DATABASE so it still runs standalone.
+    MONGODB_URI: str = ""
+    MONGODB_DB_NAME: str = "mplads_ai"
+
+    # Alerting. If ALERT_WEBHOOK_URL is unset, alerts are just logged to console.
+    ALERT_WEBHOOK_URL: str = ""
+
     class Config:
         case_sensitive = True
+        env_file = ".env"
 
 settings = SystemSettings()

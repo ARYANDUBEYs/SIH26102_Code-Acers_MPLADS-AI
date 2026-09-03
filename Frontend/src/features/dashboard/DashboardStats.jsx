@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { DashboardCard } from './DashboardCard';
-import { NATIONAL_KPIS } from '../../services/mockData';
 import {
   FolderGit2,
   IndianRupee,
@@ -12,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export const DashboardStats = ({ kpis = NATIONAL_KPIS }) => {
+export const DashboardStats = ({ kpis = {} }) => {
   const navigate = useNavigate();
 
   const cards = [

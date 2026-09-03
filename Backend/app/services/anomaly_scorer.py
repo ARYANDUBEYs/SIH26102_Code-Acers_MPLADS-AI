@@ -1,26 +1,34 @@
 """
 Multi-Factor Project Risk & Inefficiency Scorer
 Calculates normalized 0-100 Composite Risk Index with explainable audit factors.
+
+Financial-drift and timeline-delay each combine two independent signals:
+  1. An interpretable rule (the original linear formula) — auditors can see
+     exactly why a number came out the way it did.
+  2. A trained IsolationForest anomaly score (see app/ml/anomaly_model.py) —
+     catches unusual combinations the fixed rule wouldn't, e.g. a project
+     that's individually fine on each axis but jointly unusual.
+The two are blended via settings.ML_BLEND_WEIGHT (default 50/50).
 """
 from typing import List
 from app.models.schemas import ProjectRecord, ProjectRiskAssessment, RiskBreakdown, RiskLevelEnum
 from app.core.config import settings
+from app.ml.anomaly_model import project_anomaly_model
+from app.ml.overrun_predictor import overrun_predictor_service
+from app.services.alerting import alerting_service
 
 class AnomalyScorerEngine:
     @staticmethod
     def evaluate_financial_drift(record: ProjectRecord) -> float:
         """
-        Measures mismatch between funds disbursed vs physical ground progress.
+        Measures mismatch between disbursement/utilization and physical progress.
         """
-        disbursement_ratio = (record.funds_released / record.sanctioned_amount) if record.sanctioned_amount > 0 else 0.0
+        disbursement_ratio = min(1.0, record.funds_released / record.sanctioned_amount) if record.sanctioned_amount > 0 else 0.0
         physical_ratio = record.physical_progress_pct / 100.0
-        
-        drift = disbursement_ratio - physical_ratio
-        if drift <= 0:
-            return 0.0
-        
-        # Scale drift linearly up to 100
-        return min(100.0, drift * 150.0)
+        utilization_ratio = min(1.0, record.funds_utilized / record.funds_released) if record.funds_released > 0 else 0.0
+        drift = max(0.0, disbursement_ratio - physical_ratio)
+        idle_funds = max(0.0, 1.0 - utilization_ratio) * disbursement_ratio
+        return min(100.0, drift * 120.0 + idle_funds * 40.0)
 
     @staticmethod
     def evaluate_timeline_delay(record: ProjectRecord) -> float:
@@ -46,11 +54,28 @@ class AnomalyScorerEngine:
         """
         Computes the weighted composite risk index (0-100) and actionable MoSPI audit flags.
         """
-        financial_score = cls.evaluate_financial_drift(record)
-        timeline_score = cls.evaluate_timeline_delay(record)
-        image_score = image_anomaly_factor
+        rule_financial_score = cls.evaluate_financial_drift(record)
+        rule_timeline_score = cls.evaluate_timeline_delay(record)
+
+        disbursement_ratio = min(1.0, (record.funds_released / record.sanctioned_amount)) if record.sanctioned_amount > 0 else 0.0
+        utilization_ratio = min(1.0, (record.funds_utilized / record.funds_released)) if record.funds_released > 0 else 0.0
+        physical_ratio = record.physical_progress_pct / 100.0
+        time_ratio = (record.days_elapsed / record.allocated_duration_days) if record.allocated_duration_days > 0 else 1.0
+
+        ml_anomaly_score = project_anomaly_model.score(disbursement_ratio, physical_ratio, time_ratio)
+        w = settings.ML_BLEND_WEIGHT
+        financial_score = ((1 - w) * rule_financial_score) + (w * ml_anomaly_score)
+        timeline_score = ((1 - w) * rule_timeline_score) + (w * ml_anomaly_score)
+
+        image_score = image_anomaly_factor if image_anomaly_factor > 0 else record.image_anomaly_score
         vendor_score = vendor_historical_risk
-        
+
+        overrun_probability = overrun_predictor_service.predict_overrun_probability(
+            time_ratio=time_ratio,
+            physical_ratio=physical_ratio,
+            financial_drift=disbursement_ratio - physical_ratio,
+        )
+
         composite_score = (
             (settings.WEIGHT_FINANCIAL_DRIFT * financial_score) +
             (settings.WEIGHT_TIMELINE_DELAY * timeline_score) +
@@ -71,16 +96,21 @@ class AnomalyScorerEngine:
             recommended = "AUTOMATED_CLEARANCE: Project metrics conform to MoSPI standard implementation parameters."
             
         flags: List[str] = []
-        if financial_score > 40.0:
-            flags.append(f"Financial Drift: {(record.funds_released/record.sanctioned_amount*100):.1f}% funds disbursed with only {record.physical_progress_pct}% physical work completed.")
-        if timeline_score > 50.0:
+        if rule_financial_score > 40.0:
+            pct = (record.funds_released / record.sanctioned_amount * 100.0) if record.sanctioned_amount > 0 else 0.0
+            flags.append(f"Financial Drift: {pct:.1f}% funds disbursed with only {record.physical_progress_pct}% physical work completed.")
+        if rule_timeline_score > 50.0:
             flags.append(f"Timeline Hazard: {record.days_elapsed} days elapsed of {record.allocated_duration_days} sanctioned schedule.")
+        if ml_anomaly_score > 65.0:
+            flags.append(f"ML Model Alert: IsolationForest flagged this fund/progress/time combination as a statistical outlier ({ml_anomaly_score:.0f}/100).")
+        if overrun_probability >= settings.OVERRUN_PROBABILITY_ALERT_CUTOFF:
+            flags.append(f"Predictive Overrun Risk: {overrun_probability*100:.0f}% probability this project exceeds its allocated schedule before completion.")
         if image_score > 60.0:
             flags.append("Visual Evidence Anomaly: Suspected duplicate proof photo flagged.")
         if vendor_score > 50.0:
             flags.append(f"Vendor Monopolization: Contractor {record.contractor_id} exceeds district concentration threshold.")
 
-        return ProjectRiskAssessment(
+        assessment = ProjectRiskAssessment(
             project_id=record.project_id,
             overall_risk_score=composite_score,
             risk_level=level,
@@ -92,7 +122,14 @@ class AnomalyScorerEngine:
             ),
             explainable_flags=flags,
             requires_manual_audit=(level != RiskLevelEnum.LOW),
-            recommended_action=recommended
+            recommended_action=recommended,
+            overrun_probability=overrun_probability,
+            ml_anomaly_score=ml_anomaly_score,
         )
+
+        if level == RiskLevelEnum.CRITICAL:
+            alerting_service.send_alert(record=record, assessment=assessment)
+
+        return assessment
 
 anomaly_scorer_service = AnomalyScorerEngine()

@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
 from app.api.router import api_router
+from app.db.mongo import project_store
+from app.api.endpoints.analytics import SAMPLE_PROJECTS_DATABASE
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -21,10 +23,16 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,  # can't be True with allow_origins=["*"]; browsers reject that combo
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def on_startup():
+    # Connects to Mongo if MONGODB_URI is set/reachable; otherwise falls
+    # back to in-memory mode automatically (see app/db/mongo.py).
+    await project_store.connect(seed_data=SAMPLE_PROJECTS_DATABASE)
 
 # Include Backend API Routes
 app.include_router(api_router, prefix=settings.API_V1_STR)
