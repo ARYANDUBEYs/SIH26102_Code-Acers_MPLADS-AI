@@ -9,24 +9,28 @@ export default {
     extend: {
       colors: {
         gov: {
-          darkest: '#0B1220',
-          dark: '#111827',
-          card: '#1E293B',
-          cardLight: '#0F172A',
-          border: '#334155',
-          borderLight: '#1E293B',
-          blue: '#2563EB',
-          lightBlue: '#3B82F6',
-          accent: '#06B6D4',
-          gold: '#F59E0B',
-          saffron: '#FF9933',
-          indiaGreen: '#138808'
+          canvas: '#F8FAFC',       // Crisp enterprise off-white (slate-50)
+          surface: '#FFFFFF',      // Pure white card/table background
+          subtle: '#F1F5F9',       // Subtle table striping / hover (slate-100)
+          border: '#E2E8F0',       // Crisp 1px enterprise border (slate-200)
+          borderStrong: '#CBD5E1', // Pronounced border (slate-300)
+          navy: '#0B2545',         // Official Indian Government Deep Navy
+          navyDark: '#081D37',     // Darker Navy for mastheads
+          navyLight: '#1E3A8A',    // Primary institutional blue
+          blue: '#1D4ED8',         // Action blue
+          sky: '#0284C7',          // Accent sky blue
+          slate: '#334155',        // High-contrast slate body text (slate-700)
+          slateDark: '#0F172A',    // Main headings (slate-900)
+          muted: '#64748B',        // Secondary labels (slate-500)
+          gold: '#D97706',         // Official Audit Gold / Amber
+          saffron: '#FF9933',      // National Flag Saffron
+          indiaGreen: '#138808',   // National Flag India Green
         },
         risk: {
-          low: '#22C55E',
-          medium: '#EAB308',
-          high: '#F97316',
-          critical: '#EF4444'
+          low: '#16A34A',          // Green-600
+          medium: '#D97706',       // Amber-600
+          high: '#EA580C',         // Orange-600
+          critical: '#DC2626',     // Red-600
         }
       },
       fontFamily: {
@@ -34,11 +38,10 @@ export default {
         mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace']
       },
       boxShadow: {
-        'glow-blue': '0 0 20px -5px rgba(37, 99, 235, 0.4)',
-        'glow-red': '0 0 20px -5px rgba(239, 68, 68, 0.4)',
-        'glow-orange': '0 0 20px -5px rgba(249, 115, 22, 0.4)',
-        'glow-green': '0 0 20px -5px rgba(34, 197, 94, 0.4)',
-        'card-dark': '0 4px 20px -2px rgba(0, 0, 0, 0.5)'
+        'gov-sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        'gov-card': '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08)',
+        'gov-hover': '0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06)',
+        'gov-dropdown': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
       }
     },
   },

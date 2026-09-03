@@ -36,6 +36,8 @@ export const Analytics = () => {
   const [stateRisks, setStateRisks] = useState([]);
   const [monthlyTrends, setMonthlyTrends] = useState([]);
   const [fraudData, setFraudData] = useState([]);
+  const [fundUtilizationData, setFundUtilizationData] = useState([]);
+  const [riskDistributionData, setRiskDistributionData] = useState([]);
   const [selectedYear, setSelectedYear] = useState('2025-26');
   const [selectedState, setSelectedState] = useState('ALL');
   const [selectedType, setSelectedType] = useState('ALL');
@@ -45,31 +47,48 @@ export const Analytics = () => {
   }, []);
 
   const loadAnalytics = async () => {
-    const [stRes, trendRes, fraudRes] = await Promise.all([
+    const [stRes, trendRes, fraudRes, projRes] = await Promise.all([
       api.getStateRiskData(),
       api.getMonthlyTrends(),
       api.getFraudBreakdown(),
+      api.getProjects(),
     ]);
 
     if (stRes.success) setStateRisks(stRes.data);
     if (trendRes.success) setMonthlyTrends(trendRes.data);
     if (fraudRes.success) setFraudData(fraudRes.data);
+
+    if (projRes.success) {
+      const projects = projRes.data;
+
+      // Real fund utilization grouped by category (₹ Crores)
+      const byCategory = {};
+      for (const p of projects) {
+        const cat = p.category || 'Uncategorized';
+        if (!byCategory[cat]) byCategory[cat] = { category: cat, sanctioned: 0, released: 0, utilized: 0 };
+        byCategory[cat].sanctioned += (p.sanctionedAmount || 0) / 10000000;
+        byCategory[cat].released += (p.releasedAmount || 0) / 10000000;
+        byCategory[cat].utilized += (p.utilizedAmount || 0) / 10000000;
+      }
+      setFundUtilizationData(Object.values(byCategory).map(c => ({
+        category: c.category,
+        sanctioned: Math.round(c.sanctioned * 10) / 10,
+        released: Math.round(c.released * 10) / 10,
+        utilized: Math.round(c.utilized * 10) / 10,
+      })));
+
+      // Real risk-bucket distribution
+      const buckets = { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 };
+      for (const p of projects) if (buckets[p.riskLevel] !== undefined) buckets[p.riskLevel] += 1;
+      const total = projects.length || 1;
+      setRiskDistributionData([
+        { name: 'Low Risk (0-30%)', value: Math.round((buckets.LOW / total) * 100), color: '#22C55E' },
+        { name: 'Medium Risk (31-60%)', value: Math.round((buckets.MEDIUM / total) * 100), color: '#EAB308' },
+        { name: 'High Risk (61-85%)', value: Math.round((buckets.HIGH / total) * 100), color: '#F97316' },
+        { name: 'Critical Risk (86-100%)', value: Math.round((buckets.CRITICAL / total) * 100), color: '#EF4444' },
+      ]);
+    }
   };
-
-  const fundUtilizationData = [
-    { category: 'Roads & Bridges', sanctioned: 840, released: 620, utilized: 480 },
-    { category: 'Drinking Water', sanctioned: 520, released: 450, utilized: 390 },
-    { category: 'Education Labs', sanctioned: 430, released: 380, utilized: 350 },
-    { category: 'Healthcare PHCs', sanctioned: 390, released: 310, utilized: 240 },
-    { category: 'Community Halls', sanctioned: 306, released: 240, utilized: 160 },
-  ];
-
-  const riskDistributionData = [
-    { name: 'Low Risk (0-30%)', value: 68, color: '#22C55E' },
-    { name: 'Medium Risk (31-60%)', value: 20, color: '#EAB308' },
-    { name: 'High Risk (61-85%)', value: 9, color: '#F97316' },
-    { name: 'Critical Risk (86-100%)', value: 3, color: '#EF4444' },
-  ];
 
   return (
     <PageLayout

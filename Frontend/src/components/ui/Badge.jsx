@@ -11,13 +11,13 @@ export const Badge = ({
   dotColor = '',
 }) => {
   const variants = {
-    default: 'bg-slate-800 text-slate-300 border-slate-700',
-    primary: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-    success: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-    warning: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    danger: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
-    orange: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-    purple: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+    default: 'bg-slate-100 text-slate-700 border-slate-200',
+    primary: 'bg-blue-50 text-blue-700 border-blue-200',
+    success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    warning: 'bg-amber-50 text-amber-800 border-amber-200',
+    danger: 'bg-rose-50 text-rose-700 border-rose-200',
+    orange: 'bg-orange-50 text-orange-700 border-orange-200',
+    purple: 'bg-purple-50 text-purple-700 border-purple-200',
   };
 
   const sizes = {
@@ -48,15 +48,22 @@ export const Badge = ({
 export const RiskBadge = ({ score, level, showScore = true, className = '' }) => {
   const meta = getRiskMeta(score !== undefined ? score : level === 'CRITICAL' ? 95 : level === 'HIGH' ? 75 : level === 'MEDIUM' ? 45 : 15);
 
+  const styleMap = {
+    CRITICAL: 'bg-rose-50 text-rose-700 border-rose-200',
+    HIGH: 'bg-orange-50 text-orange-700 border-orange-200',
+    MEDIUM: 'bg-amber-50 text-amber-800 border-amber-200',
+    LOW: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  };
+
   return (
     <span
       className={cn(
         'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border font-mono tracking-wide',
-        meta.badgeColor,
+        styleMap[meta.level] || meta.badgeColor,
         className
       )}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0 animate-pulse" />
+      <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0" />
       {showScore && score !== undefined ? `${score}% ${meta.label}` : meta.label}
     </span>
   );
@@ -65,7 +72,7 @@ export const RiskBadge = ({ score, level, showScore = true, className = '' }) =>
 export const StatusBadge = ({ status, className = '' }) => {
   const config = PROJECT_STATUS[status] || {
     label: status || 'Unknown',
-    color: 'bg-slate-800 text-slate-300 border-slate-700',
+    color: 'bg-slate-100 text-slate-700 border-slate-200',
   };
 
   return (

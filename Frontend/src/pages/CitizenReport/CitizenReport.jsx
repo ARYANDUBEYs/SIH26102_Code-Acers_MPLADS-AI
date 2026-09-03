@@ -25,7 +25,7 @@ export const CitizenReport = () => {
   const [location, setLocation] = useState('Chiraigaon Block, Varanasi');
   const [gpsCoords, setGpsCoords] = useState('25.3190° N, 82.9810° E');
   const [isGettingLocation, setIsGettingLocation] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState('https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80');
+  const [photoPreview, setPhotoPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedReport, setSubmittedReport] = useState(null);
 
@@ -229,7 +229,11 @@ export const CitizenReport = () => {
                       <img
                         src={photoPreview}
                         alt="Preview"
-                        className="h-32 rounded-lg object-cover border border-slate-200"
+                        className="h-32 rounded-lg object-cover border border-slate-200 bg-slate-100"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          setPhotoPreview(null);
+                        }}
                       />
                       <span className="text-xs font-semibold text-blue-600">Photo attached • Click to replace</span>
                     </div>

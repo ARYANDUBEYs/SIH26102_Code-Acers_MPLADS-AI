@@ -43,8 +43,8 @@ export const MOCK_PROJECTS = [
     slaDaysLeft: 4,
     slaUrgency: 'HIGH',
     images: {
-      uploaded: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=800&auto=format&fit=crop&q=80',
-      matched: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=800&auto=format&fit=crop&q=80',
+      uploaded: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.3dm7d3iD_CNAtTQMp22DUQHaEu%3Fr%3D0%26pid%3DApi&f=1&ipt=08e3923244a23d76cd19ec9fff62db7b1fc3c11e2572fd1aa59a7624b944bb79&ipo=images',
+      matched: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.3dm7d3iD_CNAtTQMp22DUQHaEu%3Fr%3D0%26pid%3DApi&f=1&ipt=08e3923244a23d76cd19ec9fff62db7b1fc3c11e2572fd1aa59a7624b944bb79&ipo=images',
       uploadedMeta: {
         timestamp: '2026-08-20 16:42 IST',
         device: 'Realme 9 Pro (5G)',
@@ -110,6 +110,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00231',
     name: 'Multi-purpose Community Hall Construction',
+    images: { uploaded: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80' },
     category: 'Community Assets',
     location: 'Sector 4, Rohini',
     district: 'North West Delhi',
@@ -148,6 +149,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00451',
     name: 'Solar Drinking Water RO Plant & Borewell',
+    images: { uploaded: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80' },
     category: 'Drinking Water & Sanitation',
     location: 'Banswara Tribal Block',
     district: 'Banswara',
@@ -186,6 +188,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00089',
     name: 'Digital Smart Classroom Lab & Computer Setup',
+    images: { uploaded: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&auto=format&fit=crop&q=80' },
     category: 'Education & Skill Development',
     location: 'Govt Model Higher Secondary School',
     district: 'Patna',
@@ -214,6 +217,7 @@ export const MOCK_PROJECTS = [
   {
     id: 'MPLAD-2026-00342',
     name: 'Primary Health Centre (PHC) Medical Oxygen Pipeline',
+    images: { uploaded: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80' },
     category: 'Public Health',
     location: 'Baramati Rural Hospital',
     district: 'Pune',

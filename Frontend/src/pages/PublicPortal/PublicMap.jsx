@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera } from 'lucide-react';
+import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera, Layers } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatINR } from '../../utils/helpers';
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+function MapResizer() {
+  const map = useMap();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [map]);
+  return null;
+}
 
 export const PublicMap = () => {
   const [projects, setProjects] = useState([]);
@@ -22,17 +34,15 @@ export const PublicMap = () => {
   };
 
   const getPinColor = (status, risk) => {
-    if (risk >= 80) return '#EF4444'; // Red = Attention Required
-    if (risk >= 50) return '#EAB308'; // Yellow = Monitoring
-    return '#22C55E'; // Green = Normal
+    if (risk >= 80) return '#EF4444';
+    if (risk >= 50) return '#EAB308';
+    return '#22C55E';
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-600 flex flex-col">
-      {/* Tiranga Accent Banner */}
       <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600" />
 
-      {/* Public Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/public" className="flex items-center gap-3">
@@ -43,7 +53,7 @@ export const PublicMap = () => {
               <span className="font-extrabold text-base tracking-tight text-slate-900">
                 MPLADS <span className="text-blue-600">Public Map</span>
               </span>
-              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator</p>
+              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator (English)</p>
             </div>
           </Link>
 
@@ -62,12 +72,11 @@ export const PublicMap = () => {
         </div>
       </header>
 
-      {/* Map Content */}
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Public Project Map</h2>
-            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in your area</p>
+            <h2 className="text-lg font-bold text-slate-900">Public Project Map (English India Map)</h2>
+            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in your area with English location labels</p>
           </div>
 
           <div className="flex items-center gap-3 text-xs bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
@@ -83,15 +92,16 @@ export const PublicMap = () => {
           </div>
         </div>
 
-        <div className="flex-1 w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md min-h-[550px] relative">
+        <div className="w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md h-[600px] relative">
           <MapContainer
-            center={[25.3176, 82.9739]} // Centered on Varanasi/UP
-            zoom={6}
-            className="w-full h-full min-h-[550px]"
+            center={[22.5937, 78.9629]}
+            zoom={5}
+            style={{ height: '100%', width: '100%' }}
           >
+            <MapResizer />
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://carto.com/">CARTO</a> (English Tiles)'
+              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             />
 
             {projects.map((p) => {
@@ -102,43 +112,36 @@ export const PublicMap = () => {
                 <CircleMarker
                   key={p.id}
                   center={coords}
-                  radius={12}
+                  radius={9}
                   pathOptions={{
-                    color: color,
                     fillColor: color,
-                    fillOpacity: 0.8,
+                    fillOpacity: 0.85,
+                    color: '#ffffff',
                     weight: 2,
                   }}
                 >
                   <Popup>
-                    <div className="p-1 space-y-2 text-slate-900 min-w-[220px]">
-                      <div className="border-b border-slate-200 pb-1.5">
-                        <span className="text-[10px] font-mono font-bold text-blue-600 block">{p.id}</span>
-                        <h4 className="font-bold text-xs text-slate-900">{p.name}</h4>
-                        <p className="text-[11px] text-slate-500">{p.location}, {p.district}</p>
+                    <div className="p-1 space-y-2 text-xs font-sans max-w-xs">
+                      <div>
+                        <span className="font-mono font-bold text-[10px] text-blue-600">{p.id}</span>
+                        <h4 className="font-bold text-slate-900 leading-tight">{p.name}</h4>
+                        <p className="text-slate-500 text-[11px]">{p.district}, {p.state}</p>
                       </div>
-
-                      <div className="space-y-1 text-xs text-slate-600">
+                      <div className="p-2 bg-slate-50 rounded space-y-1">
                         <div className="flex justify-between">
-                          <span>Sanction:</span>
-                          <span className="font-mono font-bold text-slate-900">{formatINR(p.sanctionedAmount)}</span>
+                          <span className="text-slate-500">Sanctioned:</span>
+                          <span className="font-bold font-mono">{formatINR(p.sanctionedAmount)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Physical Progress:</span>
-                          <span className="font-mono font-bold text-blue-600">{p.progressPercent}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Public Status:</span>
-                          <span className="font-semibold text-emerald-600">AI Monitored</span>
+                          <span className="text-slate-500">AI Risk Score:</span>
+                          <span className="font-bold font-mono text-rose-600">{p.riskScore}/100</span>
                         </div>
                       </div>
-
                       <button
                         onClick={() => navigate(`/project/${p.id}`)}
-                        className="w-full mt-2 py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-semibold flex items-center justify-center gap-1 shadow"
+                        className="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold text-[11px] flex items-center justify-center gap-1"
                       >
-                        <span>View Project</span>
-                        <ArrowRight className="w-3 h-3" />
+                        <Eye className="w-3 h-3" /> View Project Audit
                       </button>
                     </div>
                   </Popup>

@@ -1,3 +1,4 @@
+import 'leaflet/dist/leaflet.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageLayout } from '../../components/layout/PageLayout';
@@ -143,7 +144,7 @@ export const RiskMap = () => {
               {/* Dark CartoDB Map Tiles */}
               <TileLayer
                 attribution='&copy; <a href="https://carto.com/">CartoDB</a> Dark Matter'
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
               />
 
               {filteredStates.map((st) => {
