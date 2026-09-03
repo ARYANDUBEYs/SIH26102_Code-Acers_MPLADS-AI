@@ -445,7 +445,7 @@ export const NOTIFICATIONS_LIST = [
     message: 'AI Vision detected 96% photo match with completed Jaunpur project MPLAD-2024-00892.',
     timestamp: '10 minutes ago',
     unread: true,
-    link: '/dashboard/evidence',
+    link: '/evidence',
   },
   {
     id: 'NOTIF-02',
@@ -454,7 +454,7 @@ export const NOTIFICATIONS_LIST = [
     message: 'Project MPLAD-2026-00231 in Rohini Delhi has 2 days remaining before SLA breach.',
     timestamp: '45 minutes ago',
     unread: true,
-    link: '/dashboard/sla',
+    link: '/sla',
   },
   {
     id: 'NOTIF-03',
@@ -463,7 +463,7 @@ export const NOTIFICATIONS_LIST = [
     message: 'Report CIT-2026-9812 submitted with geotagged photo evidence for Varanasi Road.',
     timestamp: '2 hours ago',
     unread: false,
-    link: '/dashboard/high-risk',
+    link: '/high-risk',
   },
   {
     id: 'NOTIF-04',
@@ -472,6 +472,6 @@ export const NOTIFICATIONS_LIST = [
     message: 'Patna Smart Classroom (MPLAD-2026-00089) cleared all 5 automated integrity audits.',
     timestamp: '1 day ago',
     unread: false,
-    link: '/dashboard/projects',
+    link: '/projects',
   },
 ];
