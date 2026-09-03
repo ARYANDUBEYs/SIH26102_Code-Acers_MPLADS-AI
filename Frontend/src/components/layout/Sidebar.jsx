@@ -87,7 +87,7 @@ export const Sidebar = () => {
               <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50" />
             </div>
 
-            <nav className="space-y-1">
+            <nav className="space-y-1.5">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
@@ -98,13 +98,13 @@ export const Sidebar = () => {
                     to={item.path}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      'group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150',
+                      'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150',
                       isActive
                         ? 'bg-blue-50 text-blue-900 border border-blue-200 font-semibold shadow-gov-sm'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
                     )}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         className={cn(
                           'w-4 h-4 shrink-0 transition-colors',
@@ -116,7 +116,7 @@ export const Sidebar = () => {
                     </div>
 
                     {item.badge && (
-                      <span className={cn('px-1.5 py-0.2 text-[10px] font-mono rounded font-semibold', item.badgeColor)}>
+                      <span className={cn('px-1.5 py-0.5 text-[10px] font-mono rounded font-semibold leading-none', item.badgeColor)}>
                         {item.badge}
                       </span>
                     )}
@@ -132,7 +132,7 @@ export const Sidebar = () => {
           <div className="p-2.5 rounded-lg bg-white border border-slate-200 shadow-gov-sm text-xs">
             <div className="flex items-center justify-between font-semibold text-slate-800">
               <span>e-SAKSHI Sync</span>
-              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200 font-mono">LIVE</span>
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-mono leading-none">LIVE</span>
             </div>
             <p className="text-[10px] text-slate-500 mt-1 leading-tight">
               Continuous Audit Layer active for 784 Parliamentary Constituencies.
