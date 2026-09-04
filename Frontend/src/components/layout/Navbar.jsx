@@ -23,6 +23,8 @@ import { useApp } from '../../context/AppContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext';
 import { NotificationDropdown } from './NotificationDropdown';
 import { SarvamIndicModal } from '../sarvam/SarvamIndicModal';
+import { TopUtilityBar } from './TopUtilityBar';
+import { CitizenRequestModal } from '../common/CitizenRequestModal';
 import { ROLES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
@@ -36,6 +38,7 @@ export const Navbar = () => {
   const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isIndicModalOpen, setIsIndicModalOpen] = useState(false);
+  const [isCitizenModalOpen, setIsCitizenModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const currentLangObj = SUPPORTED_LANGUAGES.find(l => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
@@ -53,54 +56,63 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 shadow-sm">
-      {/* Top National Tricolor Ribbon */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+    <div className="sticky top-0 z-40 w-full">
+      <TopUtilityBar onOpenVoiceModal={() => setIsIndicModalOpen(true)} />
+      <header className="w-full bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 gap-4">
+            
+            {/* Brand / Logo */}
+            <div className="flex items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
-          
-          {/* Brand / Logo */}
-          <div className="flex items-center gap-2.5 shrink-0">
+              <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+                {/* National Emblem / Shield Icon */}
+                <div className="w-9 h-9 rounded-xl bg-[#0B2545] p-0.5 shadow-sm flex items-center justify-center shrink-0 border border-blue-900">
+                  <ShieldCheck className="w-5 h-5 text-amber-400 group-hover:scale-105 transition-transform" />
+                </div>
+
+                <div className="shrink-0">
+                  <div className="flex items-center gap-2 whitespace-nowrap">
+                    <span className="font-extrabold text-sm sm:text-base tracking-tight text-[#0B2545] whitespace-nowrap">
+                      {t('brand_title', 'MPLADS e-SAKSHI 2.0')}
+                    </span>
+                    <span className="hidden xl:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-emerald-50 text-emerald-800 border border-emerald-300 rounded font-bold whitespace-nowrap shrink-0">
+                      {t('brand_tag', 'AI Vigilance Layer')}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 font-medium tracking-wide hidden lg:block whitespace-nowrap">
+                    {t('brand_sub', 'Ministry of Statistics & Programme Implementation • Govt. of India')}
+                  </p>
+                </div>
+              </Link>
+            </div>
+
+            {/* Back to Home Button */}
+            <Link
+              to="/"
+              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-xs text-slate-700 hover:text-blue-700 font-semibold transition-all shadow-sm shrink-0 whitespace-nowrap"
+              title="Return to Main Landing Page"
+            >
+              <Home className="w-3.5 h-3.5 text-blue-700" />
+              <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
+            </Link>
+
+            {/* Citizen Request Button */}
             <button
               type="button"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+              onClick={() => setIsCitizenModalOpen(true)}
+              className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-xs text-blue-800 font-semibold transition-all shadow-sm shrink-0 whitespace-nowrap cursor-pointer"
+              title="Submit Citizen Work Recommendation or Grievance"
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <span>Citizen Request</span>
             </button>
-
-            <Link to="/" className="flex items-center gap-2.5 group shrink-0">
-              {/* National Emblem / Shield Icon */}
-              <div className="w-9 h-9 rounded-xl bg-[#0B2545] p-0.5 shadow-sm flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5 text-blue-300 group-hover:scale-105 transition-transform" />
-              </div>
-
-              <div className="shrink-0">
-                <div className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="font-extrabold text-sm sm:text-base tracking-tight text-[#0B2545] whitespace-nowrap">
-                    {t('brand_title', 'MPLADS INTELLIGENCE')}
-                  </span>
-                  <span className="hidden xl:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-blue-50 text-blue-800 border border-blue-200 rounded font-bold whitespace-nowrap shrink-0">
-                    {t('brand_tag', 'MoSPI e-SAKSHI Layer')}
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-500 font-medium tracking-wide hidden lg:block whitespace-nowrap">
-                  {t('brand_sub', 'Ministry of Statistics & Programme Implementation • Govt. of India')}
-                </p>
-              </div>
-            </Link>
-          </div>
-
-          {/* Back to Home Button */}
-          <Link
-            to="/"
-            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-xs text-slate-700 hover:text-blue-700 font-semibold transition-all shadow-sm shrink-0 whitespace-nowrap"
-            title="Return to Main Landing Page"
-          >
-            <Home className="w-3.5 h-3.5 text-blue-700" />
-            <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
-          </Link>
 
           {/* Center Search Bar Trigger */}
           <div className="hidden md:flex flex-1 max-w-xs xl:max-w-sm mx-2">
@@ -341,6 +353,10 @@ export const Navbar = () => {
 
       {/* Sovereign Indic Intelligence Modal */}
       <SarvamIndicModal isOpen={isIndicModalOpen} onClose={() => setIsIndicModalOpen(false)} />
+
+      {/* Citizen Request Modal */}
+      <CitizenRequestModal isOpen={isCitizenModalOpen} onClose={() => setIsCitizenModalOpen(false)} />
     </header>
-  );
+  </div>
+);
 };
