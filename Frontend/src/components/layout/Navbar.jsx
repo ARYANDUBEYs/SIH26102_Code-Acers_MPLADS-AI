@@ -132,66 +132,10 @@ export const Navbar = () => {
             </button>
           </div>
 
-          {/* Right Actions: Full-Page Language Switcher, Voice AI, Role Switcher, Notifications, User Profile */}
+          {/* Right Actions: Role Switcher, Notifications, User Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* 1. Global Indic Language Dropdown (TRANSLATES WHOLE PAGE) */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-white border border-slate-200 hover:border-blue-600 rounded-lg text-xs text-slate-800 transition-all shadow-sm font-semibold cursor-pointer"
-                title="Select Indic Language (Translates entire page)"
-              >
-                <Globe className="w-3.5 h-3.5 text-blue-700" />
-                <span className="font-mono text-[11px]">{currentLangObj.flag} {currentLangObj.native}</span>
-                <ChevronDown className="w-3 h-3 text-slate-400" />
-              </button>
-
-              {isLangMenuOpen && (
-                <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 divide-y divide-slate-100 max-h-80 overflow-y-auto">
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    Sovereign Indic Languages (8)
-                  </div>
-                  <div className="py-1">
-                    {SUPPORTED_LANGUAGES.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setLanguage(lang.code);
-                          setIsLangMenuOpen(false);
-                        }}
-                        className={cn(
-                          'w-full flex items-center justify-between px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                          currentLanguage === lang.code
-                            ? 'bg-blue-50 text-blue-900 font-bold'
-                            : 'text-slate-700 hover:bg-slate-50'
-                        )}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span>{lang.flag}</span>
-                          <span className="font-medium">{lang.native}</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 font-mono">({lang.name})</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* 2. Sarvam AI Voice Briefing & Grievance Trigger */}
-            <button
-              type="button"
-              onClick={() => setIsIndicModalOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-orange-50 hover:bg-orange-100 border border-orange-200 hover:border-orange-500 rounded-lg text-xs text-orange-900 transition-all shadow-sm font-semibold cursor-pointer"
-              title="Sarvam AI Voice Intelligence & Vernacular Grievances"
-            >
-              <Volume2 className="w-3.5 h-3.5 text-orange-600 animate-pulse" />
-              <span className="hidden sm:inline-block">{t('voice_briefing_btn', 'Voice AI')}</span>
-            </button>
-
-            {/* 3. Role Switcher for Hackathon Demo */}
+            {/* Role Switcher for Hackathon Demo */}
             <div className="relative">
               <button
                 type="button"

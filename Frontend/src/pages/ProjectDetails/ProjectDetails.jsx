@@ -11,6 +11,7 @@ import { api } from '../../services/api';
 import { formatINR, formatDate } from '../../utils/helpers';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
+import { ROLES } from '../../utils/constants';
 import {
   ShieldAlert,
   IndianRupee,
@@ -43,6 +44,7 @@ export const ProjectDetails = () => {
   const [isSubmittingDecision, setIsSubmittingDecision] = useState(false);
 
   const { role, isDistrictOfficer, isAdmin } = useAuth();
+  const isCitizen = role === ROLES.CITIZEN;
   const { showToast } = useApp();
   const navigate = useNavigate();
 
@@ -116,30 +118,52 @@ export const ProjectDetails = () => {
       badge={<StatusBadge status={project.status} />}
       actions={
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/cartel-matrix')}
-            icon={Network}
-          >
-            Cartel Graph
-          </Button>
-          <Button
-            variant="danger"
-            size="sm"
-            onClick={() => navigate('/evidence')}
-            icon={Camera}
-          >
-            Verify AI Evidence
-          </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => setIsDecisionModalOpen(true)}
-            icon={ShieldCheck}
-          >
-            Take Official Action
-          </Button>
+          {isCitizen ? (
+            <>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => navigate(`/public/report?projectId=${encodeURIComponent(project.id)}`)}
+                icon={Camera}
+              >
+                Report Citizen Grievance
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/public')}
+              >
+                Public Transparency Portal
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/cartel-matrix')}
+                icon={Network}
+              >
+                Cartel Graph
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => navigate('/evidence')}
+                icon={Camera}
+              >
+                Verify AI Evidence
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setIsDecisionModalOpen(true)}
+                icon={ShieldCheck}
+              >
+                Take Official Action
+              </Button>
+            </>
+          )}
         </div>
       }
     >
@@ -245,15 +269,27 @@ export const ProjectDetails = () => {
               </div>
             </div>
 
-            <Button
-              variant="danger"
-              size="md"
-              onClick={() => navigate('/evidence')}
-              className="w-full mt-4"
-              icon={Camera}
-            >
-              Examine Forensic Evidence
-            </Button>
+            {isCitizen ? (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => navigate(`/public/report?projectId=${encodeURIComponent(project.id)}`)}
+                className="w-full mt-4 bg-[#0B2545] hover:bg-[#081D37] text-white font-semibold"
+                icon={Camera}
+              >
+                Report Ground Grievance on this Work
+              </Button>
+            ) : (
+              <Button
+                variant="danger"
+                size="md"
+                onClick={() => navigate('/evidence')}
+                className="w-full mt-4"
+                icon={Camera}
+              >
+                Examine Forensic Evidence
+              </Button>
+            )}
           </Card>
 
           {/* Project Administrative Metadata */}
@@ -338,19 +374,36 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Quick Action Banner */}
-          <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-gov-card">
-            <div className="text-xs text-slate-600">
-              Need to inspect raw computer vision feature maps or coordinate boundary overlays?
+          {isCitizen ? (
+            <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-gov-card">
+              <div className="text-xs text-slate-600">
+                Notice ground delays, abandoned construction, or material quality discrepancies on this project?
+              </div>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => navigate(`/public/report?projectId=${encodeURIComponent(project.id)}`)}
+                icon={Camera}
+                className="bg-[#0B2545] hover:bg-[#081D37] text-white shrink-0 ml-3 font-semibold"
+              >
+                Submit Citizen Grievance
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate('/evidence')}
-              icon={Camera}
-            >
-              Open Photo Forensic Lab
-            </Button>
-          </div>
+          ) : (
+            <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-gov-card">
+              <div className="text-xs text-slate-600">
+                Need to inspect raw computer vision feature maps or coordinate boundary overlays?
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/evidence')}
+                icon={Camera}
+              >
+                Open Photo Forensic Lab
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

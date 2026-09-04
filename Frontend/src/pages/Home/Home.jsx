@@ -130,13 +130,6 @@ export const Home = () => {
               <span>Command Dashboard</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             </Link>
-            <button
-              type="button"
-              onClick={() => setIsCitizenModalOpen(true)}
-              className="hover:text-blue-700 transition-colors text-slate-700 cursor-pointer"
-            >
-              Citizen Request / Grievance
-            </button>
             <Link to="/public" className="hover:text-blue-700 transition-colors">
               Public Portal
             </Link>
@@ -201,11 +194,11 @@ export const Home = () => {
             <Button
               variant="outline"
               size="lg"
-              onClick={() => setIsCitizenModalOpen(true)}
-              icon={Send}
+              onClick={handleLaunchCitizenPortal}
+              icon={Eye}
               className="text-xs sm:text-sm font-bold px-6 border-slate-400/40 text-slate-100 bg-white/10 hover:bg-white/20 backdrop-blur-sm"
             >
-              Submit Citizen Work Recommendation
+              Explore Public Portal
             </Button>
           </div>
         </div>
