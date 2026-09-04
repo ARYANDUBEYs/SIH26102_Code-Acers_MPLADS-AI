@@ -11,7 +11,8 @@ import {
   Sparkles,
   FileCheck2,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Home
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
@@ -100,8 +101,12 @@ export const CitizenReport = () => {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-600">
-            <Link to="/public" className="hover:text-blue-600">Home</Link>
+          <nav className="hidden md:flex items-center gap-5 text-xs font-medium text-slate-600">
+            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-slate-700 hover:text-blue-700 bg-slate-100 hover:bg-blue-50 border border-slate-200 rounded-md font-semibold transition">
+              <Home className="w-3.5 h-3.5 text-blue-600" />
+              <span>Back to Home</span>
+            </Link>
+            <Link to="/public" className="hover:text-blue-600">Public Portal</Link>
             <Link to="/public/map" className="hover:text-blue-600">Interactive Map</Link>
             <Link to="/public/search" className="hover:text-blue-600">Search Projects</Link>
             <Link to="/public/report" className="text-rose-600 font-bold">Report Grievance</Link>

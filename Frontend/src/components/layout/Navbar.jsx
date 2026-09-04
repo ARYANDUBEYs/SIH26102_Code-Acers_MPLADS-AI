@@ -15,7 +15,8 @@ import {
   Building2,
   MapPin,
   Globe,
-  Volume2
+  Volume2,
+  Home
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -90,6 +91,16 @@ export const Navbar = () => {
               </div>
             </Link>
           </div>
+
+          {/* Back to Home Button */}
+          <Link
+            to="/"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-xs text-slate-700 hover:text-blue-700 font-semibold transition-all shadow-sm shrink-0"
+            title="Return to Main Landing Page"
+          >
+            <Home className="w-3.5 h-3.5 text-blue-700" />
+            <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
+          </Link>
 
           {/* Center Search Bar Trigger */}
           <div className="hidden md:flex flex-1 max-w-md mx-4">
@@ -281,6 +292,14 @@ export const Navbar = () => {
                   </div>
 
                   <div className="py-1">
+                    <Link
+                      to="/"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
+                    >
+                      <Home className="w-3.5 h-3.5 text-blue-700" />
+                      <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
+                    </Link>
                     <Link
                       to="/profile"
                       onClick={() => setIsProfileOpen(false)}

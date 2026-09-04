@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera, Layers } from 'lucide-react';
+import { ShieldCheck, Search, MapPin, CheckCircle2, ArrowRight, Eye, Camera, Layers, Home } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatINR } from '../../utils/helpers';
@@ -57,8 +57,12 @@ export const PublicMap = () => {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-600">
-            <Link to="/public" className="hover:text-blue-600">Home</Link>
+          <nav className="hidden md:flex items-center gap-5 text-xs font-medium text-slate-600">
+            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-slate-700 hover:text-blue-700 bg-slate-100 hover:bg-blue-50 border border-slate-200 rounded-md font-semibold transition">
+              <Home className="w-3.5 h-3.5 text-blue-600" />
+              <span>Back to Home</span>
+            </Link>
+            <Link to="/public" className="hover:text-blue-600">Public Portal</Link>
             <Link to="/public/map" className="text-blue-600 font-bold">Interactive Map</Link>
             <Link to="/public/search" className="hover:text-blue-600">Search Projects</Link>
             <Link to="/public/report" className="text-rose-600 font-semibold hover:text-rose-700">Report Grievance</Link>
@@ -100,8 +104,8 @@ export const PublicMap = () => {
           >
             <MapResizer />
             <TileLayer
-              attribution='&copy; <a href="https://carto.com/">CARTO</a> (English Tiles)'
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
             {projects.map((p) => {

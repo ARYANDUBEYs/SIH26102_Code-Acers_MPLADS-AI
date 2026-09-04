@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Languages, Mic, Sparkles, X, CheckCircle, AlertTriangle, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'hi-IN', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
@@ -74,8 +75,6 @@ const TRANSLATIONS = {
     severityHigh: 'CRITICAL SEVERITY (Dispatched to District Magistrate Vigilance Squad)',
   }
 };
-
-import { useLanguage } from '../../context/LanguageContext';
 
 export const SarvamIndicModal = ({ isOpen, onClose }) => {
   const { currentLanguage, setLanguage } = useLanguage();

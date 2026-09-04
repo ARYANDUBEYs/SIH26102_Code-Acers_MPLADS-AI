@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { AppProvider } from './context/AppContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AppRoutes } from './routes/AppRoutes';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <LanguageProvider>
         <AuthProvider>
           <AppProvider>
-            <AppRoutes />
+            <ErrorBoundary>
+              <AppRoutes />
+            </ErrorBoundary>
           </AppProvider>
         </AuthProvider>
       </LanguageProvider>
