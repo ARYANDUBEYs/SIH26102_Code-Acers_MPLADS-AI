@@ -2,6 +2,7 @@
   "buildCommand": "cd Frontend && npm install && npm run build",
   "outputDirectory": "Frontend/dist",
   "rewrites": [
+    { "source": "/api/v1/(.*)", "destination": "https://mplads-ai-backend-brqi.onrender.com/api/v1/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

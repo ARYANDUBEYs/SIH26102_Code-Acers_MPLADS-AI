@@ -6,6 +6,7 @@ import { RiskGauge } from '../../components/ui/RiskGauge';
 import { RiskBadge, StatusBadge, Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/common/Button';
 import { Modal } from '../../components/common/Modal';
+import { FALLBACK_PROJECTS } from '../../data/fallbackProjects';
 import { api } from '../../services/api';
 import { formatINR, formatDate } from '../../utils/helpers';
 import { useAuth } from '../../context/AuthContext';
@@ -52,10 +53,18 @@ export const ProjectDetails = () => {
   const loadProject = async () => {
     setIsLoading(true);
     try {
-      const res = await api.getProjectById(id || 'MPLAD-2026-00124');
-      if (res.success) {
+      const targetId = id || 'MPLAD-2026-00124';
+      const res = await api.getProjectById(targetId);
+      if (res && res.success && res.data) {
         setProject(res.data);
+      } else {
+        const fb = FALLBACK_PROJECTS.find(p => p.id.toLowerCase() === targetId.toLowerCase()) || FALLBACK_PROJECTS[0];
+        setProject(fb);
       }
+    } catch {
+      const targetId = id || 'MPLAD-2026-00124';
+      const fb = FALLBACK_PROJECTS.find(p => p.id.toLowerCase() === targetId.toLowerCase()) || FALLBACK_PROJECTS[0];
+      setProject(fb);
     } finally {
       setIsLoading(false);
     }
@@ -80,10 +89,21 @@ export const ProjectDetails = () => {
     }
   };
 
-  if (isLoading || !project) {
+  if (isLoading && !project) {
     return (
       <PageLayout title="Project Details" breadcrumbs={['Dashboard', 'Projects', 'Loading...']}>
-        <div className="p-12 text-center text-slate-400">Loading comprehensive project dossier...</div>
+        <div className="p-12 text-center text-slate-500 font-medium">Loading comprehensive project dossier...</div>
+      </PageLayout>
+    );
+  }
+
+  if (!project) {
+    return (
+      <PageLayout title="Project Not Found" breadcrumbs={['Dashboard', 'Projects', 'Not Found']}>
+        <div className="p-12 text-center text-slate-500 space-y-4">
+          <p>Project dossier could not be located.</p>
+          <Button variant="primary" onClick={() => navigate('/dashboard')}>Return to Dashboard</Button>
+        </div>
       </PageLayout>
     );
   }
@@ -125,28 +145,28 @@ export const ProjectDetails = () => {
     >
       {/* 4 Financial Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Sanctioned Amount</p>
-          <h3 className="text-2xl font-black font-mono text-slate-100">{formatINR(project.sanctionedAmount)}</h3>
-          <p className="text-[11px] text-slate-500">Sanctioned: {formatDate(project.sanctionDate)}</p>
+        <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-gov-card space-y-1">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Sanctioned Amount</p>
+          <h3 className="text-2xl font-black font-mono text-slate-900">{formatINR(project.sanctionedAmount)}</h3>
+          <p className="text-[11px] text-slate-400">Sanctioned: {formatDate(project.sanctionDate)}</p>
         </div>
 
-        <div className="p-4 bg-slate-900 border border-blue-900/40 rounded-xl space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-400">Released Funds (Installment 1)</p>
-          <h3 className="text-2xl font-black font-mono text-blue-400">{formatINR(project.releasedAmount)}</h3>
-          <p className="text-[11px] text-slate-500">Disbursed to Agency Escrow</p>
+        <div className="p-4 bg-white border border-blue-200 rounded-xl shadow-gov-card space-y-1">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">Released Funds (Installment 1)</p>
+          <h3 className="text-2xl font-black font-mono text-blue-700">{formatINR(project.releasedAmount)}</h3>
+          <p className="text-[11px] text-slate-400">Disbursed to Agency Escrow</p>
         </div>
 
-        <div className="p-4 bg-slate-900 border border-emerald-900/40 rounded-xl space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">Utilized Amount</p>
-          <h3 className="text-2xl font-black font-mono text-emerald-400">{formatINR(project.utilizedAmount)}</h3>
-          <p className="text-[11px] text-slate-500">Physical MB Certified</p>
+        <div className="p-4 bg-white border border-emerald-200 rounded-xl shadow-gov-card space-y-1">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Utilized Amount</p>
+          <h3 className="text-2xl font-black font-mono text-emerald-700">{formatINR(project.utilizedAmount)}</h3>
+          <p className="text-[11px] text-slate-400">Physical MB Certified</p>
         </div>
 
-        <div className="p-4 bg-slate-900 border border-amber-900/40 rounded-xl space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-400">Remaining Balance</p>
-          <h3 className="text-2xl font-black font-mono text-amber-400">{formatINR(project.remainingAmount)}</h3>
-          <p className="text-[11px] text-slate-500">Stage-2 Payout Pending</p>
+        <div className="p-4 bg-white border border-amber-200 rounded-xl shadow-gov-card space-y-1">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Remaining Balance</p>
+          <h3 className="text-2xl font-black font-mono text-amber-700">{formatINR(project.remainingAmount)}</h3>
+          <p className="text-[11px] text-slate-400">Stage-2 Payout Pending</p>
         </div>
       </div>
 
@@ -158,7 +178,7 @@ export const ProjectDetails = () => {
       >
         <div className="space-y-4">
           {/* Progress bar */}
-          <div className="w-full bg-slate-950 rounded-full h-3 p-0.5 border border-slate-800">
+          <div className="w-full bg-slate-100 rounded-full h-3 p-0.5 border border-slate-200">
             <div
               className="bg-gradient-to-r from-blue-600 to-cyan-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${project.progressPercent}%` }}
@@ -179,15 +199,15 @@ export const ProjectDetails = () => {
                 key={idx}
                 className={`p-2.5 rounded-lg border text-xs ${
                   step.status === 'completed'
-                    ? 'bg-slate-950 border-emerald-500/30 text-emerald-300'
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
                     : step.status === 'in-progress'
-                    ? 'bg-blue-950/40 border-blue-500/50 text-blue-300 font-semibold shadow-glow-blue/20'
-                    : 'bg-slate-950/40 border-slate-800 text-slate-500'
+                    ? 'bg-blue-50 border-blue-400 text-blue-800 font-bold shadow-sm'
+                    : 'bg-slate-50 border-slate-200 text-slate-500'
                 }`}
               >
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  {step.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
-                  {step.status === 'in-progress' && <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />}
+                  {step.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  {step.status === 'in-progress' && <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />}
                   <span className="font-semibold truncate">{step.stage}</span>
                 </div>
                 <span className="text-[10px] opacity-75 font-mono">{step.date}</span>
@@ -210,18 +230,18 @@ export const ProjectDetails = () => {
           >
             <RiskGauge score={project.riskScore} size={190} />
 
-            <div className="mt-6 w-full pt-4 border-t border-slate-800 text-left space-y-2 text-xs">
-              <div className="flex justify-between text-slate-400">
+            <div className="mt-6 w-full pt-4 border-t border-slate-200 text-left space-y-2 text-xs">
+              <div className="flex justify-between text-slate-600">
                 <span>Model Confidence:</span>
-                <span className="font-mono font-bold text-white">94.2%</span>
+                <span className="font-mono font-bold text-slate-900">94.2%</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-600">
                 <span>Anomaly Vectors Caught:</span>
-                <span className="font-mono font-bold text-rose-400">{project.anomalies?.length || 4} Factors</span>
+                <span className="font-mono font-bold text-rose-600">{project.anomalies?.length || 4} Factors</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-600">
                 <span>Recommended Action:</span>
-                <span className="font-bold text-amber-400">Hold Payout & Dispatch Inspection</span>
+                <span className="font-bold text-amber-700">Hold Payout & Dispatch Inspection</span>
               </div>
             </div>
 
@@ -239,26 +259,26 @@ export const ProjectDetails = () => {
           {/* Project Administrative Metadata */}
           <Card title="Project Administration" icon={Building} className="text-xs space-y-3">
             <div>
-              <span className="text-slate-400 block">Implementing Agency:</span>
-              <span className="font-semibold text-slate-200">{project.implementingAgency}</span>
+              <span className="text-slate-500 block">Implementing Agency:</span>
+              <span className="font-semibold text-slate-800">{project.implementingAgency}</span>
             </div>
             <div>
-              <span className="text-slate-400 block">Awarded Contractor:</span>
+              <span className="text-slate-500 block">Awarded Contractor:</span>
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-200">{project.contractor}</span>
-                <Link to="/cartel-matrix" className="text-blue-400 hover:underline text-[11px] flex items-center gap-0.5">
+                <span className="font-semibold text-slate-800">{project.contractor}</span>
+                <Link to="/cartel-matrix" className="text-blue-600 hover:underline text-[11px] flex items-center gap-0.5 font-medium">
                   <span>Cartel Profile</span>
                   <ExternalLink className="w-3 h-3" />
                 </Link>
               </div>
             </div>
             <div>
-              <span className="text-slate-400 block">Recommended By (Hon'ble MP):</span>
-              <span className="font-semibold text-slate-200">{project.mpName}</span>
+              <span className="text-slate-500 block">Recommended By (Hon'ble MP):</span>
+              <span className="font-semibold text-slate-800">{project.mpName}</span>
             </div>
             <div>
-              <span className="text-slate-400 block">Target Completion:</span>
-              <span className="font-mono text-slate-200">{formatDate(project.targetDate)}</span>
+              <span className="text-slate-500 block">Target Completion:</span>
+              <span className="font-mono text-slate-800">{formatDate(project.targetDate)}</span>
             </div>
           </Card>
         </div>
@@ -267,11 +287,11 @@ export const ProjectDetails = () => {
         <div className="lg:col-span-8 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-blue-600" />
                 <span>Explainable AI Findings ({project.anomalies?.length || 4})</span>
               </h3>
-              <p className="text-xs text-slate-400">Detailed algorithmic justification for high-risk flags</p>
+              <p className="text-xs text-slate-500">Detailed algorithmic justification for high-risk flags</p>
             </div>
           </div>
 
@@ -279,38 +299,38 @@ export const ProjectDetails = () => {
             {project.anomalies?.map((ano) => (
               <div
                 key={ano.id}
-                className="p-4 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl space-y-2.5 transition-all shadow-card-dark"
+                className="p-4 bg-white border border-slate-200 hover:border-slate-300 rounded-xl space-y-2.5 transition-all shadow-gov-card"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <span
                       className={`p-2 rounded-lg text-xs font-bold ${
                         ano.severity === 'CRITICAL'
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200'
                           : ano.severity === 'HIGH'
-                          ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
-                          : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                          ? 'bg-orange-50 text-orange-700 border border-orange-200'
+                          : 'bg-amber-50 text-amber-700 border border-amber-200'
                       }`}
                     >
                       {ano.severity}
                     </span>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-100">{ano.title}</h4>
-                      <span className="text-[10px] font-mono text-slate-500">Anomaly Code: {ano.id}</span>
+                      <h4 className="text-sm font-bold text-slate-900">{ano.title}</h4>
+                      <span className="text-[10px] font-mono text-slate-400">Anomaly Code: {ano.id}</span>
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <span className="text-xs font-mono font-bold text-cyan-400">
+                    <span className="text-xs font-mono font-bold text-blue-700">
                       {ano.confidence}% Confidence
                     </span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed">{ano.description}</p>
+                <p className="text-xs text-slate-700 leading-relaxed">{ano.description}</p>
 
-                <div className="p-2.5 bg-slate-950/80 rounded-lg border border-slate-800/80 text-[11px] text-slate-400">
-                  <strong className="text-slate-300">Auditable Evidence: </strong>
+                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-[11px] text-slate-600">
+                  <strong className="text-slate-800">Auditable Evidence: </strong>
                   <span>{ano.evidence}</span>
                 </div>
               </div>
@@ -318,8 +338,8 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Quick Action Banner */}
-          <div className="p-4 bg-slate-900/60 border border-slate-800 rounded-xl flex items-center justify-between">
-            <div className="text-xs text-slate-400">
+          <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-gov-card">
+            <div className="text-xs text-slate-600">
               Need to inspect raw computer vision feature maps or coordinate boundary overlays?
             </div>
             <Button
@@ -343,14 +363,14 @@ export const ProjectDetails = () => {
         size="md"
       >
         <div className="space-y-4">
-          <div className="p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs space-y-1">
-            <span className="text-slate-400 block font-semibold uppercase">Project Under Action:</span>
-            <p className="font-bold text-slate-100">{project.name}</p>
-            <p className="text-slate-400">{project.district}, {project.state} • Sanction: {formatINR(project.sanctionedAmount)}</p>
+          <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1">
+            <span className="text-slate-500 block font-semibold uppercase">Project Under Action:</span>
+            <p className="font-bold text-slate-900">{project.name}</p>
+            <p className="text-slate-600">{project.district}, {project.state} • Sanction: {formatINR(project.sanctionedAmount)}</p>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block mb-2">
+            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-2">
               Select Official Order:
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -359,8 +379,8 @@ export const ProjectDetails = () => {
                 onClick={() => setDecisionType('VERIFY')}
                 className={`p-3 rounded-lg border text-xs font-bold text-center transition-colors ${
                   decisionType === 'VERIFY'
-                    ? 'bg-emerald-600/20 border-emerald-500 text-emerald-400 shadow-glow-green/20'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-emerald-50 border-emerald-500 text-emerald-700 shadow-sm'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 Approve & Clear
@@ -371,8 +391,8 @@ export const ProjectDetails = () => {
                 onClick={() => setDecisionType('AUDIT')}
                 className={`p-3 rounded-lg border text-xs font-bold text-center transition-colors ${
                   decisionType === 'AUDIT'
-                    ? 'bg-amber-600/20 border-amber-500 text-amber-400 shadow-glow-orange/20'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-50 border-amber-500 text-amber-700 shadow-sm'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 Dispatch Audit Team
@@ -383,8 +403,8 @@ export const ProjectDetails = () => {
                 onClick={() => setDecisionType('FLAG')}
                 className={`p-3 rounded-lg border text-xs font-bold text-center transition-colors ${
                   decisionType === 'FLAG'
-                    ? 'bg-rose-600/20 border-rose-500 text-rose-400 shadow-glow-red/20'
-                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-rose-50 border-rose-500 text-rose-700 shadow-sm'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 Freeze Next Payout
@@ -393,7 +413,7 @@ export const ProjectDetails = () => {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block mb-1.5">
+            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-1.5">
               Official Remarks & File Notation:
             </label>
             <textarea
@@ -401,11 +421,11 @@ export const ProjectDetails = () => {
               value={decisionRemarks}
               onChange={(e) => setDecisionRemarks(e.target.value)}
               placeholder="Enter official justification, reference to inspection memo, or officer remarks..."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
             <Button
               variant="outline"
               size="sm"

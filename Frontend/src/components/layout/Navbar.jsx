@@ -61,7 +61,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16 gap-4">
           
           {/* Brand / Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 shrink-0">
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -70,22 +70,22 @@ export const Navbar = () => {
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <Link to="/" className="flex items-center gap-3 group">
+            <Link to="/" className="flex items-center gap-2.5 group shrink-0">
               {/* National Emblem / Shield Icon */}
-              <div className="w-10 h-10 rounded-xl bg-[#0B2545] p-0.5 shadow-sm flex items-center justify-center">
+              <div className="w-9 h-9 rounded-xl bg-[#0B2545] p-0.5 shadow-sm flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-5 h-5 text-blue-300 group-hover:scale-105 transition-transform" />
               </div>
 
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-sm sm:text-base tracking-tight text-[#0B2545]">
+              <div className="shrink-0">
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  <span className="font-extrabold text-sm sm:text-base tracking-tight text-[#0B2545] whitespace-nowrap">
                     {t('brand_title', 'MPLADS INTELLIGENCE')}
                   </span>
-                  <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-blue-50 text-blue-800 border border-blue-200 rounded font-semibold">
+                  <span className="hidden xl:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-blue-50 text-blue-800 border border-blue-200 rounded font-bold whitespace-nowrap shrink-0">
                     {t('brand_tag', 'MoSPI e-SAKSHI Layer')}
                   </span>
                 </div>
-                <p className="text-[10px] text-slate-500 font-medium tracking-wide hidden sm:block">
+                <p className="text-[10px] text-slate-500 font-medium tracking-wide hidden lg:block whitespace-nowrap">
                   {t('brand_sub', 'Ministry of Statistics & Programme Implementation • Govt. of India')}
                 </p>
               </div>
@@ -95,7 +95,7 @@ export const Navbar = () => {
           {/* Back to Home Button */}
           <Link
             to="/"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-xs text-slate-700 hover:text-blue-700 font-semibold transition-all shadow-sm shrink-0"
+            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-xs text-slate-700 hover:text-blue-700 font-semibold transition-all shadow-sm shrink-0 whitespace-nowrap"
             title="Return to Main Landing Page"
           >
             <Home className="w-3.5 h-3.5 text-blue-700" />
@@ -103,7 +103,7 @@ export const Navbar = () => {
           </Link>
 
           {/* Center Search Bar Trigger */}
-          <div className="hidden md:flex flex-1 max-w-md mx-4">
+          <div className="hidden md:flex flex-1 max-w-xs xl:max-w-sm mx-2">
             <button
               onClick={() => setIsSearchOpen(true)}
               className="w-full flex items-center justify-between px-3.5 py-1.5 bg-slate-50 hover:bg-white border border-slate-200 hover:border-slate-300 rounded-lg text-xs text-slate-600 transition-all shadow-sm cursor-pointer"
