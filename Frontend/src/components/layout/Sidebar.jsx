@@ -21,38 +21,40 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { cn } from '../../utils/helpers';
 
 export const Sidebar = () => {
-  const { role, logout, isAdmin, isDistrictOfficer, isCitizen } = useAuth();
+  const { role, logout, isDistrictOfficer, isCitizen } = useAuth();
   const { isMobileMenuOpen, setIsMobileMenuOpen } = useApp();
+  const { t } = useLanguage();
   const location = useLocation();
 
   const adminNavItems = [
-    { label: 'Executive Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { label: 'Intelligence Analytics', path: '/analytics', icon: BarChart3 },
-    { label: 'National Risk Map', path: '/risk-map', icon: Map },
-    { label: 'High-Risk Audit Queue', path: '/high-risk', icon: AlertOctagon, badge: '42', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
-    { label: 'Cartel & Monopoly Matrix', path: '/cartel-matrix', icon: Network, highlight: true },
-    { label: 'All Works Directory', path: '/projects', icon: FolderGit2 },
-    { label: 'AI Forensic Evidence Lab', path: '/evidence', icon: Camera, highlight: true },
-    { label: 'SLA Delay Escalations', path: '/sla', icon: Clock, badge: '12', badgeColor: 'bg-amber-50 text-amber-800 border border-amber-200' },
+    { label: t('nav_exec_dashboard', 'Executive Dashboard'), path: '/dashboard', icon: LayoutDashboard },
+    { label: t('nav_analytics', 'Intelligence Analytics'), path: '/analytics', icon: BarChart3 },
+    { label: t('nav_risk_map', 'National Risk Map'), path: '/risk-map', icon: Map },
+    { label: t('nav_high_risk', 'High-Risk Audit Queue'), path: '/high-risk', icon: AlertOctagon, badge: '42', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
+    { label: t('nav_cartel_matrix', 'Cartel & Monopoly Matrix'), path: '/cartel-matrix', icon: Network, highlight: true },
+    { label: t('nav_all_works', 'All Works Directory'), path: '/projects', icon: FolderGit2 },
+    { label: t('nav_evidence_lab', 'AI Forensic Evidence Lab'), path: '/evidence', icon: Camera, highlight: true },
+    { label: t('nav_sla', 'SLA Delay Escalations'), path: '/sla', icon: Clock, badge: '12', badgeColor: 'bg-amber-50 text-amber-800 border border-amber-200' },
   ];
 
   const districtNavItems = [
-    { label: 'District Overview', path: '/district', icon: LayoutDashboard },
-    { label: 'Pending Sanctions', path: '/district/pending', icon: CheckSquare, badge: '24', badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200' },
-    { label: 'SLA Risk Alerts', path: '/sla', icon: Clock, badge: '7', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
-    { label: 'AI Pre-Screening', path: '/district/pre-screening', icon: Sparkles, highlight: true },
-    { label: 'Photo Integrity Validation', path: '/district/photo-validation', icon: Camera, highlight: true },
-    { label: 'Constituency Works', path: '/projects', icon: FolderGit2 },
+    { label: t('nav_district_overview', 'District Overview'), path: '/district', icon: LayoutDashboard },
+    { label: t('nav_pending_sanctions', 'Pending Sanctions'), path: '/district/pending', icon: CheckSquare, badge: '24', badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200' },
+    { label: t('nav_sla_alerts', 'SLA Risk Alerts'), path: '/sla', icon: Clock, badge: '7', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
+    { label: t('nav_pre_screening', 'AI Pre-Screening'), path: '/district/pre-screening', icon: Sparkles, highlight: true },
+    { label: t('nav_photo_val', 'Photo Integrity Validation'), path: '/district/photo-validation', icon: Camera, highlight: true },
+    { label: t('nav_constituency_works', 'Constituency Works'), path: '/projects', icon: FolderGit2 },
   ];
 
   const citizenNavItems = [
-    { label: 'Public Vigilance Portal', path: '/public', icon: ShieldCheck },
-    { label: 'Geospatial Work Explorer', path: '/public/map', icon: Map },
-    { label: 'Search Local Works', path: '/public/search', icon: Search },
-    { label: 'Submit Citizen Grievance', path: '/public/report', icon: MessageSquareWarning, highlight: true },
+    { label: t('nav_public_home', 'Public Vigilance Portal'), path: '/public', icon: ShieldCheck },
+    { label: t('nav_geo_explorer', 'Geospatial Work Explorer'), path: '/public/map', icon: Map },
+    { label: t('nav_search_works', 'Search Local Works'), path: '/public/search', icon: Search },
+    { label: t('nav_submit_grievance', 'Submit Citizen Grievance'), path: '/public/report', icon: MessageSquareWarning, highlight: true },
   ];
 
   const navItems = isCitizen
@@ -82,7 +84,7 @@ export const Sidebar = () => {
           <div>
             <div className="px-3 mb-2.5 flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                {isCitizen ? 'Citizen Navigation' : isDistrictOfficer ? 'District Officer Suite' : 'National Command Suite'}
+                {isCitizen ? t('suite_citizen', 'Citizen Navigation') : isDistrictOfficer ? t('suite_district', 'District Officer Suite') : t('suite_admin', 'National Command Suite')}
               </span>
               <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50" />
             </div>
@@ -125,19 +127,37 @@ export const Sidebar = () => {
               })}
             </nav>
           </div>
+
+          {/* Quick SLA / Vigilance Status Card */}
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                AI Sentinel Stream
+              </span>
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-600">
+              dHash & IsolationForest models cross-referencing 28 States & UTs.
+            </p>
+            <div className="pt-1.5 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono text-slate-500">
+              <span>Latency: 18ms</span>
+              <span className="text-emerald-700 font-semibold">99.98% Uptime</span>
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Institutional Info Box */}
-        <div className="p-3 border-t border-slate-100 bg-slate-50/70">
-          <div className="p-2.5 rounded-lg bg-white border border-slate-200 shadow-gov-sm text-xs">
-            <div className="flex items-center justify-between font-semibold text-slate-800">
-              <span>e-SAKSHI Sync</span>
-              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-mono leading-none">LIVE</span>
-            </div>
-            <p className="text-[10px] text-slate-500 mt-1 leading-tight">
-              Continuous Audit Layer active for 784 Parliamentary Constituencies.
-            </p>
-          </div>
+        {/* User sign out footer */}
+        <div className="p-3 border-t border-slate-200 bg-slate-50/50">
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>{t('sign_out', 'Sign Out')}</span>
+          </button>
         </div>
       </aside>
     </>

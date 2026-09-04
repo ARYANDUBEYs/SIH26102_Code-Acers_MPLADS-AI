@@ -75,11 +75,20 @@ const TRANSLATIONS = {
   }
 };
 
+import { useLanguage } from '../../context/LanguageContext';
+
 export const SarvamIndicModal = ({ isOpen, onClose }) => {
-  const [selectedLang, setSelectedLang] = useState('hi-IN');
+  const { currentLanguage, setLanguage } = useLanguage();
+  const [selectedLang, setSelectedLang] = useState(currentLanguage || 'hi-IN');
   const [isPlaying, setIsPlaying] = useState(false);
   const [customText, setCustomText] = useState('');
   const [analysisResult, setAnalysisResult] = useState(null);
+
+  useEffect(() => {
+    if (isOpen && currentLanguage) {
+      setSelectedLang(currentLanguage);
+    }
+  }, [isOpen, currentLanguage]);
 
   if (!isOpen) return null;
 
@@ -166,6 +175,7 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
                     if (isPlaying && 'speechSynthesis' in window) window.speechSynthesis.cancel();
                     setIsPlaying(false);
                     setSelectedLang(lang.code);
+                    setLanguage(lang.code);
                   }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5 border ${
                     selectedLang === lang.code

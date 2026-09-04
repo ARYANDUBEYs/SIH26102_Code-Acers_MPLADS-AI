@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { PageLayout } from '../../components/layout/PageLayout';
 import { DashboardStats } from '../../features/dashboard/DashboardStats';
+import { ThreeColumnArchitecture } from '../../components/dashboard/ThreeColumnArchitecture';
+import { JudgeDefensePanel } from '../../components/dashboard/JudgeDefensePanel';
+import { DrillDownSlideOver } from '../../components/ui/DrillDownSlideOver';
+import { SarvamIndicModal } from '../../components/sarvam/SarvamIndicModal';
 import { Card } from '../../components/ui/Card';
 import { Table } from '../../components/ui/Table';
 import { RiskBadge, StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatINR } from '../../utils/helpers';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   AlertTriangle,
   AlertOctagon,
@@ -18,7 +23,8 @@ import {
   Network,
   RefreshCw,
   ChevronRight,
-  FileSpreadsheet
+  FileSpreadsheet,
+  SlidersHorizontal
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -34,12 +40,19 @@ import {
 } from 'recharts';
 
 export const AdminDashboard = () => {
+  const { t } = useLanguage();
   const [kpis, setKpis] = useState(null);
   const [highRiskProjects, setHighRiskProjects] = useState([]);
   const [stateRisks, setStateRisks] = useState([]);
   const [fraudData, setFraudData] = useState([]);
   const [monthlyTrends, setMonthlyTrends] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Slide-over & voice modal state
+  const [isSlideOverOpen, setIsSlideOverOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,16 +80,29 @@ export const AdminDashboard = () => {
     }
   };
 
+  const handleOpenSlideOver = (project = null) => {
+    setSelectedProject(project);
+    setIsSlideOverOpen(true);
+  };
+
   const highRiskColumns = [
     {
-      header: 'Work ID',
+      header: t('table_work_id', 'Work ID'),
       accessor: 'id',
       cell: (row) => (
-        <span className="font-mono text-xs font-bold text-blue-700 hover:underline">{row.id}</span>
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenSlideOver(row);
+          }}
+          className="font-mono text-xs font-bold text-blue-700 hover:underline cursor-pointer"
+        >
+          {row.id}
+        </span>
       ),
     },
     {
-      header: 'Description & Constituency',
+      header: t('table_desc_constituency', 'Description & Constituency'),
       accessor: 'name',
       cell: (row) => (
         <div>
@@ -86,14 +112,14 @@ export const AdminDashboard = () => {
       ),
     },
     {
-      header: 'Sanction Value',
+      header: t('table_sanction_value', 'Sanction Value'),
       accessor: 'sanctionedAmount',
       cell: (row) => (
         <span className="font-mono font-bold text-slate-800">{formatINR(row.sanctionedAmount)}</span>
       ),
     },
     {
-      header: 'Composite Risk',
+      header: t('table_composite_risk', 'Composite Risk'),
       accessor: 'riskScore',
       cell: (row) => <RiskBadge score={row.riskScore} />,
     },
@@ -107,12 +133,12 @@ export const AdminDashboard = () => {
       ),
     },
     {
-      header: 'Audit Status',
+      header: t('table_status', 'Audit Status'),
       accessor: 'status',
       cell: (row) => <StatusBadge status={row.status} />,
     },
     {
-      header: 'Action',
+      header: t('table_actions', 'Action'),
       accessor: 'action',
       cell: (row) => (
         <Button
@@ -120,11 +146,11 @@ export const AdminDashboard = () => {
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/project/${row.id}`);
+            handleOpenSlideOver(row);
           }}
           className="text-xs border-slate-200 hover:bg-slate-50 text-slate-700"
         >
-          Dossier
+          {t('btn_audit', 'Audit Dossier')}
         </Button>
       ),
     },
@@ -132,7 +158,7 @@ export const AdminDashboard = () => {
 
   return (
     <PageLayout
-      title="National Oversight Dashboard"
+      title={t('nav_exec_dashboard', 'National Oversight Dashboard')}
       subtitle="AI-Powered Continuous Forensic Vigilance & Anomaly Detection Layer for e-SAKSHI."
       badge={
         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200">
@@ -146,24 +172,33 @@ export const AdminDashboard = () => {
             size="sm"
             onClick={loadDashboardData}
             icon={RefreshCw}
-            className="border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+            className="border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
           >
-            Refresh Feed
+            {t('btn_refresh', 'Refresh Feed')}
           </Button>
           <Button
             variant="primary"
             size="sm"
             onClick={() => navigate('/risk-map')}
             icon={MapPin}
-            className="bg-blue-700 hover:bg-blue-800 text-white"
+            className="bg-blue-700 hover:bg-blue-800 text-white cursor-pointer"
           >
-            National Risk Map
+            {t('nav_risk_map', 'National Risk Map')}
           </Button>
         </div>
       }
     >
       {/* 6 Executive KPI Cards */}
       <DashboardStats kpis={kpis || undefined} />
+
+      {/* THREE-COLUMN SYSTEM ARCHITECTURE (User's Exact Specification) */}
+      <ThreeColumnArchitecture
+        onOpenSlideOver={() => handleOpenSlideOver(null)}
+        onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+      />
+
+      {/* JUDGE DEFENSE MITIGATIONS PANEL (Resolves Geotags, Bribery, Deepfakes & Bias) */}
+      <JudgeDefensePanel />
 
       {/* Critical Urgent Investigation Alert Banner */}
       <div className="p-4 bg-rose-50/90 border border-rose-200 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-gov-sm">
@@ -193,12 +228,25 @@ export const AdminDashboard = () => {
           <Button
             variant="danger"
             size="sm"
-            onClick={() => navigate('/project/MPLAD-2026-00124')}
+            onClick={() => handleOpenSlideOver({
+              id: 'MPLAD-2026-00124',
+              name: 'Rural Road Construction & Flood Drainage',
+              constituency: 'Varanasi',
+              district: 'Varanasi',
+              state: 'Uttar Pradesh',
+              sanctionedAmount: 4800000,
+              disbursedAmount: 4100000,
+              physicalProgress: 38,
+              riskScore: 87,
+              contractor: 'Apex Infra & BuildTech Pvt Ltd',
+              hhiScore: 2840,
+              warningTags: ['DUPLICATE_PHOTO_DHASH_EXACT', 'HHI_CARTEL_SYNDICATE_MONOPOLY', 'SLA_BREACH_IMMUTABLE']
+            })}
             icon={ArrowRight}
             iconPosition="right"
-            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white"
+            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white cursor-pointer"
           >
-            Audit Dossier
+            {t('btn_audit', 'Audit Dossier')}
           </Button>
         </div>
       </div>
@@ -300,7 +348,7 @@ export const AdminDashboard = () => {
           columns={highRiskColumns}
           data={highRiskProjects}
           isLoading={isLoading}
-          onRowClick={(row) => navigate(`/project/${row.id}`)}
+          onRowClick={(row) => handleOpenSlideOver(row)}
           rowsPerPage={5}
         />
       </div>
@@ -316,7 +364,7 @@ export const AdminDashboard = () => {
               <MapPin className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">National Risk Heatmap</h4>
+              <h4 className="text-sm font-bold text-slate-900">{t('nav_risk_map', 'National Risk Heatmap')}</h4>
               <p className="text-xs text-slate-500">Interactive GIS map of district & constituency threat levels</p>
             </div>
           </div>
@@ -332,7 +380,7 @@ export const AdminDashboard = () => {
               <Network className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">Vendor Cartel Matrix</h4>
+              <h4 className="text-sm font-bold text-slate-900">{t('nav_cartel_matrix', 'Vendor Cartel Matrix')}</h4>
               <p className="text-xs text-slate-500">Bipartite graph exposing tender rotation & HHI monopoly</p>
             </div>
           </div>
@@ -348,13 +396,26 @@ export const AdminDashboard = () => {
               <Camera className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">AI Forensic Evidence Lab</h4>
+              <h4 className="text-sm font-bold text-slate-900">{t('nav_evidence_lab', 'AI Forensic Evidence Lab')}</h4>
               <p className="text-xs text-slate-500">Real OpenCV 64-bit dHash perceptual hashing inspection</p>
             </div>
           </div>
           <ChevronRight className="w-5 h-5 text-slate-400" />
         </Card>
       </div>
+
+      {/* Drill-Down Audit Slide-Over Sheet */}
+      <DrillDownSlideOver
+        isOpen={isSlideOverOpen}
+        onClose={() => setIsSlideOverOpen(false)}
+        project={selectedProject}
+      />
+
+      {/* Sarvam Sovereign Indic Voice Modal */}
+      <SarvamIndicModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => setIsVoiceModalOpen(false)}
+      />
     </PageLayout>
   );
 };

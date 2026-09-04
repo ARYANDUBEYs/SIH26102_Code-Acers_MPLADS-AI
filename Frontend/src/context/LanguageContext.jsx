@@ -1,0 +1,507 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+export const SUPPORTED_LANGUAGES = [
+  { code: 'en-IN', name: 'English', native: 'English', flag: '🇮🇳' },
+  { code: 'hi-IN', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'mr-IN', name: 'Marathi', native: 'मराठी', flag: '🇮🇳' },
+  { code: 'ta-IN', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'te-IN', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'bn-IN', name: 'Bengali', native: 'বাংলা', flag: '🇮🇳' },
+  { code: 'gu-IN', name: 'Gujarati', native: 'ગુજરાતી', flag: '🇮🇳' },
+  { code: 'kn-IN', name: 'Kannada', native: 'ಕನ್ನಡ', flag: '🇮🇳' },
+];
+
+export const DICTIONARY = {
+  'en-IN': {
+    // Top Bar
+    brand_title: 'MPLADS INTELLIGENCE',
+    brand_tag: 'MoSPI e-SAKSHI Layer',
+    brand_sub: 'Ministry of Statistics & Programme Implementation • Govt. of India',
+    search_placeholder: 'Search project ID, district, contractor, cartel...',
+    role_admin: 'MoSPI Admin',
+    role_district: 'District Officer',
+    role_citizen: 'Citizen Portal',
+    role_persona: 'Active Authority Persona',
+    role_admin_sub: 'National oversight & cartels',
+    role_district_sub: 'SLA alerts & photo verification',
+    role_citizen_sub: 'Project search & grievance filing',
+    indic_btn: 'Indic AI',
+    voice_briefing_btn: 'Voice AI',
+    sign_out: 'Sign Out',
+    sec_profile: 'Security & Profile',
+    public_portal: 'Public Transparency Portal',
+
+    // Sidebar
+    suite_admin: 'National Command Suite',
+    suite_district: 'District Officer Suite',
+    suite_citizen: 'Citizen Navigation',
+    nav_exec_dashboard: 'Executive Dashboard',
+    nav_analytics: 'Intelligence Analytics',
+    nav_risk_map: 'National Risk Map',
+    nav_high_risk: 'High-Risk Audit Queue',
+    nav_cartel_matrix: 'Cartel & Monopoly Matrix',
+    nav_all_works: 'All Works Directory',
+    nav_evidence_lab: 'AI Forensic Evidence Lab',
+    nav_sla: 'SLA Delay Escalations',
+    nav_district_overview: 'District Overview',
+    nav_pending_sanctions: 'Pending Sanctions',
+    nav_sla_alerts: 'SLA Risk Alerts',
+    nav_pre_screening: 'AI Pre-Screening',
+    nav_photo_val: 'Photo Integrity Validation',
+    nav_constituency_works: 'Constituency Works',
+    nav_public_home: 'Public Vigilance Portal',
+    nav_geo_explorer: 'Geospatial Work Explorer',
+    nav_search_works: 'Search Local Works',
+    nav_submit_grievance: 'Submit Citizen Grievance',
+
+    // Dashboard Stats
+    kpi_total_projects: 'Total Projects',
+    kpi_total_projects_sub: 'All 28 States & UTs',
+    kpi_total_funds: 'Total Funds',
+    kpi_total_funds_sub: 'Sanctioned in FY 25-26',
+    kpi_ai_monitored: 'AI Monitored',
+    kpi_ai_monitored_sub: '95.5% Data Coverage',
+    kpi_anomalies: 'Anomalies Detected',
+    kpi_anomalies_sub: 'Cost, photo & cartels',
+    kpi_high_risk: 'High Risk Projects',
+    kpi_high_risk_sub: 'Requires immediate review',
+    kpi_sla_risk: 'SLA At Risk',
+    kpi_sla_risk_sub: '12 critical (<48h)',
+
+    // 3 Column Architecture
+    arch_title: 'MPLAD Sentinel Architecture & Core Intelligence Engine',
+    arch_subtitle: 'Three-Pillar Continuous Audit Architecture: AI Analytics, Mathematical Risk Scoring, and Geospatial Interfaces',
+    arch_col1_title: 'AI Analytics Engines (The Brains)',
+    arch_col1_sub: 'Automated perceptual hashing & graph ML replacing subjective auditing',
+    arch_col1_f1_title: 'Duplicate Image Detection (OpenCV dHash)',
+    arch_col1_f1_desc: '64-bit Difference Hashing and Hamming distance cross-reference site photos across districts to instantly flag reused images.',
+    arch_col1_f2_title: 'Contractor Cartel Analyzer (NetworkX)',
+    arch_col1_f2_desc: 'Constructs bipartite procurement graphs and calculates Herfindahl-Hirschman Index (HHI) to expose vendor syndicates.',
+    arch_col1_f3_title: 'Terrain & Climate Normalization',
+    arch_col1_f3_desc: 'Calibrates anomaly thresholds for Himalayan, hill, and monsoon-disrupted districts to eliminate regional bias.',
+
+    arch_col2_title: 'The Core Processing Engine (The Math)',
+    arch_col2_sub: 'Mathematical formulation and high-speed API microservices',
+    arch_col2_f1_title: 'Mathematical Risk Engine Formula',
+    arch_col2_f1_desc: 'R = 0.35F + 0.25T + 0.20I + 0.20C (Financials, Timelines, Images, Contractor History) calculating a dynamic 0-100 score.',
+    arch_col2_f2_title: 'Categorized Triage Tiers',
+    arch_col2_f2_desc: 'Classifies works into 🔴 High Risk (>70), 🟡 Warning (40-69), and 🟢 Safe (<40) for precision officer dispatch.',
+    arch_col2_f3_title: 'Live RESTful API (FastAPI)',
+    arch_col2_f3_desc: 'Exposes GET /projects, POST /analyze-image, and GET /cartel-graph with interactive OpenAPI Swagger documentation.',
+
+    arch_col3_title: 'Interactive Dashboards (The Interface)',
+    arch_col3_sub: 'Enterprise GIS maps, slide-over audit sheets, and voice intelligence',
+    arch_col3_f1_title: 'Geospatial District Map (Leaflet.js)',
+    arch_col3_f1_desc: 'Interactive GIS map with color-coded pins displaying total funds, unspent balances, and regional risk clusters.',
+    arch_col3_f2_title: 'Drill-Down Slide-Over Sheets',
+    arch_col3_f2_desc: 'Granular project audit panels detailing budget vs. spend, timeline delays, photo evidence, and specific AI warning tags.',
+    arch_col3_f3_title: 'Sarvam AI Sovereign Voice Intelligence',
+    arch_col3_f3_desc: 'Multilingual TTS audio briefings and Saaras ASR vernacular grievance speech processing for rural citizens.',
+
+    // Judge Defense Panel
+    judge_title: 'Systemic Vulnerability & Judge Defense Mitigations',
+    judge_sub: 'Engineered solutions to real-world edge cases, location-spoofing, and human biases',
+    judge_d1_title: '1. Editable Geotags (GPS Spoofing)',
+    judge_d1_desc: 'Multi-Source Spatial Attestation cross-verifies EXIF GPS coordinates against cellular tower IDs, ISP telemetry, and PostGIS polygon boundaries, rejecting spoofed uploads.',
+    judge_d2_title: '2. Human-in-the-Loop Bribery',
+    judge_d2_desc: 'Multi-Signature Dual-Auditor Protocol mandates two independent officer digital signatures (e-Sign) to override alerts, writing to an immutable audit trail.',
+    judge_d3_title: '3. AI-Generated Construction Photos',
+    judge_d3_desc: 'Forensic Frequency Domain Analysis inspects FFT spectral artifacts and Error Level Analysis (ELA) against baseline Day-0 terrain satellite captures.',
+    judge_d4_title: '4. Terrain & Monsoon Regional Bias',
+    judge_d4_desc: 'Context-Aware Baseline Normalization adjusts delay thresholds via Terrain Difficulty & Monsoon Disruption factors so hill/remote districts are not penalized.',
+
+    // Table & General UI
+    table_work_id: 'Work ID',
+    table_desc_constituency: 'Description & Constituency',
+    table_sanction_value: 'Sanction Value',
+    table_composite_risk: 'Composite Risk',
+    table_status: 'Audit Status',
+    table_actions: 'Actions',
+    btn_audit: 'Audit Dossier',
+    btn_export: 'Export Report',
+    btn_refresh: 'Refresh Live Data',
+    filter_all_states: 'All States & UTs',
+    filter_risk_level: 'All Risk Levels',
+    footer_text: 'MPLADS AI MONITOR — Ministry of Statistics and Programme Implementation (MoSPI) • Govt. of India',
+    footer_sec: 'RESTRICTED GOVERNMENT AUDIT ACCESS • ZERO-LEAKAGE ALLOCATION',
+  },
+
+  'hi-IN': {
+    brand_title: 'एमपीलैड्स इंटेलिजेंस',
+    brand_tag: 'सांख्यिकी मंत्रालय e-SAKSHI लेयर',
+    brand_sub: 'सांख्यिकी एवं कार्यक्रम कार्यान्वयन मंत्रालय • भारत सरकार',
+    search_placeholder: 'परियोजना आईडी, ज़िला, ठेकेदार, कार्टेल खोजें...',
+    role_admin: 'MoSPI केंद्रीय लेखापरीक्षक',
+    role_district: 'ज़िलाधिकारी (DM)',
+    role_citizen: 'नागरिक पोर्टल',
+    role_persona: 'सक्रिय प्रशासनिक भूमिका',
+    role_admin_sub: 'राष्ट्रीय निगरानी व कार्टेल विश्लेषण',
+    role_district_sub: 'एसएलए अलर्ट व फोटो सत्यापन',
+    role_citizen_sub: 'परियोजना खोज व नागरिक शिकायत',
+    indic_btn: 'सर्वम AI',
+    voice_briefing_btn: 'ध्वनि AI',
+    sign_out: 'लॉग आउट',
+    sec_profile: 'सुरक्षा एवं प्रोफ़ाइल',
+    public_portal: 'सार्वजनिक पारदर्शिता पोर्टल',
+
+    suite_admin: 'राष्ट्रीय कमान केंद्र',
+    suite_district: 'ज़िलाधिकारी नियंत्रण कक्ष',
+    suite_citizen: 'नागरिक सेवा केंद्र',
+    nav_exec_dashboard: 'कार्यकारी डैशबोर्ड',
+    nav_analytics: 'खुफिया विश्लेषण',
+    nav_risk_map: 'राष्ट्रीय जोखिम मानचित्र',
+    nav_high_risk: 'उच्च जोखिम ऑडिट कतार',
+    nav_cartel_matrix: 'ठेकेदार कार्टेल व सिंडिकेट',
+    nav_all_works: 'सभी स्वीकृत कार्य',
+    nav_evidence_lab: 'एआई फोरेंसिक साक्ष्य प्रयोगशाला',
+    nav_sla: 'समय-सीमा (SLA) उल्लंघन अलर्ट',
+    nav_district_overview: 'ज़िला समग्र विवरण',
+    nav_pending_sanctions: 'लंबित स्वीकृतियां',
+    nav_sla_alerts: 'समय-सीमा जोखिम अलर्ट',
+    nav_pre_screening: 'एआई प्रारंभिक जांच',
+    nav_photo_val: 'फोटो सत्यता सत्यापन',
+    nav_constituency_works: 'संसदीय क्षेत्र कार्य',
+    nav_public_home: 'सार्वजनिक सतर्कता पोर्टल',
+    nav_geo_explorer: 'मानचित्र कार्य अन्वेषक',
+    nav_search_works: 'स्थानीय विकास कार्य खोजें',
+    nav_submit_grievance: 'नागरिक शिकायत दर्ज करें',
+
+    kpi_total_projects: 'कुल स्वीकृत परियोजनाएं',
+    kpi_total_projects_sub: 'सभी 28 राज्य व केंद्र शासित प्रदेश',
+    kpi_total_funds: 'कुल स्वीकृत निधि',
+    kpi_total_funds_sub: 'वित्तीय वर्ष 2025-26 में जारी',
+    kpi_ai_monitored: 'एआई द्वारा निरंतर निगरानी',
+    kpi_ai_monitored_sub: '95.5% डेटा आच्छादन',
+    kpi_anomalies: 'पहचानी गई विसंगतियां',
+    kpi_anomalies_sub: 'लागत, फोटो व कार्टेल संकेंद्रण',
+    kpi_high_risk: 'उच्च जोखिम परियोजनाएं',
+    kpi_high_risk_sub: 'तत्काल निरीक्षण आवश्यक',
+    kpi_sla_risk: 'समय-सीमा उल्लंघन जोखिम',
+    kpi_sla_risk_sub: '12 अति-गंभीर (<48 घंटे)',
+
+    arch_title: 'एमपीलैड सेंटिनल संरचना एवं कोर इंटेलिजेंस इंजन',
+    arch_subtitle: 'त्रि-स्तंभीय सतत ऑडिट वास्तुकला: एआई एनालिटिक्स, गणितीय जोखिम गणना, और भू-स्थानिक इंटरफ़ेस',
+    arch_col1_title: 'स्तंभ 1: एआई एनालिटिक्स इंजन (बुद्धिमत्ता)',
+    arch_col1_sub: 'पारंपरिक मानवीय जांच के स्थान पर स्वचालित कंप्यूटर विज़न एवं ग्राफ एमएल',
+    arch_col1_f1_title: 'डुप्लीकेट फोटो पहचान (OpenCV dHash)',
+    arch_col1_f1_desc: '64-बिट डिफरेंस हैशिंग और हैमिंग दूरी द्वारा विभिन्न ज़िलों की तस्वीरों का मिलान कर पुरानी तस्वीरों के पुन: उपयोग को तुरंत पकड़ता है।',
+    arch_col1_f2_title: 'ठेकेदार कार्टेल विश्लेषक (NetworkX)',
+    arch_col1_f2_desc: 'निविदा संबंधों का द्विदलीय (Bipartite) ग्राफ बनाकर हरफिंडाहल-हर्शमैन इंडेक्स (HHI) द्वारा ज़िले में ठेकेदारों के एकाधिकार को उजागर करता है।',
+    arch_col1_f3_title: 'भौगोलिक व मानसूनी सामान्यीकरण',
+    arch_col1_f3_desc: 'पहाड़ी, दुर्गम और मानसूनी क्षेत्रों के लिए थ्रेशोल्ड समायोजित करता है ताकि भौगोलिक कारणों से होने वाले विलंब को गलत तरीके से धोखाधड़ी न माना जाए।',
+
+    arch_col2_title: 'स्तंभ 2: कोर प्रोसेसिंग इंजन (गणितीय मॉडल)',
+    arch_col2_sub: 'वैज्ञानिक जोखिम सूत्र एवं तीव्र गति फास्ट-एपीआई सेवाएं',
+    arch_col2_f1_title: 'गणितीय जोखिम गणना सूत्र',
+    arch_col2_f1_desc: 'R = 0.35F + 0.25T + 0.20I + 0.20C (वित्तीय अनियमितता, समय-सीमा, फोटो अंतर, ठेकेदार इतिहास) पर आधारित 0-100 गतिशील स्कोर।',
+    arch_col2_f2_title: 'त्रि-स्तरीय प्राथमिकता श्रेणियां',
+    arch_col2_f2_desc: 'परियोजनाओं को 🔴 उच्च जोखिम (>70), 🟡 चेतावनी (40-69), और 🟢 सुरक्षित (<40) में विभाजित कर अधिकारियों को सटीक दिशा देता है।',
+    arch_col2_f3_title: 'लाइव रेस्टफुल एपीआई (FastAPI)',
+    arch_col2_f3_desc: 'उच्च गति वाले GET /projects, POST /analyze-image, एवं GET /cartel-graph एंडपॉइंट्स स्वैगर प्रलेखन के साथ सक्रिय हैं।',
+
+    arch_col3_title: 'स्तंभ 3: संवादात्मक डैशबोर्ड (यूजर इंटरफ़ेस)',
+    arch_col3_sub: 'संस्थागत जीआईएस मानचित्र, स्लाइड-ओवर ऑडिट पैनल, और बहुभाषी सर्वम वॉयस एआई',
+    arch_col3_f1_title: 'भू-स्थानिक ज़िला मानचित्र (Leaflet.js)',
+    arch_col3_f1_desc: 'रंग-कोडित पिनों के साथ संवादात्मक जीआईएस मानचित्र जो कुल स्वीकृत राशि, अप्रयुक्त शेष, और जोखिम समूहों को प्रदर्शित करता है।',
+    arch_col3_f2_title: 'ड्रिल-डाउन स्लाइड-ओवर ऑडिट पैनल',
+    arch_col3_f2_desc: 'प्रत्येक परियोजना की गहराई से जांच के लिए बजट बनाम खर्च, समय-सीमा विलंब, फोटो साक्ष्य, और एआई चेतावनी टैग दिखाता है।',
+    arch_col3_f3_title: 'सर्वम एआई संप्रभु ध्वनि बुद्धिमत्ता',
+    arch_col3_f3_desc: 'अधिकारियों के लिए बहुभाषी ऑडियो ब्रीफिंग (TTS) और ग्रामीण नागरिकों के लिए सारास ASR द्वारा क्षेत्रीय भाषा में ध्वनि शिकायत निवारण।',
+
+    judge_title: 'प्रणालीगत संवेदनशीलता व जूरी रक्षा समाधान (Judge Defense)',
+    judge_sub: 'वास्तविक जीवन की चुनौतियों, स्थान धोखाधड़ी (GPS Spoofing), और रिश्वतखोरी के विरुद्ध तकनीकी समाधान',
+    judge_d1_title: '1. संपादन योग्य जियोटैग (GPS Spoofing का समाधान)',
+    judge_d1_desc: 'बहु-स्रोत स्थानिक सत्यापन: EXIF जीपीएस निर्देशांकों का मोबाइल टावर आईडी, इंटरनेट प्रदाता आईपी और पोस्ट-जीआईएस ज़िला बहुभुज सीमाओं से त्रि-स्तरीय मिलान करता है।',
+    judge_d2_title: '2. मानवीय रिश्वतखोरी रोकथाम (Human Bribery Prevention)',
+    judge_d2_desc: 'मल्टी-सिग्नेचर डुअल-ऑडिटर प्रोटोकॉल: एआई अलर्ट को खारिज करने के लिए दो स्वतंत्र अधिकारियों के डिजिटल हस्ताक्षर (e-Sign) अनिवार्य हैं, जो अपरिवर्तनीय ऑडिट ट्रेल में दर्ज होते हैं।',
+    judge_d3_title: '3. एआई जनरेटेड फर्जी फोटो पहचान (Deepfake Detection)',
+    judge_d3_desc: 'फोरेंसिक फ्रीक्वेंसी डोमेन विश्लेषण: एफएफटी (FFT) स्पेक्ट्रल विश्लेषण और एरर लेवल एनालिसिस (ELA) द्वारा जनरेटिव एआई पिक्सल विसंगतियों को डे-0 बेसलाइन तस्वीरों से मिलाता है।',
+    judge_d4_title: '4. पहाड़ी व मानसूनी क्षेत्रों में क्षेत्रीय निष्पक्षता',
+    judge_d4_desc: 'संदर्भ-जागरूक सामान्यीकरण: कठिन भूभाग व वर्षा बाधा सूचकांक को लागू करता है ताकि पूर्वोत्तर और हिमालयी राज्यों को प्राकृतिक कठिनाई के लिए दंडित न किया जाए।',
+
+    table_work_id: 'कार्य पहचान (ID)',
+    table_desc_constituency: 'विवरण व संसदीय क्षेत्र',
+    table_sanction_value: 'स्वीकृत राशि',
+    table_composite_risk: 'समग्र जोखिम',
+    table_status: 'ऑडिट स्थिति',
+    table_actions: 'कार्रवाई',
+    btn_audit: 'ऑडिट डॉसियर',
+    btn_export: 'रिपोर्ट डाउनलोड करें',
+    btn_refresh: 'लाइव डेटा रीफ्रेश करें',
+    filter_all_states: 'सभी राज्य व संघ राज्य',
+    filter_risk_level: 'सभी जोखिम स्तर',
+    footer_text: 'एमपीलैड्स एआई मॉनिटर — सांख्यिकी एवं कार्यक्रम कार्यान्वयन मंत्रालय (MoSPI) • भारत सरकार',
+    footer_sec: 'प्रतिबंधित सरकारी ऑडिट पहुंच • शून्य वित्तीय रिसाव संकल्प',
+  },
+
+  'mr-IN': {
+    brand_title: 'खासदार निधी इंटेलिजेंस',
+    brand_tag: 'सांख्यिकी मंत्रालय e-SAKSHI लेयर',
+    brand_sub: 'सांख्यिकी आणि कार्यक्रम अंमलबजावणी मंत्रालय • भारत सरकार',
+    search_placeholder: 'प्रकल्प क्रमांक, जिल्हा, कंत्राटदार शोधा...',
+    role_admin: 'MoSPI केंद्रीय लेखापरीक्षक',
+    role_district: 'जिल्हाधिकारी (DM)',
+    role_citizen: 'नागरिक पोर्टल',
+    role_persona: 'सक्रिय प्रशासकीय भूमिका',
+    role_admin_sub: 'राष्ट्रीय देखरेख आणि कार्टेल शोध',
+    role_district_sub: 'SLA इशारे व फोटो पडताळणी',
+    role_citizen_sub: 'प्रकल्प शोध व नागरिक तक्रार',
+    indic_btn: 'सर्वम AI',
+    voice_briefing_btn: 'व्हॉइस AI',
+    sign_out: 'लॉग आउट',
+    sec_profile: 'सुरक्षा आणि प्रोफाइल',
+    public_portal: 'सार्वजनिक पारदर्शकता पोर्टल',
+
+    suite_admin: 'राष्ट्रीय आदेश कक्ष',
+    suite_district: 'जिल्हाधिकारी नियंत्रण कक्ष',
+    suite_citizen: 'नागरिक सेवा केंद्र',
+    nav_exec_dashboard: 'कार्यकारी डॅशबोर्ड',
+    nav_analytics: 'बुद्धिमत्ता विश्लेषण',
+    nav_risk_map: 'राष्ट्रीय जोखीम नकाशा',
+    nav_high_risk: 'अति-जोखीम तपासणी यादी',
+    nav_cartel_matrix: 'कंत्राटदार मक्तेदारी (कार्टेल)',
+    nav_all_works: 'सर्व मंजूर कामे',
+    nav_evidence_lab: 'न्यायवैद्यक पुरावा प्रयोगशाळा',
+    nav_sla: 'मुदतवाढ उल्लंघन इशारे',
+    nav_district_overview: 'जिल्हा आढावा',
+    nav_pending_sanctions: 'प्रलंबित मंजुऱ्या',
+    nav_sla_alerts: 'मुदत जोखीम इशारे',
+    nav_pre_screening: 'एआय प्राथमिक तपासणी',
+    nav_photo_val: 'छायाचित्र सत्यता पडताळणी',
+    nav_constituency_works: 'मतदारसंघ विकास कामे',
+    nav_public_home: 'सार्वजनिक दक्षता पोर्टल',
+    nav_geo_explorer: 'भौगोलिक कामे शोधक',
+    nav_search_works: 'स्थानिक कामे शोधा',
+    nav_submit_grievance: 'नागरिक तक्रार नोंदवा',
+
+    kpi_total_projects: 'एकूण मंजूर प्रकल्प',
+    kpi_total_projects_sub: 'सर्व २८ राज्ये व केंद्रशासित प्रदेश',
+    kpi_total_funds: 'एकूण मंजूर निधी',
+    kpi_total_funds_sub: 'आर्थिक वर्ष २०२५-२६ मध्ये वितरित',
+    kpi_ai_monitored: 'एआय द्वारे सतत देखरेख',
+    kpi_ai_monitored_sub: '९५.५% डेटा संरक्षण',
+    kpi_anomalies: 'आढळलेल्या अनियमितता',
+    kpi_anomalies_sub: 'खर्च, फोटो व कार्टेल मक्तेदारी',
+    kpi_high_risk: 'अति-जोखीम प्रकल्प',
+    kpi_high_risk_sub: 'तातडीने प्रत्यक्ष तपासणी आवश्यक',
+    kpi_sla_risk: 'मुदत उल्लंघन जोखीम',
+    kpi_sla_risk_sub: '१२ गंभीर (<४८ तास)',
+
+    arch_title: 'एमपीलॅड सेंटिनेल रचना आणि कोर इंटेलिजन्स इंजिन',
+    arch_subtitle: 'त्रि-स्तरीय अखंड लेखापरीक्षण: एआय विश्लेषण, गणितीय जोखीम गणना, आणि भौगोलिक इंटरफेस',
+    arch_col1_title: 'स्तंभ १: एआय अनॅलिटिक्स इंजिन (बुद्धिमत्ता)',
+    arch_col1_sub: 'मानवी तपासणीऐवजी स्वयंचलित कॉम्प्युटर व्हिजन आणि नेटवर्क ग्राफ',
+    arch_col1_f1_title: 'दुबार छायाचित्र शोध (OpenCV dHash)',
+    arch_col1_f1_desc: '६४-बिट डिफरन्स हॅशिंगद्वारे विविध जिल्ह्यातील छायाचित्रांची तुलना करून जुन्या फोटोंचा गैरवापर रोखते.',
+    arch_col1_f2_title: 'कंत्राटदार कार्टेल विश्लेषक (NetworkX)',
+    arch_col1_f2_desc: 'निविदांचा द्विपक्षीय आलेख तयार करून हर्फ़िंडाहल इंडेक्स (HHI) द्वारे मक्तेदारी उघडकीस आणते.',
+    arch_col1_f3_title: 'भौगोलिक व हवामान सामान्यीकरण',
+    arch_col1_f3_desc: 'डोंगराळ व पावसाळी भागातील नैसर्गिक विलंबाचा निष्पक्ष विचार करून थ्रेशोल्ड निश्चित करते.',
+
+    arch_col2_title: 'स्तंभ २: कोर प्रोसेसिंग इंजिन (गणितीय मॉडेल)',
+    arch_col2_sub: 'अचूक जोखीम सूत्र आणि वेगवान फास्ट-एपीआय सेवा',
+    arch_col2_f1_title: 'गणितीय जोखीम गणना सूत्र',
+    arch_col2_f1_desc: 'R = 0.35F + 0.25T + 0.20I + 0.20C या सूत्राने ० ते १०० दरम्यान गतिशील गुण दिले जातात.',
+    arch_col2_f2_title: 'त्रि-स्तरीय प्राधान्य वर्गवारी',
+    arch_col2_f2_desc: 'प्रकल्पांची 🔴 अति-जोखीम (>७०), 🟡 इशारा (४०-६९), आणि 🟢 सुरक्षित (<४०) अशी विभागणी होते.',
+    arch_col2_f3_title: 'थेट रेस्टफुल एपीआय (FastAPI)',
+    arch_col2_f3_desc: 'GET /projects, POST /analyze-image, आणि GET /cartel-graph एंडपॉइंट्स स्वॅगरसह उपलब्ध आहेत.',
+
+    arch_col3_title: 'स्तंभ ३: संवादात्मक डॅशबोर्ड (इंटरफेस)',
+    arch_col3_sub: 'संस्थात्मक जीआयएस नकाशे, स्लाइड-ओवर ऑडिट पॅनल, आणि व्हॉइस एआय',
+    arch_col3_f1_title: 'भौगोलिक जिल्हा नकाशा (Leaflet.js)',
+    arch_col3_f1_desc: 'रंगीत चिन्हांसह संवादात्मक नकाशा जो निधी वापर आणि प्रादेशिक जोखीम दाखवतो.',
+    arch_col3_f2_title: 'तपशीलवार स्लाइड-ओवर ऑडिट पॅनल',
+    arch_col3_f2_desc: 'खर्च, मुदत विलंब, छायाचित्र पुरावे आणि एआय इशारे एका क्लिकवर समोर आणते.',
+    arch_col3_f3_title: 'सर्वम एआय संप्रभू व्हॉइस इंटेलिजन्स',
+    arch_col3_f3_desc: 'मराठीत ऑडिओ अहवाल (TTS) आणि सारास ASR द्वारे ग्रामीण नागरिकांच्या आवाजी तक्रारींचे निवारण.',
+
+    judge_title: 'प्रणालीगत आव्हाने आणि ज्युरी संरक्षण उपाय',
+    judge_sub: 'खोट्या जीपीएस नोंदी, मानवी भ्रष्टाचार, आणि एआय डीपफेक छायाचित्रांविरुद्ध ठोस उपाय',
+    judge_d1_title: '१. खोट्या जिओटॅग नोंदी (GPS Spoofing)',
+    judge_d1_desc: 'मोबाइल टॉवर आयडी, इंटरनेट आयपी आणि पोस्ट-जीआयएस सीमा यांच्याशी तिहेरी पडताळणी.',
+    judge_d2_title: '२. मानवी भ्रष्टाचार प्रतिबंध (Bribery Prevention)',
+    judge_d2_desc: 'दोन स्वतंत्र अधिकाऱ्यांच्या डिजिटल स्वाक्षरी (e-Sign) शिवाय अलर्ट रद्द करता येत नाही.',
+    judge_d3_title: '३. एआय जनरेटेड बनावट छायाचित्रे (Deepfake)',
+    judge_d3_desc: 'एफएफटी स्पेक्ट्रल विश्लेषण आणि एरर लेव्हल ॲनालिसिसद्वारे कृत्रिम पिक्सेल लगेच पकडले जातात.',
+    judge_d4_title: '४. डोंगराळ व दुर्गम भागातील नैसर्गिक विलंब',
+    judge_d4_desc: 'कठीण भौगोलिक परिस्थितीचा घटक जोडून निष्पक्ष मूल्यमापन केले जाते.',
+
+    table_work_id: 'काम क्र.',
+    table_desc_constituency: 'तपशील व मतदारसंघ',
+    table_sanction_value: 'मंजूर रक्कम',
+    table_composite_risk: 'एकत्रित जोखीम',
+    table_status: 'स्थिती',
+    table_actions: 'कृती',
+    btn_audit: 'तपासणी डॉसियर',
+    btn_export: 'अहवाल डाउनलोड',
+    btn_refresh: 'माहिती अद्ययावत करा',
+    filter_all_states: 'सर्व राज्ये',
+    filter_risk_level: 'सर्व जोखीम स्तर',
+    footer_text: 'एमपीलॅड्स एआय मॉनिटर — सांख्यिकी आणि कार्यक्रम अंमलबजावणी मंत्रालय (MoSPI) • भारत सरकार',
+    footer_sec: 'प्रतिबंधित सरकारी प्रवेश • शून्य निधी गळती ध्येय',
+  },
+
+  'ta-IN': {
+    brand_title: 'எம்பி நிதி நுண்ணறிவு',
+    brand_tag: 'புள்ளியியல் அமைச்சகம் e-SAKSHI அடுக்கு',
+    brand_sub: 'புள்ளியியல் மற்றும் திட்ட அமலாக்க அமைச்சகம் • இந்திய அரசு',
+    search_placeholder: 'திட்ட எண், மாவட்டம், ஒப்பந்தக்காரரைத் தேடுக...',
+    role_admin: 'மத்திய தணிக்கையாளர்',
+    role_district: 'மாவட்ட ஆட்சியர் (DM)',
+    role_citizen: 'குடிமக்கள் தளம்',
+    role_persona: 'செயலில் உள்ள நிர்வாகப் பங்கு',
+    role_admin_sub: 'தேசிய மேற்பார்வை & சிண்டிகேட் ஆய்வு',
+    role_district_sub: 'SLA எச்சரிக்கைகள் & புகைப்பட சரிபார்ப்பு',
+    role_citizen_sub: 'திட்ட தேடல் & குறைதீர்ப்பு',
+    indic_btn: 'சர்வம் AI',
+    voice_briefing_btn: 'குரல் AI',
+    sign_out: 'வெளியேறு',
+    sec_profile: 'பாதுகாப்பு & சுயவிவரம்',
+    public_portal: 'பொது வெளிப்படைத்தன்மை தளம்',
+
+    suite_admin: 'தேசிய கட்டளை மையம்',
+    suite_district: 'மாவட்ட ஆட்சியர் கட்டுப்பாட்டு மையம்',
+    suite_citizen: 'குடிமக்கள் வழிகாட்டி',
+    nav_exec_dashboard: 'நிர்வாக டாஷ்போர்டு',
+    nav_analytics: 'நுண்ணறிவு பகுப்பாய்வு',
+    nav_risk_map: 'தேசிய இடர் வரைபடம்',
+    nav_high_risk: 'அதி-இடர் தணிக்கை வரிசை',
+    nav_cartel_matrix: 'ஒப்பந்தக்காரர் கூட்டு ஆதிக்கம்',
+    nav_all_works: 'அனைத்து அங்கீகரிக்கப்பட்ட பணிகள்',
+    nav_evidence_lab: 'AI தடயவியல் சான்று ஆய்வகம்',
+    nav_sla: 'காலக்கெடு மீறல் எச்சரிக்கைகள்',
+    nav_district_overview: 'மாவட்ட மேலோட்டம்',
+    nav_pending_sanctions: 'நிலுவையில் உள்ள ஒப்புதல்கள்',
+    nav_sla_alerts: 'காலக்கெடு அபாய எச்சரிக்கைகள்',
+    nav_pre_screening: 'AI முதற்கட்ட ஆய்வு',
+    nav_photo_val: 'புகைப்பட உண்மைத்தன்மை சரிபார்ப்பு',
+    nav_constituency_works: 'தொகுதி வளர்ச்சிப் பணிகள்',
+    nav_public_home: 'பொது விழிப்புணர்வு தளம்',
+    nav_geo_explorer: 'புவியியல் பணி ஆய்வாளர்',
+    nav_search_works: 'உள்ளூர் பணிகளைத் தேடுக',
+    nav_submit_grievance: 'குடிமக்கள் புகாரைப் பதிவுசெய்க',
+
+    kpi_total_projects: 'மொத்த அங்கீகரிக்கப்பட்ட பணிகள்',
+    kpi_total_projects_sub: 'அனைத்து 28 மாநிலங்கள் & யூனியன் பிரதேசங்கள்',
+    kpi_total_funds: 'ஒதுக்கப்பட்ட மொத்த நிதி',
+    kpi_total_funds_sub: 'நிதியாண்டு 2025-26-ல் வழங்கப்பட்டது',
+    kpi_ai_monitored: 'AI தொடர் கண்காணிப்பு',
+    kpi_ai_monitored_sub: '95.5% தரவு பாதுகாப்பு',
+    kpi_anomalies: 'கண்டறியப்பட்ட முறைகேடுகள்',
+    kpi_anomalies_sub: 'செலவு, புகைப்படம் & ஏகபோக ஆதிக்கம்',
+    kpi_high_risk: 'அதி-இடர் திட்டங்கள்',
+    kpi_high_risk_sub: 'உடனடி கள ஆய்வு தேவை',
+    kpi_sla_risk: 'காலக்கெடு மீறல் அபாயம்',
+    kpi_sla_risk_sub: '12 அவசர நிலைகள் (<48 மணி நேரம்)',
+
+    arch_title: 'எம்பிஎல்ஏடி சென்டினல் கட்டமைப்பு மற்றும் நுண்ணறிவு இயந்திரம்',
+    arch_subtitle: 'முத்தூண் தணிக்கை கட்டமைப்பு: AI பகுப்பாய்வு, கணித இடர் மதிப்பீடு, மற்றும் புவியியல் இடைமுகம்',
+    arch_col1_title: 'தூண் 1: AI பகுப்பாய்வு இயந்திரங்கள் (மூளை)',
+    arch_col1_sub: 'மனித தணிக்கைக்குப் பதிலாக தானியங்கி கணினி பார்வை மற்றும் வரைபட ML',
+    arch_col1_f1_title: 'நகல் புகைப்படக் கண்டறிதல் (OpenCV dHash)',
+    arch_col1_f1_desc: '64-பிட் dHash மூலம் பல்வேறு மாவட்ட புகைப்படங்களை ஒப்பிட்டு பழைய படங்களின் மறுபயன்பாட்டைத் தடுக்கிறது.',
+    arch_col1_f2_title: 'ஒப்பந்தக்காரர் கூட்டு ஆய்வு (NetworkX)',
+    arch_col1_f2_desc: 'டெண்டர் வரைபடம் உருவாக்கி ஹெர்பிண்டால் குறியீட்டின் (HHI) மூலம் ஏகபோக சந்தை அபாயத்தை வெளிப்படுத்துகிறது.',
+    arch_col1_f3_title: 'புவியியல் மற்றும் தட்பவெப்ப இயல்பாக்கம்',
+    arch_col1_f3_desc: 'மலை மற்றும் மழைக்காலப் பகுதிகளின் தாமதங்களை நியாயமாக மதிப்பிடுகிறது.',
+
+    arch_col2_title: 'தூண் 2: முக்கிய செயலாக்க இயந்திரம் (கணித மாதிரி)',
+    arch_col2_sub: 'துல்லியமான இடர் சூத்திரம் மற்றும் அதிவேக FastAPI சேவைகள்',
+    arch_col2_f1_title: 'கணித இடர் சூத்திரம்',
+    arch_col2_f1_desc: 'R = 0.35F + 0.25T + 0.20I + 0.20C சூத்திரத்தின் அடிப்படையில் 0-100 வரம்பில் மதிப்பெண் வழங்கப்படுகிறது.',
+    arch_col2_f2_title: 'முன்னுரிமை பிரிவுகள்',
+    arch_col2_f2_desc: 'திட்டங்களை 🔴 அதி-இடர் (>70), 🟡 எச்சரிக்கை (40-69), மற்றும் 🟢 பாதுகாப்பானது (<40) எனப் பிரிக்கிறது.',
+    arch_col2_f3_title: 'நேரடி REST API (FastAPI)',
+    arch_col2_f3_desc: 'GET /projects, POST /analyze-image, மற்றும் GET /cartel-graphSwagger ஆவணங்களுடன் செயல்படுகின்றன.',
+
+    arch_col3_title: 'தூண் 3: ஊடாடும் டாஷ்போர்டு (இடைமுகம்)',
+    arch_col3_sub: 'GIS வரைபடங்கள், ஸ்லைடு-ஓவர் தணிக்கை பேனல்கள், மற்றும் சர்வம் குரல் AI',
+    arch_col3_f1_title: 'புவியியல் மாவட்ட வரைபடம் (Leaflet.js)',
+    arch_col3_f1_desc: 'வண்ணக் குறியீட்டுடன் நிதிப் பயன்பாடு மற்றும் பிராந்திய இடர்களைக் காட்டும் வரைபடம்.',
+    arch_col3_f2_title: 'விரிவான ஸ்லைடு-ஓவர் தணிக்கைப் பேனல்',
+    arch_col3_f2_desc: 'ஒவ்வொரு திட்டத்தின் செலவு, காலக்கெடு, சான்றுப் படங்கள் மற்றும் AI எச்சரிக்கைகளைக் காட்டுகிறது.',
+    arch_col3_f3_title: 'சர்வம் AI குரல் நுண்ணறிவு',
+    arch_col3_f3_desc: 'தமிழில் குரல் அறிக்கை (TTS) மற்றும் கிராமப்புற குடிமக்களுக்கான குரல்வழிப் புகார் பதிவு.',
+
+    judge_title: 'கட்டமைப்பு பலவீனங்கள் மற்றும் தீர்வுகள்',
+    judge_sub: 'போலி GPS, மனித லஞ்சம், மற்றும் போலியான புகைப்படங்களுக்கு எதிரான பாதுகாப்பு உத்திகள்',
+    judge_d1_title: '1. போலி புவிக்குறியீடு சரிபார்ப்பு (GPS Spoofing)',
+    judge_d1_desc: 'செல்போன் டவர் ஐடி மற்றும் இணைய ஐபி முகவரியுடன் முத்தரப்பு சரிபார்ப்பு.',
+    judge_d2_title: '2. மனித லஞ்சத் தடுப்பு (Bribery Prevention)',
+    judge_d2_desc: 'இரு அதிகாரிகளின் டிஜிட்டல் கையொப்பம் (e-Sign) இன்றி எச்சரிக்கைகளை நீக்க முடியாது.',
+    judge_d3_title: '3. AI உருவாக்கிய போலி புகைப்படங்கள் (Deepfake)',
+    judge_d3_desc: 'FFT ஸ்பெக்ட்ரல் பகுப்பாய்வு மூலம் செயற்கை பிக்சல் முரண்பாடுகளை உடனடியாகக் கண்டறிகிறது.',
+    judge_d4_title: '4. மலை மற்றும் தொலைதூரப் பகுதிகளின் சார்புத் தடுப்பு',
+    judge_d4_desc: 'புவியியல் சிரமங்களை கணக்கில் கொண்டு பாரபட்சமற்ற தணிக்கையை உறுதிசெய்கிறது.',
+
+    table_work_id: 'பணி எண்',
+    table_desc_constituency: 'விவரம் & தொகுதி',
+    table_sanction_value: 'ஒதுக்கப்பட்ட தொகை',
+    table_composite_risk: 'இடர் மதிப்பீடு',
+    table_status: 'தணிக்கை நிலை',
+    table_actions: 'நடவடிக்கை',
+    btn_audit: 'ஆவணத் தணிக்கை',
+    btn_export: 'அறிக்கை பதிவிறக்கம்',
+    btn_refresh: 'தரவை புதுப்பிக்கவும்',
+    filter_all_states: 'அனைத்து மாநிலங்கள்',
+    filter_risk_level: 'அனைத்து இடர் நிலைகள்',
+    footer_text: 'எம்பி நிதி AI கண்காணிப்பு — புள்ளியியல் மற்றும் திட்ட அமலாக்க அமைச்சகம் (MoSPI) • இந்திய அரசு',
+    footer_sec: 'வரம்பிற்குட்பட்ட அரசு தணிக்கை அணுகல் • பூஜ்ஜிய நிதி கசிவு நோக்கம்',
+  }
+};
+
+// Fallback logic for remaining Indic languages
+['te-IN', 'bn-IN', 'gu-IN', 'kn-IN'].forEach(code => {
+  DICTIONARY[code] = { ...DICTIONARY['hi-IN'] };
+});
+
+const LanguageContext = createContext(null);
+
+export const LanguageProvider = ({ children }) => {
+  const [currentLanguage, setCurrentLanguage] = useState(() => {
+    return localStorage.getItem('mplads_selected_lang') || 'en-IN';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('mplads_selected_lang', currentLanguage);
+    document.documentElement.lang = currentLanguage.split('-')[0];
+  }, [currentLanguage]);
+
+  const setLanguage = (langCode) => {
+    setCurrentLanguage(langCode);
+  };
+
+  const t = (key, defaultText = '') => {
+    const langDict = DICTIONARY[currentLanguage] || DICTIONARY['en-IN'];
+    if (langDict && langDict[key]) {
+      return langDict[key];
+    }
+    const enDict = DICTIONARY['en-IN'];
+    if (enDict && enDict[key]) {
+      return enDict[key];
+    }
+    return defaultText || key;
+  };
+
+  return (
+    <LanguageContext.Provider
+      value={{
+        currentLanguage,
+        setLanguage,
+        t,
+        languages: SUPPORTED_LANGUAGES,
+      }}
+    >
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};

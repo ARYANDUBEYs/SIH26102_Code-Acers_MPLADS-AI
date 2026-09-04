@@ -10,15 +10,17 @@ import {
   Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const DashboardStats = ({ kpis = {} }) => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const cards = [
     {
-      title: "Total Projects",
+      title: t('kpi_total_projects', 'Total Projects'),
       value: kpis.totalProjects?.toLocaleString() || '12,482',
-      subtitle: "All 28 States & UTs",
+      subtitle: t('kpi_total_projects_sub', 'All 28 States & UTs'),
       icon: FolderGit2,
       trend: kpis.trends?.totalProjects,
       trendPositive: true,
@@ -26,9 +28,9 @@ export const DashboardStats = ({ kpis = {} }) => {
       onClick: () => navigate('/projects')
     },
     {
-      title: "Total Funds",
+      title: t('kpi_total_funds', 'Total Funds'),
       value: `₹${kpis.totalFundsCr || '2,486'} Cr`,
-      subtitle: "Sanctioned in FY 25-26",
+      subtitle: t('kpi_total_funds_sub', 'Sanctioned in FY 25-26'),
       icon: IndianRupee,
       trend: kpis.trends?.totalFundsCr,
       trendPositive: true,
@@ -36,9 +38,9 @@ export const DashboardStats = ({ kpis = {} }) => {
       onClick: () => navigate('/analytics')
     },
     {
-      title: "AI Monitored",
+      title: t('kpi_ai_monitored', 'AI Monitored'),
       value: kpis.projectsMonitored?.toLocaleString() || '11,920',
-      subtitle: "95.5% Data Coverage",
+      subtitle: t('kpi_ai_monitored_sub', '95.5% Data Coverage'),
       icon: ShieldCheck,
       trend: "Continuous AI Scan",
       trendPositive: true,
@@ -46,9 +48,9 @@ export const DashboardStats = ({ kpis = {} }) => {
       onClick: () => navigate('/projects')
     },
     {
-      title: "Anomalies Detected",
+      title: t('kpi_anomalies', 'Anomalies Detected'),
       value: kpis.anomaliesDetected || '183',
-      subtitle: "Cost, photo & cartels",
+      subtitle: t('kpi_anomalies_sub', 'Cost, photo & cartels'),
       icon: AlertTriangle,
       trend: kpis.trends?.anomaliesDetected,
       trendPositive: true,
@@ -56,9 +58,9 @@ export const DashboardStats = ({ kpis = {} }) => {
       onClick: () => navigate('/high-risk')
     },
     {
-      title: "High Risk Projects",
+      title: t('kpi_high_risk', 'High Risk Projects'),
       value: kpis.highRiskProjects || '42',
-      subtitle: "Requires immediate review",
+      subtitle: t('kpi_high_risk_sub', 'Requires immediate review'),
       icon: AlertOctagon,
       trend: kpis.trends?.highRiskProjects,
       trendPositive: false,
@@ -66,9 +68,9 @@ export const DashboardStats = ({ kpis = {} }) => {
       onClick: () => navigate('/high-risk')
     },
     {
-      title: "SLA At Risk",
+      title: t('kpi_sla_risk', 'SLA At Risk'),
       value: kpis.slaAtRisk || '96',
-      subtitle: "12 critical (<48h)",
+      subtitle: t('kpi_sla_risk_sub', '12 critical (<48h)'),
       icon: Clock,
       trend: kpis.trends?.slaAtRisk,
       trendPositive: false,
@@ -82,9 +84,9 @@ export const DashboardStats = ({ kpis = {} }) => {
       {cards.map((card, idx) => (
         <motion.div
           key={card.title}
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: idx * 0.05, ease: "easeOut" }}
+          transition={{ duration: 0.25, delay: idx * 0.04, ease: "easeOut" }}
         >
           <DashboardCard {...card} />
         </motion.div>
