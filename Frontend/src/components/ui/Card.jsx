@@ -24,29 +24,29 @@ export const Card = ({
   return (
     <div
       className={cn(
-        'bg-white border border-slate-200 rounded-xl shadow-gov-card transition-all duration-200 text-slate-800',
+        'bg-gov-surface border border-gov-border rounded-md shadow-sm transition-all duration-200 text-gov-slate',
         riskAccent && riskBorderMap[riskAccent],
         className
       )}
       {...props}
     >
       {(title || subtitle || action || Icon) && (
-        <div className={cn('flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/50 rounded-t-xl', headerClassName)}>
-          <div className="flex items-center gap-3">
+        <div className={cn('flex items-center justify-between px-4 py-3 border-b border-gov-border bg-gov-canvas/50 rounded-t-md', headerClassName)}>
+          <div className="flex items-center gap-2.5">
             {Icon && (
-              <div className="p-2 rounded-lg bg-blue-50 text-blue-700 border border-blue-100 shrink-0">
+              <div className="p-1.5 rounded bg-gov-subtle text-gov-navy border border-gov-border shrink-0">
                 <Icon className="w-4 h-4" />
               </div>
             )}
             <div>
-              {title && <h3 className="text-sm font-semibold text-slate-900 tracking-tight">{title}</h3>}
-              {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+              {title && <h3 className="text-sm font-bold text-gov-slateDark tracking-tight">{title}</h3>}
+              {subtitle && <p className="text-xs text-gov-muted mt-0.5">{subtitle}</p>}
             </div>
           </div>
           {action && <div className="shrink-0">{action}</div>}
         </div>
       )}
-      <div className={cn('p-5', bodyClassName)}>{children}</div>
+      <div className={cn('p-4', bodyClassName)}>{children}</div>
     </div>
   );
 };

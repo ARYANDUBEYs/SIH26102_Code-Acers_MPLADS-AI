@@ -40,35 +40,40 @@ export const PublicMap = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-600 flex flex-col">
+    <div className="min-h-screen bg-gov-canvas text-gov-slateDark selection:bg-gov-navy selection:text-white flex flex-col">
       <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600" />
 
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-gov-surface border-b border-gov-border shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/public" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 p-0.5 shadow-md flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-md bg-gov-navy text-white flex items-center justify-center font-bold text-sm shadow-xs border border-gov-navyLight">
+              MP
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight text-slate-900">
-                MPLADS <span className="text-blue-600">Public Map</span>
-              </span>
-              <p className="text-[10px] text-slate-500 font-medium">Interactive Geospatial Project Locator (English)</p>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-base tracking-tight text-gov-navy">
+                  MPLADS <span className="text-gov-saffron font-bold">PUBLIC MAP</span>
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-gov-canvas text-gov-muted border border-gov-border px-1.5 py-0.5 rounded">
+                  MoSPI GIS
+                </span>
+              </div>
+              <p className="text-[10px] text-gov-muted font-medium">Interactive Geospatial Project Locator • All India</p>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-5 text-xs font-medium text-slate-600">
-            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-slate-700 hover:text-blue-700 bg-slate-100 hover:bg-blue-50 border border-slate-200 rounded-md font-semibold transition">
-              <Home className="w-3.5 h-3.5 text-blue-600" />
-              <span>Back to Home</span>
+          <nav className="hidden md:flex items-center gap-5 text-xs font-semibold text-gov-muted">
+            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-gov-slateDark hover:text-gov-navy bg-gov-canvas hover:bg-slate-100 border border-gov-border rounded-md transition">
+              <Home className="w-3.5 h-3.5 text-gov-navy" />
+              <span>Back to Overview</span>
             </Link>
-            <Link to="/public" className="hover:text-blue-600">Public Portal</Link>
-            <Link to="/public/map" className="text-blue-600 font-bold">Interactive Map</Link>
-            <Link to="/public/search" className="hover:text-blue-600">Search Projects</Link>
+            <Link to="/public" className="hover:text-gov-navy transition">Citizen Home</Link>
+            <Link to="/public/map" className="text-gov-navy font-bold border-b-2 border-gov-navy pb-0.5">Constituency Map</Link>
+            <Link to="/public/search" className="hover:text-gov-navy transition">Search Works</Link>
           </nav>
 
           <Link to="/public/report">
-            <Button variant="danger" size="sm" icon={Camera}>
+            <Button variant="danger" size="sm" icon={Camera} className="rounded-md shadow-xs font-semibold text-xs">
               Report Issue
             </Button>
           </Link>
@@ -76,26 +81,26 @@ export const PublicMap = () => {
       </header>
 
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gov-surface p-3.5 rounded-md border border-gov-border shadow-xs">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Public Project Map (English India Map)</h2>
-            <p className="text-xs text-slate-500">Explore active and completed MPLADS works in your area with English location labels</p>
+            <h2 className="text-base font-bold text-gov-navy">Geospatial Project Surveillance & Mapping</h2>
+            <p className="text-xs text-gov-muted">Visual distribution of sanctioned works across parliamentary constituencies</p>
           </div>
 
-          <div className="flex items-center gap-3 text-xs bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Normal Verified
+          <div className="flex items-center gap-4 text-xs font-medium text-gov-slateDark">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200" /> Normal Verified
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" /> Continuous Monitoring
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-amber-200" /> Under Surveillance
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Attention Required
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-rose-200" /> Discrepancy Flagged
             </span>
           </div>
         </div>
 
-        <div className="w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md h-[600px] relative">
+        <div className="w-full bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-xs h-[620px] relative">
           <MapContainer
             center={[22.5937, 78.9629]}
             zoom={5}
@@ -115,10 +120,10 @@ export const PublicMap = () => {
                 <CircleMarker
                   key={p.id}
                   center={coords}
-                  radius={9}
+                  radius={8}
                   pathOptions={{
                     fillColor: color,
-                    fillOpacity: 0.85,
+                    fillOpacity: 0.9,
                     color: '#ffffff',
                     weight: 2,
                   }}
@@ -126,25 +131,32 @@ export const PublicMap = () => {
                   <Popup>
                     <div className="p-1 space-y-2 text-xs font-sans max-w-xs">
                       <div>
-                        <span className="font-mono font-bold text-[10px] text-blue-600">{p.id}</span>
-                        <h4 className="font-bold text-slate-900 leading-tight">{p.name}</h4>
-                        <p className="text-slate-500 text-[11px]">{p.district}, {p.state}</p>
-                      </div>
-                      <div className="p-2 bg-slate-50 rounded space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Sanctioned:</span>
-                          <span className="font-bold font-mono">{formatINR(p.sanctionedAmount)}</span>
+                        <div className="flex items-center justify-between pb-1 border-b border-gov-border">
+                          <span className="font-mono font-bold text-[10px] text-gov-navy">{p.id}</span>
+                          <span className="text-[10px] font-bold text-slate-500">{p.currentStage}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">AI Risk Score:</span>
-                          <span className="font-bold font-mono text-rose-600">{p.riskScore}/100</span>
+                        <h4 className="font-bold text-gov-navy leading-tight mt-1.5">{p.name}</h4>
+                        <p className="text-gov-muted text-[11px] mt-0.5">{p.district}, {p.state}</p>
+                      </div>
+                      <div className="p-2 bg-gov-canvas rounded border border-gov-border space-y-1">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gov-muted text-[11px]">Sanctioned:</span>
+                          <span className="font-bold font-mono text-gov-navy">{formatINR(p.sanctionedAmount)}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gov-muted text-[11px]">Disbursed:</span>
+                          <span className="font-bold font-mono text-emerald-700">{formatINR(p.utilizedAmount)}</span>
+                        </div>
+                        <div className="flex justify-between items-center pt-1 border-t border-gov-border">
+                          <span className="text-gov-muted text-[11px]">Surveillance Index:</span>
+                          <span className="font-bold font-mono text-rose-700">{p.riskScore}/100</span>
                         </div>
                       </div>
                       <button
                         onClick={() => navigate(`/project/${p.id}`)}
-                        className="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold text-[11px] flex items-center justify-center gap-1"
+                        className="w-full py-1.5 bg-gov-navy hover:bg-gov-navyLight text-white rounded font-semibold text-[11px] flex items-center justify-center gap-1 transition"
                       >
-                        <Eye className="w-3 h-3" /> View Project Audit
+                        <Eye className="w-3 h-3" /> Inspect Project Dossier
                       </button>
                     </div>
                   </Popup>
@@ -154,6 +166,10 @@ export const PublicMap = () => {
           </MapContainer>
         </div>
       </div>
+
+      <footer className="bg-gov-surface border-t border-gov-border py-4 px-4 text-center text-xs text-gov-muted">
+        Ministry of Statistics & Programme Implementation (MoSPI) • Government of India
+      </footer>
     </div>
   );
 };

@@ -118,6 +118,7 @@ export const LoginForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           icon={Mail}
+          variant="dark"
           placeholder="officer.id@gov.in"
           required
         />
@@ -128,6 +129,7 @@ export const LoginForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           icon={Lock}
+          variant="dark"
           placeholder="••••••••••••"
           required
         />

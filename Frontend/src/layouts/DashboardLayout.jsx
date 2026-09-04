@@ -60,10 +60,10 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-gov-canvas text-gov-slateDark flex flex-col selection:bg-gov-blue selection:text-white">
       <Navbar />
 
-      <div className="flex-1 flex w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+      <div className="flex-1 flex w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 pt-4 sm:pt-6">
         <Sidebar />
 
         <main className="flex-1 min-w-0 lg:pl-6 pb-12">

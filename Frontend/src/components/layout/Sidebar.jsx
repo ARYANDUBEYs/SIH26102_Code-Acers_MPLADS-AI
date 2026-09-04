@@ -75,7 +75,7 @@ export const Sidebar = () => {
 
       <aside
         className={cn(
-          'fixed lg:sticky top-16 z-30 h-[calc(100vh-4rem)] w-64 bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-300 ease-in-out',
+          'fixed lg:sticky top-14 z-30 h-[calc(100vh-3.5rem)] w-64 bg-gov-navyDark border-r border-gov-navy flex flex-col justify-between transition-transform duration-300 ease-in-out',
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
@@ -86,7 +86,7 @@ export const Sidebar = () => {
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 {isCitizen ? t('suite_citizen', 'Citizen Navigation') : isDistrictOfficer ? t('suite_district', 'District Officer Suite') : t('suite_admin', 'National Command Suite')}
               </span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-900" />
             </div>
 
             <nav className="space-y-1.5">
@@ -100,18 +100,18 @@ export const Sidebar = () => {
                     to={item.path}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150',
+                      'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 border',
                       isActive
-                        ? 'bg-blue-50 text-blue-900 border border-blue-200 font-semibold shadow-gov-sm'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
+                        ? 'bg-gov-blue/20 text-white border-gov-blue/50 shadow-[0_0_10px_rgba(29,78,216,0.3)] font-semibold'
+                        : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
                     )}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         className={cn(
                           'w-4 h-4 shrink-0 transition-colors',
-                          isActive ? 'text-blue-700' : 'text-slate-400 group-hover:text-slate-700',
-                          item.highlight && !isActive && 'text-blue-600'
+                          isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300',
+                          item.highlight && !isActive && 'text-amber-500/70'
                         )}
                       />
                       <span className="truncate">{item.label}</span>
@@ -129,9 +129,9 @@ export const Sidebar = () => {
           </div>
 
           {/* Quick SLA / Vigilance Status Card */}
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 AI Sentinel Stream
               </span>
               <span className="flex h-2 w-2 relative">
@@ -139,21 +139,21 @@ export const Sidebar = () => {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
             </div>
-            <p className="text-[11px] text-slate-600">
+            <p className="text-[11px] text-slate-300">
               dHash & IsolationForest models cross-referencing 28 States & UTs.
             </p>
-            <div className="pt-1.5 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono text-slate-500">
+            <div className="pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-slate-400">
               <span>Latency: 18ms</span>
-              <span className="text-emerald-700 font-semibold">99.98% Uptime</span>
+              <span className="text-emerald-400 font-semibold">99.98% Uptime</span>
             </div>
           </div>
         </div>
 
         {/* User sign out footer */}
-        <div className="p-3 border-t border-slate-200 bg-slate-50/50">
+        <div className="p-3 border-t border-white/10 bg-black/10">
           <button
             onClick={logout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>{t('sign_out', 'Sign Out')}</span>

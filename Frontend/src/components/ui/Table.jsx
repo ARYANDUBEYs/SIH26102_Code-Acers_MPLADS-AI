@@ -51,7 +51,7 @@ export const Table = ({
 
   if (isLoading) {
     return (
-      <div className="w-full bg-white border border-slate-200 rounded-xl p-8 shadow-gov-card">
+      <div className="w-full bg-gov-surface border border-gov-border rounded-md p-8 shadow-sm">
         <Loader text="Loading Project Intelligence..." />
       </div>
     );
@@ -62,17 +62,17 @@ export const Table = ({
   }
 
   return (
-    <div className={cn('w-full flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-gov-card', className)}>
+    <div className={cn('w-full flex flex-col bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-sm', className)}>
       <div className="w-full overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-slate-700 uppercase text-[11px] font-bold tracking-wider">
+            <tr className="border-b border-gov-border bg-gov-canvas text-gov-muted uppercase text-[11px] font-bold tracking-wider">
               {columns.map((col, idx) => (
                 <th
                   key={idx}
                   className={cn(
-                    'px-4 py-3.5 select-none',
-                    col.sortable && 'cursor-pointer hover:text-slate-900 transition-colors',
+                    'px-4 py-3 select-none',
+                    col.sortable && 'cursor-pointer hover:text-gov-slateDark transition-colors',
                     col.className
                   )}
                   onClick={() => col.sortable && handleSort(col.accessor)}

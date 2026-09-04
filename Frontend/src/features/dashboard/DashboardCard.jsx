@@ -47,23 +47,23 @@ export const DashboardCard = ({
     <div
       onClick={onClick}
       className={cn(
-        'p-5 rounded-xl border shadow-gov-card hover:shadow-gov-hover transition-all duration-200 flex flex-col justify-between select-none relative overflow-hidden bg-white',
+        'p-4 rounded-md border shadow-sm hover:shadow transition-all duration-200 flex flex-col justify-between select-none relative overflow-hidden bg-gov-surface',
         style.card,
-        onClick && 'cursor-pointer hover:-translate-y-0.5',
+        onClick && 'cursor-pointer',
         className
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">{title}</p>
-          <h3 className={cn('text-2xl sm:text-3xl font-black font-mono tracking-tight', style.value)}>
+        <div className="space-y-0.5">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{title}</p>
+          <h3 className={cn('text-xl sm:text-2xl font-black font-mono tracking-tight', style.value)}>
             {value}
           </h3>
         </div>
 
         {Icon && (
-          <div className={cn('p-2.5 rounded-xl border shrink-0', style.icon)}>
-            <Icon className="w-5 h-5" />
+          <div className={cn('p-2 rounded-md border shrink-0', style.icon)}>
+            <Icon className="w-4 h-4" />
           </div>
         )}
       </div>

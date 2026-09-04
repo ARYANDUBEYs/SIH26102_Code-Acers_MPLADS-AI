@@ -119,29 +119,29 @@ export const EvidenceVerification = () => {
       />
 
       {/* AI Forensic Integrity Checklist */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-1 shadow-gov-card">
-          <span className="text-[11px] font-bold uppercase text-slate-500">dHash Hamming Distance</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-rose-600">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">dHash Hamming Distance</span>
           <h4 className="text-xl font-black font-mono text-rose-700">2 / 64 Bits</h4>
-          <p className="text-[11px] text-slate-500">96.88% Structural Overlap (Threshold &le; 6)</p>
+          <p className="text-[11px] text-gov-slate font-medium">96.88% Structural Overlap (Threshold &le; 6)</p>
         </div>
 
-        <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-1 shadow-gov-card">
-          <span className="text-[11px] font-bold uppercase text-slate-500">Geotag Coordinates</span>
-          <h4 className="text-xl font-black font-mono text-emerald-700">Verified (80m)</h4>
-          <p className="text-[11px] text-slate-500">Inside sanctioned boundary (Chiraigaon Block)</p>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-emerald-600">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Geotag Coordinates</span>
+          <h4 className="text-xl font-black font-mono text-emerald-700">Matched (&lt;80m)</h4>
+          <p className="text-[11px] text-gov-slate font-medium">Inside boundary (Chiraigaon Block, Varanasi)</p>
         </div>
 
-        <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-1 shadow-gov-card">
-          <span className="text-[11px] font-bold uppercase text-slate-500">Repository History</span>
-          <h4 className="text-xl font-black font-mono text-rose-700">Cross-District Match</h4>
-          <p className="text-[11px] text-slate-500">Identical photo claimed in Jaunpur (2024)</p>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-rose-600">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Repository History</span>
+          <h4 className="text-xl font-black font-mono text-rose-700">Cross-District Reuse</h4>
+          <p className="text-[11px] text-gov-slate font-medium">Identical photo claimed in Jaunpur (2024 work)</p>
         </div>
 
-        <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-1 shadow-gov-card">
-          <span className="text-[11px] font-bold uppercase text-slate-500">Prescribed Audit Action</span>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-gov-blue">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Prescribed Action</span>
           <h4 className="text-xl font-black font-mono text-rose-700">HOLD FUNDS</h4>
-          <p className="text-[11px] text-slate-500">Withhold ₹27L Stage-2 release pending audit</p>
+          <p className="text-[11px] text-gov-slate font-medium">Withhold Stage-2 disbursal pending inspection</p>
         </div>
       </div>
 

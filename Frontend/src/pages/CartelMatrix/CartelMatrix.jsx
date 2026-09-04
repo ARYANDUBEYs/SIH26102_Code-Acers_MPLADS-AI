@@ -61,17 +61,17 @@ export const CartelMatrix = () => {
         </span>
       }
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Main Network Graph Canvas (Interactive SVG Graph) */}
-        <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-5 shadow-gov-card relative flex flex-col min-h-[520px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Main Network Graph Canvas */}
+        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-md p-4 shadow-sm relative flex flex-col min-h-[520px]">
           {/* Graph Title & Legend */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3.5 mb-3.5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border pb-3 mb-3">
             <div className="flex items-center gap-2">
-              <Network className="w-5 h-5 text-blue-700" />
-              <span className="text-sm font-bold text-slate-900">Eastern UP Infrastructure Tender Bipartite Cluster</span>
+              <Network className="w-5 h-5 text-gov-blue" />
+              <span className="text-sm font-bold text-gov-slateDark">Eastern UP Infrastructure Tender Bipartite Cluster</span>
             </div>
 
-            <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-600">
+            <div className="flex items-center gap-3 text-[11px] font-bold text-gov-muted">
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-600" /> Primary Contractor (High Risk)
               </span>
@@ -79,19 +79,19 @@ export const CartelMatrix = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-pink-600" /> Common Director / ROC
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-600" /> Public Work
+                <span className="w-2.5 h-2.5 rounded-full bg-gov-blue" /> Public Work
               </span>
             </div>
           </div>
 
           {/* Interactive Visual Graph Canvas */}
-          <div className="flex-1 w-full relative min-h-[440px] flex items-center justify-center bg-slate-50/70 rounded-xl overflow-hidden border border-slate-200">
+          <div className="flex-1 w-full relative min-h-[440px] flex items-center justify-center bg-gov-canvas/60 rounded border border-gov-border overflow-hidden">
             {/* SVG Link lines between nodes */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
-              {/* Lines from Director (DIR-01: 50%, 20%) to Vendors */}
-              <line x1="50%" y1="18%" x2="25%" y2="50%" stroke="#DB2777" strokeWidth="2" strokeDasharray="6 4" className="animate-flow-dash" />
-              <line x1="50%" y1="18%" x2="50%" y2="50%" stroke="#DB2777" strokeWidth="2" strokeDasharray="6 4" className="animate-flow-dash" />
-              <line x1="50%" y1="18%" x2="75%" y2="50%" stroke="#DB2777" strokeWidth="2" strokeDasharray="6 4" className="animate-flow-dash" />
+              {/* Lines from Director (DIR-01: 50%, 18%) to Vendors */}
+              <line x1="50%" y1="18%" x2="25%" y2="50%" stroke="#DB2777" strokeWidth="2" strokeDasharray="6 4" />
+              <line x1="50%" y1="18%" x2="50%" y2="50%" stroke="#DB2777" strokeWidth="2" strokeDasharray="6 4" />
+              <line x1="50%" y1="18%" x2="75%" y2="50%" stroke="#DB2777" strokeWidth="2" strokeDasharray="6 4" />
 
               {/* Lines from Apex Infra (V-01: 25%, 50%) to Projects */}
               <line x1="25%" y1="50%" x2="20%" y2="82%" stroke="#DC2626" strokeWidth="2.5" />
@@ -99,12 +99,12 @@ export const CartelMatrix = () => {
               <line x1="25%" y1="50%" x2="75%" y2="82%" stroke="#DC2626" strokeWidth="1.5" />
 
               {/* Lines from other dummy bidders to project 124 */}
-              <line x1="50%" y1="50%" x2="20%" y2="82%" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="4 4" className="animate-flow-dash-reverse" />
-              <line x1="75%" y1="50%" x2="20%" y2="82%" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="4 4" className="animate-flow-dash-reverse" />
+              <line x1="50%" y1="50%" x2="20%" y2="82%" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="4 4" />
+              <line x1="75%" y1="50%" x2="20%" y2="82%" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="4 4" />
             </svg>
 
             {/* Positioned Interactive Nodes */}
-            <div className="absolute inset-0 p-6 flex flex-col justify-between">
+            <div className="absolute inset-0 p-5 flex flex-col justify-between">
               {/* Top Layer: Shared Director */}
               <div className="flex justify-center">
                 <button
@@ -120,15 +120,15 @@ export const CartelMatrix = () => {
                     totalClusterProjects: 17,
                     totalDisbursedCr: 8.4,
                   })}
-                  className={`px-3.5 py-2.5 rounded-xl border-2 flex items-center gap-2 text-xs font-bold transition-all shadow-gov-sm ${
+                  className={`px-3 py-2 rounded-md border-2 flex items-center gap-2 text-xs font-bold transition-all shadow-sm ${
                     selectedNode?.id === 'DIR-01'
-                      ? 'bg-pink-50 border-pink-600 text-pink-900 ring-2 ring-pink-200 scale-105'
+                      ? 'bg-pink-50 border-pink-600 text-pink-900 ring-2 ring-pink-200'
                       : 'bg-white border-pink-300 text-pink-800 hover:border-pink-500'
                   }`}
                 >
                   <User className="w-4 h-4 text-pink-600" />
                   <span>R. K. Agarwal (Common Director)</span>
-                  <span className="px-1.5 py-0.2 rounded text-[10px] bg-pink-100 text-pink-800 font-mono">95% COLLUSION</span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] bg-pink-100 text-pink-800 font-mono">95% COLLUSION</span>
                 </button>
               </div>
 
@@ -149,15 +149,15 @@ export const CartelMatrix = () => {
                     avgRiskScore: 86,
                     alerts: 4,
                   })}
-                  className={`p-3 rounded-xl border-2 flex flex-col items-center gap-1.5 text-xs transition-all shadow-gov-sm ${
+                  className={`p-3 rounded-md border-2 flex flex-col items-center gap-1 text-xs transition-all shadow-sm ${
                     selectedNode?.id === 'V-01'
-                      ? 'bg-rose-50 border-rose-600 text-rose-900 ring-2 ring-rose-200 scale-105'
+                      ? 'bg-rose-50 border-rose-600 text-rose-900 ring-2 ring-rose-200'
                       : 'bg-white border-slate-300 text-slate-800 hover:border-rose-400'
                   }`}
                 >
                   <Building className="w-4 h-4 text-rose-600" />
                   <span className="font-bold">Apex Infra & BuildTech</span>
-                  <span className="text-[10px] text-rose-700 font-mono font-semibold">8 Works • 89% Risk</span>
+                  <span className="text-[10px] text-rose-700 font-mono font-bold">8 Works • 89% Risk</span>
                 </button>
 
                 {/* Vendor 2 */}
@@ -175,15 +175,15 @@ export const CartelMatrix = () => {
                     avgRiskScore: 82,
                     alerts: 3,
                   })}
-                  className={`p-3 rounded-xl border-2 flex flex-col items-center gap-1.5 text-xs transition-all shadow-gov-sm ${
+                  className={`p-3 rounded-md border-2 flex flex-col items-center gap-1 text-xs transition-all shadow-sm ${
                     selectedNode?.id === 'V-02'
-                      ? 'bg-amber-50 border-amber-600 text-amber-900 ring-2 ring-amber-200 scale-105'
+                      ? 'bg-amber-50 border-amber-600 text-amber-900 ring-2 ring-amber-200'
                       : 'bg-white border-slate-300 text-slate-800 hover:border-amber-400'
                   }`}
                 >
                   <Building className="w-4 h-4 text-amber-600" />
                   <span className="font-bold">Shiva Buildcon</span>
-                  <span className="text-[10px] text-amber-800 font-mono font-semibold">5 Works • 84% Risk</span>
+                  <span className="text-[10px] text-amber-800 font-mono font-bold">5 Works • 84% Risk</span>
                 </button>
 
                 {/* Vendor 3 */}
@@ -201,15 +201,15 @@ export const CartelMatrix = () => {
                     avgRiskScore: 78,
                     alerts: 2,
                   })}
-                  className={`p-3 rounded-xl border-2 flex flex-col items-center gap-1.5 text-xs transition-all shadow-gov-sm ${
+                  className={`p-3 rounded-md border-2 flex flex-col items-center gap-1 text-xs transition-all shadow-sm ${
                     selectedNode?.id === 'V-03'
-                      ? 'bg-amber-50 border-amber-600 text-amber-900 ring-2 ring-amber-200 scale-105'
+                      ? 'bg-amber-50 border-amber-600 text-amber-900 ring-2 ring-amber-200'
                       : 'bg-white border-slate-300 text-slate-800 hover:border-amber-400'
                   }`}
                 >
                   <Building className="w-4 h-4 text-amber-600" />
                   <span className="font-bold">Purvanchal Infratech</span>
-                  <span className="text-[10px] text-amber-800 font-mono font-semibold">4 Works • 79% Risk</span>
+                  <span className="text-[10px] text-amber-800 font-mono font-bold">4 Works • 79% Risk</span>
                 </button>
               </div>
 
@@ -219,7 +219,7 @@ export const CartelMatrix = () => {
                 <button
                   type="button"
                   onClick={() => navigate('/project/MPLAD-2026-00124')}
-                  className="px-3.5 py-2 rounded-xl bg-blue-50 border-2 border-blue-600 text-blue-900 text-xs font-bold flex items-center gap-1.5 hover:scale-105 transition-all shadow-gov-sm"
+                  className="px-3 py-1.5 rounded-md bg-blue-50 border-2 border-blue-600 text-blue-900 text-xs font-bold flex items-center gap-1.5 hover:bg-blue-100 transition-colors shadow-sm"
                 >
                   <FolderGit2 className="w-3.5 h-3.5 text-blue-700" />
                   <span>MPLAD-00124 (Varanasi Road)</span>
@@ -235,7 +235,7 @@ export const CartelMatrix = () => {
                     risk: 92,
                     details: 'Historical project from which duplicate photo evidence was reused in MPLAD-00124.',
                   })}
-                  className="px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-medium flex items-center gap-1.5 hover:scale-105 transition-all shadow-gov-sm"
+                  className="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-slate-700 text-xs font-medium flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-sm"
                 >
                   <FolderGit2 className="w-3.5 h-3.5 text-slate-500" />
                   <span>MPLAD-00892 (Jaunpur 2024)</span>
@@ -245,7 +245,7 @@ export const CartelMatrix = () => {
                 <button
                   type="button"
                   onClick={() => navigate('/project/MPLAD-2026-00518')}
-                  className="px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-medium flex items-center gap-1.5 hover:scale-105 transition-all shadow-gov-sm"
+                  className="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-slate-700 text-xs font-medium flex items-center gap-1.5 hover:bg-slate-50 transition-colors shadow-sm"
                 >
                   <FolderGit2 className="w-3.5 h-3.5 text-slate-500" />
                   <span>MPLAD-00518 (Guwahati LED)</span>
@@ -260,48 +260,48 @@ export const CartelMatrix = () => {
           {selectedNode ? (
             <Card
               title={selectedNode.name}
-              subtitle={selectedNode.title || 'Entity Dossier'}
+              subtitle={selectedNode.title || 'Entity Intelligence Dossier'}
               icon={getNodeIcon(selectedNode.type)}
               riskAccent={selectedNode.risk >= 80 ? 'critical' : 'high'}
-              className="space-y-4 shadow-gov-card"
+              className="space-y-3.5"
             >
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
-                <span className="text-xs text-slate-500 font-medium">Network Entity Role:</span>
-                <span className="text-xs font-bold uppercase font-mono text-blue-700">
+              <div className="flex items-center justify-between p-2.5 rounded bg-gov-canvas border border-gov-border">
+                <span className="text-xs text-gov-muted font-medium">Bipartite Node Role:</span>
+                <span className="text-xs font-bold uppercase font-mono text-gov-navy">
                   {selectedNode.type}
                 </span>
               </div>
 
               {/* Economic Monopoly HHI Metric */}
-              <div className="flex items-center justify-between p-3 rounded-lg bg-rose-50 border border-rose-200">
-                <div className="flex items-center gap-1.5 text-xs text-rose-800 font-medium">
+              <div className="flex items-center justify-between p-2.5 rounded bg-rose-50 border border-rose-200">
+                <div className="flex items-center gap-1.5 text-xs text-rose-800 font-bold">
                   <Scale className="w-3.5 h-3.5 text-rose-700" />
-                  <span>HHI Monopoly Score:</span>
+                  <span>Herfindahl HHI Index:</span>
                 </div>
-                <span className="text-sm font-black font-mono text-rose-700">
-                  4,820 (Severe)
+                <span className="text-sm font-black font-mono text-rose-800">
+                  4,820 (Severe Monopoly)
                 </span>
               </div>
 
               {selectedNode.risk && (
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-xs text-slate-500 font-medium">Collusion Threat Index:</span>
+                <div className="flex items-center justify-between p-2.5 rounded bg-gov-canvas border border-gov-border">
+                  <span className="text-xs text-gov-muted font-medium">Collusion Threat Index:</span>
                   <span className="text-sm font-black font-mono text-rose-700">
                     {selectedNode.risk} / 100
                   </span>
                 </div>
               )}
 
-              <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <p className="text-xs text-gov-slate leading-relaxed bg-gov-canvas p-3 rounded border border-gov-border">
                 {selectedNode.details}
               </p>
 
               {selectedNode.districts && (
                 <div className="space-y-1.5">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Monopolized Districts:</span>
+                  <span className="text-[11px] font-bold text-gov-slateDark uppercase tracking-wider">Monopolized Districts:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedNode.districts.map((d, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded text-xs bg-slate-100 text-slate-800 border border-slate-200 font-medium">
+                      <span key={i} className="px-2 py-0.5 rounded text-xs bg-gov-subtle text-gov-slateDark border border-gov-border font-medium">
                         {d}
                       </span>
                     ))}
@@ -314,8 +314,8 @@ export const CartelMatrix = () => {
                   <span className="text-[11px] font-bold text-pink-700 uppercase tracking-wider">Common Signatory Entities:</span>
                   <div className="space-y-1">
                     {selectedNode.connectedVendors.map((v, i) => (
-                      <div key={i} className="p-2 rounded bg-slate-50 text-xs text-slate-800 border border-slate-200 flex items-center justify-between">
-                        <span className="font-medium">{v}</span>
+                      <div key={i} className="p-2 rounded bg-gov-canvas text-xs text-gov-slateDark border border-gov-border flex items-center justify-between">
+                        <span className="font-semibold">{v}</span>
                         <span className="text-[10px] text-pink-700 font-mono font-bold">Shared ROC</span>
                       </div>
                     ))}
@@ -328,7 +328,7 @@ export const CartelMatrix = () => {
                   variant="danger"
                   size="md"
                   onClick={() => navigate('/project/MPLAD-2026-00124')}
-                  className="w-full text-xs bg-rose-600 hover:bg-rose-700 text-white shadow-gov-sm"
+                  className="w-full text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white"
                   icon={ArrowRight}
                   iconPosition="right"
                 >
@@ -338,17 +338,17 @@ export const CartelMatrix = () => {
             </Card>
           ) : (
             <Card className="text-center p-8">
-              <Network className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-              <p className="text-xs text-slate-500">Click any entity node on the graph to inspect cartel connections.</p>
+              <Network className="w-8 h-8 text-gov-muted mx-auto mb-2" />
+              <p className="text-xs text-gov-muted">Click any entity node on the graph to inspect cartel connections.</p>
             </Card>
           )}
 
           {/* Institutional Statutory Guidance Box */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-1.5 text-xs text-blue-900 shadow-gov-sm">
-            <span className="font-bold flex items-center gap-1.5 text-blue-900">
-              <Info className="w-4 h-4 text-blue-700" /> Statutory Audit Impact:
+          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md space-y-1.5 text-xs text-gov-slate border-l-4 border-l-gov-blue">
+            <span className="font-bold flex items-center gap-1.5 text-gov-navy">
+              <Info className="w-4 h-4 text-gov-blue" /> Statutory Audit Guidance:
             </span>
-            <p className="text-slate-700 leading-relaxed">
+            <p className="text-gov-slate leading-relaxed">
               Bipartite graph projections detect ring rotations where the same syndicate submits artificial L2/L3 cover bids to manipulate competitive bidding thresholds required under Central Vigilance Commission (CVC) guidelines.
             </p>
           </div>

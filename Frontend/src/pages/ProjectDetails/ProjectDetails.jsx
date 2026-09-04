@@ -169,48 +169,48 @@ export const ProjectDetails = () => {
     >
       {/* 4 Financial Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-gov-card space-y-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Sanctioned Amount</p>
-          <h3 className="text-2xl font-black font-mono text-slate-900">{formatINR(project.sanctionedAmount)}</h3>
-          <p className="text-[11px] text-slate-400">Sanctioned: {formatDate(project.sanctionDate)}</p>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-gov-navy">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Sanctioned Allocation</p>
+          <h3 className="text-2xl font-black font-mono text-gov-slateDark">{formatINR(project.sanctionedAmount)}</h3>
+          <p className="text-[11px] text-gov-muted">Sanction Date: {formatDate(project.sanctionDate)}</p>
         </div>
 
-        <div className="p-4 bg-white border border-blue-200 rounded-xl shadow-gov-card space-y-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">Released Funds (Installment 1)</p>
-          <h3 className="text-2xl font-black font-mono text-blue-700">{formatINR(project.releasedAmount)}</h3>
-          <p className="text-[11px] text-slate-400">Disbursed to Agency Escrow</p>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-gov-blue">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gov-blue">Released Funds (Installment 1)</p>
+          <h3 className="text-2xl font-black font-mono text-gov-blue">{formatINR(project.releasedAmount)}</h3>
+          <p className="text-[11px] text-gov-muted">Disbursed via PFMS to SNA Escrow</p>
         </div>
 
-        <div className="p-4 bg-white border border-emerald-200 rounded-xl shadow-gov-card space-y-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Utilized Amount</p>
-          <h3 className="text-2xl font-black font-mono text-emerald-700">{formatINR(project.utilizedAmount)}</h3>
-          <p className="text-[11px] text-slate-400">Physical MB Certified</p>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-emerald-600">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Physical MB Utilized</p>
+          <h3 className="text-2xl font-black font-mono text-emerald-800">{formatINR(project.utilizedAmount)}</h3>
+          <p className="text-[11px] text-gov-muted">Certified against Measurement Book</p>
         </div>
 
-        <div className="p-4 bg-white border border-amber-200 rounded-xl shadow-gov-card space-y-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-700">Remaining Balance</p>
-          <h3 className="text-2xl font-black font-mono text-amber-700">{formatINR(project.remainingAmount)}</h3>
-          <p className="text-[11px] text-slate-400">Stage-2 Payout Pending</p>
+        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-amber-500">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-amber-800">Remaining Unspent Balance</p>
+          <h3 className="text-2xl font-black font-mono text-amber-800">{formatINR(project.remainingAmount)}</h3>
+          <p className="text-[11px] text-gov-muted">Stage-2 Disbursal Condition Precedent</p>
         </div>
       </div>
 
       {/* Progress & Milestones Bar */}
       <Card
-        title="Project Physical Milestone Timeline"
+        title="Physical Work Milestone Progression"
         subtitle={`Current Stage: ${project.currentStage} (${project.progressPercent}% Physical Work Recorded)`}
         icon={Clock}
       >
-        <div className="space-y-4">
+        <div className="space-y-3.5">
           {/* Progress bar */}
-          <div className="w-full bg-slate-100 rounded-full h-3 p-0.5 border border-slate-200">
+          <div className="w-full bg-gov-canvas rounded-full h-2.5 p-0.5 border border-gov-border overflow-hidden">
             <div
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 h-full rounded-full transition-all duration-500"
+              className="bg-gov-navy h-full rounded-full transition-all duration-500"
               style={{ width: `${project.progressPercent}%` }}
             />
           </div>
 
           {/* Timeline steps */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-center pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-center pt-1">
             {(project.timeline || [
               { stage: 'Approved', date: 'Aug 2025', status: 'completed' },
               { stage: 'Funds Released', date: 'Oct 2025', status: 'completed' },
@@ -221,20 +221,20 @@ export const ProjectDetails = () => {
             ]).map((step, idx) => (
               <div
                 key={idx}
-                className={`p-2.5 rounded-lg border text-xs ${
+                className={`p-2 rounded border text-xs ${
                   step.status === 'completed'
-                    ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
                     : step.status === 'in-progress'
-                    ? 'bg-blue-50 border-blue-400 text-blue-800 font-bold shadow-sm'
-                    : 'bg-slate-50 border-slate-200 text-slate-500'
+                    ? 'bg-blue-50 border-blue-400 text-blue-900 font-bold'
+                    : 'bg-gov-canvas border-gov-border text-gov-muted'
                 }`}
               >
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  {step.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
-                  {step.status === 'in-progress' && <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />}
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  {step.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />}
+                  {step.status === 'in-progress' && <span className="w-2 h-2 rounded-full bg-gov-blue shrink-0 animate-pulse" />}
                   <span className="font-semibold truncate">{step.stage}</span>
                 </div>
-                <span className="text-[10px] opacity-75 font-mono">{step.date}</span>
+                <span className="text-[10px] font-mono opacity-80">{step.date}</span>
               </div>
             ))}
           </div>
@@ -385,36 +385,36 @@ export const ProjectDetails = () => {
             ]).map((ano, idx) => (
               <div
                 key={idx}
-                className="p-4 bg-white border border-slate-200 rounded-xl shadow-gov-card space-y-2 hover:border-blue-400 transition-all"
+                className="p-3.5 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-2 hover:border-gov-blue transition-all"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                       ano.severity === 'high' || ano.severity === 'critical'
-                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                        ? 'bg-rose-50 text-rose-800 border border-rose-300'
                         : ano.severity === 'medium'
-                        ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                        : 'bg-blue-50 text-blue-700 border border-blue-200'
+                        ? 'bg-amber-50 text-amber-900 border border-amber-300'
+                        : 'bg-blue-50 text-blue-800 border border-blue-200'
                     }`}>
                       {ano.severity || 'Alert'}
                     </span>
-                    <h4 className="font-bold text-xs sm:text-sm text-slate-900">{ano.title}</h4>
+                    <h4 className="font-bold text-xs sm:text-sm text-gov-slateDark">{ano.title}</h4>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="text-xs font-mono font-bold text-blue-700">{ano.confidence || 92}%</span>
-                    <span className="text-[10px] text-slate-400 block">Confidence</span>
+                    <span className="text-xs font-mono font-bold text-gov-navy">{ano.confidence || 92}%</span>
+                    <span className="text-[10px] text-gov-muted block">Confidence</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500">
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-gov-muted">
                   <span>Anomaly Code: {ano.id}</span>
                 </div>
 
-                <p className="text-xs text-slate-700 leading-relaxed">{ano.description}</p>
+                <p className="text-xs text-gov-slate leading-relaxed">{ano.description}</p>
 
-                <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-[11px] text-slate-600">
-                  <strong className="text-slate-800">Auditable Evidence: </strong>
+                <div className="p-2.5 bg-gov-canvas rounded border border-gov-border text-[11px] text-gov-slate">
+                  <strong className="text-gov-slateDark">Auditable Evidence: </strong>
                   <span>{ano.evidence}</span>
                 </div>
               </div>
@@ -423,8 +423,8 @@ export const ProjectDetails = () => {
 
           {/* Quick Action Banner */}
           {isCitizen ? (
-            <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-gov-card">
-              <div className="text-xs text-slate-600">
+            <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex items-center justify-between shadow-sm">
+              <div className="text-xs text-gov-slate">
                 Explore developmental works, contractor bidding histories, and fund allocations across your constituency.
               </div>
               <Button
@@ -432,14 +432,14 @@ export const ProjectDetails = () => {
                 size="sm"
                 onClick={() => navigate('/public/search')}
                 icon={ExternalLink}
-                className="shrink-0 ml-3"
+                className="shrink-0 ml-3 border-gov-border text-gov-slateDark hover:bg-gov-subtle"
               >
                 Explore Constituency Works
               </Button>
             </div>
           ) : (
-            <div className="p-4 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-gov-card">
-              <div className="text-xs text-slate-600">
+            <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-gov-blue">
+              <div className="text-xs text-gov-slate">
                 Review statutory SLA delay escalation protocols and contractual liability notices.
               </div>
               <Button
@@ -447,7 +447,7 @@ export const ProjectDetails = () => {
                 size="sm"
                 onClick={() => navigate('/sla')}
                 icon={Clock}
-                className="shrink-0 ml-3"
+                className="shrink-0 ml-3 border-gov-border text-gov-slateDark hover:bg-gov-subtle font-semibold"
               >
                 Inspect SLA Timelines
               </Button>

@@ -42,43 +42,48 @@ export const PublicHome = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-600">
+    <div className="min-h-screen bg-gov-canvas text-gov-slateDark selection:bg-gov-navy selection:text-white">
       {/* Tiranga Accent Banner */}
       <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600" />
 
       {/* Public Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-gov-surface border-b border-gov-border shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/public" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 p-0.5 shadow-md flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-md bg-gov-navy text-white flex items-center justify-center font-bold text-sm shadow-xs border border-gov-navyLight">
+              MP
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight text-slate-900">
-                MPLADS <span className="text-blue-600">Citizen Transparency</span>
-              </span>
-              <p className="text-[10px] text-slate-500 font-medium">Public Fund Accountability Portal • MoSPI</p>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-base tracking-tight text-gov-navy">
+                  MPLADS <span className="text-gov-saffron font-bold">CITIZEN PORTAL</span>
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-gov-canvas text-gov-muted border border-gov-border px-1.5 py-0.5 rounded">
+                  MoSPI e-SAKSHI
+                </span>
+              </div>
+              <p className="text-[10px] text-gov-muted font-medium">Ministry of Statistics & Programme Implementation • Public Registry</p>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-5 text-xs font-medium text-slate-600">
-            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-slate-700 hover:text-blue-700 bg-slate-100 hover:bg-blue-50 border border-slate-200 rounded-md font-semibold transition">
-              <Home className="w-3.5 h-3.5 text-blue-600" />
-              <span>Back to Home</span>
+          <nav className="hidden md:flex items-center gap-5 text-xs font-semibold text-gov-muted">
+            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-gov-slateDark hover:text-gov-navy bg-gov-canvas hover:bg-slate-100 border border-gov-border rounded-md transition">
+              <Home className="w-3.5 h-3.5 text-gov-navy" />
+              <span>Back to Overview</span>
             </Link>
-            <Link to="/public" className="text-blue-600 font-bold">Public Portal</Link>
-            <Link to="/public/map" className="hover:text-blue-600">Interactive Map</Link>
-            <Link to="/public/search" className="hover:text-blue-600">Search Projects</Link>
+            <Link to="/public" className="text-gov-navy font-bold border-b-2 border-gov-navy pb-0.5">Citizen Home</Link>
+            <Link to="/public/map" className="hover:text-gov-navy transition">Constituency Map</Link>
+            <Link to="/public/search" className="hover:text-gov-navy transition">Search Works</Link>
           </nav>
 
           <div className="flex items-center gap-2">
             <Link to="/public/report">
-              <Button variant="danger" size="sm" icon={Camera}>
+              <Button variant="danger" size="sm" icon={Camera} className="rounded-md shadow-xs font-semibold text-xs">
                 Report Issue
               </Button>
             </Link>
             <Link to="/login">
-              <Button variant="outline" size="sm" className="border-slate-300 text-slate-700 hover:bg-slate-100">
+              <Button variant="outline" size="sm" className="border-gov-border text-gov-slateDark hover:bg-gov-canvas rounded-md text-xs font-semibold">
                 Officer Login
               </Button>
             </Link>
@@ -87,34 +92,34 @@ export const PublicHome = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-blue-50/80 to-slate-50 py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-200">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/80 text-blue-800 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            <span>Real-time Public Accountability</span>
+      <section className="bg-gov-surface py-12 px-4 sm:px-6 lg:px-8 border-b border-gov-border">
+        <div className="max-w-4xl mx-auto text-center space-y-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 text-gov-navy text-xs font-semibold border border-gov-border">
+            <Sparkles className="w-3.5 h-3.5 text-gov-saffron" />
+            <span>Official Public Fund Transparency Registry</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            Know Where Public Funds Are Being Used.
+          <h1 className="text-2xl sm:text-4xl font-black text-gov-navy tracking-tight leading-tight">
+            Know Where Public Funds Are Being Invested.
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-            Search MPLADS development projects in your constituency, track fund utilization in real-time, view verified milestone photos, and report grievances directly to government authorities.
+          <p className="text-xs sm:text-sm text-gov-muted max-w-2xl mx-auto leading-relaxed">
+            Direct public access to Member of Parliament Local Area Development Scheme works. Track sanctioned expenditures, inspect verified milestone photography, and submit geotagged feedback directly to District Authorities.
           </p>
 
           {/* Citizen Search Bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className="p-2 bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl mx-auto flex flex-col sm:flex-row gap-2"
+            className="p-1.5 bg-gov-canvas rounded-md border border-gov-border max-w-2xl mx-auto flex flex-col sm:flex-row gap-2 shadow-xs"
           >
-            <div className="flex-1 flex items-center px-3 gap-2">
-              <Search className="w-4 h-4 text-slate-400 shrink-0" />
+            <div className="flex-1 flex items-center px-3 gap-2 bg-gov-surface rounded border border-gov-border">
+              <Search className="w-4 h-4 text-gov-muted shrink-0" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Enter Constituency, District, or Project ID..."
-                className="w-full py-2.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent focus:outline-none"
+                placeholder="Enter Constituency, District, or Project ID (e.g. Varanasi)..."
+                className="w-full py-2 text-xs sm:text-sm text-gov-slateDark placeholder-gov-muted bg-transparent focus:outline-none"
               />
             </div>
             <Button
@@ -122,80 +127,99 @@ export const PublicHome = () => {
               variant="primary"
               size="md"
               icon={Search}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+              className="bg-gov-navy hover:bg-gov-navyLight text-white font-semibold rounded-md shrink-0"
             >
-              Search Projects
+              Search Registry
             </Button>
           </form>
+
+          {/* Quick Filter Tags */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-[11px] text-gov-muted">
+            <span className="font-semibold text-gov-slateDark">Quick Lookups:</span>
+            {['Varanasi', 'Lucknow', 'Patna', 'Jaipur', 'Pune'].map((city) => (
+              <button
+                key={city}
+                type="button"
+                onClick={() => {
+                  setSearchQuery(city);
+                  navigate(`/public/search?q=${encodeURIComponent(city)}`);
+                }}
+                className="px-2.5 py-0.5 rounded bg-gov-surface border border-gov-border hover:border-gov-navy hover:text-gov-navy transition"
+              >
+                {city}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Public Projects Grid */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gov-border">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Featured Local Development Works</h2>
-            <p className="text-xs text-slate-500">Live fund transparency data synchronized with official PFMS records</p>
+            <h2 className="text-lg font-bold text-gov-navy">Active & Completed Community Works</h2>
+            <p className="text-xs text-gov-muted">Verified project milestones synchronized with Central PFMS financial records</p>
           </div>
 
           <div className="flex items-center gap-2">
             <Link to="/public/map">
-              <Button variant="outline" size="sm" icon={MapPin} className="border-slate-300 text-slate-700">
+              <Button variant="outline" size="sm" icon={MapPin} className="border-gov-border text-gov-slateDark bg-gov-surface rounded-md text-xs font-semibold hover:bg-slate-50">
                 View on Map
               </Button>
             </Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.slice(0, 6).map((p) => (
             <div
               key={p.id}
               onClick={() => navigate(`/project/${p.id}`)}
-              className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200 overflow-hidden flex flex-col justify-between cursor-pointer group"
+              className="bg-gov-surface rounded-md border border-gov-border hover:border-gov-navy hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between cursor-pointer group"
             >
               <div>
                 {/* Photo Thumbnail */}
-                <div className="relative aspect-video bg-slate-100 overflow-hidden">
+                <div className="relative aspect-video bg-slate-100 overflow-hidden border-b border-gov-border">
                   <img
                     src={p.images?.uploaded || "https://images.unsplash.com/photo-1590496793929-36417d3117de?w=800&auto=format&fit=crop&q=80" || 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80'}
                     alt={p.name}
-                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80"; }} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80"; }}
+                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                   />
-                  <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded">
+                  <div className="absolute top-2.5 left-2.5 bg-gov-navyDark/90 backdrop-blur-xs text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded border border-white/10">
                     {p.id}
                   </div>
-                  <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded shadow flex items-center gap-1">
+                  <div className="absolute bottom-2.5 right-2.5 bg-gov-surface/95 backdrop-blur-xs text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-200 shadow-xs flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                     <span>AI Monitored</span>
                   </div>
                 </div>
 
-                <div className="p-5 space-y-3">
+                <div className="p-4 space-y-3">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-bold text-gov-navy text-sm line-clamp-1 group-hover:text-blue-700 transition-colors">
                       {p.name}
                     </h3>
-                    <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <p className="text-xs text-gov-muted mt-1 flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-gov-muted shrink-0" />
                       <span>{p.district}, {p.state}</span>
                     </p>
                   </div>
 
                   {/* Fund Progress Details */}
-                  <div className="p-3 bg-slate-50 rounded-xl space-y-2 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Sanctioned:</span>
-                      <span className="font-mono font-bold text-slate-800">{formatINR(p.sanctionedAmount)}</span>
+                  <div className="p-3 bg-gov-canvas rounded border border-gov-border space-y-2 text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gov-muted text-[11px]">Sanctioned Allocation:</span>
+                      <span className="font-mono font-bold text-gov-navy">{formatINR(p.sanctionedAmount)}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Utilized on Ground:</span>
-                      <span className="font-mono font-bold text-emerald-600">{formatINR(p.utilizedAmount)}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gov-muted text-[11px]">Ground Disbursed:</span>
+                      <span className="font-mono font-bold text-emerald-700">{formatINR(p.utilizedAmount)}</span>
                     </div>
                     {/* Progress bar */}
                     <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
                       <div
-                        className="bg-blue-600 h-full rounded-full"
+                        className="bg-gov-navy h-full rounded-full"
                         style={{ width: `${p.progressPercent}%` }}
                       />
                     </div>
@@ -203,10 +227,10 @@ export const PublicHome = () => {
                 </div>
               </div>
 
-              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-medium">{p.currentStage}</span>
-                <span className="font-semibold text-blue-600 group-hover:underline flex items-center gap-0.5">
-                  <span>View Details</span>
+              <div className="px-4 py-2.5 bg-gov-canvas border-t border-gov-border flex items-center justify-between text-xs">
+                <span className="text-gov-muted font-medium text-[11px]">{p.currentStage}</span>
+                <span className="font-semibold text-gov-navy group-hover:underline flex items-center gap-1 text-[11px]">
+                  <span>View Project Audit</span>
                   <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
@@ -216,16 +240,16 @@ export const PublicHome = () => {
       </main>
 
       {/* Citizen Grievance Callout Footer Banner */}
-      <section className="bg-blue-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gov-navyDark text-white py-10 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold">Notice Incomplete or Substandard Work?</h3>
-            <p className="text-xs sm:text-sm text-blue-200 max-w-xl">
-              Citizen reports directly trigger automated AI verification and alert the District Magistrate for physical site inspection.
+          <div className="space-y-1.5">
+            <h3 className="text-xl font-bold">Notice Incomplete or Substandard Work in Your Area?</h3>
+            <p className="text-xs text-slate-300 max-w-xl">
+              Citizen reports directly trigger automated AI forensic verification and alert the District Magistrate's Project Monitoring Cell for on-site inspection.
             </p>
           </div>
           <Link to="/public/report">
-            <Button variant="warning" size="lg" icon={Camera} className="bg-amber-400 text-slate-950 font-bold shrink-0">
+            <Button variant="warning" size="md" icon={Camera} className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold shrink-0 rounded-md text-xs">
               Submit Grievance with Photo
             </Button>
           </Link>
@@ -233,8 +257,8 @@ export const PublicHome = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-6 px-4 text-center text-xs text-slate-500">
-        Ministry of Statistics & Programme Implementation (MoSPI) • Government of India
+      <footer className="bg-gov-surface border-t border-gov-border py-4 px-4 text-center text-xs text-gov-muted">
+        Ministry of Statistics & Programme Implementation (MoSPI) • Government of India • Central MPLADS Surveillance Platform
       </footer>
     </div>
   );

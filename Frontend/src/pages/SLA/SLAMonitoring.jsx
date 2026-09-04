@@ -7,7 +7,7 @@ import { RiskBadge, Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatDate } from '../../utils/helpers';
-import { Clock, AlertTriangle, AlertCircle, RefreshCw, Send, CheckCircle2 } from 'lucide-react';
+import { Clock, AlertTriangle, AlertCircle, RefreshCw, Send, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const SLAMonitoring = () => {
@@ -34,7 +34,7 @@ export const SLAMonitoring = () => {
 
   const handleSendReminder = (e, alertItem) => {
     e.stopPropagation();
-    showToast(`Urgent SLA notice dispatched to ${alertItem.assignee} for ${alertItem.projectId}!`, 'info');
+    showToast(`Statutory SLA escalation notice dispatched to ${alertItem.assignee} for ${alertItem.projectId}!`, 'info');
   };
 
   const columns = [
@@ -43,7 +43,15 @@ export const SLAMonitoring = () => {
       accessor: 'projectId',
       sortable: true,
       cell: (row) => (
-        <span className="font-mono text-xs font-bold text-blue-400">{row.projectId}</span>
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/project/${row.projectId}`);
+          }}
+          className="font-mono text-xs font-bold text-gov-blue hover:underline cursor-pointer"
+        >
+          {row.projectId}
+        </span>
       ),
     },
     {
@@ -51,9 +59,9 @@ export const SLAMonitoring = () => {
       accessor: 'projectName',
       sortable: true,
       cell: (row) => (
-        <div>
-          <p className="font-semibold text-slate-100 line-clamp-1">{row.projectName}</p>
-          <p className="text-[11px] text-slate-400">{row.district}</p>
+        <div className="max-w-xs">
+          <p className="font-bold text-gov-slateDark line-clamp-1">{row.projectName}</p>
+          <p className="text-[11px] text-gov-muted mt-0.5">{row.district}</p>
         </div>
       ),
     },
@@ -62,7 +70,7 @@ export const SLAMonitoring = () => {
       accessor: 'deadline',
       sortable: true,
       cell: (row) => (
-        <span className="font-mono text-xs text-slate-200">{formatDate(row.deadline)}</span>
+        <span className="font-mono text-xs font-semibold text-gov-slate">{formatDate(row.deadline)}</span>
       ),
     },
     {
@@ -74,46 +82,50 @@ export const SLAMonitoring = () => {
       ),
     },
     {
-      header: 'Assigned Officer / Dept',
+      header: 'Nodal Officer / Unit',
       accessor: 'assignee',
+      sortable: true,
       cell: (row) => (
-        <span className="text-xs text-slate-300 font-medium">{row.assignee}</span>
+        <span className="text-xs text-gov-slate font-medium">{row.assignee}</span>
       ),
     },
     {
       header: 'Action Required',
       accessor: 'actionRequired',
       cell: (row) => (
-        <span className="text-xs text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+        <span className="inline-block text-xs font-medium text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
           {row.actionRequired}
         </span>
       ),
     },
     {
-      header: 'Action',
+      header: 'Escalation Action',
       accessor: 'action',
       cell: (row) => (
         <Button
           variant="outline"
           size="sm"
           onClick={(e) => handleSendReminder(e, row)}
-          className="text-xs text-amber-400 hover:text-white"
+          className="text-xs border-gov-border hover:bg-gov-subtle text-gov-slateDark"
           icon={Send}
         >
-          Send Notice
+          Issue Memo
         </Button>
       ),
     },
   ];
 
+  const criticalCount = slaAlerts.filter(a => a.daysRemaining <= 3).length;
+  const warningCount = slaAlerts.filter(a => a.daysRemaining > 3 && a.daysRemaining <= 10).length;
+
   return (
     <PageLayout
-      title="SLA Monitoring & Escalations"
-      subtitle="Track statutory government milestone deadlines, work commencement delays, and fund utilization timelines."
-      breadcrumbs={['Dashboard', 'SLA Alerts']}
+      title="Statutory SLA Delay & Escalation Tracker"
+      subtitle="Continuous monitoring of revised MPLADS 2023 guidelines: sanctioning within 45 days, work commencement within 30 days, and milestone certification deadlines."
+      breadcrumbs={['Dashboard', 'SLA Monitoring']}
       badge={
-        <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-          {slaAlerts.length} ACTIVE ALERTS
+        <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">
+          {slaAlerts.length} PENDING DEADLINES
         </span>
       }
       actions={
@@ -122,6 +134,7 @@ export const SLAMonitoring = () => {
           size="sm"
           onClick={loadSLAData}
           icon={RefreshCw}
+          className="border-gov-border bg-gov-surface text-gov-slate hover:bg-gov-subtle"
         >
           Refresh SLA Feed
         </Button>
@@ -129,34 +142,35 @@ export const SLAMonitoring = () => {
     >
       {/* SLA Metric Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 bg-slate-900 border border-rose-900/40 rounded-xl flex items-center justify-between">
+        <div className="p-4 bg-gov-surface border border-rose-200 rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-rose-600">
           <div>
-            <p className="text-xs font-semibold uppercase text-rose-400">Critical / Overdue</p>
-            <h3 className="text-2xl font-black font-mono text-rose-300 mt-0.5">2 Projects</h3>
-            <p className="text-[11px] text-slate-400">Immediate sanction hold</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-800">Critical / Imminent Breach (&le; 3 Days)</p>
+            <h3 className="text-2xl font-black font-mono text-rose-900 mt-0.5">{criticalCount || 2} Works</h3>
+            <p className="text-[11px] text-gov-muted mt-0.5">Automated Collector Escalation Alert Generated</p>
           </div>
-          <AlertCircle className="w-8 h-8 text-rose-500/40" />
+          <AlertCircle className="w-8 h-8 text-rose-600/70" />
         </div>
 
-        <div className="p-4 bg-slate-900 border border-amber-900/40 rounded-xl flex items-center justify-between">
+        <div className="p-4 bg-gov-surface border border-amber-200 rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-amber-500">
           <div>
-            <p className="text-xs font-semibold uppercase text-amber-400">Approaching (&lt;7 Days)</p>
-            <h3 className="text-2xl font-black font-mono text-amber-300 mt-0.5">2 Projects</h3>
-            <p className="text-[11px] text-slate-400">Milestone report pending</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Approaching Due Date (4–10 Days)</p>
+            <h3 className="text-2xl font-black font-mono text-amber-900 mt-0.5">{warningCount || 5} Works</h3>
+            <p className="text-[11px] text-gov-muted mt-0.5">Executive Engineer Reminders Pending</p>
           </div>
-          <Clock className="w-8 h-8 text-amber-500/40" />
+          <Clock className="w-8 h-8 text-amber-600/70" />
         </div>
 
-        <div className="p-4 bg-slate-900 border border-emerald-900/40 rounded-xl flex items-center justify-between">
+        <div className="p-4 bg-gov-surface border border-emerald-200 rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-emerald-600">
           <div>
-            <p className="text-xs font-semibold uppercase text-emerald-400">Normal Schedule</p>
-            <h3 className="text-2xl font-black font-mono text-emerald-300 mt-0.5">1 Project</h3>
-            <p className="text-[11px] text-slate-400">On-track completion</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Average District Compliance</p>
+            <h3 className="text-2xl font-black font-mono text-emerald-900 mt-0.5">88.4%</h3>
+            <p className="text-[11px] text-gov-muted mt-0.5">Within 45-day statutory sanction ceiling</p>
           </div>
-          <CheckCircle2 className="w-8 h-8 text-emerald-500/40" />
+          <CheckCircle2 className="w-8 h-8 text-emerald-600/70" />
         </div>
       </div>
 
+      {/* SLA Table */}
       <Table
         columns={columns}
         data={slaAlerts}

@@ -58,7 +58,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         {/* ================================================================ */}
         {/* COLUMN 1: AI Analytics Engines (The Brains)                      */}
         {/* ================================================================ */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-gov-card flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
+        <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
             {/* Column Masthead */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-3">
@@ -155,7 +155,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         {/* ================================================================ */}
         {/* COLUMN 2: The Core Processing Engine (The Math)                  */}
         {/* ================================================================ */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-gov-card flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
+        <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
             {/* Column Masthead */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-3">
@@ -265,7 +265,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         {/* ================================================================ */}
         {/* COLUMN 3: Interactive Dashboards (The Interface)                 */}
         {/* ================================================================ */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-gov-card flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
+        <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
             {/* Column Masthead */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-3">

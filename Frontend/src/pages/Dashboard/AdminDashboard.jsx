@@ -201,24 +201,25 @@ export const AdminDashboard = () => {
       <JudgeDefensePanel />
 
       {/* Critical Urgent Investigation Alert Banner */}
-      <div className="p-4 bg-rose-50/90 border border-rose-200 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-gov-sm">
-        <div className="flex items-start gap-3">
-          <div className="p-2.5 rounded-xl bg-rose-100 text-rose-700 border border-rose-200 shrink-0">
+      <div className="p-4 bg-rose-950/20 border border-rose-900/50 rounded-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-1 h-full bg-rose-600" />
+        <div className="flex items-start gap-3 pl-2">
+          <div className="p-2 rounded bg-rose-900/40 text-rose-500 border border-rose-800/50 shrink-0">
             <ShieldAlert className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-rose-800 uppercase tracking-wider font-mono">
+              <span className="text-[10px] font-bold text-rose-500 uppercase tracking-wider font-mono">
                 CRITICAL FORENSIC DISCREPANCY DETECTED
               </span>
-              <span className="px-2 py-0.2 text-[10px] font-mono bg-rose-600 text-white rounded font-bold">
+              <span className="px-1.5 py-0.5 text-[9px] font-mono bg-rose-600/20 text-rose-400 border border-rose-600/30 rounded font-bold">
                 87% RISK SCORE
               </span>
             </div>
-            <h4 className="text-sm font-bold text-slate-900 mt-0.5">
+            <h4 className="text-sm font-bold text-gov-slateDark mt-0.5">
               Project MPLAD-2026-00124: Rural Road Construction (₹48 Lakhs)
             </h4>
-            <p className="text-xs text-slate-600 mt-0.5">
+            <p className="text-xs text-gov-muted mt-0.5">
               4 Corroborated Flags: 96% Duplicate Photo match with Jaunpur (Hamming dist: 2), 42% cost inflation, and contractor circular bidding ring.
             </p>
           </div>
@@ -244,7 +245,7 @@ export const AdminDashboard = () => {
             })}
             icon={ArrowRight}
             iconPosition="right"
-            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white cursor-pointer"
+            className="w-full sm:w-auto text-xs"
           >
             {t('btn_audit', 'Audit Dossier')}
           </Button>

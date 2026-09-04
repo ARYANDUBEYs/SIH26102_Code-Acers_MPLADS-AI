@@ -41,6 +41,7 @@ export const RegisterForm = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           icon={User}
+          variant="dark"
           placeholder="e.g. Ramesh Kumar"
           required
         />
@@ -51,6 +52,7 @@ export const RegisterForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           icon={Mail}
+          variant="dark"
           placeholder="name@example.com"
           required
         />
@@ -61,6 +63,7 @@ export const RegisterForm = () => {
           value={district}
           onChange={(e) => setDistrict(e.target.value)}
           icon={MapPin}
+          variant="dark"
           placeholder="e.g. Varanasi, Uttar Pradesh"
           required
         />
@@ -71,6 +74,7 @@ export const RegisterForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           icon={Lock}
+          variant="dark"
           placeholder="••••••••••••"
           required
         />
