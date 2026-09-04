@@ -138,16 +138,6 @@ export const Home = () => {
           {/* Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsCitizenModalOpen(true)}
-              icon={Send}
-              className="hidden sm:inline-flex border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-            >
-              Citizen Request
-            </Button>
-
-            <Button
               variant="primary"
               size="sm"
               onClick={handleLaunchAdminDemo}

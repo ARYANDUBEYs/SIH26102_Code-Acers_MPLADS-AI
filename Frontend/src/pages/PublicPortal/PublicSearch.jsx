@@ -72,7 +72,6 @@ export const PublicSearch = () => {
             <Link to="/public" className="hover:text-blue-600">Public Portal</Link>
             <Link to="/public/map" className="hover:text-blue-600">Interactive Map</Link>
             <Link to="/public/search" className="text-blue-600 font-bold">Search Projects</Link>
-            <Link to="/public/report" className="text-rose-600 font-semibold hover:text-rose-700">Report Grievance</Link>
           </nav>
 
           <Link to="/public/report">

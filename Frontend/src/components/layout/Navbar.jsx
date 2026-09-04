@@ -24,7 +24,6 @@ import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext'
 import { NotificationDropdown } from './NotificationDropdown';
 import { SarvamIndicModal } from '../sarvam/SarvamIndicModal';
 import { TopUtilityBar } from './TopUtilityBar';
-import { CitizenRequestModal } from '../common/CitizenRequestModal';
 import { ROLES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
@@ -38,7 +37,6 @@ export const Navbar = () => {
   const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isIndicModalOpen, setIsIndicModalOpen] = useState(false);
-  const [isCitizenModalOpen, setIsCitizenModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const currentLangObj = SUPPORTED_LANGUAGES.find(l => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
@@ -103,16 +101,6 @@ export const Navbar = () => {
               <Home className="w-3.5 h-3.5 text-blue-700" />
               <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
             </Link>
-
-            {/* Citizen Request Button */}
-            <button
-              type="button"
-              onClick={() => setIsCitizenModalOpen(true)}
-              className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-xs text-blue-800 font-semibold transition-all shadow-sm shrink-0 whitespace-nowrap cursor-pointer"
-              title="Submit Citizen Work Recommendation or Grievance"
-            >
-              <span>Citizen Request</span>
-            </button>
 
           {/* Center Search Bar Trigger */}
           <div className="hidden md:flex flex-1 max-w-xs xl:max-w-sm mx-2">
@@ -297,9 +285,6 @@ export const Navbar = () => {
 
       {/* Sovereign Indic Intelligence Modal */}
       <SarvamIndicModal isOpen={isIndicModalOpen} onClose={() => setIsIndicModalOpen(false)} />
-
-      {/* Citizen Request Modal */}
-      <CitizenRequestModal isOpen={isCitizenModalOpen} onClose={() => setIsCitizenModalOpen(false)} />
     </header>
   </div>
 );

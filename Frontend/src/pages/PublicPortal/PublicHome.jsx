@@ -69,10 +69,6 @@ export const PublicHome = () => {
             <Link to="/public" className="text-blue-600 font-bold">Public Portal</Link>
             <Link to="/public/map" className="hover:text-blue-600">Interactive Map</Link>
             <Link to="/public/search" className="hover:text-blue-600">Search Projects</Link>
-            <Link to="/public/report" className="text-rose-600 font-semibold hover:text-rose-700 flex items-center gap-1">
-              <span>Report Grievance</span>
-              <span className="w-2 h-2 rounded-full bg-rose-500" />
-            </Link>
           </nav>
 
           <div className="flex items-center gap-2">
