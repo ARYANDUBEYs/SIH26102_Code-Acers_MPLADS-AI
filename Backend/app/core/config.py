@@ -39,6 +39,10 @@ class SystemSettings(BaseSettings):
     # Alerting. If ALERT_WEBHOOK_URL is unset, alerts are just logged to console.
     ALERT_WEBHOOK_URL: str = ""
 
+    # Sarvam AI Indic Intelligence Layer
+    SARVAM_API_KEY: str = ""
+    SARVAM_API_URL: str = "https://api.sarvam.ai"
+
     class Config:
         case_sensitive = True
         env_file = ".env"

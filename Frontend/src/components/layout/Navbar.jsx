@@ -18,6 +18,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import { NotificationDropdown } from './NotificationDropdown';
+import { SarvamIndicModal } from '../sarvam/SarvamIndicModal';
 import { ROLES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
@@ -27,6 +28,7 @@ export const Navbar = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
+  const [isIndicModalOpen, setIsIndicModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleRoleChange = (newRole) => {
@@ -102,6 +104,18 @@ export const Navbar = () => {
 
           {/* Right Actions: Role Switcher, Notifications, User Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Sarvam AI Indic Intelligence Button */}
+            <button
+              type="button"
+              onClick={() => setIsIndicModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-orange-50 hover:bg-orange-100 border border-orange-200 hover:border-orange-500 rounded-lg text-xs text-orange-900 transition-all shadow-sm font-semibold"
+              title="Sarvam AI Indic Language & Voice Intelligence"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-orange-600 animate-pulse" />
+              <span className="hidden sm:inline-block">Indic AI</span>
+              <span className="text-[10px] bg-orange-200 text-orange-950 px-1.5 py-0.5 rounded font-mono font-bold">🇮🇳 हिन्दी</span>
+            </button>
+
             {/* Quick Role Switcher for Hackathon Demo */}
             <div className="relative">
               <button
@@ -252,6 +266,9 @@ export const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Sovereign Indic Intelligence Modal */}
+      <SarvamIndicModal isOpen={isIndicModalOpen} onClose={() => setIsIndicModalOpen(false)} />
     </header>
   );
 };
