@@ -56,28 +56,23 @@ const itemVariants = {
 
 export const Navbar = () => {
   const { user, role, switchRole, logout } = useAuth();
-  const { unreadCount, setIsSearchOpen, isMobileMenuOpen, setIsMobileMenuOpen } = useApp();
+  const {
+    unreadCount,
+    setIsSearchOpen,
+    isMobileMenuOpen,
+    setIsMobileMenuOpen,
+    activeGlobalDropdown,
+    toggleDropdown,
+    closeDropdowns
+  } = useApp();
   const { currentLanguage, setLanguage, t } = useLanguage();
 
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'role' | 'profile' | 'notif' | null
   const [isIndicModalOpen, setIsIndicModalOpen] = useState(false);
-  const navContainerRef = useRef(null);
   const navigate = useNavigate();
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (navContainerRef.current && !navContainerRef.current.contains(e.target)) {
-        setActiveDropdown(null);
-      }
-    };
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, []);
 
   const handleRoleChange = (newRole) => {
     switchRole(newRole);
-    setActiveDropdown(null);
+    closeDropdowns();
     if (newRole === ROLES.CITIZEN) {
       navigate('/public');
     } else if (newRole === ROLES.DISTRICT_OFFICER) {
@@ -146,16 +141,16 @@ export const Navbar = () => {
           </div>
 
           {/* Right Actions: Role Switcher, Notifications, User Profile (Mutual Exclusivity & Staggered Motion) */}
-          <div ref={navContainerRef} className="flex items-center gap-2 sm:gap-2.5">
-            
+          <div className="flex items-center gap-2 sm:gap-2.5">
             {/* Role Switcher for Hackathon Demo */}
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setActiveDropdown(prev => prev === 'role' ? null : 'role')}
+                data-dropdown-trigger="role"
+                onClick={() => toggleDropdown('role')}
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs transition-all shadow-sm cursor-pointer",
-                  activeDropdown === 'role'
+                  activeGlobalDropdown === 'role'
                     ? "bg-white/20 border-white/40 text-white"
                     : "bg-white/10 border border-white/10 hover:border-white/30 text-slate-200 hover:text-white"
                 )}
@@ -166,17 +161,18 @@ export const Navbar = () => {
                 <span className="font-semibold text-white truncate max-w-[120px]">
                   {role === ROLES.MOSPI_ADMIN ? t('role_admin', 'MoSPI Admin') : role === ROLES.DISTRICT_OFFICER ? t('role_district', 'District Officer') : t('role_citizen', 'Citizen Portal')}
                 </span>
-                <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeDropdown === 'role' && "rotate-180")} />
+                <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeGlobalDropdown === 'role' && "rotate-180")} />
               </button>
 
               <AnimatePresence>
-                {activeDropdown === 'role' && (
+                {activeGlobalDropdown === 'role' && (
                   <motion.div
+                    data-dropdown-menu="role"
                     variants={dropdownVariants}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="absolute right-0 mt-2 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 divide-y divide-slate-100 origin-top overflow-hidden"
+                    className="absolute right-0 mt-2 w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl z-50 py-1.5 divide-y divide-slate-100 dark:divide-slate-800 origin-top overflow-hidden"
                   >
                     <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                       {t('role_persona', 'Active Authority Persona')}
@@ -187,13 +183,13 @@ export const Navbar = () => {
                           onClick={() => handleRoleChange(ROLES.MOSPI_ADMIN)}
                           className={cn(
                             'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                            role === ROLES.MOSPI_ADMIN ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                            role === ROLES.MOSPI_ADMIN ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                           )}
                         >
-                          <Building2 className="w-4 h-4 text-blue-700" />
+                          <Building2 className="w-4 h-4 text-blue-700 dark:text-blue-400" />
                           <div>
                             <div>{t('role_admin', 'MoSPI Central Auditor')}</div>
-                            <div className="text-[10px] text-slate-500">{t('role_admin_sub', 'National oversight & cartels')}</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400">{t('role_admin_sub', 'National oversight & cartels')}</div>
                           </div>
                         </button>
                       </motion.div>
@@ -203,13 +199,13 @@ export const Navbar = () => {
                           onClick={() => handleRoleChange(ROLES.DISTRICT_OFFICER)}
                           className={cn(
                             'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                            role === ROLES.DISTRICT_OFFICER ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                            role === ROLES.DISTRICT_OFFICER ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                           )}
                         >
-                          <MapPin className="w-4 h-4 text-amber-600" />
+                          <MapPin className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                           <div>
                             <div>{t('role_district', 'District Officer (DM/Varanasi)')}</div>
-                            <div className="text-[10px] text-slate-500">{t('role_district_sub', 'SLA alerts & photo verification')}</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400">{t('role_district_sub', 'SLA alerts & photo verification')}</div>
                           </div>
                         </button>
                       </motion.div>
@@ -219,13 +215,13 @@ export const Navbar = () => {
                           onClick={() => handleRoleChange(ROLES.CITIZEN)}
                           className={cn(
                             'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                            role === ROLES.CITIZEN ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                            role === ROLES.CITIZEN ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-semibold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                           )}
                         >
-                          <User className="w-4 h-4 text-emerald-600" />
+                          <User className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                           <div>
                             <div>{t('role_citizen', 'Public / Citizen Portal')}</div>
-                            <div className="text-[10px] text-slate-500">{t('role_citizen_sub', 'Project search & grievance filing')}</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400">{t('role_citizen_sub', 'Project search & grievance filing')}</div>
                           </div>
                         </button>
                       </motion.div>
@@ -239,10 +235,11 @@ export const Navbar = () => {
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setActiveDropdown(prev => prev === 'notif' ? null : 'notif')}
+                data-dropdown-trigger="notif"
+                onClick={() => toggleDropdown('notif')}
                 className={cn(
                   "relative p-2 rounded-lg transition-colors cursor-pointer",
-                  activeDropdown === 'notif'
+                  activeGlobalDropdown === 'notif'
                     ? "bg-white/20 text-white border border-white/40"
                     : "text-slate-300 hover:text-white bg-white/5 border border-white/10 hover:border-white/30"
                 )}
@@ -255,17 +252,18 @@ export const Navbar = () => {
                   </span>
                 )}
               </button>
-              <NotificationDropdown isOpen={activeDropdown === 'notif'} onClose={() => setActiveDropdown(null)} />
+              <NotificationDropdown isOpen={activeGlobalDropdown === 'notif'} onClose={closeDropdowns} />
             </div>
 
             {/* User Avatar & Profile OR Clean Login Button */}
             {user ? (
               <div className="relative">
                 <button
-                  onClick={() => setActiveDropdown(prev => prev === 'profile' ? null : 'profile')}
+                  data-dropdown-trigger="profile"
+                  onClick={() => toggleDropdown('profile')}
                   className={cn(
                     "flex items-center gap-2 p-1.5 rounded-lg transition-colors cursor-pointer",
-                    activeDropdown === 'profile'
+                    activeGlobalDropdown === 'profile'
                       ? "bg-white/20 border border-white/40"
                       : "bg-white/5 border border-white/10 hover:border-white/30"
                   )}
@@ -278,22 +276,23 @@ export const Navbar = () => {
                   <span className="hidden md:inline-block text-xs font-semibold text-white truncate max-w-[120px]">
                     {user?.name?.split(' ')[0]}
                   </span>
-                  <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeDropdown === 'profile' && "rotate-180")} />
+                  <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeGlobalDropdown === 'profile' && "rotate-180")} />
                 </button>
 
                 <AnimatePresence>
-                  {activeDropdown === 'profile' && (
+                  {activeGlobalDropdown === 'profile' && (
                     <motion.div
+                      data-dropdown-menu="profile"
                       variants={dropdownVariants}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100 origin-top overflow-hidden"
+                      className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100 dark:divide-slate-800 origin-top overflow-hidden"
                     >
                       <motion.div variants={itemVariants} className="px-4 py-2">
-                        <p className="text-xs font-bold text-slate-900">{user?.name}</p>
-                        <p className="text-[11px] text-slate-500 truncate">{user?.designation || user?.email}</p>
-                        <span className="mt-1.5 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white">{user?.name}</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{user?.designation || user?.email}</p>
+                        <span className="mt-1.5 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                           {user?.badge}
                         </span>
                       </motion.div>
@@ -302,10 +301,10 @@ export const Navbar = () => {
                         <motion.div variants={itemVariants}>
                           <Link
                             to="/profile"
-                            onClick={() => setActiveDropdown(null)}
-                            className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
+                            onClick={closeDropdowns}
+                            className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                           >
-                            <User className="w-3.5 h-3.5 text-slate-500" />
+                            <User className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                             <span>{t('sec_profile', 'Security & Profile')}</span>
                           </Link>
                         </motion.div>
@@ -315,10 +314,10 @@ export const Navbar = () => {
                         <button
                           onClick={() => {
                             logout();
-                            setActiveDropdown(null);
+                            closeDropdowns();
                             navigate('/login');
                           }}
-                          className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left font-medium cursor-pointer"
+                          className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors text-left font-medium cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5" />
                           <span>{t('sign_out', 'Sign Out')}</span>

@@ -56,7 +56,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         
         {/* ================================================================ */}
-        {/* COLUMN 1: AI Analytics Engines (The Brains)                      */}
+        {/* COLUMN 1: Automated Evidence & Fraud Checks                      */}
         {/* ================================================================ */}
         <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
@@ -68,58 +68,58 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                     <Cpu className="w-4 h-4" />
                   </div>
                   <h3 className="text-sm font-black text-[#0B2545] uppercase tracking-wide">
-                    {t('arch_col1_title', 'AI Analytics Engines (The Brains)')}
+                    1. Automated Evidence & Fraud Checks
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-500">
-                  {t('arch_col1_sub', 'Automated perceptual hashing & graph ML replacing subjective auditing')}
+                  Scans project photos, contractor bids, and terrain benchmarks automatically
                 </p>
               </div>
               <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 rounded">
-                Col 1
+                Pillar 1
               </span>
             </div>
 
-            {/* Feature 1: dHash OpenCV */}
+            {/* Feature 1: Duplicate Image Detection */}
             <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Camera className="w-3.5 h-3.5 text-blue-700" />
                   <span className="text-xs font-bold text-slate-900">
-                    {t('arch_col1_f1_title', 'Duplicate Image Detection (OpenCV dHash)')}
+                    Duplicate Photo Detection
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-slate-500 bg-white px-1.5 py-0.5 border border-slate-200 rounded font-semibold">
-                  64-bit Hash
+                <span className="text-[10px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 border border-blue-200 rounded font-semibold">
+                  Photo Fingerprint
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                {t('arch_col1_f1_desc', '64-bit Difference Hashing and Hamming distance cross-reference site photos across districts to instantly flag reused images.')}
+                Compares progress photos against all past projects across India to immediately catch and block reused pictures from older or other works.
               </p>
               <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-500">
-                <span>Metric: Hamming Distance $\le 5$</span>
-                <span className="text-emerald-700 font-semibold">O(1) Lookup</span>
+                <span>Check: Instant Digital Signature</span>
+                <span className="text-emerald-700 font-semibold">Active Across India</span>
               </div>
             </div>
 
-            {/* Feature 2: NetworkX Cartel Analyzer */}
+            {/* Feature 2: Contractor Cartel Analyzer */}
             <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Network className="w-3.5 h-3.5 text-amber-600" />
                   <span className="text-xs font-bold text-slate-900">
-                    {t('arch_col1_f2_title', 'Contractor Cartel Analyzer (NetworkX)')}
+                    Contractor Syndicate & Cartel Monitor
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 border border-amber-200 rounded font-semibold">
-                  HHI Metric
+                  Bid Monopolies
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                {t('arch_col1_f2_desc', 'Constructs bipartite procurement graphs and calculates Herfindahl-Hirschman Index (HHI) to expose vendor syndicates.')}
+                Tracks procurement patterns to uncover contractor groups that collude and secretly divide local tenders among themselves to avoid fair bidding.
               </p>
               <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-500">
-                <span>Threshold: HHI &gt; 2500</span>
+                <span>Rule: Fair Tender Distribution</span>
                 <span className="text-rose-700 font-semibold">Syndicate Alert</span>
               </div>
             </div>
@@ -130,15 +130,15 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                 <div className="flex items-center gap-2">
                   <Mountain className="w-3.5 h-3.5 text-emerald-700" />
                   <span className="text-xs font-bold text-slate-900">
-                    {t('arch_col1_f3_title', 'Terrain & Climate Normalization')}
+                    Fair Mountain & Forest Pricing
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 border border-emerald-200 rounded font-semibold">
-                  Fairness ML
+                  Fairness Rules
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                {t('arch_col1_f3_desc', 'Calibrates anomaly thresholds for Himalayan, hill, and monsoon-disrupted districts to eliminate regional bias.')}
+                Automatically adjusts cost and timeline expectations for hilly, remote, or monsoon-affected areas so honest projects are not wrongly flagged.
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         </div>
 
         {/* ================================================================ */}
-        {/* COLUMN 2: Machine Learning Models & Triage Intelligence         */}
+        {/* COLUMN 2: AI Risk Scoring Models                                 */}
         {/* ================================================================ */}
         <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
@@ -165,59 +165,59 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                     <Cpu className="w-4 h-4" />
                   </div>
                   <h3 className="text-sm font-black text-[#0B2545] uppercase tracking-wide">
-                    {t('arch_col2_title', 'ML Models & Anomaly Detection')}
+                    2. AI Risk Scoring Models
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-500">
-                  {t('arch_col2_sub', 'Ensemble machine learning for unsupervised anomaly & supervised risk ranking')}
+                  Learns spending patterns and ranks works by risk from 0 to 100
                 </p>
               </div>
               <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 rounded">
-                Col 2
+                Pillar 2
               </span>
             </div>
 
-            {/* Feature 1: Isolation Forest (Unsupervised) */}
+            {/* Feature 1: Isolation Forest */}
             <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <Binary className="w-3.5 h-3.5 text-indigo-600" />
                   <span className="text-xs font-bold text-slate-900">
-                    Isolation Forest
+                    Isolation Forest (Anomaly Finder)
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 border border-indigo-200 rounded font-bold">
-                  Unsupervised Anomaly
+                  Pattern AI
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                Partitions high-dimensional financial velocity and disbursement irregularities by recursive random splitting. Isolates subtle expenditure anomalies with zero dependency on prior fraud labels.
+                Learns standard spending timelines across normal works and flags unusual money release patterns without needing past examples of fraud.
               </p>
               <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 font-mono text-[10px] text-slate-500">
-                <span>Kernel: Tree Ensembles</span>
-                <span className="text-indigo-700 font-semibold">Contamination: 0.05</span>
+                <span>Detection: Self-Learning Trees</span>
+                <span className="text-indigo-700 font-semibold">Continuous Audit</span>
               </div>
             </div>
 
-            {/* Feature 2: XGBoost Classifier (Supervised) */}
+            {/* Feature 2: XGBoost Classifier */}
             <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-amber-600" />
                   <span className="text-xs font-bold text-slate-900">
-                    XGBoost Classifier
+                    XGBoost Classifier (Risk Ranking)
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 border border-amber-200 rounded font-bold">
-                  Gradient Boosted Risk
+                  0–100 Score
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                Evaluates 24 multi-factor features across milestone completion slippage, contractor cartel concentration (HHI), and audit logs to output a calibrated 0–100 risk probability with explainable SHAP weights.
+                Combines 24 factors including project delays, photo verification, and contractor history to output a single, easy-to-understand risk score.
               </p>
               <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 font-mono text-[10px] text-slate-500">
-                <span>Objective: binary:logistic</span>
-                <span className="text-amber-700 font-semibold">AUC-ROC: 0.942</span>
+                <span>Output: Explainable Factors</span>
+                <span className="text-amber-700 font-semibold">Accuracy: 94.2%</span>
               </div>
             </div>
 
@@ -225,9 +225,9 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
             <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900 block">
-                  {t('arch_col2_f2_title', 'Categorized Triage Tiers')}
+                  Three Clear Action Categories
                 </span>
-                <span className="text-[9px] font-mono text-slate-500">Continuous Evaluation</span>
+                <span className="text-[9px] font-mono text-slate-500">Live Status</span>
               </div>
               <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] font-bold font-mono">
                 <div className="p-2 rounded bg-rose-50 border border-rose-200 text-rose-800">
@@ -256,7 +256,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         </div>
 
         {/* ================================================================ */}
-        {/* COLUMN 3: Interactive Dashboards (The Interface)                 */}
+        {/* COLUMN 3: Interactive Dashboards & Voice Intelligence            */}
         {/* ================================================================ */}
         <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
@@ -268,15 +268,15 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                     <LayoutDashboard className="w-4 h-4" />
                   </div>
                   <h3 className="text-sm font-black text-[#0B2545] uppercase tracking-wide">
-                    {t('arch_col3_title', 'Interactive Dashboards (The Interface)')}
+                    3. Interactive Dashboards & Voice AI
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-500">
-                  {t('arch_col3_sub', 'Enterprise GIS maps, slide-over audit sheets, and voice intelligence')}
+                  Live GIS maps, project drill-down dossiers, and Indian voice access
                 </p>
               </div>
               <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded">
-                Col 3
+                Pillar 3
               </span>
             </div>
 
@@ -286,15 +286,15 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                 <div className="flex items-center gap-2">
                   <Map className="w-3.5 h-3.5 text-emerald-700" />
                   <span className="text-xs font-bold text-slate-900">
-                    {t('arch_col3_f1_title', 'Geospatial District Map (Leaflet.js)')}
+                    Interactive Constituency Map
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 border border-emerald-200 rounded font-semibold">
-                  GIS Layer
+                  Live Map
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                {t('arch_col3_f1_desc', 'Interactive GIS map with color-coded pins displaying total funds, unspent balances, and regional risk clusters.')}
+                Color-coded nationwide map showing every sanctioned work, disbursed funds, and localized risk alerts with a single click.
               </p>
               <Link
                 to="/risk-map"
@@ -311,7 +311,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                 <div className="flex items-center gap-2">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-blue-700" />
                   <span className="text-xs font-bold text-slate-900">
-                    {t('arch_col3_f2_title', 'Drill-Down Slide-Over Sheets')}
+                    One-Click Project Dossier
                   </span>
                 </div>
                 <button
@@ -323,7 +323,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                 </button>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                {t('arch_col3_f2_desc', 'Granular project audit panels detailing budget vs. spend, timeline delays, photo evidence, and specific AI warning tags.')}
+                Provides a complete overview of budget spent, physical progress photos, delay timeline, and specific reasons for any alert.
               </p>
             </div>
 
@@ -333,7 +333,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                 <div className="flex items-center gap-2">
                   <Volume2 className="w-3.5 h-3.5 text-orange-600" />
                   <span className="text-xs font-bold text-slate-900">
-                    {t('arch_col3_f3_title', 'Sarvam AI Sovereign Voice Intelligence')}
+                    Vernacular Voice Assistant
                   </span>
                 </div>
                 <button
@@ -341,11 +341,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                   onClick={() => onOpenVoiceModal && onOpenVoiceModal()}
                   className="text-[10px] font-mono text-orange-900 bg-orange-100 hover:bg-orange-200 px-1.5 py-0.5 border border-orange-300 rounded font-bold transition-colors cursor-pointer"
                 >
-                  🇮🇳 Listen TTS
+                  🇮🇳 Listen Audio
                 </button>
               </div>
               <p className="text-[11px] text-slate-600 leading-relaxed">
-                {t('arch_col3_f3_desc', 'Multilingual TTS audio briefings and Saaras ASR vernacular grievance speech processing for rural citizens.')}
+                Spoken audio briefings in 8 Indian languages allowing citizens to listen to project details or record grievances in their native dialect.
               </p>
             </div>
           </div>

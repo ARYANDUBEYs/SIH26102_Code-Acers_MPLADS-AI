@@ -21,87 +21,87 @@ export const SystemicVulnerabilitiesFramework = () => {
   const pillars = [
     {
       id: 'spatial',
-      name: '1. GPS Spoofing & Spatial Attestation',
-      shortName: 'GPS Spoofing',
+      name: '1. Verified Site Location (Anti-Spoofing)',
+      shortName: 'Location Checks',
       icon: Compass,
-      tag: 'Multi-Source Cell & PostGIS',
+      tag: 'Cell Tower & Map Matching',
       color: 'blue',
       badge: 'border-blue-200 bg-blue-50 text-blue-800',
-      vulnerability: 'Contractors tampering with EXIF camera coordinates or running software GPS emulators to upload photos taken miles away from the genuine construction site.',
-      solution: 'Cross-verifies raw EXIF metadata against cellular base transceiver station (BTS) tower records, carrier ISP telemetry, and PostGIS boundary polygon containment.',
-      mathProof: 'ST_Contains(Constituency_Polygon, ST_SetSRID(ST_MakePoint(Lon, Lat), 4326)) == TRUE && Delta_Dist(BTS, EXIF) <= 500m',
+      vulnerability: 'Uploading photos taken from an armchair miles away instead of the genuine construction site.',
+      solution: 'Cross-verifies camera location against nearby mobile network towers and official constituency boundary maps to guarantee the photo was taken at the actual project site.',
+      mathProof: 'Operational Rule: Photo location must be within 500 meters of the sanctioned site and confirmed by local mobile network towers.',
       countermeasures: [
-        'Base Station ID (CID/LAC) triangulation independent of device GPS',
-        'PostGIS ST_Contains polygon containment check',
-        'Velocity plausibility check: Rejects sequential milestone uploads with delta speed > 200 km/h'
+        'Verifies mobile cell tower signals independent of phone GPS',
+        'Checks project boundaries on official government district maps',
+        'Rejects impossible travel times between consecutive progress uploads'
       ]
     },
     {
       id: 'human',
-      name: '2. Human-in-the-Loop Multi-Sig Consensus',
-      shortName: 'Officer Override',
+      name: '2. Two-Officer Digital Sign-Off (Anti-Collusion)',
+      shortName: 'Dual Sign-Off',
       icon: Users,
-      tag: 'Dual-Auditor e-Sign',
+      tag: 'Dual-Officer Approval',
       color: 'rose',
       badge: 'border-rose-200 bg-rose-50 text-rose-800',
-      vulnerability: 'Local administrative officials colluding with contractors to manually dismiss legitimate high-risk AI alerts as false positives or unavoidable exceptions.',
-      solution: 'Dual-Auditor Multi-Signature Consensus Protocol: No critical AI alert can be overridden by a single officer. Requires simultaneous digital signatures from District Magistrate and Executive Engineer.',
-      mathProof: 'VerifySignature(PK_DM, Hash) && VerifySignature(PK_EE, Hash) => WriteTo(ImmutableAuditLog)',
+      vulnerability: 'A single officer quietly overriding or dismissing legitimate fraud warnings raised by the system.',
+      solution: 'Requires two independent senior officials (District Magistrate and Executive Engineer) to digitally sign with their official credentials before any critical alert can be cleared.',
+      mathProof: 'Operational Rule: No single person can dismiss a red flag; requires dual digital signatures and permanent audit logging.',
       countermeasures: [
-        'Dual-Officer Aadhaar e-Sign / cryptographic digital signature required',
-        'Immutable cryptographic SHA-256 hash chaining of all inspection overrides',
-        'Automated State-level escalation if officer override rate exceeds 2σ from national baseline'
+        'Two separate senior officer digital signatures required',
+        'Permanent, unalterable digital audit paper trail of all decisions',
+        'Automatic alert to state vigilance if override rates exceed normal levels'
       ]
     },
     {
       id: 'synthetic',
-      name: '3. AI-Generated Synthetic Photo Defense',
-      shortName: 'Deepfakes & ELA',
+      name: '3. Fake Image Detection (Anti-Deepfake)',
+      shortName: 'AI Photo Defense',
       icon: Eye,
-      tag: 'FFT & Error Level Analysis',
+      tag: 'Image Forensics & Satellite',
       color: 'amber',
-      badge: 'border-amber-200 bg-amber-900 text-amber-800',
-      vulnerability: 'Malicious actors using generative AI (Flux, Midjourney, Stable Diffusion) to render hyper-realistic photos of paved roads and clinics that do not exist.',
-      solution: 'Fast Fourier Transform (FFT) high-frequency spectral artifact detection combined with JPEG Error Level Analysis (ELA) and Day-0 satellite terrain matching.',
-      mathProof: 'ELA_Variance(Img) > Tau_AI || FFT_HighFreq_Energy(Img) < Threshold_Physics => FLAG_SYNTHETIC',
+      badge: 'border-amber-200 bg-amber-50 text-amber-800',
+      vulnerability: 'Using AI image tools or photo editing software to create fake pictures of finished roads or clinics.',
+      solution: 'Scans image compression patterns, lighting consistency, and camera sensor fingerprints to detect artificially generated or edited photographs.',
+      mathProof: 'Operational Rule: Scans image pixel integrity and verifies physical ground changes against satellite telemetry.',
       countermeasures: [
-        'FFT 2D spectral transformation detecting repeating convolutional generator lattices',
-        'Quantization table compression inconsistency analysis (Error Level Analysis)',
-        'Sentinel-2 multispectral terrain change comparison against baseline coordinates'
+        'Scans for artificial pixel patterns left by AI image tools',
+        'Validates authentic camera sensor and compression data',
+        'Cross-checks site progress against recent satellite imaging'
       ]
     },
     {
       id: 'terrain',
-      name: '4. High-Altitude & Forest Cost Bias Mitigation',
-      shortName: 'Hilly Cost Parity',
+      name: '4. Fair Pricing for Remote & Hilly Regions',
+      shortName: 'Fair Terrain Pricing',
       icon: Mountain,
-      tag: 'SOR Multiplier Matrix',
+      tag: 'CPWD Terrain Index',
       color: 'emerald',
       badge: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-      vulnerability: 'AI flagging legitimate high costs in Ladakh, Northeast, or Western Ghats as anomalies due to severe topography and heavy transit logistics expenses.',
-      solution: 'Dynamic Schedule of Rates (SOR) Elevation Multiplier Matrix calibrated with CPWD hill index coefficients, isolating genuine corruption from geographical hurdles.',
-      mathProof: 'ExpectedCost = BaseSOR * (1 + 0.15 * log10(Elevation_m) + TransitDistanceFactor)',
+      vulnerability: 'Wrongly flagging high construction costs in remote Himalayan or forest districts where material transport is legitimately expensive.',
+      solution: 'Automatically applies official CPWD hill and terrain cost indices based on elevation and transport distance, ensuring fair budgeting for remote communities.',
+      mathProof: 'Operational Rule: Budget limits automatically include official elevation and terrain transport multipliers.',
       countermeasures: [
-        'Automated elevation extraction via NASA SRTM Digital Elevation Models',
-        'Constituency-specific CPWD Schedule of Rates (SOR) baseline calibration',
-        'Heavy-rainfall & seasonal construction window variance offsets'
+        'Altitude data automatically factored into cost baselines',
+        'Official CPWD Schedule of Rates terrain adjustments applied',
+        'Monsoon and seasonal working windows taken into account'
       ]
     },
     {
       id: 'legal',
-      name: '5. Pre-Disbursal Prevention vs Post-Mortem Auditing',
-      shortName: 'Pre-Disbursal Gates',
+      name: '5. Stop Fraud Before Money Leaves the Bank',
+      shortName: 'Payment Safeguards',
       icon: Lock,
-      tag: 'PFMS Milestone Gates',
+      tag: 'PFMS Treasury Gate',
       color: 'purple',
       badge: 'border-purple-200 bg-purple-50 text-purple-800',
-      vulnerability: 'Traditional government audits occur 2-3 years after completion, when allocated funds have already leaked and contractors have vanished.',
-      solution: 'Real-time programmatic escrow disallowance: High-risk anomaly flags automatically place PFMS/RBI TSA escrow releases on provisional freeze pending clearance.',
-      mathProof: 'RiskScore(Work_ID) >= 70 => DisbursalGateway.Lock(Work_ID, Reason=AI_SUSPENSION)',
+      vulnerability: 'Traditional audits taking place 2 to 3 years after project completion, when funds are already lost and contractors have vanished.',
+      solution: 'Connects directly with the central government payment gateway (PFMS) to pause next-stage milestone payouts the moment high-risk discrepancies are detected.',
+      mathProof: 'Operational Rule: Critical fraud flags automatically place milestone payouts on hold until physical verification is completed.',
       countermeasures: [
-        'Direct API integration hook into PFMS / SBI Treasury Single Account (TSA)',
-        'Pre-disbursal algorithmic verification before milestone tranche release',
-        'Automatic statutory escalation dossiers submitted to MoSPI Central Vigilance'
+        'Integrated directly with central PFMS treasury payment rails',
+        'Milestone payments verified before public money is released',
+        'Instant escalation report generated for central vigilance officers'
       ]
     }
   ];
@@ -114,13 +114,13 @@ export const SystemicVulnerabilitiesFramework = () => {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-semibold mb-2 font-mono">
             <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-            <span>National Defense & Methodology Protocol</span>
+            <span>Public Fund Integrity Safeguards</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-            Systemic Vulnerability Mitigations & Mathematical Proofs
+            How the System Protects Public Money
           </h3>
           <p className="text-xs text-slate-300 mt-1 max-w-2xl">
-            Addressing real-world deployment challenges: GPS spoofing, officer bribery, AI-generated synthetic evidence, and geographical cost variations.
+            Clear, transparent rules to prevent fake photos, stop officer collusion, and ensure honest public spending.
           </p>
         </div>
 
@@ -171,7 +171,7 @@ export const SystemicVulnerabilitiesFramework = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-black text-slate-900">{current.name}</h4>
-                  <span className="text-xs text-slate-500">Methodology Vector #{activeTab + 1}</span>
+                  <span className="text-xs text-slate-500">Methodology Pillar #{activeTab + 1}</span>
                 </div>
               </div>
 
@@ -180,13 +180,13 @@ export const SystemicVulnerabilitiesFramework = () => {
               </span>
             </div>
 
-            {/* Split: Vulnerability vs Algorithmic Solution */}
+            {/* Split: Vulnerability vs Solution */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Problem */}
               <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200/80 space-y-2">
                 <div className="flex items-center gap-2 text-rose-800 text-xs font-bold uppercase tracking-wider">
                   <span className="w-2 h-2 rounded-full bg-rose-500" />
-                  <span>Real-World Vulnerability</span>
+                  <span>The Problem It Solves</span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                   {current.vulnerability}
@@ -197,7 +197,7 @@ export const SystemicVulnerabilitiesFramework = () => {
               <div className="p-4 rounded-xl bg-emerald-50/60 border border-emerald-200/80 space-y-2">
                 <div className="flex items-center gap-2 text-emerald-800 text-xs font-bold uppercase tracking-wider">
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>Algorithmic Mitigation Solution</span>
+                  <span>How We Solve It</span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                   {current.solution}
@@ -205,23 +205,23 @@ export const SystemicVulnerabilitiesFramework = () => {
               </div>
             </div>
 
-            {/* Mathematical Proof Formulation Box */}
+            {/* Enforcement Rule Box */}
             <div className="p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-2 shadow-inner">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold">
-                  Mathematical / Algorithmic Enforcement Rule
+                  Operational Rule
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">Formal Logic Invariant</span>
+                <span className="text-[10px] font-mono text-emerald-400">Strictly Enforced</span>
               </div>
-              <code className="text-xs sm:text-sm font-mono text-cyan-300 block bg-slate-950/80 p-3 rounded border border-slate-800 overflow-x-auto">
+              <div className="text-xs sm:text-sm font-medium text-cyan-200 bg-slate-950/80 p-3 rounded border border-slate-800">
                 {current.mathProof}
-              </code>
+              </div>
             </div>
 
             {/* Specific Implementation Countermeasures */}
             <div className="space-y-2.5">
               <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                Production Implementation Architecture
+                Key Safeguard Measures
               </h5>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {current.countermeasures.map((item, i) => (

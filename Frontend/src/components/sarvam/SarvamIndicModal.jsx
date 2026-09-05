@@ -83,17 +83,22 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
   const [customText, setCustomText] = useState('');
   const [analysisResult, setAnalysisResult] = useState(null);
 
+  const [isReadingPage, setIsReadingPage] = useState(false);
+
   useEffect(() => {
     if (isOpen && currentLanguage) {
       setSelectedLang(currentLanguage);
+    }
+    if (!isOpen && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      setIsReadingPage(false);
     }
   }, [isOpen, currentLanguage]);
 
   if (!isOpen) return null;
 
   const t = TRANSLATIONS[selectedLang] || TRANSLATIONS['hi-IN'];
-
-  const [isReadingPage, setIsReadingPage] = useState(false);
 
   const handleSpeak = () => {
     if ('speechSynthesis' in window) {

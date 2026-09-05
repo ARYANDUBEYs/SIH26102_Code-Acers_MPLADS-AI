@@ -785,14 +785,14 @@ export const Home = () => {
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold font-mono shadow-xs">
               <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              <span>e-SAKSHI 2.0 AI Sentinel Layer — Core Methodology & Working Principles</span>
+              <span>Core Methodology & Working Principles</span>
             </div>
             <TypewriterHeading
-              text="Algorithmic Vigilance & Systemic Vulnerability Mitigations"
+              text="How It Works: Continuous Vigilance & Public Fund Safeguards"
               className="text-2xl sm:text-4xl font-black text-[#0B2545] min-h-[44px]"
             />
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              From mathematical risk formulas and computer vision forensics to rigorous defenses against GPS spoofing, human-in-the-loop bribery, and synthetic image fraud.
+              Simple, automated checks that verify photo proof, block duplicate bills, and detect bidding rings—ensuring public development funds reach genuine local community projects.
             </p>
           </div>
 
@@ -804,10 +804,10 @@ export const Home = () => {
             <div className="mb-6">
               <h3 className="text-lg font-black text-[#0B2545] flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                <span>Three-Column Continuous Audit Architecture</span>
+                <span>The Three Core Pillars of Vigilance</span>
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Live interactive demonstration of OpenCV 64-bit dHash perceptual hashing, NetworkX cartel analyzers, and composite risk scoring formulas.
+                How our automated checks, risk scoring models, and public transparency tools operate in real time.
               </p>
             </div>
 

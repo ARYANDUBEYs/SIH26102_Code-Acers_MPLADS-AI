@@ -45,59 +45,55 @@ import {
   Area
 } from 'recharts';
 
+import { ScrollReveal } from '../../components/common/ScrollReveal';
+
 export const PublicCommandDashboard = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Mode: Layman View vs Industry Expert Audit Mode
-  const [viewMode, setViewMode] = useState('layman'); // 'layman' | 'expert'
   const [selectedState, setSelectedState] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Public Transparency KPIs
+  // Public Transparency KPIs with crystal-clear professional layman explanations
   const publicKPIs = [
     {
       title: 'Total Monitored Public Funds',
       value: '₹83,336 Cr',
-      laymanSub: 'Every rupee allocated to 543 Lok Sabha Constituencies',
-      expertSub: 'PFMS SNA Escrow reconciliations for FY 2024-26',
+      subtitle: 'Every rupee allocated across 543 Lok Sabha Constituencies verified via PFMS banking escrows.',
       icon: Building2,
-      color: 'border-l-blue-600 bg-blue-50/40 text-blue-900',
+      color: 'border-l-blue-600 bg-blue-50/40 dark:bg-blue-950/20 text-blue-900 dark:text-blue-200',
     },
     {
       title: 'Public Works Under Surveillance',
       value: '8,420 Works',
-      laymanSub: 'Schools, roads, water plants, and hospitals tracked',
-      expertSub: '100% Geotagged MB (Measurement Book) entries indexed',
+      subtitle: 'Schools, drinking water plants, roads, and hospitals actively verified with GPS geotags.',
       icon: Eye,
-      color: 'border-l-emerald-600 bg-emerald-50/40 text-emerald-900',
+      color: 'border-l-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200',
     },
     {
       title: 'Forensic Photo Checks Passed',
       value: '96.4%',
-      laymanSub: 'Verified genuine site construction photos',
-      expertSub: 'dHash 64-bit perceptual similarity hamming distance > 10',
+      subtitle: 'Physical construction photos confirmed authentic against national duplicate image archives.',
       icon: ShieldCheck,
-      color: 'border-l-teal-600 bg-teal-50/40 text-teal-900',
+      color: 'border-l-teal-600 bg-teal-50/40 dark:bg-teal-950/20 text-teal-900 dark:text-teal-200',
     },
     {
       title: 'Citizen Grievances Resolved',
       value: '88.2%',
-      laymanSub: '312 out of 354 public reports addressed by officers',
-      expertSub: 'Mean SLA turnaround time: 4.2 days vs statutory 7 days',
+      subtitle: '312 out of 354 public reports formally inspected and resolved by District Magistrates.',
       icon: MessageSquareWarning,
-      color: 'border-l-amber-500 bg-amber-50/40 text-amber-900',
+      color: 'border-l-amber-500 bg-amber-50/40 dark:bg-amber-950/20 text-amber-900 dark:text-amber-200',
     },
   ];
 
-  // Invented but coherent & easy-to-understand dataset for Category Fund Utilization
+  // Coherent & easy-to-understand dataset for Category Fund Utilization
   const categoryFundsData = [
-    { name: 'Roads & Bridges', funds: 3420, laymanDesc: 'Connectivity in rural & tribal hamlets', expertMetric: 'IRC-SP-20 Standards Compliance' },
-    { name: 'Drinking Water & RO', funds: 2150, laymanDesc: 'Clean tap water pipelines & borewells', expertMetric: 'Jal Jeevan Mission Synergy' },
-    { name: 'Education & Smart Labs', funds: 1680, laymanDesc: 'Government school classrooms & computers', expertMetric: 'DISE Asset Verification' },
-    { name: 'Health PHCs & Clinics', funds: 1240, laymanDesc: 'Primary health centers & diagnostic tools', expertMetric: 'IPHS Norms Alignment' },
-    { name: 'Community Halls', funds: 890, laymanDesc: 'Public spaces for social gatherings', expertMetric: 'Civic Asset Registry 2025' },
+    { name: 'Roads & Bridges', funds: 3420, desc: 'Connectivity in rural & tribal hamlets' },
+    { name: 'Drinking Water & RO', funds: 2150, desc: 'Clean tap water pipelines & community RO plants' },
+    { name: 'Education & Smart Labs', funds: 1680, desc: 'Government school classrooms & digital smart labs' },
+    { name: 'Health PHCs & Clinics', funds: 1240, desc: 'Primary health centers & diagnostic equipment' },
+    { name: 'Community Halls', funds: 890, desc: 'Public civic spaces & social gathering centres' },
   ];
 
   // State-wise Transparency & Citizen Oversight Index
@@ -123,8 +119,7 @@ export const PublicCommandDashboard = () => {
       spent: 2150000,
       status: 'VERIFIED',
       verificationDate: 'Yesterday',
-      laymanSummary: 'Solar plant functional with clean water supply running to 400 households.',
-      expertSummary: 'OpenCV dHash verified; zero pixel replication against regional water repository.',
+      summary: 'Solar plant fully operational with clean water supply running to 400 households.',
     },
     {
       id: 'MPLAD-2026-00188',
@@ -135,8 +130,7 @@ export const PublicCommandDashboard = () => {
       spent: 1850000,
       status: 'COMPLETED',
       verificationDate: '3 days ago',
-      laymanSummary: '20 computer workstations installed and connected to high-speed broadband.',
-      expertSummary: 'Asset serial numbers cross-checked with GeM procurement invoice DB.',
+      summary: '20 computer workstations installed and connected to high-speed broadband.',
     },
     {
       id: 'MPLAD-2026-00204',
@@ -147,8 +141,7 @@ export const PublicCommandDashboard = () => {
       spent: 3100000,
       status: 'IN_PROGRESS',
       verificationDate: '5 days ago',
-      laymanSummary: 'Bituminous layer laid down; final surface grading under inspection.',
-      expertSummary: 'Milestone 2 certified via drone orthomosaic imagery; financial drift normal (+0.4%).',
+      summary: 'Bituminous layer laid down; final surface grading under inspection.',
     },
   ];
 
@@ -159,33 +152,6 @@ export const PublicCommandDashboard = () => {
       breadcrumbs={['Civil Command', 'Public Transparency']}
       actions={
         <div className="flex items-center gap-3">
-          {/* Layman vs Industry Expert Mode Switcher */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 border border-slate-300 rounded-lg shadow-inner">
-            <button
-              type="button"
-              onClick={() => setViewMode('layman')}
-              className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                viewMode === 'layman'
-                  ? 'bg-white text-blue-900 shadow-sm border border-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              🌱 Citizen / Layman Mode
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('expert')}
-              className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                viewMode === 'expert'
-                  ? 'bg-[#0B2545] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>🔬 Industry Expert / Audit Mode</span>
-            </button>
-          </div>
-
           <Button
             variant="outline"
             size="sm"
@@ -195,85 +161,84 @@ export const PublicCommandDashboard = () => {
           >
             Report Grievance
           </Button>
+          <Link
+            to="/public/map"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+          >
+            <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Interactive Map</span>
+          </Link>
         </div>
       }
     >
       <div className="space-y-6">
-
-        {/* Explainability Banner for Layman vs Expert */}
-        <div className="p-4 rounded-xl border border-blue-200 bg-gradient-to-r from-blue-50 via-white to-blue-50/50 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-blue-600 text-white shrink-0 mt-0.5">
-              <Info className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <span>{viewMode === 'layman' ? 'Viewing in Simplified Layman Mode' : 'Viewing in Full Technical & Algorithmic Audit Mode'}</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-100 text-blue-800">
-                  {viewMode === 'layman' ? 'Plain Language' : 'Mathematical Formulas Active'}
-                </span>
-              </h3>
-              <p className="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
-                {viewMode === 'layman'
-                  ? 'Complex government statistics are translated into plain everyday terms so every citizen can track how their local MP uses development funds without needing an engineering degree.'
-                  : 'Exposing exact forensic coefficients, OpenCV 64-bit dHash perceptual Hamming distance thresholds, NetworkX HHI cartel indices, and PFMS SNA Escrow banking reconciliations.'}
-              </p>
+        {/* Public Transparency Banner */}
+        <ScrollReveal>
+          <div className="p-4 rounded-xl border border-blue-200 dark:border-blue-900 bg-gradient-to-r from-blue-50/80 via-white to-blue-50/40 dark:from-blue-950/40 dark:via-slate-900 dark:to-blue-950/20 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-blue-600 text-white shrink-0 mt-0.5">
+                <Info className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>Sovereign Public Fund Transparency Engine</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">
+                    Live Telemetry
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 max-w-3xl leading-relaxed">
+                  Every rupee allocated across all 543 Lok Sabha Constituencies is tracked with satellite GPS geotags, authentic progress photography, and public citizen audit logs.
+                </p>
+              </div>
             </div>
           </div>
-
-          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
-            <Link
-              to="/public/map"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
-            >
-              <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Explore Geospatial Map</span>
-            </Link>
-          </div>
-        </div>
+        </ScrollReveal>
 
         {/* 4 Public Transparency Metric Cards */}
+        <ScrollReveal delay={0.1}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {publicKPIs.map((kpi, idx) => {
             const Icon = kpi.icon;
             return (
               <div
                 key={idx}
-                className={`p-4 bg-white border border-slate-200 rounded-xl shadow-sm border-l-4 ${kpi.color} space-y-2 hover:shadow-md transition-shadow`}
+                className={`p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm border-l-4 ${kpi.color} space-y-2 hover:shadow-md transition-shadow`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-600">{kpi.title}</span>
-                  <Icon className="w-4 h-4 text-slate-500" />
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    {kpi.title}
+                  </span>
+                  <Icon className="w-4 h-4 text-slate-400" />
                 </div>
-                <div className="text-2xl font-black font-mono tracking-tight text-slate-900">
+                <div className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                   {kpi.value}
                 </div>
-                <p className="text-[11px] text-slate-600 leading-snug">
-                  {viewMode === 'layman' ? kpi.laymanSub : kpi.expertSub}
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+                  {kpi.subtitle}
                 </p>
               </div>
             );
           })}
         </div>
+        </ScrollReveal>
 
         {/* Two-Column Structured Charts Section */}
+        <ScrollReveal delay={0.2}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-w-0">
           
           {/* Chart 1: Sector-Wise Development Fund Flow (Left 7 Cols) */}
-          <div className="lg:col-span-7 min-w-0 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="lg:col-span-7 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
-                <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-blue-700" />
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span>Public Fund Expenditure by Developmental Category</span>
                 </h4>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  {viewMode === 'layman'
-                    ? 'Where are your tax rupees going? Breakdown in ₹ Crores.'
-                    : 'Reconciled Central SNA Escrow payouts categorized by CPWD / MoSPI Sector Schemas.'}
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Direct breakdown of developmental funds allocated across core community sectors (in ₹ Crores).
                 </p>
               </div>
-              <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 text-slate-700 rounded">
+              <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded">
                 FY 2024-26
               </span>
             </div>
@@ -281,11 +246,11 @@ export const PublicCommandDashboard = () => {
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={categoryFundsData} margin={{ top: 10, right: 10, left: -15, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
                   <XAxis dataKey="name" stroke="#64748B" fontSize={10} interval={0} angle={-15} textAnchor="end" />
                   <YAxis stroke="#64748B" fontSize={11} tickFormatter={(v) => `₹${v}`} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '8px', fontSize: '12px' }}
+                    contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '8px', fontSize: '12px', color: '#FFF' }}
                     formatter={(value) => [`₹${value} Crores`, 'Sanctioned Funds']}
                   />
                   <Bar dataKey="funds" fill="#2563EB" radius={[4, 4, 0, 0]} name="Sanctioned Funds (₹ Cr)" />
@@ -294,14 +259,14 @@ export const PublicCommandDashboard = () => {
             </div>
 
             {/* Explanatory Cards underneath Chart */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
               {categoryFundsData.slice(0, 4).map((c, i) => (
-                <div key={i} className="p-2 bg-slate-50 rounded-lg border border-slate-200/60 flex items-start gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-600 mt-1 shrink-0" />
+                <div key={i} className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60 flex items-start gap-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 mt-1 shrink-0" />
                   <div>
-                    <strong className="text-slate-900">{c.name}: </strong>
-                    <span className="text-slate-600">
-                      {viewMode === 'layman' ? c.laymanDesc : c.expertMetric}
+                    <strong className="text-slate-900 dark:text-white">{c.name}: </strong>
+                    <span className="text-slate-600 dark:text-slate-400">
+                      {c.desc}
                     </span>
                   </div>
                 </div>
@@ -310,17 +275,15 @@ export const PublicCommandDashboard = () => {
           </div>
 
           {/* Chart 2: State Transparency & Verification Rate (Right 5 Cols) */}
-          <div className="lg:col-span-5 min-w-0 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="lg:col-span-5 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
-                <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>State Public Verification Leaderboard</span>
                 </h4>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  {viewMode === 'layman'
-                    ? 'States with highest rate of photo-verified community works'
-                    : 'Composite dHash Image & GPS Consistency Ratio (%)'}
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  States ranked by proportion of verified, geotagged community development works.
                 </p>
               </div>
             </div>
@@ -329,46 +292,48 @@ export const PublicCommandDashboard = () => {
               {stateTransparencyData.map((st, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between text-xs font-semibold">
-                    <span className="text-slate-800">{st.state} ({st.code})</span>
-                    <span className="font-mono text-emerald-700">{st.transparencyScore}% Verified</span>
+                    <span className="text-slate-800 dark:text-slate-200">{st.state} ({st.code})</span>
+                    <span className="font-mono text-emerald-600 dark:text-emerald-400">{st.transparencyScore}% Verified</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                     <div
-                      className="bg-emerald-600 h-full rounded-full transition-all duration-500"
+                      className="bg-emerald-600 dark:bg-emerald-500 h-full rounded-full transition-all duration-500"
                       style={{ width: `${st.transparencyScore}%` }}
                     />
                   </div>
-                  <div className="flex justify-between text-[10px] text-slate-500">
+                  <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
                     <span>{st.verified} of {st.works} works verified</span>
-                    <span>{viewMode === 'layman' ? 'Zero fraud flags' : 'HHI < 1200'}</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-medium">Audited & Clean</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+        </ScrollReveal>
 
         {/* Recent Transparent Works Directory */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-3">
+        <ScrollReveal delay={0.3}>
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-3">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span>Citizen Project Verification Stream</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
                   Live Public Feed
                 </span>
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Constituency projects with audited photographic proof and public contractor contracts
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Constituency projects with audited photographic proof, public expenditure ledger, and GPS verification.
               </p>
             </div>
 
             <div className="flex items-center gap-2">
               <Link
                 to="/public/search"
-                className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg transition-colors inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg transition-colors inline-flex items-center gap-1.5"
               >
-                <Search className="w-3.5 h-3.5 text-slate-500" />
+                <Search className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                 <span>Search All Works</span>
               </Link>
             </div>
@@ -378,39 +343,39 @@ export const PublicCommandDashboard = () => {
             {publicProjects.map((p) => (
               <div
                 key={p.id}
-                className="p-4 rounded-xl border border-slate-200 hover:border-blue-400 bg-slate-50/50 hover:bg-white transition-all space-y-3 group cursor-pointer shadow-xs"
+                className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 transition-all space-y-3 group cursor-pointer shadow-xs"
                 onClick={() => navigate(`/project/${p.id}`)}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                  <span className="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
                     {p.id}
                   </span>
-                  <span className="text-[10px] text-slate-500">{p.verificationDate}</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">{p.verificationDate}</span>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1">
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
                     {p.title}
                   </h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
                     <span>{p.district}, {p.state}</span>
                   </p>
                 </div>
 
-                <div className="p-2.5 bg-white border border-slate-200/80 rounded-lg text-xs space-y-1">
-                  <div className="flex justify-between text-slate-600">
+                <div className="p-2.5 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-lg text-xs space-y-1">
+                  <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Disbursed:</span>
-                    <strong className="font-mono text-slate-900">{formatINR(p.spent)}</strong>
+                    <strong className="font-mono text-slate-900 dark:text-white">{formatINR(p.spent)}</strong>
                   </div>
-                  <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 leading-snug">
-                    {viewMode === 'layman' ? p.laymanSummary : p.expertSummary}
+                  <div className="text-[11px] text-slate-600 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800 leading-snug">
+                    {p.summary}
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-1 text-xs">
                   <StatusBadge status={p.status} />
-                  <span className="text-blue-700 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-semibold text-[11px]">
+                  <span className="text-blue-700 dark:text-blue-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 font-semibold text-[11px]">
                     <span>Inspect</span>
                     <ChevronRight className="w-3 h-3" />
                   </span>
@@ -419,6 +384,7 @@ export const PublicCommandDashboard = () => {
             ))}
           </div>
         </div>
+        </ScrollReveal>
 
       </div>
     </PageLayout>

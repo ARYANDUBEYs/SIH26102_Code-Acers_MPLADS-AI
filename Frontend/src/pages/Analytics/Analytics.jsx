@@ -38,6 +38,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const Analytics = () => {
   const [stateRisks, setStateRisks] = useState([]);
@@ -46,7 +47,6 @@ export const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2025-26');
   const [selectedState, setSelectedState] = useState('ALL');
   const [selectedType, setSelectedType] = useState('ALL');
-  const [isExpertMode, setIsExpertMode] = useState(false);
   const { showToast } = useApp();
 
   useEffect(() => {
@@ -147,29 +147,6 @@ export const Analytics = () => {
       breadcrumbs={['Dashboard', 'Analytics']}
       actions={
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Layman vs Industry Expert Dual Mode Switcher */}
-          <button
-            type="button"
-            onClick={() => setIsExpertMode(!isExpertMode)}
-            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border shadow-sm ${
-              isExpertMode
-                ? 'bg-purple-950/85 text-purple-200 border-purple-500/50 ring-2 ring-purple-500/20'
-                : 'bg-emerald-950/85 text-emerald-200 border-emerald-500/50 ring-2 ring-emerald-500/20'
-            }`}
-          >
-            {isExpertMode ? (
-              <>
-                <Brain className="w-3.5 h-3.5 text-purple-400" />
-                <span>Auditor Mode (🔬 Statistical Deep-Dive)</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Citizen View (🌱 Plain Explanation)</span>
-              </>
-            )}
-          </button>
-
           <Button
             variant="outline"
             size="sm"
@@ -182,34 +159,8 @@ export const Analytics = () => {
         </div>
       }
     >
-      {/* Top Mode Context Notification Banner */}
-      <div className={`p-3 rounded-lg border flex items-center justify-between text-xs transition-colors shadow-xs ${
-        isExpertMode 
-          ? 'bg-purple-950/30 border-purple-800/40 text-purple-200' 
-          : 'bg-emerald-950/30 border-emerald-800/40 text-emerald-200'
-      }`}>
-        <div className="flex items-center gap-2.5">
-          {isExpertMode ? <Brain className="w-4 h-4 text-purple-400 shrink-0" /> : <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />}
-          <div>
-            <span className="font-bold">
-              {isExpertMode ? 'Technical Forensic Mode Enabled' : 'Citizen Transparency Mode Enabled'}
-            </span>
-            <span className="opacity-80 ml-2 hidden sm:inline">
-              {isExpertMode 
-                ? 'Displaying econometric variance, z-score thresholds, cosine perceptual similarity, and regression models.'
-                : 'Displaying clear, layman-friendly summaries explaining how public money is guarded across each chart.'}
-            </span>
-          </div>
-        </div>
-        <button
-          onClick={() => setIsExpertMode(!isExpertMode)}
-          className="text-xs underline font-semibold cursor-pointer hover:opacity-90 shrink-0 ml-3"
-        >
-          {isExpertMode ? 'Switch to Simple View' : 'Switch to Expert Audit'}
-        </button>
-      </div>
-
       {/* Top Filter Bar */}
+      <ScrollReveal>
       <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-wrap items-center gap-3 shadow-sm">
         <div className="flex items-center gap-2 text-xs font-bold text-gov-navy uppercase tracking-wider">
           <Filter className="w-4 h-4 text-gov-blue" />
@@ -256,8 +207,10 @@ export const Analytics = () => {
           />
         </div>
       </div>
+      </ScrollReveal>
 
       {/* Analytics Charts Grid */}
+      <ScrollReveal delay={0.15}>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Chart 1: Monthly Anomaly Trends (ComposedChart with Area & Line) */}
         <Card
@@ -279,13 +232,13 @@ export const Analytics = () => {
                     <stop offset="95%" stopColor="#DC2626" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
                 <XAxis dataKey="month" stroke="#64748B" fontSize={11} />
                 <YAxis stroke="#64748B" fontSize={11} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Cases Detected`, name]}
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '6px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  itemStyle={{ color: '#0F172A' }}
+                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
+                  itemStyle={{ color: '#FFF' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                 <Area type="monotone" dataKey="cost" stroke="#1D4ED8" fillOpacity={1} fill="url(#costGrad)" name="Cost Discrepancies" strokeWidth={2} />
@@ -296,27 +249,15 @@ export const Analytics = () => {
           </div>
 
           {/* Contextual Annotation */}
-          {!isExpertMode ? (
-            <div className="mt-3 p-2.5 bg-blue-50/70 dark:bg-blue-950/20 rounded-md border border-blue-200 dark:border-blue-900/40 flex items-start gap-2 text-xs text-gov-slateDark">
-              <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-blue-950 dark:text-blue-200">Citizen Insight: </span>
-                <span className="text-gov-slate">
-                  This chart tracks AI surveillance month by month. The blue area shows bills inflated above standard CPWD rates, the red area shows contractors caught submitting identical photos from previous projects, and the orange line catches bid-rigging rings.
-                </span>
-              </div>
+          <div className="mt-3 p-2.5 bg-blue-50/70 dark:bg-blue-950/20 rounded-md border border-blue-200 dark:border-blue-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+            <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold text-blue-950 dark:text-blue-200">Surveillance Telemetry: </span>
+              <span>
+                Continuous monthly tracking of anomaly flags. Blue tracks invoices exceeding standard schedule rates, red catches identical photographic reuse across works, and orange highlights contractor bid collusion rings.
+              </span>
             </div>
-          ) : (
-            <div className="mt-3 p-2.5 bg-purple-50/70 dark:bg-purple-950/20 rounded-md border border-purple-200 dark:border-purple-900/40 flex items-start gap-2 text-xs text-gov-slateDark">
-              <Brain className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-purple-950 dark:text-purple-200 font-mono">Statistical Decomposition: </span>
-                <span className="text-gov-slate font-mono text-[11px]">
-                  SARIMA (1,1,2) forecast deviation. Cost surge in Oct (+28.4% MoM) correlates with Q3 fiscal spending deadlines. Perceptual image collision threshold set at Cosine distance &gt; 0.91 with structural SSIM &gt; 0.88.
-                </span>
-              </div>
-            </div>
-          )}
+          </div>
         </Card>
 
         {/* Chart 2: National Risk Distribution (Pie) */}
@@ -344,33 +285,27 @@ export const Analytics = () => {
                 </Pie>
                 <Tooltip
                   formatter={(val) => [`${val}% of Monitored Works`, 'Portfolio Share']}
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '6px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  itemStyle={{ color: '#0F172A' }}
+                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
+                  itemStyle={{ color: '#FFF' }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="space-y-1.5 text-xs mt-2 border-t border-gov-border pt-3">
+          <div className="space-y-1.5 text-xs mt-2 border-t border-slate-200 dark:border-slate-800 pt-3">
             {riskDistributionData.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between text-gov-slate">
+              <div key={idx} className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                   <span>{item.name}</span>
                 </span>
-                <span className="font-mono font-bold text-gov-slateDark">{item.value}%</span>
+                <span className="font-mono font-bold text-slate-900 dark:text-white">{item.value}%</span>
               </div>
             ))}
           </div>
 
-          {!isExpertMode ? (
-            <p className="text-[11px] text-gov-slate mt-3 bg-gov-subtle p-2 rounded border border-gov-border">
-              💡 <strong>Summary:</strong> 88% of all projects are completely safe or normal. Only 3% (critical) are halted for direct manual audit by central inspectors.
-            </p>
-          ) : (
-            <p className="text-[11px] text-gov-slate font-mono mt-3 bg-gov-subtle p-2 rounded border border-gov-border">
-              🔬 <strong>Isolation Forest:</strong> Contamination rate α=0.03 for critical cluster (z-score &gt; 2.85σ). Gini inequality index G=0.22.
-            </p>
-          )}
+          <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-3 bg-slate-50 dark:bg-slate-800/60 p-2 rounded border border-slate-200 dark:border-slate-700">
+            💡 <strong>Portfolio Health:</strong> Over 88% of monitored works are within normal operational baselines. Only the 3% critical tier is placed under automated escrow hold for direct collector verification.
+          </p>
         </Card>
 
         {/* Chart 3: Fund Utilization by Category */}
@@ -383,13 +318,13 @@ export const Analytics = () => {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={fundUtilizationData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
                 <XAxis dataKey="category" stroke="#64748B" fontSize={10} />
                 <YAxis stroke="#64748B" fontSize={11} />
                 <Tooltip
                   formatter={(val, name) => [`₹${val} Crores`, name]}
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '6px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  itemStyle={{ color: '#0F172A' }}
+                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
+                  itemStyle={{ color: '#FFF' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                 <Bar dataKey="sanctioned" fill="#0B2545" name="Sanctioned" radius={[3, 3, 0, 0]} />
@@ -399,27 +334,15 @@ export const Analytics = () => {
             </ResponsiveContainer>
           </div>
 
-          {!isExpertMode ? (
-            <div className="mt-3 p-2.5 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-md border border-emerald-200 dark:border-emerald-900/40 flex items-start gap-2 text-xs text-gov-slateDark">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-emerald-950 dark:text-emerald-200">Expenditure Health: </span>
-                <span className="text-gov-slate">
-                  Roads & Bridges and Drinking Water receive the highest funds. Notice how the green bar tracks actual verified work done on the ground before final payments are released.
-                </span>
-              </div>
+          <div className="mt-3 p-2.5 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-md border border-emerald-200 dark:border-emerald-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold text-emerald-950 dark:text-emerald-200">Expenditure Health: </span>
+              <span>
+                Roads & Bridges and Drinking Water receive the largest share of sanctioned development. The green bar ensures that public disbursements closely follow verified on-site milestone progress.
+              </span>
             </div>
-          ) : (
-            <div className="mt-3 p-2.5 bg-purple-50/70 dark:bg-purple-950/20 rounded-md border border-purple-200 dark:border-purple-900/40 flex items-start gap-2 text-xs text-gov-slateDark font-mono text-[11px]">
-              <Brain className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-purple-950 dark:text-purple-200">PFMS Reconciliation Ratio: </span>
-                <span className="text-gov-slate">
-                  Mean MB completion-to-release ratio = 0.814. Community Halls display lagging completion delta (Δ = ₹80Cr, 33.3% delayed release variance).
-                </span>
-              </div>
-            </div>
-          )}
+          </div>
         </Card>
 
         {/* Chart 4: Anomalies by State */}
@@ -432,13 +355,13 @@ export const Analytics = () => {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stateRisks} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
                 <XAxis dataKey="code" stroke="#64748B" fontSize={11} />
                 <YAxis stroke="#64748B" fontSize={11} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Projects`, name]}
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '6px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  itemStyle={{ color: '#0F172A' }}
+                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
+                  itemStyle={{ color: '#FFF' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                 <Bar dataKey="anomalies" fill="#D97706" name="Total Anomalies" radius={[3, 3, 0, 0]} />
@@ -447,29 +370,18 @@ export const Analytics = () => {
             </ResponsiveContainer>
           </div>
 
-          {!isExpertMode ? (
-            <div className="mt-3 p-2.5 bg-amber-50/70 dark:bg-amber-950/20 rounded-md border border-amber-200 dark:border-amber-900/40 flex items-start gap-2 text-xs text-gov-slateDark">
-              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-amber-950 dark:text-amber-200">State Oversight: </span>
-                <span className="text-gov-slate">
-                  UP, Bihar, and Maharashtra have the largest number of total projects, which naturally yields higher numbers of checks. Red flags indicate urgent attention needed by district collectors.
-                </span>
-              </div>
+          <div className="mt-3 p-2.5 bg-amber-50/70 dark:bg-amber-950/20 rounded-md border border-amber-200 dark:border-amber-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold text-amber-950 dark:text-amber-200">State Oversight: </span>
+              <span>
+                States with higher sanction volumes naturally record more automated checks. Critical red flags highlight works that require expedited field inspection by district collectors.
+              </span>
             </div>
-          ) : (
-            <div className="mt-3 p-2.5 bg-purple-50/70 dark:bg-purple-950/20 rounded-md border border-purple-200 dark:border-purple-900/40 flex items-start gap-2 text-xs text-gov-slateDark font-mono text-[11px]">
-              <Brain className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-purple-950 dark:text-purple-200">Spatial Autocorrelation: </span>
-                <span className="text-gov-slate">
-                  Moran’s I = +0.31 (p &lt; 0.05), indicating positive spatial clustering in Northern and Eastern regional nodal corridors. Standardized anomaly rate z-score normalized to district tender volume.
-                </span>
-              </div>
-            </div>
-          )}
+          </div>
         </Card>
       </div>
+      </ScrollReveal>
     </PageLayout>
   );
 };

@@ -10,6 +10,39 @@ export const AppProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [toast, setToast] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Global active dropdown for 100% mutual exclusivity across header, topbar, public bars
+  const [activeGlobalDropdown, setActiveGlobalDropdown] = useState(null);
+
+  // Global non-blocking data/route loading state for 3D cube HUD
+  const [isGlobalLoading, setIsGlobalLoading] = useState(false);
+
+  useEffect(() => {
+    localStorage.removeItem('mplads_theme');
+    document.documentElement.classList.remove('dark', 'light', 'aero-theme');
+  }, []);
+
+  const toggleDropdown = (dropdownId) => {
+    setActiveGlobalDropdown(curr => curr === dropdownId ? null : dropdownId);
+  };
+
+  const closeDropdowns = () => {
+    setActiveGlobalDropdown(null);
+  };
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      if (
+        !e.target.closest('[data-dropdown-trigger]') &&
+        !e.target.closest('[data-dropdown-menu]')
+      ) {
+        setActiveGlobalDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleGlobalClick);
+    return () => document.removeEventListener('mousedown', handleGlobalClick);
+  }, []);
 
   useEffect(() => {
     fetchNotifications();
@@ -51,6 +84,12 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
+        activeGlobalDropdown,
+        setActiveGlobalDropdown,
+        toggleDropdown,
+        closeDropdowns,
+        isGlobalLoading,
+        setIsGlobalLoading,
         notifications,
         unreadCount,
         markNotificationAsRead,

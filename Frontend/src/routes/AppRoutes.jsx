@@ -29,6 +29,7 @@ const CitizenReport = lazy(() => import('../pages/CitizenReport/CitizenReport').
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 import { CubeSpinner } from '../components/common/CubeSpinner';
+import { GlobalCubeLoader } from '../components/common/GlobalCubeLoader';
 
 const RouteLoader = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8">
@@ -38,8 +39,10 @@ const RouteLoader = () => (
 
 export const AppRoutes = () => {
   return (
-    <Suspense fallback={<RouteLoader />}>
-      <Routes>
+    <>
+      <GlobalCubeLoader />
+      <Suspense fallback={<RouteLoader />}>
+        <Routes>
         {/* Landing Page */}
         <Route path="/" element={<Home />} />
 
@@ -77,5 +80,6 @@ export const AppRoutes = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
+    </>
   );
 };

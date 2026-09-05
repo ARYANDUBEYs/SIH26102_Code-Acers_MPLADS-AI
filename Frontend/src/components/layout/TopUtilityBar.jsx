@@ -1,12 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, ChevronDown, Volume2 } from 'lucide-react';
 import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext';
+import { useApp } from '../../context/AppContext';
+
+const dropdownVariants = {
+  hidden: { opacity: 0, scaleY: 0.85, originY: 0, y: -4 },
+  visible: {
+    opacity: 1,
+    scaleY: 1,
+    y: 0,
+    transition: {
+      duration: 0.18,
+      ease: [0.16, 1, 0.3, 1],
+      when: 'beforeChildren',
+      staggerChildren: 0.03
+    }
+  },
+  exit: {
+    opacity: 0,
+    scaleY: 0.9,
+    y: -4,
+    transition: { duration: 0.12, ease: 'easeInOut' }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -6 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.15 } },
+  exit: { opacity: 0, x: -6 }
+};
 
 export const TopUtilityBar = ({ onOpenVoiceModal }) => {
   const { currentLanguage, setLanguage } = useLanguage();
+  const { activeGlobalDropdown, toggleDropdown, closeDropdowns } = useApp();
   const location = useLocation();
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [fontSizeLevel, setFontSizeLevel] = useState(0);
   const [isPageLoading, setIsPageLoading] = useState(false);
 
@@ -34,6 +63,8 @@ export const TopUtilityBar = ({ onOpenVoiceModal }) => {
       document.documentElement.style.fontSize = '20px';
     }
   };
+
+  const isLangOpen = activeGlobalDropdown === 'topLang';
 
   return (
     <div className="w-full bg-[#07172B] text-slate-200 border-b border-slate-800 text-[11px] select-none sticky top-0 z-50">
@@ -110,42 +141,57 @@ export const TopUtilityBar = ({ onOpenVoiceModal }) => {
           <div className="relative">
             <button
               type="button"
-              onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-              className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded text-slate-200 transition-all font-semibold cursor-pointer"
+              data-dropdown-trigger="topLang"
+              onClick={() => toggleDropdown('topLang')}
+              className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-all font-semibold cursor-pointer ${
+                isLangOpen
+                  ? 'bg-blue-900/80 text-white border border-blue-400'
+                  : 'bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200'
+              }`}
               title="Select Sovereign Indic Language"
             >
               <Globe className="w-3 h-3 text-emerald-400" />
               <span className="font-mono text-[10px]">{currentLangObj.flag} {currentLangObj.native}</span>
-              <ChevronDown className="w-2.5 h-2.5 text-slate-400" />
+              <ChevronDown className={`w-2.5 h-2.5 text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            {isLangMenuOpen && (
-              <div className="absolute right-0 mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-xl z-50 py-1 divide-y divide-slate-100 max-h-72 overflow-y-auto text-slate-800">
-                <div className="px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50">
-                  Sovereign Indic Languages (8)
-                </div>
-                <div className="py-0.5">
-                  {SUPPORTED_LANGUAGES.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => {
-                        setLanguage(lang.code);
-                        setIsLangMenuOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-1.5 text-xs text-left hover:bg-blue-50 transition-colors cursor-pointer ${
-                        currentLanguage === lang.code ? 'font-bold text-blue-700 bg-blue-50/50' : 'text-slate-700'
-                      }`}
-                    >
-                      <span className="flex items-center gap-2">
-                        <span>{lang.flag}</span>
-                        <span>{lang.native}</span>
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">{lang.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <AnimatePresence>
+              {isLangOpen && (
+                <motion.div
+                  data-dropdown-menu="topLang"
+                  variants={dropdownVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="absolute right-0 mt-1 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-2xl z-50 py-1 divide-y divide-slate-100 dark:divide-slate-800 max-h-72 overflow-y-auto text-slate-800 dark:text-slate-200 origin-top"
+                >
+                  <div className="px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/60">
+                    Sovereign Indic Languages (8)
+                  </div>
+                  <div className="py-0.5">
+                    {SUPPORTED_LANGUAGES.map((lang) => (
+                      <motion.div key={lang.code} variants={itemVariants}>
+                        <button
+                          onClick={() => {
+                            setLanguage(lang.code);
+                            closeDropdowns();
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-1.5 text-xs text-left hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer ${
+                            currentLanguage === lang.code ? 'font-bold text-blue-700 dark:text-blue-400 bg-blue-50/70 dark:bg-blue-950/40' : 'text-slate-700 dark:text-slate-300'
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span>{lang.flag}</span>
+                            <span>{lang.native}</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-slate-400">{lang.name}</span>
+                        </button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
