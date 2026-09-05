@@ -181,12 +181,10 @@ export const Home = () => {
   }, []);
 
   const handleLaunchAdminDemo = () => {
-    switchRole(ROLES.MOSPI_ADMIN);
     navigate('/dashboard');
   };
 
   const handleLaunchCitizenPortal = () => {
-    switchRole(ROLES.CITIZEN);
     navigate('/public');
   };
 

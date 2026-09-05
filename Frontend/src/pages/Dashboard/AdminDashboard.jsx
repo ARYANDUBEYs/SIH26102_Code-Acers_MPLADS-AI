@@ -39,6 +39,7 @@ import {
 
 export const AdminDashboard = () => {
   const { t } = useLanguage();
+  const [viewMode, setViewMode] = useState('expert'); // 'layman' | 'expert'
   const [kpis, setKpis] = useState(null);
   const [highRiskProjects, setHighRiskProjects] = useState([]);
   const [stateRisks, setStateRisks] = useState([]);
@@ -183,7 +184,34 @@ export const AdminDashboard = () => {
         </span>
       }
       actions={
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Layman vs Industry Expert Mode Switcher */}
+          <div className="flex items-center gap-1 p-1 bg-slate-100 border border-slate-300 rounded-lg shadow-inner">
+            <button
+              type="button"
+              onClick={() => setViewMode('layman')}
+              className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                viewMode === 'layman'
+                  ? 'bg-white text-blue-900 shadow-sm border border-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              🌱 Layman View
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('expert')}
+              className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                viewMode === 'expert'
+                  ? 'bg-[#0B2545] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span>🔬 Expert Audit Mode</span>
+            </button>
+          </div>
+
           <Button
             variant="secondary"
             size="sm"
@@ -205,63 +233,65 @@ export const AdminDashboard = () => {
         </div>
       }
     >
-      {/* 6 Executive KPI Cards */}
-      <DashboardStats kpis={kpis || undefined} />
+      <div className="space-y-6">
+        {/* 6 Executive KPI Cards */}
+        <DashboardStats kpis={kpis || undefined} />
 
-      {/* Critical Urgent Investigation Alert Banner */}
-      <div className="p-4 bg-rose-950/20 border border-rose-900/50 rounded-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-1 h-full bg-rose-600" />
-        <div className="flex items-start gap-3 pl-2">
-          <div className="p-2 rounded bg-rose-900/40 text-rose-500 border border-rose-800/50 shrink-0">
-            <ShieldAlert className="w-5 h-5 animate-pulse" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-rose-500 uppercase tracking-wider font-mono">
-                CRITICAL FORENSIC DISCREPANCY DETECTED
-              </span>
-              <span className="px-1.5 py-0.5 text-[9px] font-mono bg-rose-600/20 text-rose-400 border border-rose-600/30 rounded font-bold">
-                87% RISK SCORE
-              </span>
+        {/* Critical Urgent Investigation Alert Banner with Layman / Expert dynamic text */}
+        <div className="p-4 bg-white border border-rose-200 border-l-4 border-l-rose-600 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative overflow-hidden">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 shrink-0 mt-0.5">
+              <ShieldAlert className="w-5 h-5 animate-pulse" />
             </div>
-            <h4 className="text-sm font-bold text-gov-slateDark mt-0.5">
-              Project MPLAD-2026-00124: Rural Road Construction (₹48 Lakhs)
-            </h4>
-            <p className="text-xs text-gov-muted mt-0.5">
-              4 Corroborated Flags: 96% Duplicate Photo match with Jaunpur (Hamming dist: 2), 42% cost inflation, and contractor circular bidding ring.
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black text-rose-700 uppercase tracking-wider font-mono">
+                  CRITICAL FORENSIC DISCREPANCY DETECTED
+                </span>
+                <span className="px-2 py-0.5 text-[10px] font-mono bg-rose-100 text-rose-800 rounded font-bold">
+                  87% RISK SCORE
+                </span>
+              </div>
+              <h4 className="text-sm font-black text-slate-900 mt-1">
+                Project MPLAD-2026-00124: Rural Road Construction & Flood Drainage (₹48.5 Lakhs)
+              </h4>
+              <p className="text-xs text-slate-600 mt-1 leading-relaxed max-w-3xl">
+                {viewMode === 'layman'
+                  ? '⚠️ What happened: This contractor uploaded the exact same photo used for a road in Jaunpur (400km away). Also, estimated costs are 42% higher than standard government rates, and only 1 contractor family won all local tenders.'
+                  : '🔬 Forensic Evidence: OpenCV 64-bit dHash exact collision (Hamming distance = 2 against Solapur archive), 42% cost variance vs regional schedule of rates, and NetworkX Bipartite HHI = 2840 (Syndicate threshold exceeded).'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => handleOpenSlideOver({
+                id: 'MPLAD-2026-00124',
+                name: 'Rural Road Construction & Flood Drainage',
+                constituency: 'Varanasi',
+                district: 'Varanasi',
+                state: 'Uttar Pradesh',
+                sanctionedAmount: 4800000,
+                disbursedAmount: 4100000,
+                physicalProgress: 38,
+                riskScore: 87,
+                contractor: 'Apex Infra & BuildTech Pvt Ltd',
+                hhiScore: 2840,
+                warningTags: ['DUPLICATE_PHOTO_DHASH_EXACT', 'HHI_CARTEL_SYNDICATE_MONOPOLY', 'SLA_BREACH_IMMUTABLE']
+              })}
+              icon={ArrowRight}
+              iconPosition="right"
+              className="w-full sm:w-auto text-xs font-bold"
+            >
+              {t('btn_audit', 'Audit Dossier')}
+            </Button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
-          <Button
-            variant="danger"
-            size="sm"
-            onClick={() => handleOpenSlideOver({
-              id: 'MPLAD-2026-00124',
-              name: 'Rural Road Construction & Flood Drainage',
-              constituency: 'Varanasi',
-              district: 'Varanasi',
-              state: 'Uttar Pradesh',
-              sanctionedAmount: 4800000,
-              disbursedAmount: 4100000,
-              physicalProgress: 38,
-              riskScore: 87,
-              contractor: 'Apex Infra & BuildTech Pvt Ltd',
-              hhiScore: 2840,
-              warningTags: ['DUPLICATE_PHOTO_DHASH_EXACT', 'HHI_CARTEL_SYNDICATE_MONOPOLY', 'SLA_BREACH_IMMUTABLE']
-            })}
-            icon={ArrowRight}
-            iconPosition="right"
-            className="w-full sm:w-auto text-xs"
-          >
-            {t('btn_audit', 'Audit Dossier')}
-          </Button>
-        </div>
-      </div>
-
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-w-0">
         {/* State Anomaly Bar Chart */}
         <Card
           title="Detected Anomalies by State"
@@ -282,6 +312,7 @@ export const AdminDashboard = () => {
                 <XAxis dataKey="code" stroke="#64748B" fontSize={11} tickLine={false} />
                 <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip
+                  formatter={(val, name) => [`${val} Cases`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
@@ -316,6 +347,7 @@ export const AdminDashboard = () => {
                   ))}
                 </Pie>
                 <Tooltip
+                  formatter={(val, name) => [`${val}% of Total Risk`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
@@ -411,6 +443,7 @@ export const AdminDashboard = () => {
           </div>
           <ChevronRight className="w-5 h-5 text-slate-400" />
         </Card>
+      </div>
       </div>
 
       {/* Drill-Down Audit Slide-Over Sheet */}

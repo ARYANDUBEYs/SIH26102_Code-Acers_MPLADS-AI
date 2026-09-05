@@ -24,6 +24,8 @@ import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext'
 import { NotificationDropdown } from './NotificationDropdown';
 import { SarvamIndicModal } from '../sarvam/SarvamIndicModal';
 import { TopUtilityBar } from './TopUtilityBar';
+import { LanguageSelector } from '../common/LanguageSelector';
+import { TextToSpeechButton } from '../common/TextToSpeechButton';
 import { ROLES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
@@ -111,9 +113,15 @@ export const Navbar = () => {
             </button>
           </div>
 
-          {/* Right Actions: Role Switcher, Notifications, User Profile */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right Actions: TTS, Translate, Role Switcher, Notifications, User Profile */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
             
+            {/* Screen Reader & Text-To-Speech (Sitewide) */}
+            <TextToSpeechButton className="hidden md:inline-flex" />
+
+            {/* Sovereign Indic Language Selector (Sitewide) */}
+            <LanguageSelector variant="dark" />
+
             {/* Role Switcher for Hackathon Demo */}
             <div className="relative">
               <button
@@ -199,60 +207,69 @@ export const Navbar = () => {
               <NotificationDropdown isOpen={isNotifOpen} onClose={() => setIsNotifOpen(false)} />
             </div>
 
-            {/* 5. User Avatar & Profile */}
-            <div className="relative">
-              <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2 p-1.5 bg-white/5 border border-white/10 hover:border-white/30 rounded-lg transition-colors cursor-pointer"
+            {/* 5. User Avatar & Profile OR Clean Login Button */}
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="flex items-center gap-2 p-1.5 bg-white/5 border border-white/10 hover:border-white/30 rounded-lg transition-colors cursor-pointer"
+                >
+                  <img
+                    src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
+                    alt={user?.name || 'User'}
+                    className="w-6 h-6 rounded-md object-cover border border-white/20"
+                  />
+                  <span className="hidden md:inline-block text-xs font-semibold text-white truncate max-w-[120px]">
+                    {user?.name?.split(' ')[0]}
+                  </span>
+                  <ChevronDown className="w-3 h-3 text-slate-400" />
+                </button>
+
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100">
+                    <div className="px-4 py-2">
+                      <p className="text-xs font-bold text-slate-900">{user?.name}</p>
+                      <p className="text-[11px] text-slate-500 truncate">{user?.designation || user?.email}</p>
+                      <span className="mt-1.5 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
+                        {user?.badge}
+                      </span>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        <User className="w-3.5 h-3.5 text-slate-500" />
+                        <span>{t('sec_profile', 'Security & Profile')}</span>
+                      </Link>
+                    </div>
+
+                    <div className="pt-1">
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsProfileOpen(false);
+                          navigate('/login');
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left font-medium cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>{t('sign_out', 'Sign Out')}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer whitespace-nowrap"
               >
-                <img
-                  src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
-                  alt={user?.name || 'User'}
-                  className="w-6 h-6 rounded-md object-cover border border-white/20"
-                />
-                <span className="hidden md:inline-block text-xs font-semibold text-white truncate max-w-[120px]">
-                  {user?.name?.split(' ')[0]}
-                </span>
-                <ChevronDown className="w-3 h-3 text-slate-400" />
-              </button>
-
-              {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100">
-                  <div className="px-4 py-2">
-                    <p className="text-xs font-bold text-slate-900">{user?.name}</p>
-                    <p className="text-[11px] text-slate-500 truncate">{user?.designation || user?.email}</p>
-                    <span className="mt-1.5 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
-                      {user?.badge}
-                    </span>
-                  </div>
-
-                  <div className="py-1">
-                    <Link
-                      to="/profile"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                    >
-                      <User className="w-3.5 h-3.5 text-slate-500" />
-                      <span>{t('sec_profile', 'Security & Profile')}</span>
-                    </Link>
-                  </div>
-
-                  <div className="pt-1">
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsProfileOpen(false);
-                        navigate('/login');
-                      }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left font-medium cursor-pointer"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      <span>{t('sign_out', 'Sign Out')}</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                Login
+              </Link>
+            )}
 
           </div>
         </div>

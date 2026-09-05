@@ -10,14 +10,14 @@ export const AuthProvider = ({ children }) => {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        return DEMO_USERS[0];
+        return null;
       }
     }
-    return DEMO_USERS[0]; // Default to MoSPI Admin for seamless demo
+    return null; // Public guest by default
   });
 
   const [role, setRole] = useState(() => {
-    return user?.role || ROLES.MOSPI_ADMIN;
+    return user?.role || ROLES.CITIZEN;
   });
 
   useEffect(() => {

@@ -185,3 +185,103 @@ main, section {
   backface-visibility: hidden;
 }
 
+/* 8. Button & Card Hover Triggered Micro-Animations */
+@keyframes aeroplaneFly {
+  0% { transform: translateX(0); opacity: 1; }
+  45% { transform: translateX(20px); opacity: 0; }
+  46% { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes paperPlaneFly {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  45% { transform: translate(22px, -18px) rotate(15deg); opacity: 0; }
+  46% { transform: translate(-22px, 18px) rotate(-15deg); opacity: 0; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+
+@keyframes eyeIrisScan {
+  0% { transform: translateX(0); fill: transparent; stroke: currentColor; }
+  25% { transform: translateX(3.5px); fill: #ef4444; stroke: #ef4444; }
+  75% { transform: translateX(-3.5px); fill: #ef4444; stroke: #ef4444; }
+  100% { transform: translateX(0); fill: #ef4444; stroke: #ef4444; }
+}
+
+@keyframes soundBarBounce1 {
+  0%, 100% { height: 6px; }
+  50% { height: 16px; }
+}
+@keyframes soundBarBounce2 {
+  0%, 100% { height: 14px; }
+  50% { height: 6px; }
+}
+@keyframes soundBarBounce3 {
+  0%, 100% { height: 8px; }
+  50% { height: 18px; }
+}
+@keyframes soundBarBounce4 {
+  0%, 100% { height: 12px; }
+  50% { height: 6px; }
+}
+
+@keyframes alertExclamationPop {
+  0% { transform: scaleY(1) translateY(0); }
+  50% { transform: scaleY(1.4) translateY(-3px); stroke: #ef4444; }
+  100% { transform: scaleY(1) translateY(0); stroke: #e11d48; }
+}
+
+@keyframes lineDrawSeq1 {
+  0% { stroke-dasharray: 10; stroke-dashoffset: 10; opacity: 0; }
+  40% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes lineDrawSeq2 {
+  0%, 25% { stroke-dasharray: 10; stroke-dashoffset: 10; opacity: 0; }
+  65% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes lineDrawSeq3 {
+  0%, 50% { stroke-dasharray: 6; stroke-dashoffset: 6; opacity: 0; }
+  90% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.group:hover .group-aeroplane-fly {
+  animation: aeroplaneFly 0.65s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.group:hover .group-paperplane-fly {
+  animation: paperPlaneFly 0.75s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.group:hover .group-eye-scan {
+  animation: eyeIrisScan 0.7s ease-in-out infinite;
+}
+
+.group:hover .group-soundbar-1 {
+  animation: soundBarBounce1 0.5s ease-in-out infinite;
+}
+.group:hover .group-soundbar-2 {
+  animation: soundBarBounce2 0.45s ease-in-out infinite 0.1s;
+}
+.group:hover .group-soundbar-3 {
+  animation: soundBarBounce3 0.55s ease-in-out infinite 0.15s;
+}
+.group:hover .group-soundbar-4 {
+  animation: soundBarBounce4 0.5s ease-in-out infinite 0.05s;
+}
+
+.group:hover .group-alert-pop {
+  animation: alertExclamationPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+.group:hover .group-line-draw-1 {
+  animation: lineDrawSeq1 0.7s ease-out infinite;
+}
+.group:hover .group-line-draw-2 {
+  animation: lineDrawSeq2 0.7s ease-out infinite;
+}
+.group:hover .group-line-draw-3 {
+  animation: lineDrawSeq3 0.7s ease-out infinite;
+}
+
