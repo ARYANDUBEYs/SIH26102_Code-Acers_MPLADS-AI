@@ -153,7 +153,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         </div>
 
         {/* ================================================================ */}
-        {/* COLUMN 2: The Core Processing Engine (The Math)                  */}
+        {/* COLUMN 2: Machine Learning Models & Triage Intelligence         */}
         {/* ================================================================ */}
         <div className="bg-gov-surface border border-gov-border rounded-md p-5 shadow-sm flex flex-col justify-between space-y-4 hover:border-slate-300 transition-colors">
           <div className="space-y-4">
@@ -162,14 +162,14 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700">
-                    <Calculator className="w-4 h-4" />
+                    <Cpu className="w-4 h-4" />
                   </div>
                   <h3 className="text-sm font-black text-[#0B2545] uppercase tracking-wide">
-                    {t('arch_col2_title', 'The Core Processing Engine (The Math)')}
+                    {t('arch_col2_title', 'ML Models & Anomaly Detection')}
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-500">
-                  {t('arch_col2_sub', 'Mathematical formulation and high-speed API microservices')}
+                  {t('arch_col2_sub', 'Ensemble machine learning for unsupervised anomaly & supervised risk ranking')}
                 </p>
               </div>
               <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 rounded">
@@ -177,43 +177,58 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </span>
             </div>
 
-            {/* Feature 1: The Weighted Formula */}
-            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2.5">
+            {/* Feature 1: Isolation Forest (Unsupervised) */}
+            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-900">
-                  {t('arch_col2_f1_title', 'Mathematical Risk Engine Formula')}
-                </span>
-                <span className="text-[10px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 border border-blue-200 rounded font-bold">
-                  Scale 0–100
+                <div className="flex items-center gap-1.5">
+                  <Binary className="w-3.5 h-3.5 text-indigo-600" />
+                  <span className="text-xs font-bold text-slate-900">
+                    Isolation Forest
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 border border-indigo-200 rounded font-bold">
+                  Unsupervised Anomaly
                 </span>
               </div>
-              
-              {/* Formula Code Box */}
-              <div className="p-2.5 bg-slate-900 text-slate-100 rounded-md font-mono text-xs overflow-x-auto shadow-inner border border-slate-800">
-                <code className="text-emerald-400 font-bold">R = 0.35F + 0.25T + 0.20I + 0.20C</code>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-600 font-mono">
-                <div className="p-1.5 bg-white border border-slate-200 rounded">
-                  <span className="font-bold text-slate-900">F (35%):</span> Financial variance
-                </div>
-                <div className="p-1.5 bg-white border border-slate-200 rounded">
-                  <span className="font-bold text-slate-900">T (25%):</span> Timeline SLA delay
-                </div>
-                <div className="p-1.5 bg-white border border-slate-200 rounded">
-                  <span className="font-bold text-slate-900">I (20%):</span> Photo dHash match
-                </div>
-                <div className="p-1.5 bg-white border border-slate-200 rounded">
-                  <span className="font-bold text-slate-900">C (20%):</span> Cartel monopoly HHI
-                </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                Partitions high-dimensional financial velocity and disbursement irregularities by recursive random splitting. Isolates subtle expenditure anomalies with zero dependency on prior fraud labels.
+              </p>
+              <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 font-mono text-[10px] text-slate-500">
+                <span>Kernel: Tree Ensembles</span>
+                <span className="text-indigo-700 font-semibold">Contamination: 0.05</span>
               </div>
             </div>
 
-            {/* Feature 2: Triage Classification */}
+            {/* Feature 2: XGBoost Classifier (Supervised) */}
             <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
-              <span className="text-xs font-bold text-slate-900 block">
-                {t('arch_col2_f2_title', 'Categorized Triage Tiers')}
-              </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-amber-600" />
+                  <span className="text-xs font-bold text-slate-900">
+                    XGBoost Classifier
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 border border-amber-200 rounded font-bold">
+                  Gradient Boosted Risk
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                Evaluates 24 multi-factor features across milestone completion slippage, contractor cartel concentration (HHI), and audit logs to output a calibrated 0–100 risk probability with explainable SHAP weights.
+              </p>
+              <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 font-mono text-[10px] text-slate-500">
+                <span>Objective: binary:logistic</span>
+                <span className="text-amber-700 font-semibold">AUC-ROC: 0.942</span>
+              </div>
+            </div>
+
+            {/* Feature 3: Categorized Triage Tiers */}
+            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-900 block">
+                  {t('arch_col2_f2_title', 'Categorized Triage Tiers')}
+                </span>
+                <span className="text-[9px] font-mono text-slate-500">Continuous Evaluation</span>
+              </div>
               <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] font-bold font-mono">
                 <div className="p-2 rounded bg-rose-50 border border-rose-200 text-rose-800">
                   <div>🔴 High Risk</div>
@@ -229,37 +244,15 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
                 </div>
               </div>
             </div>
-
-            {/* Feature 3: Live FastAPI Endpoints */}
-            <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-900">
-                  {t('arch_col2_f3_title', 'Live RESTful API (FastAPI)')}
-                </span>
-                <span className="text-[10px] font-mono text-slate-500">Uvicorn Port 8000</span>
-              </div>
-              <div className="space-y-1 font-mono text-[10px] text-slate-700">
-                <div className="flex items-center justify-between p-1 bg-white border border-slate-200 rounded">
-                  <span className="text-blue-700 font-bold">GET /api/v1/projects</span>
-                  <span className="text-slate-400">200 OK • 18ms</span>
-                </div>
-                <div className="flex items-center justify-between p-1 bg-white border border-slate-200 rounded">
-                  <span className="text-emerald-700 font-bold">POST /api/v1/analyze-image</span>
-                  <span className="text-slate-400">200 OK • 42ms</span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <a
-            href="https://mplads-ai-backend-brqi.onrender.com/docs"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/analytics"
             className="w-full py-2 px-3 text-xs font-semibold text-indigo-700 hover:text-indigo-900 bg-indigo-50/80 hover:bg-indigo-100 border border-indigo-200 rounded-lg flex items-center justify-center gap-1.5 transition-colors"
           >
-            <span>Inspect Swagger API Docs</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
+            <span>Inspect Model Performance & Analytics</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         {/* ================================================================ */}

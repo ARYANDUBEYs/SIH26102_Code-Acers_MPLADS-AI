@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldCheck,
   Search,
@@ -15,7 +16,6 @@ import {
   Building2,
   MapPin,
   Globe,
-  Volume2,
   Home
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -24,28 +24,60 @@ import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext'
 import { NotificationDropdown } from './NotificationDropdown';
 import { SarvamIndicModal } from '../sarvam/SarvamIndicModal';
 import { TopUtilityBar } from './TopUtilityBar';
-import { LanguageSelector } from '../common/LanguageSelector';
-import { TextToSpeechButton } from '../common/TextToSpeechButton';
 import { ROLES } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
+
+const dropdownVariants = {
+  hidden: { opacity: 0, scaleY: 0.85, originY: 0, y: -4 },
+  visible: {
+    opacity: 1,
+    scaleY: 1,
+    y: 0,
+    transition: {
+      duration: 0.18,
+      ease: [0.16, 1, 0.3, 1],
+      when: 'beforeChildren',
+      staggerChildren: 0.04
+    }
+  },
+  exit: {
+    opacity: 0,
+    scaleY: 0.9,
+    y: -4,
+    transition: { duration: 0.12, ease: 'easeInOut' }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -6 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.15 } },
+  exit: { opacity: 0, x: -6 }
+};
 
 export const Navbar = () => {
   const { user, role, switchRole, logout } = useAuth();
   const { unreadCount, setIsSearchOpen, isMobileMenuOpen, setIsMobileMenuOpen } = useApp();
   const { currentLanguage, setLanguage, t } = useLanguage();
 
-  const [isNotifOpen, setIsNotifOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'role' | 'profile' | 'notif' | null
   const [isIndicModalOpen, setIsIndicModalOpen] = useState(false);
+  const navContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const currentLangObj = SUPPORTED_LANGUAGES.find(l => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (navContainerRef.current && !navContainerRef.current.contains(e.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   const handleRoleChange = (newRole) => {
     switchRole(newRole);
-    setIsRoleMenuOpen(false);
+    setActiveDropdown(null);
     if (newRole === ROLES.CITIZEN) {
       navigate('/public');
     } else if (newRole === ROLES.DISTRICT_OFFICER) {
@@ -113,21 +145,20 @@ export const Navbar = () => {
             </button>
           </div>
 
-          {/* Right Actions: TTS, Translate, Role Switcher, Notifications, User Profile */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Right Actions: Role Switcher, Notifications, User Profile (Mutual Exclusivity & Staggered Motion) */}
+          <div ref={navContainerRef} className="flex items-center gap-2 sm:gap-2.5">
             
-            {/* Screen Reader & Text-To-Speech (Sitewide) */}
-            <TextToSpeechButton className="hidden md:inline-flex" />
-
-            {/* Sovereign Indic Language Selector (Sitewide) */}
-            <LanguageSelector variant="dark" />
-
             {/* Role Switcher for Hackathon Demo */}
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setIsRoleMenuOpen(!isRoleMenuOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 border border-white/10 hover:border-white/30 rounded-lg text-xs text-slate-200 hover:text-white transition-all shadow-sm cursor-pointer"
+                onClick={() => setActiveDropdown(prev => prev === 'role' ? null : 'role')}
+                className={cn(
+                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs transition-all shadow-sm cursor-pointer",
+                  activeDropdown === 'role'
+                    ? "bg-white/20 border-white/40 text-white"
+                    : "bg-white/10 border border-white/10 hover:border-white/30 text-slate-200 hover:text-white"
+                )}
                 title="Switch Role for Demo"
               >
                 <Layers className="w-3.5 h-3.5 text-gov-saffron" />
@@ -135,67 +166,87 @@ export const Navbar = () => {
                 <span className="font-semibold text-white truncate max-w-[120px]">
                   {role === ROLES.MOSPI_ADMIN ? t('role_admin', 'MoSPI Admin') : role === ROLES.DISTRICT_OFFICER ? t('role_district', 'District Officer') : t('role_citizen', 'Citizen Portal')}
                 </span>
-                <ChevronDown className="w-3 h-3 text-slate-400" />
+                <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeDropdown === 'role' && "rotate-180")} />
               </button>
 
-              {isRoleMenuOpen && (
-                <div className="absolute right-0 mt-2 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 divide-y divide-slate-100">
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    {t('role_persona', 'Active Authority Persona')}
-                  </div>
-                  <div className="py-1">
-                    <button
-                      onClick={() => handleRoleChange(ROLES.MOSPI_ADMIN)}
-                      className={cn(
-                        'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                        role === ROLES.MOSPI_ADMIN ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
-                      )}
-                    >
-                      <Building2 className="w-4 h-4 text-blue-700" />
-                      <div>
-                        <div>{t('role_admin', 'MoSPI Central Auditor')}</div>
-                        <div className="text-[10px] text-slate-500">{t('role_admin_sub', 'National oversight & cartels')}</div>
-                      </div>
-                    </button>
+              <AnimatePresence>
+                {activeDropdown === 'role' && (
+                  <motion.div
+                    variants={dropdownVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="absolute right-0 mt-2 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 divide-y divide-slate-100 origin-top overflow-hidden"
+                  >
+                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {t('role_persona', 'Active Authority Persona')}
+                    </div>
+                    <div className="py-1">
+                      <motion.div variants={itemVariants}>
+                        <button
+                          onClick={() => handleRoleChange(ROLES.MOSPI_ADMIN)}
+                          className={cn(
+                            'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
+                            role === ROLES.MOSPI_ADMIN ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                          )}
+                        >
+                          <Building2 className="w-4 h-4 text-blue-700" />
+                          <div>
+                            <div>{t('role_admin', 'MoSPI Central Auditor')}</div>
+                            <div className="text-[10px] text-slate-500">{t('role_admin_sub', 'National oversight & cartels')}</div>
+                          </div>
+                        </button>
+                      </motion.div>
 
-                    <button
-                      onClick={() => handleRoleChange(ROLES.DISTRICT_OFFICER)}
-                      className={cn(
-                        'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                        role === ROLES.DISTRICT_OFFICER ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
-                      )}
-                    >
-                      <MapPin className="w-4 h-4 text-amber-600" />
-                      <div>
-                        <div>{t('role_district', 'District Officer (DM/Varanasi)')}</div>
-                        <div className="text-[10px] text-slate-500">{t('role_district_sub', 'SLA alerts & photo verification')}</div>
-                      </div>
-                    </button>
+                      <motion.div variants={itemVariants}>
+                        <button
+                          onClick={() => handleRoleChange(ROLES.DISTRICT_OFFICER)}
+                          className={cn(
+                            'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
+                            role === ROLES.DISTRICT_OFFICER ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                          )}
+                        >
+                          <MapPin className="w-4 h-4 text-amber-600" />
+                          <div>
+                            <div>{t('role_district', 'District Officer (DM/Varanasi)')}</div>
+                            <div className="text-[10px] text-slate-500">{t('role_district_sub', 'SLA alerts & photo verification')}</div>
+                          </div>
+                        </button>
+                      </motion.div>
 
-                    <button
-                      onClick={() => handleRoleChange(ROLES.CITIZEN)}
-                      className={cn(
-                        'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
-                        role === ROLES.CITIZEN ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
-                      )}
-                    >
-                      <User className="w-4 h-4 text-emerald-600" />
-                      <div>
-                        <div>{t('role_citizen', 'Public / Citizen Portal')}</div>
-                        <div className="text-[10px] text-slate-500">{t('role_citizen_sub', 'Project search & grievance filing')}</div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              )}
+                      <motion.div variants={itemVariants}>
+                        <button
+                          onClick={() => handleRoleChange(ROLES.CITIZEN)}
+                          className={cn(
+                            'w-full flex items-center gap-2.5 px-3 py-2 text-xs text-left transition-colors cursor-pointer',
+                            role === ROLES.CITIZEN ? 'bg-blue-50 text-blue-800 font-semibold' : 'text-slate-700 hover:bg-slate-50'
+                          )}
+                        >
+                          <User className="w-4 h-4 text-emerald-600" />
+                          <div>
+                            <div>{t('role_citizen', 'Public / Citizen Portal')}</div>
+                            <div className="text-[10px] text-slate-500">{t('role_citizen_sub', 'Project search & grievance filing')}</div>
+                          </div>
+                        </button>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* 4. Notification Bell */}
+            {/* Notification Bell */}
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setIsNotifOpen(!isNotifOpen)}
-                className="relative p-2 text-slate-300 hover:text-white bg-white/5 border border-white/10 hover:border-white/30 rounded-lg transition-colors cursor-pointer"
+                onClick={() => setActiveDropdown(prev => prev === 'notif' ? null : 'notif')}
+                className={cn(
+                  "relative p-2 rounded-lg transition-colors cursor-pointer",
+                  activeDropdown === 'notif'
+                    ? "bg-white/20 text-white border border-white/40"
+                    : "text-slate-300 hover:text-white bg-white/5 border border-white/10 hover:border-white/30"
+                )}
+                title="Intelligence Alerts"
               >
                 <Bell className="w-4 h-4" />
                 {unreadCount > 0 && (
@@ -204,15 +255,20 @@ export const Navbar = () => {
                   </span>
                 )}
               </button>
-              <NotificationDropdown isOpen={isNotifOpen} onClose={() => setIsNotifOpen(false)} />
+              <NotificationDropdown isOpen={activeDropdown === 'notif'} onClose={() => setActiveDropdown(null)} />
             </div>
 
-            {/* 5. User Avatar & Profile OR Clean Login Button */}
+            {/* User Avatar & Profile OR Clean Login Button */}
             {user ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center gap-2 p-1.5 bg-white/5 border border-white/10 hover:border-white/30 rounded-lg transition-colors cursor-pointer"
+                  onClick={() => setActiveDropdown(prev => prev === 'profile' ? null : 'profile')}
+                  className={cn(
+                    "flex items-center gap-2 p-1.5 rounded-lg transition-colors cursor-pointer",
+                    activeDropdown === 'profile'
+                      ? "bg-white/20 border border-white/40"
+                      : "bg-white/5 border border-white/10 hover:border-white/30"
+                  )}
                 >
                   <img
                     src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
@@ -222,45 +278,55 @@ export const Navbar = () => {
                   <span className="hidden md:inline-block text-xs font-semibold text-white truncate max-w-[120px]">
                     {user?.name?.split(' ')[0]}
                   </span>
-                  <ChevronDown className="w-3 h-3 text-slate-400" />
+                  <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeDropdown === 'profile' && "rotate-180")} />
                 </button>
 
-                {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100">
-                    <div className="px-4 py-2">
-                      <p className="text-xs font-bold text-slate-900">{user?.name}</p>
-                      <p className="text-[11px] text-slate-500 truncate">{user?.designation || user?.email}</p>
-                      <span className="mt-1.5 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
-                        {user?.badge}
-                      </span>
-                    </div>
+                <AnimatePresence>
+                  {activeDropdown === 'profile' && (
+                    <motion.div
+                      variants={dropdownVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100 origin-top overflow-hidden"
+                    >
+                      <motion.div variants={itemVariants} className="px-4 py-2">
+                        <p className="text-xs font-bold text-slate-900">{user?.name}</p>
+                        <p className="text-[11px] text-slate-500 truncate">{user?.designation || user?.email}</p>
+                        <span className="mt-1.5 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
+                          {user?.badge}
+                        </span>
+                      </motion.div>
 
-                    <div className="py-1">
-                      <Link
-                        to="/profile"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                      >
-                        <User className="w-3.5 h-3.5 text-slate-500" />
-                        <span>{t('sec_profile', 'Security & Profile')}</span>
-                      </Link>
-                    </div>
+                      <div className="py-1">
+                        <motion.div variants={itemVariants}>
+                          <Link
+                            to="/profile"
+                            onClick={() => setActiveDropdown(null)}
+                            className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
+                          >
+                            <User className="w-3.5 h-3.5 text-slate-500" />
+                            <span>{t('sec_profile', 'Security & Profile')}</span>
+                          </Link>
+                        </motion.div>
+                      </div>
 
-                    <div className="pt-1">
-                      <button
-                        onClick={() => {
-                          logout();
-                          setIsProfileOpen(false);
-                          navigate('/login');
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left font-medium cursor-pointer"
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        <span>{t('sign_out', 'Sign Out')}</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
+                      <motion.div variants={itemVariants} className="pt-1">
+                        <button
+                          onClick={() => {
+                            logout();
+                            setActiveDropdown(null);
+                            navigate('/login');
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left font-medium cursor-pointer"
+                        >
+                          <LogOut className="w-3.5 h-3.5" />
+                          <span>{t('sign_out', 'Sign Out')}</span>
+                        </button>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
               <Link

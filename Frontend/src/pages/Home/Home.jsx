@@ -193,9 +193,13 @@ export const Home = () => {
     setIsSlideOverOpen(true);
   };
 
+  const isManualScrollRef = useRef(false);
+  const manualScrollTimerRef = useRef(null);
+
   // Scroll-spy listener: automatically update activeNav as user scrolls through sections
   useEffect(() => {
     const handleScroll = () => {
+      if (isManualScrollRef.current) return;
       const scrollPosition = window.scrollY + 180;
       const aboutElem = document.getElementById('aboutus');
       const methodologyElem = document.getElementById('methodology');
@@ -210,11 +214,20 @@ export const Home = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
+    };
   }, []);
 
   const scrollToSection = (id, navKey) => {
     setActiveNav(navKey);
+    isManualScrollRef.current = true;
+    if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
+    manualScrollTimerRef.current = setTimeout(() => {
+      isManualScrollRef.current = false;
+    }, 850);
+
     const elem = document.getElementById(id);
     if (elem) {
       const headerOffset = 115;
@@ -269,6 +282,11 @@ export const Home = () => {
               type="button"
               onClick={() => {
                 setActiveNav('home');
+                isManualScrollRef.current = true;
+                if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
+                manualScrollTimerRef.current = setTimeout(() => {
+                  isManualScrollRef.current = false;
+                }, 850);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-colors duration-200 z-10 cursor-pointer ${
@@ -438,9 +456,9 @@ export const Home = () => {
             className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white"
           >
             MPLADS:{' '}
-            <span className="text-[#F6C85F]">From Local Priorities</span>{' '}
-            to{' '}
-            <span className="text-[#6EE7B7]">National Development</span>
+            <span className="hero-tricolor-text inline-block">
+              From Local Priorities to National Development
+            </span>
           </motion.h1>
 
           {/* Reference subtitle */}

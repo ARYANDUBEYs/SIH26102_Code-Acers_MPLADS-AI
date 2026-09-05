@@ -28,13 +28,11 @@ const CitizenReport = lazy(() => import('../pages/CitizenReport/CitizenReport').
 
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { ProtectedRoute } from './ProtectedRoute';
+import { CubeSpinner } from '../components/common/CubeSpinner';
 
 const RouteLoader = () => (
-  <div className="min-h-[50vh] flex flex-col items-center justify-center p-8">
-    <div className="w-8 h-8 border-3 border-gov-border border-t-gov-navy rounded-full animate-spin" />
-    <span className="mt-3 text-xs font-semibold text-gov-slate uppercase tracking-wider">
-      Loading MoSPI Sentinel View...
-    </span>
+  <div className="min-h-[60vh] flex flex-col items-center justify-center p-8">
+    <CubeSpinner text="Loading MoSPI Sentinel Intelligence Engine..." />
   </div>
 );
 

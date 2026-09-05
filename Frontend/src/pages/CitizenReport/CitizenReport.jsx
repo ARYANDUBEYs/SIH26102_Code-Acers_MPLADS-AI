@@ -17,6 +17,7 @@ import {
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { api } from '../../services/api';
+import { PublicHeader } from '../../components/layout/PublicHeader';
 
 export const CitizenReport = () => {
   const [projectId, setProjectId] = useState('MPLAD-2026-00124');
