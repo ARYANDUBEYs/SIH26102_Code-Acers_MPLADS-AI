@@ -93,12 +93,18 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
 
   const t = TRANSLATIONS[selectedLang] || TRANSLATIONS['hi-IN'];
 
+  const [isReadingPage, setIsReadingPage] = useState(false);
+
   const handleSpeak = () => {
     if ('speechSynthesis' in window) {
       if (isPlaying) {
         window.speechSynthesis.cancel();
         setIsPlaying(false);
         return;
+      }
+      if (isReadingPage) {
+        window.speechSynthesis.cancel();
+        setIsReadingPage(false);
       }
       const utterance = new SpeechSynthesisUtterance(t.auditBody);
       utterance.lang = selectedLang;
@@ -110,6 +116,44 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
     } else {
       alert('Browser speech synthesis is not supported on this device.');
     }
+  };
+
+  const handleReadPage = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Browser speech synthesis is not supported on this device.');
+      return;
+    }
+
+    if (isReadingPage) {
+      window.speechSynthesis.cancel();
+      setIsReadingPage(false);
+      return;
+    }
+
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+    }
+
+    // Collect headings and paragraphs from current document
+    const elements = document.querySelectorAll('h1, h2, h3, p');
+    const texts = Array.from(elements)
+      .map(el => el.innerText?.trim())
+      .filter(txt => txt && txt.length > 5)
+      .slice(0, 16)
+      .join('. ');
+
+    if (!texts) return;
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(texts);
+    utterance.lang = selectedLang || 'en-IN';
+    utterance.rate = 0.92;
+    utterance.onend = () => setIsReadingPage(false);
+    utterance.onerror = () => setIsReadingPage(false);
+
+    setIsReadingPage(true);
+    window.speechSynthesis.speak(utterance);
   };
 
   const handleAnalyzeGrievance = (text) => {
@@ -148,10 +192,12 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
           </div>
           <button 
             onClick={() => {
-              if (isPlaying && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+              if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+              setIsPlaying(false);
+              setIsReadingPage(false);
               onClose();
             }}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -223,6 +269,40 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
                 Powered by Sarvam Bulbul:v1 TTS
               </span>
             </div>
+          </div>
+
+          {/* Sovereign Web Speech API Screen Reader (Read Entire Current Page) */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+            <div className="space-y-0.5">
+              <h4 className="text-xs font-bold text-[#0B2545] flex items-center gap-1.5">
+                <Volume2 className="w-4 h-4 text-blue-600 shrink-0" />
+                <span>Screen Reader • Read Current Page Aloud</span>
+              </h4>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                Audible narration of all active headers, financial data, and vigilance metrics on your current page in {SUPPORTED_LANGUAGES.find(l => l.code === selectedLang)?.name || 'English'}.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleReadPage}
+              className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm ${
+                isReadingPage
+                  ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse'
+                  : 'bg-[#0B2545] hover:bg-blue-900 text-white'
+              }`}
+            >
+              {isReadingPage ? (
+                <>
+                  <VolumeX className="w-4 h-4" />
+                  <span>Stop Reading</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-4 h-4" />
+                  <span>Read Page Aloud</span>
+                </>
+              )}
+            </button>
           </div>
 
           {/* Citizen Vernacular Voice Grievance Simulator */}

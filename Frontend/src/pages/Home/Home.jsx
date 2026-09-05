@@ -193,11 +193,37 @@ export const Home = () => {
     setIsSlideOverOpen(true);
   };
 
+  // Scroll-spy listener: automatically update activeNav as user scrolls through sections
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 180;
+      const aboutElem = document.getElementById('aboutus');
+      const methodologyElem = document.getElementById('methodology');
+
+      if (aboutElem && scrollPosition >= aboutElem.offsetTop) {
+        setActiveNav('about');
+      } else if (methodologyElem && scrollPosition >= methodologyElem.offsetTop) {
+        setActiveNav('methodology');
+      } else {
+        setActiveNav('home');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToSection = (id, navKey) => {
     setActiveNav(navKey);
     const elem = document.getElementById(id);
     if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
+      const headerOffset = 115;
+      const elementPosition = elem.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -236,8 +262,8 @@ export const Home = () => {
             </div>
           </div>
 
-          {/* Authentic Clean Navigation Links with Circular Indicators & Smooth Animated Tabs */}
-          <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100/80 p-1 rounded-full border border-slate-200">
+          {/* Authentic Clean Navigation Links with Sliding Cylinder Indicator & Scroll-Spy */}
+          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-slate-700 bg-slate-100/90 p-1 rounded-full border border-slate-200 shadow-inner">
             {/* 1. Home */}
             <button
               type="button"
@@ -245,12 +271,17 @@ export const Home = () => {
                 setActiveNav('home');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-300 ${
-                activeNav === 'home'
-                  ? 'bg-[#0B2545] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-colors duration-200 z-10 cursor-pointer ${
+                activeNav === 'home' ? 'text-white' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
+              {activeNav === 'home' && (
+                <motion.div
+                  layoutId="homeNavIndicator"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   activeNav === 'home' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
@@ -259,16 +290,21 @@ export const Home = () => {
               <span>Home</span>
             </button>
 
-            {/* 2. Methodology & Working Principle (Positioned between Home and About Scheme) */}
+            {/* 2. Methodology & Working Principle */}
             <button
               type="button"
               onClick={() => scrollToSection('methodology', 'methodology')}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-300 ${
-                activeNav === 'methodology'
-                  ? 'bg-[#0B2545] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-colors duration-200 z-10 cursor-pointer ${
+                activeNav === 'methodology' ? 'text-white' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
+              {activeNav === 'methodology' && (
+                <motion.div
+                  layoutId="homeNavIndicator"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   activeNav === 'methodology' ? 'bg-cyan-400 scale-100' : 'bg-slate-400 scale-75'
@@ -281,12 +317,17 @@ export const Home = () => {
             <button
               type="button"
               onClick={() => scrollToSection('aboutus', 'about')}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-300 ${
-                activeNav === 'about'
-                  ? 'bg-[#0B2545] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-colors duration-200 z-10 cursor-pointer ${
+                activeNav === 'about' ? 'text-white' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
+              {activeNav === 'about' && (
+                <motion.div
+                  layoutId="homeNavIndicator"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   activeNav === 'about' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
@@ -721,58 +762,63 @@ export const Home = () => {
       </section>
 
       {/* 6. Methodology & Working Principle Section (Systemic Vulnerabilities + Algorithmic Vigilance) */}
-      <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 mb-20 space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold font-mono">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            <span>e-SAKSHI 2.0 AI Sentinel Layer — Core Methodology & Working Principles</span>
-          </div>
-          <TypewriterHeading
-            text="Algorithmic Vigilance & Systemic Vulnerability Mitigations"
-            className="text-2xl sm:text-4xl font-black text-[#0B2545] min-h-[44px]"
-          />
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            From mathematical risk formulas and computer vision forensics to rigorous defenses against GPS spoofing, human-in-the-loop bribery, and synthetic image fraud.
-          </p>
-        </div>
-
-        {/* Part A: Systemic Vulnerabilities & Countermeasures Matrix */}
-        <SystemicVulnerabilitiesFramework />
-
-        {/* Part B: Three-Column Core Intelligence Engine */}
-        <div className="pt-8">
-          <div className="mb-6">
-            <h3 className="text-lg font-black text-[#0B2545] flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-              <span>Three-Column Continuous Audit Architecture</span>
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Live interactive demonstration of OpenCV 64-bit dHash perceptual hashing, NetworkX cartel analyzers, and composite risk scoring formulas.
+      <section id="methodology" className="w-full bg-[#F3F6F9] border-t border-b border-slate-300/80 py-16 mb-0 scroll-mt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold font-mono shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+              <span>e-SAKSHI 2.0 AI Sentinel Layer — Core Methodology & Working Principles</span>
+            </div>
+            <TypewriterHeading
+              text="Algorithmic Vigilance & Systemic Vulnerability Mitigations"
+              className="text-2xl sm:text-4xl font-black text-[#0B2545] min-h-[44px]"
+            />
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              From mathematical risk formulas and computer vision forensics to rigorous defenses against GPS spoofing, human-in-the-loop bribery, and synthetic image fraud.
             </p>
           </div>
 
-          <ThreeColumnArchitecture
-            onOpenSlideOver={() => handleOpenSlideOver({
-              id: 'MPLAD-2026-00124',
-              title: 'Construction of Sub-District Health Center & Oxygen Plant',
-              district: 'Nandurbar',
-              state: 'Maharashtra',
-              sanctionedAmount: 4850000,
-              disbursedAmount: 3637500,
-              spentAmount: 3880000,
-              status: 'IN_PROGRESS',
-              riskScore: 87,
-              riskLevel: 'HIGH',
-              contractor: 'Apex Infra & BuildTech Pvt Ltd',
-              flags: ['Duplicate Photo Reused from Solapur', 'Financial Drift +5.0%']
-            })}
-            onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
-          />
+          {/* Part A: Systemic Vulnerabilities & Countermeasures Matrix */}
+          <SystemicVulnerabilitiesFramework />
+
+          {/* Part B: Three-Column Core Intelligence Engine */}
+          <div className="pt-8">
+            <div className="mb-6">
+              <h3 className="text-lg font-black text-[#0B2545] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                <span>Three-Column Continuous Audit Architecture</span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Live interactive demonstration of OpenCV 64-bit dHash perceptual hashing, NetworkX cartel analyzers, and composite risk scoring formulas.
+              </p>
+            </div>
+
+            <ThreeColumnArchitecture
+              onOpenSlideOver={() => handleOpenSlideOver({
+                id: 'MPLAD-2026-00124',
+                title: 'Construction of Sub-District Health Center & Oxygen Plant',
+                district: 'Nandurbar',
+                state: 'Maharashtra',
+                sanctionedAmount: 4850000,
+                disbursedAmount: 3637500,
+                spentAmount: 3880000,
+                status: 'IN_PROGRESS',
+                riskScore: 87,
+                riskLevel: 'HIGH',
+                contractor: 'Apex Infra & BuildTech Pvt Ltd',
+                flags: ['Duplicate Photo Reused from Solapur', 'Financial Drift +5.0%']
+              })}
+              onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+            />
+          </div>
         </div>
       </section>
 
+      {/* Institutional Boundary Divider Between Methodology and Statutory Overview */}
+      <div className="w-full bg-slate-200 h-1.5 bg-gradient-to-r from-amber-400/50 via-slate-300 to-emerald-500/50" />
+
       {/* 7. Statutory "About the Scheme" Section (Verbatim e-SAKSHI Narrative) */}
-      <section id="aboutus" className="bg-white border-y border-slate-200 py-24 px-4 sm:px-6 lg:px-8">
+      <section id="aboutus" className="w-full bg-white border-b border-slate-200 py-24 px-4 sm:px-6 lg:px-8 scroll-mt-32">
         <div className="max-w-6xl mx-auto space-y-16">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">

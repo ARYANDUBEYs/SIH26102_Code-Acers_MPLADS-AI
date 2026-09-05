@@ -26,7 +26,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
 
   if (!isOpen) return null;
 
-  const demoProject = project || {
+  const demoProject = {
     id: 'MPLAD-2026-00124',
     name: 'Construction of Community Center & Flood Drainage Channel',
     constituency: 'Varanasi',
@@ -41,11 +41,10 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
     contractor: 'Apex Infra & BuildTech Pvt Ltd',
     hhiScore: 2840,
     dHashMatch: 88.5,
-    warningTags: [
-      'DUPLICATE_PHOTO_DHASH_EXACT',
-      'HHI_CARTEL_SYNDICATE_MONOPOLY',
-      'SLA_BREACH_IMMUTABLE'
-    ]
+    ...(project || {}),
+    warningTags: (project?.warningTags && Array.isArray(project.warningTags) && project.warningTags.length > 0)
+      ? project.warningTags
+      : ['DUPLICATE_PHOTO_DHASH_EXACT', 'HHI_CARTEL_SYNDICATE_MONOPOLY', 'SLA_BREACH_IMMUTABLE']
   };
 
   return (
@@ -211,7 +210,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
                   Active Automated Warning Tags
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {demoProject.warningTags.map((tag) => (
+                  {(demoProject.warningTags || []).map((tag) => (
                     <span
                       key={tag}
                       className="px-2 py-1 text-[10px] font-mono font-bold bg-slate-100 text-slate-800 border border-slate-300 rounded"

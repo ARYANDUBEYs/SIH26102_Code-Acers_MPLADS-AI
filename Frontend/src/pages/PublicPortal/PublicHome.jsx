@@ -16,6 +16,7 @@ import {
   Home
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
+import { PublicHeader } from '../../components/layout/PublicHeader';
 import { api } from '../../services/api';
 import { formatINR, formatDate } from '../../utils/helpers';
 
@@ -24,16 +25,23 @@ export const PublicHome = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState('ALL');
   const [sortBy, setSortBy] = useState('default');
+  const [stats, setStats] = useState({ total: 0, completed: 0, ongoing: 0, expenditure: 0 });
+  const [activeTab, setActiveTab] = useState('FEATURED');
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadPublicProjects();
+    loadPublicData();
   }, []);
 
-  const loadPublicProjects = async () => {
+  const loadPublicData = async () => {
     const res = await api.getProjects();
-    if (res.success) {
+    if (res.success && res.data) {
       setProjects(res.data);
+      const total = res.data.length;
+      const completed = res.data.filter(p => p.status === 'COMPLETED').length;
+      const ongoing = res.data.filter(p => p.status === 'IN_PROGRESS').length;
+      const expenditure = res.data.reduce((acc, curr) => acc + (curr.spentAmount || 0), 0);
+      setStats({ total, completed, ongoing, expenditure });
     }
   };
 
@@ -42,7 +50,14 @@ export const PublicHome = () => {
     navigate(`/public/search?q=${encodeURIComponent(searchQuery)}`);
   };
 
-  const sortedProjects = [...projects].sort((a, b) => {
+  const filteredProjects = projects.filter(p => {
+    if (selectedState !== 'ALL' && p.state !== selectedState) return false;
+    if (activeTab === 'COMPLETED' && p.status !== 'COMPLETED') return false;
+    if (activeTab === 'ONGOING' && p.status !== 'IN_PROGRESS') return false;
+    return true;
+  });
+
+  const sortedProjects = [...filteredProjects].sort((a, b) => {
     if (sortBy === 'risk_high') return b.riskScore - a.riskScore;
     if (sortBy === 'risk_low') return a.riskScore - b.riskScore;
     if (sortBy === 'amount') return b.sanctionedAmount - a.sanctionedAmount;
@@ -51,50 +66,8 @@ export const PublicHome = () => {
 
   return (
     <div className="min-h-screen bg-gov-canvas text-gov-slateDark selection:bg-gov-navy selection:text-white">
-      {/* Public Header */}
-      <header className="sticky top-0 z-40 bg-gov-surface border-b border-gov-border shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/public" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-md bg-gov-navy text-white flex items-center justify-center font-bold text-sm shadow-xs border border-gov-navyLight">
-              MP
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-tight text-gov-navy">
-                  MPLADS <span className="text-gov-saffron font-bold">CITIZEN PORTAL</span>
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-gov-canvas text-gov-muted border border-gov-border px-1.5 py-0.5 rounded">
-                  MoSPI e-SAKSHI
-                </span>
-              </div>
-              <p className="text-[10px] text-gov-muted font-medium">Ministry of Statistics & Programme Implementation • Public Registry</p>
-            </div>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-5 text-xs font-semibold text-gov-muted">
-            <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-gov-slateDark hover:text-gov-navy bg-gov-canvas hover:bg-slate-100 border border-gov-border rounded-md transition">
-              <Home className="w-3.5 h-3.5 text-gov-navy" />
-              <span>Home</span>
-            </Link>
-            <Link to="/public" className="text-gov-navy font-bold border-b-2 border-gov-navy pb-0.5">Citizen Home</Link>
-            <Link to="/public/map" className="hover:text-gov-navy transition">Constituency Map</Link>
-            <Link to="/public/search" className="hover:text-gov-navy transition">Search Works</Link>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Link to="/public/report">
-              <Button variant="danger" size="sm" icon={Camera} className="rounded-md shadow-xs font-semibold text-xs">
-                Report Issue
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="outline" size="sm" className="border-gov-border text-gov-slateDark hover:bg-gov-canvas rounded-md text-xs font-semibold">
-                Officer Login
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Sovereign Unified Public Header */}
+      <PublicHeader activeSubtitle="Public Fund Registry" />
 
       {/* Hero Section */}
       <section className="bg-gov-surface py-12 px-4 sm:px-6 lg:px-8 border-b border-gov-border">

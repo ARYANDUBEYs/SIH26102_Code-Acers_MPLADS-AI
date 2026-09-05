@@ -22,7 +22,8 @@ import {
   RefreshCw,
   ChevronRight,
   FileSpreadsheet,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Sparkles
 } from 'lucide-react';
 import {
   ResponsiveContainer,

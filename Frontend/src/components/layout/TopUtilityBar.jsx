@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Globe, ChevronDown, Volume2 } from 'lucide-react';
 import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext';
-import { TextToSpeechButton } from '../common/TextToSpeechButton';
 
 export const TopUtilityBar = ({ onOpenVoiceModal }) => {
   const { currentLanguage, setLanguage } = useLanguage();
@@ -61,19 +60,16 @@ export const TopUtilityBar = ({ onOpenVoiceModal }) => {
 
         {/* Right: Accessibility Controls & Sovereign Language Switcher */}
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-          {/* Screen Reader & Text-To-Speech */}
-          <TextToSpeechButton className="px-1.5 py-0.5" />
-
-          {/* Voice Briefing Modal Trigger */}
+          {/* Voice Briefing & Vernacular Reader Modal Trigger */}
           {onOpenVoiceModal && (
             <button
               type="button"
               onClick={onOpenVoiceModal}
-              className="hidden lg:flex items-center gap-1 text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer px-1 py-0.5 rounded"
-              title="Voice Briefing and Indic Assistant (Sarvam AI)"
+              className="flex items-center gap-1.5 text-cyan-300 hover:text-cyan-200 bg-cyan-950/50 border border-cyan-700/60 hover:border-cyan-400 transition-all cursor-pointer px-2 py-0.5 rounded shadow-xs"
+              title="Vernacular Voice Briefing & Reader (Sarvam Indic Audio)"
             >
               <Volume2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="font-mono text-[10px]">Indic Voice</span>
+              <span className="font-mono text-[10px] font-bold">Indic Voice</span>
             </button>
           )}
 

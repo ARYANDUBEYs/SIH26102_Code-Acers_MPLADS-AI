@@ -43,19 +43,19 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6">
-      <div className="space-y-1">
-        <h3 className="text-xl sm:text-2xl font-bold text-slate-100">National Officer Login</h3>
-        <p className="text-xs text-slate-400">Access the AI-Powered MPLADS monitoring & anomaly command platform</p>
+    <div className="w-full max-w-md mx-auto space-y-4">
+      <div className="space-y-0.5">
+        <h3 className="text-lg sm:text-xl font-bold text-slate-100">National Officer Login</h3>
+        <p className="text-[11px] text-slate-400">Access the AI-Powered MPLADS monitoring & anomaly command platform</p>
       </div>
 
       {/* Role Selection Tabs */}
-      <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-950/80 border border-slate-800 rounded-xl">
+      <div className="grid grid-cols-3 gap-1 p-1 bg-slate-950/80 border border-slate-800 rounded-xl">
         <button
           type="button"
           onClick={() => handleRoleTabChange(ROLES.MOSPI_ADMIN)}
           className={cn(
-            'flex flex-col items-center py-2 px-1 rounded-lg text-xs font-medium transition-all gap-1',
+            'flex flex-col items-center py-1.5 px-1 rounded-lg text-[11px] font-medium transition-all gap-0.5',
             selectedRole === ROLES.MOSPI_ADMIN
               ? 'bg-blue-600 text-white shadow-md font-semibold'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -69,7 +69,7 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
           type="button"
           onClick={() => handleRoleTabChange(ROLES.DISTRICT_OFFICER)}
           className={cn(
-            'flex flex-col items-center py-2 px-1 rounded-lg text-xs font-medium transition-all gap-1',
+            'flex flex-col items-center py-1.5 px-1 rounded-lg text-[11px] font-medium transition-all gap-0.5',
             selectedRole === ROLES.DISTRICT_OFFICER
               ? 'bg-blue-600 text-white shadow-md font-semibold'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -83,7 +83,7 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
           type="button"
           onClick={() => handleRoleTabChange(ROLES.CITIZEN)}
           className={cn(
-            'flex flex-col items-center py-2 px-1 rounded-lg text-xs font-medium transition-all gap-1',
+            'flex flex-col items-center py-1.5 px-1 rounded-lg text-[11px] font-medium transition-all gap-0.5',
             selectedRole === ROLES.CITIZEN
               ? 'bg-blue-600 text-white shadow-md font-semibold'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -95,9 +95,9 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
       </div>
 
       {/* Quick 1-Click Demo Shortcut */}
-      <div className="p-3 bg-blue-950/30 border border-blue-900/40 rounded-xl flex items-center justify-between">
+      <div className="p-2.5 bg-blue-950/30 border border-blue-900/40 rounded-xl flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-cyan-400" />
+          <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
           <div className="text-[11px] text-slate-300">
             <span className="font-semibold text-white">Preset: </span>
             {selectedRole === ROLES.MOSPI_ADMIN ? 'Central MoSPI Director' : selectedRole === ROLES.DISTRICT_OFFICER ? 'Varanasi District Magistrate' : 'Public Explorer'}
@@ -106,13 +106,13 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
         <button
           type="button"
           onClick={handleSubmit}
-          className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 hover:underline shrink-0"
+          className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 hover:underline shrink-0 cursor-pointer"
         >
           1-Click Login →
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <Input
           label="Email / Government Officer ID"
           type="text"
