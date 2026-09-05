@@ -7,8 +7,8 @@ import { useAuth } from '../../context/AuthContext';
 import { ROLES, DEMO_USERS } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
 
-export const LoginForm = () => {
-  const [selectedRole, setSelectedRole] = useState(ROLES.MOSPI_ADMIN);
+export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
+  const [selectedRole, setSelectedRole] = useState(initialRole);
   const [email, setEmail] = useState('admin.mospi@gov.in');
   const [password, setPassword] = useState('••••••••••••');
   const [rememberMe, setRememberMe] = useState(true);
@@ -29,6 +29,7 @@ export const LoginForm = () => {
     setIsLoading(true);
     try {
       await login(email, password, selectedRole);
+      if (onSuccess) onSuccess();
       if (selectedRole === ROLES.CITIZEN) {
         navigate('/public');
       } else if (selectedRole === ROLES.DISTRICT_OFFICER) {

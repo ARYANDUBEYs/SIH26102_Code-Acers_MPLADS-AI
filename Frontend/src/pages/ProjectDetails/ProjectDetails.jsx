@@ -117,81 +117,154 @@ export const ProjectDetails = () => {
       breadcrumbs={['Dashboard', 'High-Risk Queue', project.id]}
       badge={<StatusBadge status={project.status} />}
       actions={
-        <div className="flex items-center gap-2">
-          {isCitizen ? (
-            <>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => navigate(`/public/report?projectId=${encodeURIComponent(project.id)}`)}
-                icon={Camera}
-              >
-                Report Citizen Grievance
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/public')}
-              >
-                Public Transparency Portal
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/cartel-matrix')}
-                icon={Network}
-              >
-                Cartel Graph
-              </Button>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => navigate('/evidence')}
-                icon={Camera}
-              >
-                Verify AI Evidence
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setIsDecisionModalOpen(true)}
-                icon={ShieldCheck}
-              >
-                Take Official Action
-              </Button>
-            </>
-          )}
-        </div>
+        isCitizen ? null : (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/cartel-matrix')}
+              icon={Network}
+            >
+              Cartel Graph
+            </Button>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => navigate('/evidence')}
+              icon={Camera}
+            >
+              Verify AI Evidence
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setIsDecisionModalOpen(true)}
+              icon={ShieldCheck}
+            >
+              Take Official Action
+            </Button>
+          </div>
+        )
       }
     >
-      {/* 4 Financial Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-gov-navy">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Sanctioned Allocation</p>
-          <h3 className="text-2xl font-black font-mono text-gov-slateDark">{formatINR(project.sanctionedAmount)}</h3>
-          <p className="text-[11px] text-gov-muted">Sanction Date: {formatDate(project.sanctionDate)}</p>
-        </div>
+      {/* TOP HALF EXECUTIVE SPLIT: Circular AI Risk Assessment (Left) Alongside Funds Utilization (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        {/* Left: Prominent Circular AI Risk Assessment */}
+        <Card
+          title="AI Risk Assessment"
+          subtitle="Normalized neural threat index & multi-signal anomaly evaluation"
+          icon={ShieldAlert}
+          riskAccent="high"
+          className="lg:col-span-5 flex flex-col justify-between p-5"
+        >
+          <div className="flex flex-col items-center justify-center pt-2">
+            <RiskGauge score={project.riskScore} size={200} />
+          </div>
 
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-gov-blue">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gov-blue">Released Funds (Installment 1)</p>
-          <h3 className="text-2xl font-black font-mono text-gov-blue">{formatINR(project.releasedAmount)}</h3>
-          <p className="text-[11px] text-gov-muted">Disbursed via PFMS to SNA Escrow</p>
-        </div>
+          <div className="mt-4 pt-3.5 border-t border-gov-border space-y-2 text-xs">
+            <div className="flex justify-between items-center">
+              <span className="text-gov-muted">Model Confidence:</span>
+              <span className="font-mono font-bold text-gov-navy">94.2% (Ensemble Vision + Tabular)</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gov-muted">Anomaly Signals Caught:</span>
+              <span className="font-mono font-bold text-rose-700">{project.anomalies?.length || 4} Critical Flags</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gov-muted">Recommended Statutory Action:</span>
+              <span className="font-bold text-amber-800">Hold Milestone Payout & Audit Field</span>
+            </div>
+          </div>
 
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-emerald-600">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Physical MB Utilized</p>
-          <h3 className="text-2xl font-black font-mono text-emerald-800">{formatINR(project.utilizedAmount)}</h3>
-          <p className="text-[11px] text-gov-muted">Certified against Measurement Book</p>
-        </div>
+          <div className={`mt-3.5 p-2.5 rounded text-center text-xs font-semibold ${
+            project.riskScore > 70
+              ? 'bg-rose-50 border border-rose-200 text-rose-800'
+              : project.riskScore > 40
+              ? 'bg-amber-50 border border-amber-200 text-amber-800'
+              : 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+          }`}>
+            {project.riskScore > 70
+              ? 'High-Priority Review Required • Escalated to District Collector'
+              : project.riskScore > 40
+              ? 'Moderate Variance • Periodic Field Inspection Due'
+              : 'Low Risk • Project Progress Milestone Normal'}
+          </div>
+        </Card>
 
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md shadow-sm space-y-1 border-t-2 border-t-amber-500">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-amber-800">Remaining Unspent Balance</p>
-          <h3 className="text-2xl font-black font-mono text-amber-800">{formatINR(project.remainingAmount)}</h3>
-          <p className="text-[11px] text-gov-muted">Stage-2 Disbursal Condition Precedent</p>
-        </div>
+        {/* Right: Complete Funds Utilization & Financial Overview */}
+        <Card
+          title="Fund Utilization & Financial Intelligence"
+          subtitle="TSA / Hybrid Just-in-Time disbursement reconciled with Central PFMS & RBI SNA Escrow"
+          icon={IndianRupee}
+          className="lg:col-span-7 flex flex-col space-y-4 p-5"
+        >
+          {/* 4 Financial Metric Boxes */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-3 bg-gov-canvas border border-gov-border rounded-md space-y-1 border-t-2 border-t-gov-navy">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Sanctioned Allocation</p>
+              <h3 className="text-xl font-black font-mono text-gov-navy">{formatINR(project.sanctionedAmount)}</h3>
+              <p className="text-[11px] text-gov-muted">Sanction Date: {formatDate(project.sanctionDate)}</p>
+            </div>
+
+            <div className="p-3 bg-gov-canvas border border-gov-border rounded-md space-y-1 border-t-2 border-t-blue-600">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Released Funds (Installment 1)</p>
+              <h3 className="text-xl font-black font-mono text-blue-700">{formatINR(project.releasedAmount)}</h3>
+              <p className="text-[11px] text-gov-muted">Disbursed via PFMS to SNA Escrow</p>
+            </div>
+
+            <div className="p-3 bg-gov-canvas border border-gov-border rounded-md space-y-1 border-t-2 border-t-emerald-600">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Physical MB Utilized</p>
+              <h3 className="text-xl font-black font-mono text-emerald-800">{formatINR(project.utilizedAmount)}</h3>
+              <p className="text-[11px] text-gov-muted">Certified against Measurement Book</p>
+            </div>
+
+            <div className="p-3 bg-gov-canvas border border-gov-border rounded-md space-y-1 border-t-2 border-t-amber-500">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-800">Remaining Unspent Balance</p>
+              <h3 className="text-xl font-black font-mono text-amber-800">{formatINR(project.remainingAmount)}</h3>
+              <p className="text-[11px] text-gov-muted">Stage-2 Disbursal Condition Precedent</p>
+            </div>
+          </div>
+
+          {/* Reconciled Escrow & TSA Ledger Audit Snapshot */}
+          <div className="grid grid-cols-3 gap-2.5 p-2.5 bg-slate-50 border border-slate-200 rounded-md text-xs">
+            <div>
+              <span className="text-[10px] text-gov-muted uppercase font-bold tracking-wider block">SNA Escrow Acc</span>
+              <span className="font-mono text-xs font-semibold text-slate-800">SBIN0004218-99</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-gov-muted uppercase font-bold tracking-wider block">Tranche Phase</span>
+              <span className="font-mono text-xs font-semibold text-blue-700">Tranche 1 (75%)</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-gov-muted uppercase font-bold tracking-wider block">PFMS E-Bill Ref</span>
+              <span className="font-mono text-xs font-semibold text-emerald-700">PFMS/2026/EB-8812</span>
+            </div>
+          </div>
+
+          {/* Financial vs Physical Progress Reconciliation Bar */}
+          <div className="mt-4 pt-3.5 border-t border-gov-border space-y-2.5">
+            <div className="flex justify-between items-center text-xs">
+              <span className="font-semibold text-gov-navy">Financial Disbursal vs Physical Progress</span>
+              <span className="font-mono text-xs text-gov-muted">
+                Fund Disbursed: <strong className="text-blue-700">{Math.round((project.utilizedAmount / (project.sanctionedAmount || 1)) * 100)}%</strong> vs Physical: <strong className="text-emerald-700">{project.progressPercent}%</strong>
+              </span>
+            </div>
+
+            {/* Dual Comparative Bars */}
+            <div className="space-y-1.5">
+              <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-blue-600 h-full rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, Math.round((project.utilizedAmount / (project.sanctionedAmount || 1)) * 100))}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-[10px] text-gov-muted">
+                <span>TSA Hybrid Protocol Compliance: VERIFIED</span>
+                <span className="font-mono">Central PFMS Reconciliation OK</span>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
 
       {/* Progress & Milestones Bar */}
@@ -241,55 +314,10 @@ export const ProjectDetails = () => {
         </div>
       </Card>
 
-      {/* Main Grid: AI Risk Assessment & Explainable Findings */}
+      {/* Main Grid: Explainable Findings (8 Cols) & Project Metadata / Signatures (4 Cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Circular AI Risk Gauge & Summary */}
+        {/* Left: Project Administrative Metadata & Verification Audit Signatures (4 cols) */}
         <div className="lg:col-span-4 space-y-4">
-          <Card
-            title="AI Risk Assessment"
-            subtitle="Normalized neural threat index"
-            icon={ShieldAlert}
-            riskAccent="high"
-            className="flex flex-col items-center justify-center p-6 text-center"
-          >
-            <RiskGauge score={project.riskScore} size={190} />
-
-            <div className="mt-6 w-full pt-4 border-t border-slate-200 text-left space-y-2 text-xs">
-              <div className="flex justify-between text-slate-600">
-                <span>Model Confidence:</span>
-                <span className="font-mono font-bold text-slate-900">94.2%</span>
-              </div>
-              <div className="flex justify-between text-slate-600">
-                <span>Anomaly Vectors Caught:</span>
-                <span className="font-mono font-bold text-rose-600">{project.anomalies?.length || 4} Factors</span>
-              </div>
-              <div className="flex justify-between text-slate-600">
-                <span>Recommended Action:</span>
-                <span className="font-bold text-amber-700">Hold Payout & Dispatch Inspection</span>
-              </div>
-            </div>
-
-            {isCitizen ? (
-              <div className="mt-4 w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-center text-xs text-slate-600">
-                <span className="font-semibold text-slate-800">Public Vigilance Status:</span> Automated multi-factor ML verification active across milestone photos and expenditure records.
-              </div>
-            ) : (
-              <div className={`mt-4 w-full p-2.5 rounded-lg text-center text-xs font-semibold ${
-                project.riskScore > 70
-                  ? 'bg-rose-50 border border-rose-200 text-rose-800'
-                  : project.riskScore > 40
-                  ? 'bg-amber-50 border border-amber-200 text-amber-800'
-                  : 'bg-emerald-50 border border-emerald-200 text-emerald-800'
-              }`}>
-                {project.riskScore > 70
-                  ? 'High-Priority Review Required • Escalated to Collector'
-                  : project.riskScore > 40
-                  ? 'Moderate Variance • Periodic Field Inspection Due'
-                  : 'Low Risk • Project Progress Milestone Normal'}
-              </div>
-            )}
-          </Card>
-
           {/* Project Administrative Metadata */}
           <Card title="Project Administration" icon={Building} className="text-xs space-y-3">
             <div>
@@ -336,7 +364,7 @@ export const ProjectDetails = () => {
           </Card>
         </div>
 
-        {/* Right Column: AI Explanations & Anomaly Cards */}
+        {/* Right Column: AI Explanations & Anomaly Cards (8 cols) */}
         <div className="lg:col-span-8 space-y-4">
           <div className="flex items-center justify-between">
             <div>

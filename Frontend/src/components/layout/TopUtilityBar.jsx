@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Globe, ChevronDown, Volume2 } from 'lucide-react';
 import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext';
 
 export const TopUtilityBar = ({ onOpenVoiceModal }) => {
   const { currentLanguage, setLanguage } = useLanguage();
+  const location = useLocation();
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [fontSizeLevel, setFontSizeLevel] = useState(0);
+  const [isPageLoading, setIsPageLoading] = useState(false);
+
+  // Trigger tricolor loading shimmer on every route change
+  useEffect(() => {
+    setIsPageLoading(true);
+    const timer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 850);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   const currentLangObj = SUPPORTED_LANGUAGES.find(l => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
 
@@ -24,9 +36,15 @@ export const TopUtilityBar = ({ onOpenVoiceModal }) => {
   };
 
   return (
-    <div className="w-full bg-[#07172B] text-slate-200 border-b border-slate-800 text-[11px] select-none">
-      {/* National Tricolor Top Strip */}
-      <div className="h-[3px] w-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+    <div className="w-full bg-[#07172B] text-slate-200 border-b border-slate-800 text-[11px] select-none sticky top-0 z-50">
+      {/* National Tricolor Top Strip with Route Loading State */}
+      <div
+        className={`h-[3.5px] w-full transition-all duration-300 ${
+          isPageLoading
+            ? 'animate-tricolor-loading shadow-[0_0_12px_rgba(56,189,248,0.7)]'
+            : 'bg-gradient-to-r from-[#FF9933] via-white to-[#138808]'
+        }`}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-between gap-2">
         {/* Left: Government of India / MoSPI identity */}

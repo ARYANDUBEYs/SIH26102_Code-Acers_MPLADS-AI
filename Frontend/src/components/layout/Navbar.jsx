@@ -92,15 +92,6 @@ export const Navbar = () => {
               </Link>
             </div>
 
-            {/* Back to Home Button */}
-            <Link
-              to="/"
-              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 rounded-lg text-xs text-slate-100 hover:text-white font-semibold transition-all shadow-sm shrink-0 whitespace-nowrap"
-              title="Return to Main Landing Page"
-            >
-              <Home className="w-3.5 h-3.5 text-slate-200" />
-              <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
-            </Link>
 
           {/* Center Search Bar Trigger */}
           <div className="hidden md:flex flex-1 max-w-xs xl:max-w-sm mx-2">
@@ -237,28 +228,12 @@ export const Navbar = () => {
 
                   <div className="py-1">
                     <Link
-                      to="/"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
-                    >
-                      <Home className="w-3.5 h-3.5 text-blue-700" />
-                      <span>{t('nav_back_home', 'Home / मुख्य पृष्ठ')}</span>
-                    </Link>
-                    <Link
                       to="/profile"
                       onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
                     >
-                      <User className="w-3.5 h-3.5" />
+                      <User className="w-3.5 h-3.5 text-slate-500" />
                       <span>{t('sec_profile', 'Security & Profile')}</span>
-                    </Link>
-                    <Link
-                      to="/public"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>{t('public_portal', 'Public Transparency Portal')}</span>
                     </Link>
                   </div>
 

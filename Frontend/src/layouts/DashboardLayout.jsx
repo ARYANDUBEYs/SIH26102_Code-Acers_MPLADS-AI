@@ -63,10 +63,10 @@ export const DashboardLayout = () => {
     <div className="min-h-screen bg-gov-canvas text-gov-slateDark flex flex-col selection:bg-gov-blue selection:text-white">
       <Navbar />
 
-      <div className="flex-1 flex w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 pt-4 sm:pt-6">
+      <div className="flex-1 flex w-full max-w-[1920px] mx-auto">
         <Sidebar />
 
-        <main className="flex-1 min-w-0 lg:pl-6 pb-12">
+        <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 pb-16">
           <Outlet />
         </main>
       </div>

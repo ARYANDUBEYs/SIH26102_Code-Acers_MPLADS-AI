@@ -55,6 +55,7 @@ export const Sidebar = () => {
     { label: t('nav_geo_explorer', 'Geospatial Work Explorer'), path: '/public/map', icon: Map },
     { label: t('nav_search_works', 'Search Local Works'), path: '/public/search', icon: Search },
     { label: t('nav_submit_grievance', 'Submit Citizen Grievance'), path: '/public/report', icon: MessageSquareWarning, highlight: true },
+    { label: t('nav_exec_dashboard_view', 'Executive Dashboard (Public)'), path: '/dashboard', icon: LayoutDashboard },
   ];
 
   const navItems = isCitizen
@@ -75,7 +76,7 @@ export const Sidebar = () => {
 
       <aside
         className={cn(
-          'fixed lg:sticky top-14 z-30 h-[calc(100vh-3.5rem)] w-64 bg-gov-navyDark border-r border-gov-navy flex flex-col justify-between transition-transform duration-300 ease-in-out',
+          'fixed lg:sticky top-[88px] z-30 h-[calc(100vh-88px)] w-64 bg-gov-navyDark border-r border-gov-navy flex flex-col justify-between transition-transform duration-300 ease-in-out',
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
@@ -147,17 +148,6 @@ export const Sidebar = () => {
               <span className="text-emerald-400 font-semibold">99.98% Uptime</span>
             </div>
           </div>
-        </div>
-
-        {/* User sign out footer */}
-        <div className="p-3 border-t border-white/10 bg-black/10">
-          <button
-            onClick={logout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-colors cursor-pointer"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>{t('sign_out', 'Sign Out')}</span>
-          </button>
         </div>
       </aside>
     </>

@@ -14,6 +14,7 @@ import { getRiskMeta } from '../../utils/helpers';
 const RecenterAutomatically = ({ lat, lng, zoom }) => {
   const map = useMap();
   useEffect(() => {
+    map.invalidateSize();
     map.setView([lat, lng], zoom);
   }, [lat, lng, zoom, map]);
   return null;
@@ -136,6 +137,10 @@ export const RiskMap = () => {
             <MapContainer
               center={mapCenter}
               zoom={zoomLevel}
+              minZoom={4}
+              maxZoom={12}
+              maxBounds={[[5.0, 65.0], [38.5, 100.0]]}
+              maxBoundsViscosity={1.0}
               scrollWheelZoom={true}
               className="w-full h-full min-h-[550px]"
             >

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ShieldCheck,
@@ -25,28 +25,140 @@ import {
   ExternalLink,
   IndianRupee,
   Activity,
-  Award
+  Award,
+  LogOut,
+  User
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Button } from '../../components/common/Button';
 import { TopUtilityBar } from '../../components/layout/TopUtilityBar';
 import { GovFooter } from '../../components/layout/GovFooter';
 import { CitizenRequestModal } from '../../components/common/CitizenRequestModal';
 import { ThreeColumnArchitecture } from '../../components/dashboard/ThreeColumnArchitecture';
+import { SystemicVulnerabilitiesFramework } from '../../components/dashboard/SystemicVulnerabilitiesFramework';
 import { DrillDownSlideOver } from '../../components/ui/DrillDownSlideOver';
 import { SarvamIndicModal } from '../../components/sarvam/SarvamIndicModal';
+import { AuthModal } from '../../components/common/AuthModal';
+import { TiltQuoteCard } from '../../components/common/TiltQuoteCard';
+import { GlowingParticlesBackground } from '../../components/common/GlowingParticlesBackground';
+import {
+  AeroplaneArrow,
+  AeroplaneSend,
+  AnimatedEye,
+  AnimatedVoice,
+  AnimatedAlertTriangle,
+  AnimatedFileText
+} from '../../components/common/AnimatedIcons';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '../../context/LanguageContext';
 import { ROLES } from '../../utils/constants';
 
+/**
+ * Typewriter Heading Component
+ * Types the heading character by character upon entering the viewport.
+ */
+const TypewriterHeading = ({ text, className = '' }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [hasStarted, setHasStarted] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let index = 0;
+    const interval = setInterval(() => {
+      index++;
+      setDisplayedText(text.slice(0, index));
+      if (index >= text.length) {
+        clearInterval(interval);
+      }
+    }, 24);
+    return () => clearInterval(interval);
+  }, [hasStarted, text]);
+
+  return (
+    <h2 ref={containerRef} className={className}>
+      {hasStarted ? displayedText : text}
+      {hasStarted && displayedText.length < text.length && (
+        <span className="inline-block w-1.5 h-6 sm:h-8 bg-blue-600 ml-1 animate-pulse align-middle" />
+      )}
+    </h2>
+  );
+};
+
+/**
+ * Scroll Scaling Heading Component
+ * Grows font size as user scrolls towards it, and reveals an orange underline when in view.
+ */
+const ScrollScalingHeading = ({ title = "About the MPLAD Scheme" }) => {
+  const ref = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const totalDist = windowHeight * 0.65;
+      const current = windowHeight - rect.top;
+      const progress = Math.max(0, Math.min(1, current / totalDist));
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scale = 0.92 + scrollProgress * 0.16;
+  const underlineWidth = `${Math.min(100, Math.round(scrollProgress * 100))}%`;
+
+  return (
+    <div ref={ref} className="relative inline-block">
+      <h2
+        className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0B2545] transition-transform duration-75 origin-left"
+        style={{ transform: `scale(${scale})` }}
+      >
+        {title}
+      </h2>
+      <div
+        className="h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full mt-2 transition-all duration-150 ease-out"
+        style={{
+          width: underlineWidth,
+          opacity: scrollProgress > 0.1 ? Math.min(1, scrollProgress * 1.2) : 0,
+        }}
+      />
+    </div>
+  );
+};
+
 export const Home = () => {
-  const { switchRole } = useAuth();
+  const { user, isAuthenticated, logout, switchRole } = useAuth();
   const { currentLanguage, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
 
   // Mode toggles
   const [kpiMode, setKpiMode] = useState('statutory'); // 'statutory' | 'ai_vigilance'
   const [activeSabha, setActiveSabha] = useState('lok'); // 'lok' | 'rajya'
+
+  // Active nav section state
+  const [activeNav, setActiveNav] = useState('home');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   // Modals & Slide-over
   const [isCitizenModalOpen, setIsCitizenModalOpen] = useState(false);
@@ -83,13 +195,21 @@ export const Home = () => {
     setIsSlideOverOpen(true);
   };
 
+  const scrollToSection = (id, navKey) => {
+    setActiveNav(navKey);
+    const elem = document.getElementById(id);
+    if (elem) {
+      elem.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-blue-600 selection:text-white flex flex-col font-sans">
       {/* 1. Official Government Top Utility Bar (A-, A, A+, Indic Switcher, Tricolor) */}
       <TopUtilityBar onOpenVoiceModal={() => setIsVoiceModalOpen(true)} />
 
-      {/* 2. Official e-SAKSHI Dual-Tier Masthead */}
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+      {/* 2. Official e-SAKSHI Dual-Tier Masthead with Fixed Top Offset to prevent collision */}
+      <header className="sticky top-[32px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
           {/* Official MoSPI & e-SAKSHI Brand Identification */}
@@ -118,160 +238,312 @@ export const Home = () => {
             </div>
           </div>
 
-          {/* Authentic Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-bold text-slate-700">
-            <Link to="/" className="text-blue-700 hover:text-blue-800 transition-colors">
-              Home / मुख्य पृष्ठ
-            </Link>
-            <a href="#aboutus" className="hover:text-blue-700 transition-colors">
-              About the Scheme
-            </a>
-            <Link to="/dashboard" className="hover:text-blue-700 transition-colors flex items-center gap-1">
-              <span>Command Dashboard</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            </Link>
-            <Link to="/public" className="hover:text-blue-700 transition-colors">
-              Public Portal
-            </Link>
+          {/* Authentic Clean Navigation Links with Circular Indicators & Smooth Animated Tabs */}
+          <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100/80 p-1 rounded-full border border-slate-200">
+            {/* 1. Home */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveNav('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-300 ${
+                activeNav === 'home'
+                  ? 'bg-[#0B2545] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              }`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  activeNav === 'home' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
+                }`}
+              />
+              <span>Home</span>
+            </button>
+
+            {/* 2. Methodology & Working Principle (Positioned between Home and About Scheme) */}
+            <button
+              type="button"
+              onClick={() => scrollToSection('methodology', 'methodology')}
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-300 ${
+                activeNav === 'methodology'
+                  ? 'bg-[#0B2545] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              }`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  activeNav === 'methodology' ? 'bg-cyan-400 scale-100' : 'bg-slate-400 scale-75'
+                }`}
+              />
+              <span>Methodology & Working Principle</span>
+            </button>
+
+            {/* 3. About the Scheme */}
+            <button
+              type="button"
+              onClick={() => scrollToSection('aboutus', 'about')}
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-300 ${
+                activeNav === 'about'
+                  ? 'bg-[#0B2545] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+              }`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  activeNav === 'about' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
+                }`}
+              />
+              <span>About the Scheme</span>
+            </button>
           </nav>
 
-          {/* Action Buttons */}
+          {/* User Profile Avatar with Dropdown (when authenticated) OR Clean 'Login' Button */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={handleLaunchAdminDemo}
-              icon={ArrowRight}
-              iconPosition="right"
-              className="bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold shadow-gov-card px-4"
-            >
-              Officer Login
-            </Button>
+            {user ? (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="flex items-center gap-2 p-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition-colors cursor-pointer"
+                  title="Account Profile"
+                >
+                  <img
+                    src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
+                    alt={user?.name || 'User'}
+                    className="w-7 h-7 rounded-md object-cover border border-slate-300"
+                  />
+                  <span className="hidden sm:inline-block text-xs font-bold text-slate-800 truncate max-w-[110px]">
+                    {user?.name?.split(' ')[0]}
+                  </span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+                </button>
+
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="px-4 py-2">
+                      <p className="text-xs font-bold text-slate-900">{user?.name}</p>
+                      <p className="text-[11px] text-slate-500 truncate">{user?.designation || user?.email}</p>
+                      <span className="mt-1 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
+                        {user?.badge || 'Authorized'}
+                      </span>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        <User className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Security & Profile</span>
+                      </Link>
+                    </div>
+
+                    <div className="pt-1">
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsProfileDropdownOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left font-medium cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setIsAuthModalOpen(true)}
+                icon={ArrowRight}
+                iconPosition="right"
+                className="bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold shadow-gov-card px-4 group"
+              >
+                <span>Login</span>
+              </Button>
+            )}
           </div>
         </div>
       </header>
 
-      {/* 3. Hero Section - Authoritative Indian Institutional Masthead */}
-      <section className="relative bg-[#0B2545] text-white pt-12 pb-14 px-4 sm:px-6 lg:px-8 border-b border-blue-950">
-        <div className="max-w-5xl mx-auto text-center space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-900/60 border border-blue-400/30 text-blue-200 text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>National e-SAKSHI Continuous Forensic Vigilance Layer</span>
-          </div>
+      {/* 3. Hero Section - Deep institutional canvas with dynamic interactive glowing particles & wave cut */}
+      <section className="relative bg-[#06182E] text-white pt-16 pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Dynamic Interactive Glowing Particles Canvas */}
+        <GlowingParticlesBackground />
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white">
-            MPLADS AI Surveillance & Public Transparency Platform
-          </h1>
+        {/* Ambient background depth gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-900/30 via-transparent to-transparent pointer-events-none" />
 
-          <p className="text-xs sm:text-sm text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
-            Continuous algorithmic oversight, duplicate photo verification, and transparent fund utilization across all 543 Lok Sabha Constituencies with OpenCV 64-bit dHash, NetworkX Cartel Analyzers, and Sarvam Indic Voice Intelligence.
-          </p>
+        <div className="max-w-5xl mx-auto text-center space-y-5 relative z-10">
+          {/* Reference pill tag */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/70 border border-cyan-500/30 text-cyan-300 text-xs font-semibold backdrop-blur-sm shadow-inner"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span>Next-Generation AI Forensic Vigilance for MPLADS e-SAKSHI</span>
+          </motion.div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Button
-              variant="primary"
-              size="md"
+          {/* Reference headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white"
+          >
+            MPLADS:{' '}
+            <span className="text-[#F6C85F]">From Local Priorities</span>{' '}
+            to{' '}
+            <span className="text-[#6EE7B7]">National Development</span>
+          </motion.h1>
+
+          {/* Reference subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xs sm:text-sm text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed"
+          >
+            Ensuring continuous algorithmic vigilance, transparent fund utilization, and high-assurance project verification across all 543 Lok Sabha Constituencies with OpenCV 64-bit dHash, NetworkX Cartel Analyzers, and Sarvam Indic Voice Intelligence.
+          </motion.p>
+
+          {/* Call-to-action buttons with animated interactive icons */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-4 pt-4"
+          >
+            <button
+              type="button"
               onClick={handleLaunchAdminDemo}
-              icon={ArrowRight}
-              iconPosition="right"
-              className="text-xs font-bold px-5 bg-blue-700 hover:bg-blue-800 text-white rounded border border-blue-500/40 shadow-sm"
+              className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-lg hover:shadow-blue-500/30 transition-all duration-200 border border-blue-400/40 active:scale-95 cursor-pointer"
             >
-              MoSPI Central Command Center
-            </Button>
-            <Button
-              variant="outline"
-              size="md"
+              <span>Launch MoSPI Central Command</span>
+              <AeroplaneArrow className="w-4 h-4 text-white" />
+            </button>
+
+            <button
+              type="button"
               onClick={handleLaunchCitizenPortal}
-              icon={Eye}
-              className="text-xs font-bold px-5 border-slate-400/40 text-slate-100 bg-white/10 hover:bg-white/20 rounded"
+              className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100 hover:text-white text-xs sm:text-sm font-semibold border border-slate-500/50 backdrop-blur-sm transition-all duration-200 active:scale-95 cursor-pointer"
             >
-              Citizen Transparency Portal
-            </Button>
-            <Button
-              variant="outline"
-              size="md"
-              onClick={() => setIsVoiceModalOpen(true)}
-              icon={Volume2}
-              className="text-xs font-bold px-4 border-amber-400/40 text-amber-300 bg-amber-950/20 hover:bg-amber-950/40 rounded"
-            >
-              🇮🇳 Voice Briefing (8 Languages)
-            </Button>
-          </div>
+              <AnimatedEye className="w-4 h-4 text-cyan-300" />
+              <span>Explore Public Portal</span>
+            </button>
+          </motion.div>
+        </div>
+
+        {/* SVG Curved Wave Transition at bottom of hero */}
+        <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none pointer-events-none">
+          <svg
+            className="relative block w-full h-12 sm:h-16 text-slate-50"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,0 C150,90 350,-40 500,50 C650,140 900,10 1200,40 L1200,120 L0,120 Z"
+              fill="currentColor"
+            />
+          </svg>
         </div>
       </section>
 
-      {/* Quick Action Navigation Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full -mt-4 relative z-20 mb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <a
+      {/* 4 Quick Access Cards floating directly above the wave */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full -mt-10 sm:-mt-14 relative z-20 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <motion.a
             href="#aboutus"
-            className="p-3 bg-white border border-slate-200 hover:border-blue-600 rounded-md shadow-sm transition-all flex items-center gap-3 group"
+            onClick={(e) => {
+              e.preventDefault();
+              const elem = document.getElementById('aboutus');
+              if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+            }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="p-4 bg-white border border-slate-200 hover:border-blue-500 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 border border-blue-100">
-              <FileText className="w-4 h-4" />
+            <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 border border-blue-100 mb-2 group-hover:scale-105 transition-transform">
+              <AnimatedFileText className="w-5 h-5 text-blue-700" />
             </div>
-            <div>
-              <span className="font-bold text-xs text-slate-900 block group-hover:text-blue-700 transition-colors">Statutory Guidelines</span>
-              <span className="text-[10px] text-slate-500">2023 Revised Protocol</span>
-            </div>
-          </a>
+            <span className="font-bold text-xs text-slate-900 group-hover:text-blue-700 transition-colors">
+              Guidelines & Acts
+            </span>
+            <span className="text-[11px] text-slate-500 mt-0.5">2023 Revised Protocol</span>
+          </motion.a>
 
-          <button
+          <motion.button
             type="button"
             onClick={() => setIsVoiceModalOpen(true)}
-            className="p-3 bg-white border border-slate-200 hover:border-emerald-600 rounded-md shadow-sm transition-all flex items-center gap-3 group text-left"
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="p-4 bg-white border border-slate-200 hover:border-emerald-500 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
-              <Volume2 className="w-4 h-4" />
+            <div className="w-11 h-11 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100 mb-2 group-hover:scale-105 transition-transform">
+              <AnimatedVoice className="w-5 h-5 text-emerald-700" />
             </div>
-            <div>
-              <span className="font-bold text-xs text-slate-900 block group-hover:text-emerald-700 transition-colors">Sarvam Voice AI</span>
-              <span className="text-[10px] text-slate-500">ASR & Vernacular Audio</span>
-            </div>
-          </button>
+            <span className="font-bold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors">
+              Voice AI Assist
+            </span>
+            <span className="text-[11px] text-slate-500 mt-0.5">8 Indic Languages</span>
+          </motion.button>
 
-          <button
+          <motion.button
             type="button"
             onClick={() => setIsCitizenModalOpen(true)}
-            className="p-3 bg-white border border-slate-200 hover:border-amber-600 rounded-md shadow-sm transition-all flex items-center gap-3 group text-left"
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="p-4 bg-white border border-slate-200 hover:border-amber-500 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-100">
-              <Send className="w-4 h-4" />
+            <div className="w-11 h-11 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-100 mb-2 group-hover:scale-105 transition-transform">
+              <AeroplaneSend className="w-5 h-5 text-amber-700" />
             </div>
-            <div>
-              <span className="font-bold text-xs text-slate-900 block group-hover:text-amber-700 transition-colors">Citizen Proposal</span>
-              <span className="text-[10px] text-slate-500">Grassroots Priority Work</span>
-            </div>
-          </button>
+            <span className="font-bold text-xs text-slate-900 group-hover:text-amber-700 transition-colors">
+              Citizen Request
+            </span>
+            <span className="text-[11px] text-slate-500 mt-0.5">Local Area Proposal</span>
+          </motion.button>
 
-          <Link
-            to="/project/MPLAD-2026-00124"
-            className="p-3 bg-white border border-rose-200 hover:border-rose-600 rounded-md shadow-sm transition-all flex items-center gap-3 group"
+          <motion.div
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="h-full"
           >
-            <div className="w-9 h-9 rounded bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-100">
-              <AlertTriangle className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-bold text-xs text-rose-900 block group-hover:text-rose-700 transition-colors">Priority Anomaly Case</span>
-              <span className="text-[10px] text-slate-500">MPLAD-2026-00124 (87% Risk)</span>
-            </div>
-          </Link>
+            <Link
+              to="/project/MPLAD-2026-00124"
+              className="p-4 bg-white border border-rose-200 hover:border-rose-500 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center group h-full block"
+            >
+              <div className="w-11 h-11 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-100 mb-2 group-hover:scale-105 transition-transform">
+                <AnimatedAlertTriangle className="w-5 h-5 text-rose-700" />
+              </div>
+              <span className="font-bold text-xs text-rose-900 group-hover:text-rose-700 transition-colors">
+                Live AI Audit Dossier
+              </span>
+              <span className="text-[11px] text-slate-500 mt-0.5">Flagged NANDURBAR</span>
+            </Link>
+          </motion.div>
         </div>
       </div>
 
-      {/* 4. Live Institutional Marquee Announcement Ticker */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-8">
-        <div className="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center gap-3 overflow-hidden">
-          <div className="px-2.5 py-1 bg-[#0B2545] text-white text-[10px] font-bold uppercase tracking-wider rounded font-mono shrink-0 flex items-center gap-1.5">
-            <Activity className="w-3 h-3 text-cyan-400 animate-pulse" />
+      {/* 4. Live Institutional Continuous Right-to-Left Marquee Announcement Ticker */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
+        <div className="p-3 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center gap-3 overflow-hidden">
+          <div className="px-3 py-1 bg-[#0B2545] text-white text-[10px] font-bold uppercase tracking-wider rounded font-mono shrink-0 flex items-center gap-1.5 shadow-sm">
+            <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
             <span>Live Surveillance</span>
           </div>
-          <div className="flex-1 overflow-hidden">
-            <div className="animate-marquee whitespace-nowrap text-xs text-slate-600 font-medium">
-              🔔 <strong className="text-slate-800">MoSPI e-SAKSHI 2.0 Alert: </strong> 
-              Surveillance active across 543 Lok Sabha Constituencies • ₹83,336.67 Cr funds continuously monitored • 
-              Project MPLAD-2026-00124 (Nandurbar) flagged with 87% composite risk due to duplicate image detection • 
-              TSA/Hybrid ‘just-in-time’ fund disbursal protocol integrated with PFMS, RBI and SBI.
+          <div className="flex-1 overflow-hidden relative">
+            {/* Seamless Infinite Marquee with double text for continuous loop */}
+            <div className="animate-marquee-smooth text-xs text-slate-600 font-medium">
+              <span className="pr-12">
+                🔔 <strong className="text-slate-900">MoSPI e-SAKSHI 2.0 Alert:</strong> Surveillance active across 543 Lok Sabha Constituencies • ₹83,336.67 Cr funds continuously monitored • Project MPLAD-2026-00124 (Nandurbar) flagged with 87% composite risk due to duplicate image detection • TSA/Hybrid ‘just-in-time’ fund disbursal protocol integrated with PFMS, RBI and SBI.
+              </span>
+              <span className="pr-12">
+                🔔 <strong className="text-slate-900">MoSPI e-SAKSHI 2.0 Alert:</strong> Surveillance active across 543 Lok Sabha Constituencies • ₹83,336.67 Cr funds continuously monitored • Project MPLAD-2026-00124 (Nandurbar) flagged with 87% composite risk due to duplicate image detection • TSA/Hybrid ‘just-in-time’ fund disbursal protocol integrated with PFMS, RBI and SBI.
+              </span>
             </div>
           </div>
         </div>
@@ -353,25 +625,22 @@ export const Home = () => {
             </div>
           )}
 
-          {/* 6 Metric Cards Grid */}
+          {/* KPI Cards Grid */}
           {kpiMode === 'statutory' ? (
+            /* Statutory Physical View */
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-              {/* Card 1: Members of Parliament */}
+              {/* Card 1: Entitlement */}
               <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-md space-y-1">
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Members of Parliament</p>
-                <h3 className="text-xl font-black font-mono text-[#0B2545]">
-                  {activeSabha === 'lok' ? '543' : '245'}
-                </h3>
-                <p className="text-[10px] text-slate-500 font-mono">Entitled: 788 MPs</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Entitlement (FY)</p>
+                <h3 className="text-xl font-black font-mono text-slate-800">₹5.00 Cr</h3>
+                <p className="text-[10px] text-slate-500">Per MP / Year</p>
               </div>
 
-              {/* Card 2: Allocated Limit */}
-              <div className="p-3.5 bg-blue-50/50 border border-blue-200 rounded-md space-y-1">
-                <p className="text-[10px] font-bold text-blue-800 uppercase tracking-wider">Allocated Limit</p>
-                <h3 className="text-xl font-black font-mono text-blue-900">
-                  {activeSabha === 'lok' ? '₹83,336 Cr' : '₹12,250 Cr'}
-                </h3>
-                <p className="text-[10px] text-blue-700 font-mono">₹5.00 Cr / Year / MP</p>
+              {/* Card 2: Total Available */}
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-md space-y-1">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">TSA Pooled Fund</p>
+                <h3 className="text-xl font-black font-mono text-slate-800">₹8,333.67 Cr</h3>
+                <p className="text-[10px] text-slate-500">Active Allocations</p>
               </div>
 
               {/* Card 3: Works Recommended */}
@@ -453,47 +722,64 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* 6. The Three-Column AI Analytics Framework (Directly from User Photo 3) */}
-      <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-16 space-y-6">
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold font-mono">
+      {/* 6. Methodology & Working Principle Section (Systemic Vulnerabilities + Algorithmic Vigilance) */}
+      <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 mb-20 space-y-12">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold font-mono">
             <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            <span>e-SAKSHI AI Layer — Three-Column Architecture</span>
+            <span>e-SAKSHI 2.0 AI Sentinel Layer — Core Methodology & Working Principles</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-[#0B2545]">
-            Algorithmic Vigilance Across Every Stage
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600">
-            A tripartite architecture grouping Computer Vision, Network Graph Theory, and Composite Risk Formulas into an interactive oversight cockpit.
+          <TypewriterHeading
+            text="Algorithmic Vigilance & Systemic Vulnerability Mitigations"
+            className="text-2xl sm:text-4xl font-black text-[#0B2545] min-h-[44px]"
+          />
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            From mathematical risk formulas and computer vision forensics to rigorous defenses against GPS spoofing, human-in-the-loop bribery, and synthetic image fraud.
           </p>
         </div>
 
-        <ThreeColumnArchitecture
-          onOpenSlideOver={() => handleOpenSlideOver({
-            id: 'MPLAD-2026-00124',
-            title: 'Construction of Sub-District Health Center & Oxygen Plant',
-            district: 'Nandurbar',
-            state: 'Maharashtra',
-            sanctionedAmount: 4850000,
-            disbursedAmount: 3637500,
-            spentAmount: 3880000,
-            status: 'IN_PROGRESS',
-            riskScore: 87,
-            riskLevel: 'HIGH',
-            contractor: 'Apex Infra & BuildTech Pvt Ltd',
-            flags: ['Duplicate Photo Reused from Solapur', 'Financial Drift +5.0%']
-          })}
-          onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
-        />
+        {/* Part A: Systemic Vulnerabilities & Countermeasures Matrix */}
+        <SystemicVulnerabilitiesFramework />
+
+        {/* Part B: Three-Column Core Intelligence Engine */}
+        <div className="pt-8">
+          <div className="mb-6">
+            <h3 className="text-lg font-black text-[#0B2545] flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+              <span>Three-Column Continuous Audit Architecture</span>
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Live interactive demonstration of OpenCV 64-bit dHash perceptual hashing, NetworkX cartel analyzers, and composite risk scoring formulas.
+            </p>
+          </div>
+
+          <ThreeColumnArchitecture
+            onOpenSlideOver={() => handleOpenSlideOver({
+              id: 'MPLAD-2026-00124',
+              title: 'Construction of Sub-District Health Center & Oxygen Plant',
+              district: 'Nandurbar',
+              state: 'Maharashtra',
+              sanctionedAmount: 4850000,
+              disbursedAmount: 3637500,
+              spentAmount: 3880000,
+              status: 'IN_PROGRESS',
+              riskScore: 87,
+              riskLevel: 'HIGH',
+              contractor: 'Apex Infra & BuildTech Pvt Ltd',
+              flags: ['Duplicate Photo Reused from Solapur', 'Financial Drift +5.0%']
+            })}
+            onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+          />
+        </div>
       </section>
 
       {/* 7. Statutory "About the Scheme" Section (Verbatim e-SAKSHI Narrative) */}
-      <section id="aboutus" className="bg-white border-y border-slate-200 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto space-y-12">
+      <section id="aboutus" className="bg-white border-y border-slate-200 py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto space-y-16">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left: Statutory Narrative */}
-            <div className="lg:col-span-8 space-y-4 text-xs text-slate-600 leading-relaxed">
+            <div className="lg:col-span-8 space-y-5 text-xs sm:text-sm text-slate-600 leading-relaxed">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-blue-700 font-mono">
                   Statutory Overview
@@ -502,9 +788,7 @@ export const Home = () => {
                 <span className="text-xs font-semibold text-slate-500">Ministry of Statistics & Programme Implementation</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-black text-[#0B2545]">
-                About the MPLAD Scheme
-              </h2>
+              <ScrollScalingHeading title="About the MPLAD Scheme" />
 
               <p>
                 <b>The Members of Parliament Local Area Development Scheme (MPLADS)</b> is a Central Sector Scheme fully funded by the Government of India, launched on 23 December 1993. The Scheme enables Members of Parliament (MPs) to recommend developmental works based on the locally felt needs of their constituencies, with a focus on creating durable community assets and improving essential public services such as health, sanitation, education, and drinking water infrastructure.
@@ -522,30 +806,18 @@ export const Home = () => {
                 Since April 2025, the Scheme implemented the <b>TSA / Hybrid fund flow procedure</b>, achieving the goal of ‘just-in-time’ fund release directly to vendors through an integrated network of PFMS, RBI and State Bank of India (Scheduled Commercial Bank).
               </p>
 
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3">
-                <Award className="w-6 h-6 text-amber-600 shrink-0" />
-                <p className="text-[11px] text-slate-700">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3.5">
+                <Award className="w-7 h-7 text-amber-600 shrink-0" />
+                <p className="text-xs text-slate-700">
                   <strong>Viksit Bharat @ 2047 Alignment: </strong>
                   The Scheme encourages MPs to prioritize future-ready, green, and sustainable infrastructure that supports grassroots social equity and self-reliance.
                 </p>
               </div>
             </div>
 
-            {/* Right: Prime Minister's E-Governance Quote Card */}
-            <div className="lg:col-span-4">
-              <div className="p-6 bg-gradient-to-br from-[#0B2545] to-[#133A6B] text-white rounded-2xl shadow-gov-card space-y-4 border border-blue-900 relative overflow-hidden">
-                <div className="w-20 h-20 bg-blue-500/10 rounded-full absolute -right-6 -bottom-6 blur-xl" />
-
-                <div className="text-amber-400 font-serif text-3xl leading-none">“</div>
-                <blockquote className="text-xs font-medium leading-relaxed text-slate-200 italic">
-                  E-Governance is an essential part of our dream of Digital India. The more Technology we infuse in Governance, the better it is for India.
-                </blockquote>
-
-                <div className="pt-3 border-t border-blue-800/80">
-                  <p className="font-bold text-sm text-amber-300">Shri Narendra Modi</p>
-                  <p className="text-[11px] text-slate-300">Hon'ble Prime Minister of India</p>
-                </div>
-              </div>
+            {/* Right: Prime Minister's E-Governance Quote Card with Weighted Interactive 3D Tilt */}
+            <div className="lg:col-span-4 flex justify-center">
+              <TiltQuoteCard />
             </div>
           </div>
 
@@ -554,6 +826,13 @@ export const Home = () => {
 
       {/* 8. Institutional Footer */}
       <GovFooter />
+
+      {/* Auth Modal Prompt */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialRole={ROLES.MOSPI_ADMIN}
+      />
 
       {/* Modals and Overlays */}
       <CitizenRequestModal

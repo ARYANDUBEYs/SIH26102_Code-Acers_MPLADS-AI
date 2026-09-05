@@ -10,10 +10,17 @@ import 'leaflet/dist/leaflet.css';
 function MapResizer() {
   const map = useMap();
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const handleResize = () => {
       map.invalidateSize();
-    }, 200);
-    return () => clearTimeout(timer);
+      map.setView([22.9734, 78.6569], 5);
+    };
+    handleResize();
+    const timer = setTimeout(handleResize, 300);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [map]);
   return null;
 }
@@ -41,8 +48,6 @@ export const PublicMap = () => {
 
   return (
     <div className="min-h-screen bg-gov-canvas text-gov-slateDark selection:bg-gov-navy selection:text-white flex flex-col">
-      <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600" />
-
       <header className="sticky top-0 z-40 bg-gov-surface border-b border-gov-border shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/public" className="flex items-center gap-3">
@@ -65,7 +70,7 @@ export const PublicMap = () => {
           <nav className="hidden md:flex items-center gap-5 text-xs font-semibold text-gov-muted">
             <Link to="/" className="inline-flex items-center gap-1.5 px-2.5 py-1 text-gov-slateDark hover:text-gov-navy bg-gov-canvas hover:bg-slate-100 border border-gov-border rounded-md transition">
               <Home className="w-3.5 h-3.5 text-gov-navy" />
-              <span>Back to Overview</span>
+              <span>Home</span>
             </Link>
             <Link to="/public" className="hover:text-gov-navy transition">Citizen Home</Link>
             <Link to="/public/map" className="text-gov-navy font-bold border-b-2 border-gov-navy pb-0.5">Constituency Map</Link>
@@ -100,10 +105,15 @@ export const PublicMap = () => {
           </div>
         </div>
 
-        <div className="w-full bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-xs h-[620px] relative">
+        <div className="w-full bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-xs h-[620px] relative isolate z-0">
           <MapContainer
-            center={[22.5937, 78.9629]}
+            center={[22.9734, 78.6569]}
             zoom={5}
+            minZoom={4}
+            maxZoom={12}
+            maxBounds={[[5.0, 65.0], [38.5, 100.0]]}
+            maxBoundsViscosity={1.0}
+            scrollWheelZoom={true}
             style={{ height: '100%', width: '100%' }}
           >
             <MapResizer />

@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --bg-primary: #F8FAFC;
     --bg-secondary: #FFFFFF;
@@ -117,3 +121,67 @@
 .animate-pulse-subtle {
   animation: pulseSubtle 2.5s ease-in-out infinite;
 }
+
+/* 4. Infinite Smooth Right-to-Left Marquee */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-smooth {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+}
+
+.animate-marquee-smooth:hover {
+  animation-play-state: paused;
+}
+
+/* 5. Tricolor Loading Shimmer Bar */
+@keyframes tricolorShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-tricolor-loading {
+  background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808, #38BDF8, #FF9933);
+  background-size: 300% 100%;
+  animation: tricolorShift 1.5s ease infinite;
+}
+
+/* 6. Leaflet Map Container Isolation & Gesture Fix */
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  z-index: 10 !important;
+  background-color: #F1F5F9 !important;
+  touch-action: pan-x pan-y !important;
+}
+
+.leaflet-control-container .leaflet-top {
+  z-index: 400 !important;
+}
+
+/* 7. Fast-Scroll GPU Hardware Acceleration & Anti-Flash */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main, section {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
