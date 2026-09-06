@@ -108,7 +108,7 @@ export const Navbar = () => {
                 <div className="shrink-0">
                   <div className="flex items-center gap-2 whitespace-nowrap">
                     <span className="font-extrabold text-sm sm:text-base tracking-tight text-white whitespace-nowrap">
-                      {t('brand_title', 'MPLADS e-SAKSHI 2.0')}
+                      {t('brand_title', 'Scheme Guard 2.0')}
                     </span>
                     <span className="hidden xl:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-gov-indiaGreen/20 text-emerald-100 border border-gov-indiaGreen/50 rounded font-bold whitespace-nowrap shrink-0">
                       {t('brand_tag', 'AI Vigilance Layer')}

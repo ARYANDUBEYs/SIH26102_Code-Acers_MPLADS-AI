@@ -260,7 +260,7 @@ export const Home = () => {
             <div className="leading-tight">
               <div className="flex items-center gap-2">
                 <span className="font-black text-lg tracking-tight text-[#0B2545]">
-                  MPLADS <span className="text-blue-700">e-SAKSHI 2.0</span>
+                  Scheme Guard <span className="text-blue-700">2.0</span>
                 </span>
                 <span className="hidden md:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-emerald-50 text-emerald-800 border border-emerald-300 rounded font-bold">
                   AI Sentinel Layer
@@ -413,16 +413,13 @@ export const Home = () => {
                 )}
               </div>
             ) : (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setIsAuthModalOpen(true)}
-                icon={ArrowRight}
-                iconPosition="right"
-                className="bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold shadow-gov-card px-4 group"
+              <Link
+                to="/login"
+                className="px-3.5 py-1.5 bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold rounded-lg shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer"
               >
-                <span>Login</span>
-              </Button>
+                <span>Officer Login</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             )}
           </div>
         </div>
@@ -445,7 +442,7 @@ export const Home = () => {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/70 border border-cyan-500/30 text-cyan-300 text-xs font-semibold backdrop-blur-sm shadow-inner"
           >
             <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-            <span>Next-Generation AI Forensic Vigilance for MPLADS e-SAKSHI</span>
+            <span>Next-Generation AI Forensic Vigilance for Scheme Guard</span>
           </motion.div>
 
           {/* Reference headline */}
@@ -455,7 +452,7 @@ export const Home = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white"
           >
-            MPLADS:{' '}
+            Scheme Guard:{' '}
             <span className="hero-tricolor-text inline-block">
               From Local Priorities to National Development
             </span>
@@ -850,10 +847,10 @@ export const Home = () => {
                 <span className="text-xs font-semibold text-slate-500">Ministry of Statistics & Programme Implementation</span>
               </div>
 
-              <ScrollScalingHeading title="About the MPLAD Scheme" />
+              <ScrollScalingHeading title="About Scheme Guard" />
 
               <p>
-                <b>The Members of Parliament Local Area Development Scheme (MPLADS)</b> is a Central Sector Scheme fully funded by the Government of India, launched on 23 December 1993. The Scheme enables Members of Parliament (MPs) to recommend developmental works based on the locally felt needs of their constituencies, with a focus on creating durable community assets and improving essential public services such as health, sanitation, education, and drinking water infrastructure.
+                <b>Scheme Guard (MPLADS Vigilance Framework)</b> is the AI-governed integrity and transparency layer for the Members of Parliament Local Area Development Scheme (MPLADS), a Central Sector Scheme fully funded by the Government of India, launched on 23 December 1993. The Scheme enables Members of Parliament (MPs) to recommend developmental works based on the locally felt needs of their constituencies, with a focus on creating durable community assets and improving essential public services such as health, sanitation, education, and drinking water infrastructure.
               </p>
 
               <p>

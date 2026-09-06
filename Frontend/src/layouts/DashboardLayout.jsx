@@ -96,7 +96,7 @@ export const DashboardLayout = () => {
           <div className="max-h-96 overflow-y-auto space-y-4 pt-2">
             {!searchQuery.trim() ? (
               <div className="p-6 text-center text-xs text-slate-400">
-                Type at least 2 characters to search across National MPLADS intelligence databases.
+                Type at least 2 characters to search across National Scheme Guard intelligence databases.
               </div>
             ) : (
               <>

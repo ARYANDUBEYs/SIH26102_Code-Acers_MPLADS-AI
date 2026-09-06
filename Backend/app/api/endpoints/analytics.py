@@ -15,142 +15,12 @@ from app.db.mongo import project_store
 
 router = APIRouter()
 
-# Seed data used to bootstrap the store (Mongo, on first connect, or the
-# in-memory fallback) — kept here since this is the canonical sample dataset.
-SAMPLE_PROJECTS_DATABASE = [
-    {
-        "project_id": "MPLAD-2026-00124",
-        "title": "Rural Road Construction & Paver Block Laying",
-        "state": "Uttar Pradesh",
-        "district": "Varanasi",
-        "constituency": "Shri Narendra Modi (Varanasi PC)",
-        "category": "Roads, Pathways and Bridges",
-        "sanctioned_amount": 4800000.0,
-        "funds_released": 3200000.0,
-        "funds_utilized": 2100000.0,
-        "physical_progress_pct": 45.0,
-        "sanction_date": "2025-08-15",
-        "expected_completion_date": "2026-03-31",
-        "days_elapsed": 337,
-        "allocated_duration_days": 228,
-        "contractor_id": "VEN-8899",
-        "contractor_name": "Apex Infra & BuildTech Pvt Ltd",
-        "latitude": 25.3176,
-        "longitude": 82.9739,
-        "evidence_image_url": "/evidence/MPLAD-2026-00124.svg",
-        "image_anomaly_score": 96.0
-    },
-    {
-        "project_id": "MPLAD-2026-00231",
-        "title": "Multi-purpose Community Hall Construction",
-        "state": "Delhi",
-        "district": "North West Delhi",
-        "constituency": "Dr. Harsh Vardhan (Chandni Chowk)",
-        "category": "Community Assets & Halls",
-        "sanctioned_amount": 3200000.0,
-        "funds_released": 2800000.0,
-        "funds_utilized": 1400000.0,
-        "physical_progress_pct": 35.0,
-        "sanction_date": "2025-06-10",
-        "expected_completion_date": "2026-02-28",
-        "days_elapsed": 415,
-        "allocated_duration_days": 263,
-        "contractor_id": "VEN-4995",
-        "contractor_name": "Vanguard Civilcon LLP",
-        "latitude": 28.7041,
-        "longitude": 77.1025,
-        "evidence_image_url": "/evidence/MPLAD-2026-00231.svg",
-        "image_anomaly_score": 0
-    },
-    {
-        "project_id": "MPLAD-2026-00451",
-        "title": "Solar Drinking Water RO Plant & Borewell",
-        "state": "Rajasthan",
-        "district": "Banswara",
-        "constituency": "Shri Kanakmal Katara",
-        "category": "Drinking Water Facilities",
-        "sanctioned_amount": 5100000.0,
-        "funds_released": 4500000.0,
-        "funds_utilized": 4100000.0,
-        "physical_progress_pct": 88.0,
-        "sanction_date": "2025-04-12",
-        "expected_completion_date": "2025-12-31",
-        "days_elapsed": 471,
-        "allocated_duration_days": 263,
-        "contractor_id": "VEN-4676",
-        "contractor_name": "SunPower Aqua Solutions",
-        "latitude": 23.5461,
-        "longitude": 74.4373,
-        "evidence_image_url": "/evidence/MPLAD-2026-00451.svg",
-        "image_anomaly_score": 98.0
-    },
-    {
-        "project_id": "MPLAD-2026-00089",
-        "title": "Digital Smart Classroom Lab & Computer Setup",
-        "state": "Bihar",
-        "district": "Patna",
-        "constituency": "Shri Ravi Shankar Prasad",
-        "category": "Education Infrastructure",
-        "sanctioned_amount": 1800000.0,
-        "funds_released": 1800000.0,
-        "funds_utilized": 1750000.0,
-        "physical_progress_pct": 100.0,
-        "sanction_date": "2025-09-01",
-        "expected_completion_date": "2026-01-30",
-        "days_elapsed": 151,
-        "allocated_duration_days": 151,
-        "contractor_id": "VEN-7624",
-        "contractor_name": "EdTech Next India Ltd",
-        "latitude": 25.5941,
-        "longitude": 85.1376,
-        "evidence_image_url": "/evidence/MPLAD-2026-00089.svg",
-        "image_anomaly_score": 0
-    },
-    {
-        "project_id": "MPLAD-2026-00342",
-        "title": "Primary Health Centre (PHC) Medical Oxygen Pipeline",
-        "state": "Maharashtra",
-        "district": "Pune",
-        "constituency": "Smt. Supriya Sule",
-        "category": "Health and Family Welfare",
-        "sanctioned_amount": 6400000.0,
-        "funds_released": 5000000.0,
-        "funds_utilized": 4800000.0,
-        "physical_progress_pct": 100.0,
-        "sanction_date": "2025-03-15",
-        "expected_completion_date": "2025-10-30",
-        "days_elapsed": 229,
-        "allocated_duration_days": 229,
-        "contractor_id": "VEN-9306",
-        "contractor_name": "Lifecare Gas Grid Corp",
-        "latitude": 18.5204,
-        "longitude": 73.8567,
-        "evidence_image_url": "/evidence/MPLAD-2026-00342.svg",
-        "image_anomaly_score": 0
-    },
-    {
-        "project_id": "MPLAD-2026-00518",
-        "title": "High-Mast LED Street Lighting (50 Junctions)",
-        "state": "Assam",
-        "district": "Kamrup Metro",
-        "constituency": "Smt. Queen Oja",
-        "category": "Other Public Amenities",
-        "sanctioned_amount": 2900000.0,
-        "funds_released": 2900000.0,
-        "funds_utilized": 1200000.0,
-        "physical_progress_pct": 40.0,
-        "sanction_date": "2025-07-22",
-        "expected_completion_date": "2026-04-30",
-        "days_elapsed": 367,
-        "allocated_duration_days": 282,
-        "contractor_id": "VEN-8899",
-        "contractor_name": "Apex Infra & BuildTech Pvt Ltd",
-        "latitude": 26.1445,
-        "longitude": 91.7362,
-        "evidence_image_url": "/evidence/MPLAD-2026-00518.svg",
-        "image_anomaly_score": 0
-    }
-]
+from app.db.data_generator import COMPREHENSIVE_PROJECTS_DATABASE
+
+# Comprehensive seed data used to bootstrap the store (Mongo, on first connect, or
+# in-memory fallback) — 65+ realistic projects covering all 5 sectors & key districts.
+SAMPLE_PROJECTS_DATABASE = COMPREHENSIVE_PROJECTS_DATABASE
+
 
 REQUIRED_CSV_COLUMNS = [
     "project_id", "title", "state", "district", "constituency", "category",
@@ -257,3 +127,65 @@ async def update_project_decision(project_id: str, decision: str, remarks: str =
     if not project:
         raise HTTPException(status_code=404, detail="Project ID not found.")
     return {"success": True, "data": project}
+
+
+@router.post("/estimate-cost", tags=["Machine Learning"])
+async def estimate_project_cost(
+    category: str = Query("Roads, Pathways and Bridges"),
+    duration_days: int = Query(180),
+    target_beneficiaries: int = Query(3500),
+    work_scale_units: float = Query(15.0),
+    district_tier: int = Query(2),
+    sanctioned_amount: float | None = Query(None)
+):
+    """
+    XGBoost Price Estimation & Fair Cost Benchmark Engine.
+    Estimates fair market sanctioned value and flags over-invoicing if sanctioned_amount is provided.
+    """
+    from app.ml.cost_predictor import cost_predictor_service
+    if sanctioned_amount is not None:
+        return cost_predictor_service.evaluate_project_pricing(
+            sanctioned_amount=sanctioned_amount,
+            category=category,
+            duration_days=duration_days,
+            target_beneficiaries=target_beneficiaries,
+            work_scale_units=work_scale_units,
+            district_tier=district_tier
+        )
+    return cost_predictor_service.estimate_fair_cost(
+        category=category,
+        duration_days=duration_days,
+        target_beneficiaries=target_beneficiaries,
+        work_scale_units=work_scale_units,
+        district_tier=district_tier
+    )
+
+
+@router.post("/predict-overrun", tags=["Machine Learning"])
+async def predict_project_overrun(
+    time_ratio: float = Query(..., description="days_elapsed / allocated_duration_days"),
+    physical_ratio: float = Query(..., description="physical_progress_pct / 100.0"),
+    financial_drift: float = Query(..., description="disbursement_ratio - physical_ratio")
+):
+    """
+    XGBoost Overrun Risk Predictor.
+    Predicts probability of project schedule delay and uncovers pace-lag factors.
+    """
+    from app.ml.overrun_predictor import overrun_predictor_service
+    prob = overrun_predictor_service.predict_overrun_probability(
+        time_ratio=time_ratio,
+        physical_ratio=physical_ratio,
+        financial_drift=financial_drift
+    )
+    factors = overrun_predictor_service.get_risk_factors(
+        time_ratio=time_ratio,
+        physical_ratio=physical_ratio,
+        financial_drift=financial_drift
+    )
+    return {
+        "overrun_probability": prob,
+        "overrun_risk_tier": "CRITICAL_RISK" if prob > 0.70 else "HIGH_RISK" if prob > 0.45 else "MODERATE_RISK" if prob > 0.20 else "LOW_RISK",
+        "contributing_factors": factors,
+        "model_engine": "XGBoost Classifier (v3.4.1)"
+    }
+

@@ -148,7 +148,7 @@ export const PublicCommandDashboard = () => {
   return (
     <PageLayout
       title="MoSPI Central Command — Public Transparency & Vigilance Portal"
-      subtitle="Open Citizen Intelligence & Oversight: Real-time public tracking of MPLADS developmental expenditures across India"
+      subtitle="Open Citizen Intelligence & Oversight: Real-time public tracking of Scheme Guard developmental expenditures across India"
       breadcrumbs={['Civil Command', 'Public Transparency']}
       actions={
         <div className="flex items-center gap-3">

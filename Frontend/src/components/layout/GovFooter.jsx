@@ -11,10 +11,10 @@ export const GovFooter = () => {
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-white font-bold text-sm">
             <ShieldCheck className="w-5 h-5 text-blue-400" />
-            <span>MPLADS e-SAKSHI 2.0</span>
+            <span>Scheme Guard 2.0</span>
           </div>
           <p className="text-slate-400 leading-relaxed text-[11px]">
-            Members of Parliament Local Area Development Scheme — Integrated High-Assurance AI Forensic Vigilance Layer under the Ministry of Statistics and Programme Implementation (MoSPI).
+            Scheme Guard — Integrated High-Assurance AI Forensic Vigilance Layer under the Ministry of Statistics and Programme Implementation (MoSPI).
           </p>
           <div className="flex items-center gap-2 pt-1">
             <span className="px-2 py-0.5 bg-blue-900/50 text-blue-300 border border-blue-700/50 rounded text-[10px] font-mono">
@@ -86,7 +86,7 @@ export const GovFooter = () => {
                 eS
               </div>
               <div className="text-[10px]">
-                <p className="font-bold text-slate-200">MPLADS e-SAKSHI App</p>
+                <p className="font-bold text-slate-200">Scheme Guard App</p>
                 <p className="text-slate-500">Available on Google Play & App Store</p>
               </div>
             </div>

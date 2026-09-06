@@ -30,17 +30,31 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const login = async (email, password, selectedRole) => {
-    const matchedUser = DEMO_USERS.find(u => u.role === selectedRole) || {
+    // Inferred role if not explicitly passed
+    let effectiveRole = selectedRole;
+    if (!effectiveRole) {
+      const em = (email || '').toLowerCase();
+      if (em.includes('admin') || em.includes('mospi')) {
+        effectiveRole = ROLES.MOSPI_ADMIN;
+      } else if (em.includes('district') || em.includes('collector') || em.includes('varanasi') || em.includes('dm')) {
+        effectiveRole = ROLES.DISTRICT_OFFICER;
+      } else {
+        effectiveRole = ROLES.CITIZEN;
+      }
+    }
+
+    const matchedUser = DEMO_USERS.find(u => u.role === effectiveRole) || {
       id: `USR-${Date.now()}`,
       email,
-      name: selectedRole === ROLES.MOSPI_ADMIN ? 'Central Admin Officer' : selectedRole === ROLES.DISTRICT_OFFICER ? 'District Collector' : 'Citizen User',
-      role: selectedRole,
-      badge: selectedRole === ROLES.MOSPI_ADMIN ? 'MoSPI Admin' : selectedRole === ROLES.DISTRICT_OFFICER ? 'District Officer' : 'Citizen',
+      name: effectiveRole === ROLES.MOSPI_ADMIN ? 'Dr. Rajeshwar Sharma' : effectiveRole === ROLES.DISTRICT_OFFICER ? 'Priyanka Verma, IAS' : 'Amit Patel',
+      role: effectiveRole,
+      badge: effectiveRole === ROLES.MOSPI_ADMIN ? 'Central MoSPI Director' : effectiveRole === ROLES.DISTRICT_OFFICER ? 'District Magistrate' : 'Citizen Auditor',
     };
     setUser(matchedUser);
     setRole(matchedUser.role);
     return { success: true, user: matchedUser };
   };
+
 
   const switchRole = (newRole) => {
     const targetUser = DEMO_USERS.find(u => u.role === newRole) || {

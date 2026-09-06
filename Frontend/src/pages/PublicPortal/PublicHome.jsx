@@ -266,7 +266,7 @@ export const PublicHome = () => {
 
       {/* Footer */}
       <footer className="bg-gov-surface border-t border-gov-border py-4 px-4 text-center text-xs text-gov-muted">
-        Ministry of Statistics & Programme Implementation (MoSPI) • Government of India • Central MPLADS Surveillance Platform
+        Ministry of Statistics & Programme Implementation (MoSPI) • Government of India • Central Scheme Guard Surveillance Platform
       </footer>
     </div>
   );

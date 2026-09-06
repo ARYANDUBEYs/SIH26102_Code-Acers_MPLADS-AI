@@ -133,7 +133,7 @@ export const Analytics = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `MPLADS_AI_Intelligence_Export_${selectedYear}.csv`);
+    link.setAttribute('download', `Scheme_Guard_Intelligence_Export_${selectedYear}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -143,7 +143,7 @@ export const Analytics = () => {
   return (
     <PageLayout
       title="National Analytics & Anomaly Intelligence"
-      subtitle="Multi-dimensional algorithmic breakdown of MPLADS expenditures, risk distributions, and forensic anomaly vectors."
+      subtitle="Multi-dimensional algorithmic breakdown of Scheme Guard expenditures, risk distributions, and forensic anomaly vectors."
       breadcrumbs={['Dashboard', 'Analytics']}
       actions={
         <div className="flex items-center gap-3 flex-wrap">

@@ -14,7 +14,7 @@ export const SUPPORTED_LANGUAGES = [
 export const DICTIONARY = {
   'en-IN': {
     // Top Bar
-    brand_title: 'MPLADS INTELLIGENCE',
+    brand_title: 'SCHEME GUARD 2.0',
     brand_tag: 'MoSPI e-SAKSHI Layer',
     brand_sub: 'Ministry of Statistics & Programme Implementation • Govt. of India',
     search_placeholder: 'Search project ID, district, contractor, cartel...',
@@ -132,7 +132,7 @@ export const DICTIONARY = {
     btn_refresh: 'Refresh Live Data',
     filter_all_states: 'All States & UTs',
     filter_risk_level: 'All Risk Levels',
-    footer_text: 'MPLADS AI MONITOR — Ministry of Statistics and Programme Implementation (MoSPI) • Govt. of India',
+    footer_text: 'SCHEME GUARD AI MONITOR — Ministry of Statistics and Programme Implementation (MoSPI) • Govt. of India',
     footer_sec: 'RESTRICTED GOVERNMENT AUDIT ACCESS • ZERO-LEAKAGE ALLOCATION',
   },
 

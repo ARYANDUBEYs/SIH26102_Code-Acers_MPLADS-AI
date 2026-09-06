@@ -121,7 +121,7 @@ export const SLAMonitoring = () => {
   return (
     <PageLayout
       title="Statutory SLA Delay & Escalation Tracker"
-      subtitle="Continuous monitoring of revised MPLADS 2023 guidelines: sanctioning within 45 days, work commencement within 30 days, and milestone certification deadlines."
+      subtitle="Continuous monitoring of revised Scheme Guard statutory guidelines: sanctioning within 45 days, work commencement within 30 days, and milestone certification deadlines."
       breadcrumbs={['Dashboard', 'SLA Monitoring']}
       badge={
         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">

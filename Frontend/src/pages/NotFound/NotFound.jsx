@@ -13,7 +13,7 @@ export const NotFound = () => {
       <h1 className="text-4xl font-black font-mono text-slate-100">404</h1>
       <h2 className="text-lg font-bold text-slate-200 mt-2">Record or Page Not Found</h2>
       <p className="text-xs text-slate-400 max-w-sm mt-1 mb-6">
-        The requested MPLADS project dossier, audit view, or route does not exist or has been archived.
+        The requested Scheme Guard project dossier, audit view, or route does not exist or has been archived.
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-3">

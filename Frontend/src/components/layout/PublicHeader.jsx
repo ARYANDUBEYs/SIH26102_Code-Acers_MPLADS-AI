@@ -64,10 +64,10 @@ export const PublicHeader = ({ activeSubtitle = 'Public Registry' }) => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-base tracking-tight text-gov-navy">
-                  MPLADS <span className="text-gov-saffron font-bold">CITIZEN PORTAL</span>
+                  Scheme Guard <span className="text-gov-saffron font-bold">CITIZEN PORTAL</span>
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-wider bg-gov-canvas text-gov-muted border border-gov-border px-1.5 py-0.5 rounded hidden sm:inline-block">
-                  MoSPI e-SAKSHI
+                  MoSPI e-SAKSHI Layer
                 </span>
               </div>
               <p className="text-[10px] text-gov-muted font-medium hidden xs:block">
