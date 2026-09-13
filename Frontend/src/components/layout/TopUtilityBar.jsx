@@ -78,15 +78,8 @@ export const TopUtilityBar = ({ onOpenVoiceModal }) => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-between gap-2">
-        {/* Left: Government of India / MoSPI identity */}
+        {/* Left: Clean Spacer or Brand Tag */}
         <div className="flex items-center gap-3 truncate">
-          <span className="font-semibold text-slate-300 hidden sm:inline">
-            भारत सरकार • Government of India
-          </span>
-          <span className="text-slate-600 hidden sm:inline">|</span>
-          <span className="text-blue-300 font-medium truncate">
-            सांख्यिकी और कार्यक्रम कार्यान्वयन मंत्रालय (MoSPI)
-          </span>
         </div>
 
         {/* Right: Accessibility Controls & Sovereign Language Switcher */}

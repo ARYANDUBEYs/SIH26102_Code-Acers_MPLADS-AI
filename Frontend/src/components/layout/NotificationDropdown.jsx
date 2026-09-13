@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { cn } from '../../utils/helpers';
 
 export const NotificationDropdown = ({ isOpen, onClose }) => {
-  const { notifications, unreadCount, markNotificationAsRead } = useApp();
+  const { notifications, unreadCount, markNotificationAsRead, markAllNotificationsAsRead } = useApp();
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -95,11 +95,12 @@ export const NotificationDropdown = ({ isOpen, onClose }) => {
 
       <div className="p-2 bg-slate-950 border-t border-slate-800 text-center">
         <button
+          type="button"
           onClick={() => {
-            notifications.forEach(n => markNotificationAsRead(n.id));
+            markAllNotificationsAsRead();
             onClose();
           }}
-          className="text-xs text-blue-400 hover:text-blue-300 font-medium py-1"
+          className="text-xs text-blue-400 hover:text-blue-300 font-medium py-1 cursor-pointer"
         >
           Mark all as read
         </button>

@@ -88,7 +88,6 @@ export const Sidebar = () => {
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 {isCitizen ? t('suite_citizen', 'Citizen Navigation') : isDistrictOfficer ? t('suite_district', 'District Officer Suite') : t('suite_admin', 'National Command Suite')}
               </span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-900" />
             </div>
 
             <nav className="space-y-1.5">
@@ -128,26 +127,6 @@ export const Sidebar = () => {
                 );
               })}
             </nav>
-          </div>
-
-          {/* Quick SLA / Vigilance Status Card */}
-          <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                AI Sentinel Stream
-              </span>
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-300">
-              dHash & IsolationForest models cross-referencing 28 States & UTs.
-            </p>
-            <div className="pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-slate-400">
-              <span>Latency: 18ms</span>
-              <span className="text-emerald-400 font-semibold">99.98% Uptime</span>
-            </div>
           </div>
         </div>
       </aside>

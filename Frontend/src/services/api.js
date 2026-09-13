@@ -1,25 +1,46 @@
 import { FALLBACK_PROJECTS, generateFallbackProject } from '../data/fallbackProjects';
 import { CITIZEN_REPORTS_LIST } from './mockData';
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'https://mplads-ai-backend-brqi.onrender.com/api/v1').replace(/\/$/, '');
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api/v1').replace(/\/$/, '');
+
+// In-memory response cache for instant repeated lookups
+const apiCache = new Map();
 
 async function request(path, options = {}) {
+  const isGet = !options.method || options.method === 'GET';
+  const cacheKey = `${path}`;
+  if (isGet && apiCache.has(cacheKey)) {
+    return apiCache.get(cacheKey);
+  }
+
+  // Fast AbortController: failover in 2.2 seconds if backend is spun down/cold starting
+  const controller = new AbortController();
+  const timeoutMs = options.timeout || 2200;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await fetch(`${API_BASE}${path}`, {
       ...options,
+      signal: controller.signal,
       headers: {
         'Accept': 'application/json',
         ...(options.headers || {})
       }
     });
+    clearTimeout(timeoutId);
     const text = await response.text();
     if (!text || text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
       throw new Error('Received HTML gateway response instead of JSON');
     }
     let payload = JSON.parse(text);
     if (!response.ok) throw new Error(typeof payload.detail === 'string' ? payload.detail : `Request failed (${response.status})`);
+    
+    if (isGet) {
+      apiCache.set(cacheKey, payload);
+    }
     return payload;
   } catch (err) {
+    clearTimeout(timeoutId);
     throw err;
   }
 }

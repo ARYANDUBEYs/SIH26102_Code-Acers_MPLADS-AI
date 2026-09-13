@@ -262,9 +262,6 @@ export const Home = () => {
                 <span className="font-black text-lg tracking-tight text-[#0B2545]">
                   Scheme Guard <span className="text-blue-700">2.0</span>
                 </span>
-                <span className="hidden md:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-emerald-50 text-emerald-800 border border-emerald-300 rounded font-bold">
-                  AI Sentinel Layer
-                </span>
               </div>
               <p className="text-[11px] text-slate-600 font-semibold tracking-wide">
                 भारत सरकार • सांख्यिकी और कार्यक्रम कार्यान्वयन मंत्रालय

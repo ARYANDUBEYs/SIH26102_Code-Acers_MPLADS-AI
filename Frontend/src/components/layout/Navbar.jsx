@@ -95,9 +95,6 @@ export const Navbar = () => {
                     <span className="font-extrabold text-sm sm:text-base tracking-tight text-white whitespace-nowrap">
                       {t('brand_title', 'Scheme Guard 2.0')}
                     </span>
-                    <span className="hidden xl:inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-gov-indiaGreen/20 text-emerald-100 border border-gov-indiaGreen/50 rounded font-bold whitespace-nowrap shrink-0">
-                      {t('brand_tag', 'AI Vigilance Layer')}
-                    </span>
                   </div>
                   <p className="text-[10px] text-slate-300 font-medium tracking-wide hidden lg:block whitespace-nowrap">
                     {t('brand_sub', 'Ministry of Statistics & Programme Implementation • Govt. of India')}
@@ -105,25 +102,6 @@ export const Navbar = () => {
                 </div>
               </Link>
             </div>
-
-
-          {/* Center Search Bar Trigger */}
-          <div className="hidden md:flex flex-1 max-w-xs xl:max-w-sm mx-2">
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="w-full flex items-center justify-between px-3.5 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg text-xs text-slate-300 transition-all shadow-sm cursor-pointer"
-            >
-              <div className="flex items-center gap-2 truncate">
-                <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span className="truncate">{t('search_placeholder', 'Search project ID, district, contractor, cartel...')}</span>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-white/10 border border-white/20 rounded text-slate-300">
-                  Ctrl+K
-                </kbd>
-              </div>
-            </button>
-          </div>
 
           {/* Right Actions: Notifications & User Profile */}
           <div className="flex items-center gap-2 sm:gap-2.5">

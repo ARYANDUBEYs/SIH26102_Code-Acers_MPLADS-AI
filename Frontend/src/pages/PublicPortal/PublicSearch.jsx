@@ -121,10 +121,6 @@ export const PublicSearch = () => {
             <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
               Showing <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{filteredProjects.length}</span> Verified Works
             </p>
-            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-semibold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Central Data Sync: Active
-            </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -138,9 +134,6 @@ export const PublicSearch = () => {
                   <div className="flex items-center justify-between pb-2 border-b border-gov-border">
                     <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
                       {p.id}
-                    </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                      {p.currentStage}
                     </span>
                   </div>
 

@@ -62,6 +62,16 @@ export const AppProvider = ({ children }) => {
     setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
+  const markAllNotificationsAsRead = async () => {
+    setNotifications(prev => {
+      prev.forEach(n => {
+        if (n.unread) api.markNotificationRead(n.id);
+      });
+      return prev.map(n => ({ ...n, unread: false }));
+    });
+    setUnreadCount(0);
+  };
+
   const showToast = (message, type = 'info', duration = 4000) => {
     setToast({ message, type, id: Date.now() });
     setTimeout(() => {
@@ -93,6 +103,7 @@ export const AppProvider = ({ children }) => {
         notifications,
         unreadCount,
         markNotificationAsRead,
+        markAllNotificationsAsRead,
         isSearchOpen,
         setIsSearchOpen,
         searchQuery,

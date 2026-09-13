@@ -154,14 +154,11 @@ export const ProjectDetails = () => {
             <span className="text-slate-600 font-semibold">Project Details</span>
           </div>
 
-          {/* Project Title + Pill Tag */}
+          {/* Project Title */}
           <div className="flex flex-wrap items-center gap-3 pt-1">
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               {project.name}
             </h1>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
-              AI Flagged
-            </span>
           </div>
 
           {/* Project Metadata Subtitle */}
@@ -437,76 +434,110 @@ export const ProjectDetails = () => {
               </div>
             </div>
 
-            {/* Animated Interactive Step Timeline */}
+            {/* Animated Interactive Step Timeline with Full Sliding Active Orb */}
             <div className="pt-2 pb-2">
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 relative">
-                {timelineSteps.map((step, idx) => {
-                  const isDone = step.status === 'completed';
-                  const isCurrent = step.status === 'in-progress';
-                  const isPending = !isDone && !isCurrent;
+              <div className="relative">
+                {/* Continuous Background Track Line across the grid */}
+                <div className="absolute top-[54px] left-[8.33%] right-[8.33%] h-1 bg-slate-200 rounded-full z-0 overflow-hidden">
+                  {/* Active progress bar filling left to right */}
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-emerald-500 via-blue-500 to-blue-600 rounded-full"
+                    initial={{ width: '0%' }}
+                    animate={{
+                      width: `${
+                        timelineSteps.length > 1
+                          ? (Math.max(0, timelineSteps.findIndex(s => s.status === 'in-progress')) / (timelineSteps.length - 1)) * 100
+                          : 0
+                      }%`
+                    }}
+                    transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </div>
+
+                {/* Gliding Full Active Circle Indicator that physically moves left-to-right to the current step */}
+                {(() => {
+                  const currentIdx = Math.max(0, timelineSteps.findIndex(s => s.status === 'in-progress'));
+                  const totalSteps = timelineSteps.length;
+                  // Calculate percentage position for current step center
+                  const targetLeftPct = (currentIdx / (totalSteps - 1)) * 100;
 
                   return (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.35, delay: idx * 0.08 }}
-                      className="flex flex-col items-center text-center space-y-2 relative group"
-                    >
-                      {/* Step Labels above line */}
-                      <div className="min-h-[32px] flex flex-col justify-end">
-                        <span className={`text-[11px] font-bold leading-tight ${
-                          isDone ? 'text-slate-800' : isCurrent ? 'text-blue-700 font-extrabold' : 'text-slate-400 font-normal'
-                        }`}>
-                          {step.stage}
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-mono mt-0.5">
-                          {step.date}
-                        </span>
-                      </div>
+                    <div className="absolute top-[42px] left-[8.33%] right-[8.33%] pointer-events-none z-20">
+                      <motion.div
+                        className="absolute -top-0.5 -ml-3.5 flex items-center justify-center"
+                        initial={{ left: '0%', scale: 0.8 }}
+                        animate={{ left: `${targetLeftPct}%`, scale: 1 }}
+                        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        {/* Outer radiating pulse */}
+                        <motion.span
+                          className="absolute w-8 h-8 rounded-full bg-blue-500/25"
+                          animate={{ scale: [1, 1.5, 1], opacity: [0.7, 0.1, 0.7] }}
+                          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                        />
+                        {/* Main solid vibrant indicator circle */}
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 border-2 border-white shadow-md flex items-center justify-center">
+                          <div className="w-2.5 h-2.5 rounded-full bg-white shadow-xs" />
+                        </div>
+                      </motion.div>
+                    </div>
+                  );
+                })()}
 
-                      {/* Line connector between nodes */}
-                      <div className="w-full flex items-center relative py-1">
-                        {idx > 0 && (
-                          <div
-                            className={`absolute left-0 right-1/2 h-0.5 ${
-                              isDone || isCurrent ? 'bg-emerald-500' : 'bg-slate-200'
-                            }`}
-                          />
-                        )}
-                        {idx < timelineSteps.length - 1 && (
-                          <div
-                            className={`absolute left-1/2 right-0 h-0.5 ${
-                              isDone ? 'bg-emerald-500' : 'bg-slate-200'
-                            }`}
-                          />
-                        )}
+                {/* Steps Grid */}
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 relative z-10">
+                  {timelineSteps.map((step, idx) => {
+                    const isDone = step.status === 'completed';
+                    const isCurrent = step.status === 'in-progress';
+                    const currentIdx = timelineSteps.findIndex(s => s.status === 'in-progress');
 
-                        {/* Node Circle */}
-                        <div className="relative z-10 mx-auto">
+                    return (
+                      <div
+                        key={idx}
+                        className="flex flex-col items-center text-center space-y-2 relative group"
+                      >
+                        {/* Step Labels above line */}
+                        <div className="min-h-[36px] flex flex-col justify-end">
+                          <motion.span
+                            initial={{ opacity: 0.4 }}
+                            animate={{
+                              opacity: 1,
+                              fontWeight: isCurrent ? 800 : isDone ? 700 : 500,
+                              color: isCurrent ? '#1d4ed8' : isDone ? '#1e293b' : '#94a3b8'
+                            }}
+                            transition={{ duration: 0.5, delay: idx * 0.15 }}
+                            className="text-[11px] leading-tight transition-colors"
+                          >
+                            {step.stage}
+                          </motion.span>
+                          <span className="text-[10px] text-slate-400 font-mono mt-0.5">
+                            {step.date}
+                          </span>
+                        </div>
+
+                        {/* Station Anchor Node */}
+                        <div className="h-7 flex items-center justify-center relative">
                           {isDone ? (
                             <motion.div
-                              whileHover={{ scale: 1.2 }}
-                              className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-white flex items-center justify-center shadow-xs"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ duration: 0.3, delay: idx * 0.18 }}
+                              whileHover={{ scale: 1.25 }}
+                              className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-emerald-500 flex items-center justify-center shadow-xs"
                             >
-                              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              <div className="w-1.5 h-1.5 rounded-full bg-white" />
                             </motion.div>
                           ) : isCurrent ? (
-                            <motion.div
-                              animate={{ scale: [1, 1.15, 1] }}
-                              transition={{ repeat: Infinity, duration: 2 }}
-                              className="w-5 h-5 rounded-full border-2 border-blue-600 bg-blue-600 flex items-center justify-center shadow-sm"
-                            >
-                              <div className="w-2 h-2 rounded-full bg-white" />
-                            </motion.div>
+                            /* Space reserved for gliding circle */
+                            <div className="w-7 h-7" />
                           ) : (
-                            <div className="w-4 h-4 rounded-full border-2 border-slate-300 bg-white" />
+                            <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-300 bg-white group-hover:border-slate-400 transition-colors" />
                           )}
                         </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

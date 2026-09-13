@@ -231,16 +231,16 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
               </button>
             </div>
 
-            {/* Continue Button */}
+            {/* Log In Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-3 py-3 px-4 bg-[#18181b] hover:bg-black active:scale-[0.99] text-white text-sm font-semibold rounded-xl transition shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+              className="w-full mt-3 py-3 px-4 bg-[#7c3aed] hover:bg-[#6d28d9] active:scale-[0.99] text-white text-sm font-semibold rounded-xl transition shadow-md shadow-purple-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin text-white" />
               ) : (
-                'Continue'
+                'Log In'
               )}
             </button>
           </form>

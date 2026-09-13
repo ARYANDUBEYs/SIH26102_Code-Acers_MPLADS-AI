@@ -75,25 +75,27 @@ export const AppRoutes = () => {
         <Route path="/public/search" element={<PublicSearch />} />
         <Route path="/public/report" element={<CitizenReport />} />
 
-        {/* Protected Command Center & Dashboard Layout Routes */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/risk-map" element={<RiskMap />} />
-          <Route path="/high-risk" element={<HighRiskQueue />} />
-          <Route path="/projects" element={<HighRiskQueue />} />
-          <Route path="/project/:id" element={<ProjectDetails />} />
-          <Route path="/evidence" element={<EvidenceVerification />} />
-          <Route path="/cartel-matrix" element={<CartelMatrix />} />
-          <Route path="/sla" element={<SLAMonitoring />} />
-          <Route path="/admin/grievances" element={<AdminCitizenReports />} />
-          <Route path="/profile" element={<Profile />} />
+        {/* Protected Command Center & Dashboard Layout Routes (Requires Auth) */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/risk-map" element={<RiskMap />} />
+            <Route path="/high-risk" element={<HighRiskQueue />} />
+            <Route path="/projects" element={<HighRiskQueue />} />
+            <Route path="/project/:id" element={<ProjectDetails />} />
+            <Route path="/evidence" element={<EvidenceVerification />} />
+            <Route path="/cartel-matrix" element={<CartelMatrix />} />
+            <Route path="/sla" element={<SLAMonitoring />} />
+            <Route path="/admin/grievances" element={<AdminCitizenReports />} />
+            <Route path="/profile" element={<Profile />} />
 
-          {/* District Officer Specific Routes */}
-          <Route path="/district" element={<DistrictDashboard />} />
-          <Route path="/district/pending" element={<DistrictDashboard />} />
-          <Route path="/district/pre-screening" element={<AIPreScreening />} />
-          <Route path="/district/photo-validation" element={<PhotoValidation />} />
+            {/* District Officer Specific Routes */}
+            <Route path="/district" element={<DistrictDashboard />} />
+            <Route path="/district/pending" element={<DistrictDashboard />} />
+            <Route path="/district/pre-screening" element={<AIPreScreening />} />
+            <Route path="/district/photo-validation" element={<PhotoValidation />} />
+          </Route>
         </Route>
 
         {/* Catch-all 404 */}
