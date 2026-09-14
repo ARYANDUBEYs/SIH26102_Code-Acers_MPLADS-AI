@@ -86,7 +86,7 @@ export const AIPreScreening = () => {
   return (
     <PageLayout
       title="AI Pre-Screening & Disbursal Audit Desk"
-      subtitle="Explainable 5-point algorithmic verification evaluating statutory guidelines, photo uniqueness, and tender integrity before fund release."
+      subtitle="Explainable 5-point automated verification evaluating budget benchmarks, photo uniqueness, and contractor history before fund release."
       breadcrumbs={['District Suite', 'AI Pre-Screening']}
       actions={
         <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-md p-1 text-xs shadow-sm">
@@ -189,7 +189,7 @@ export const AIPreScreening = () => {
         <div className="lg:col-span-7 space-y-4">
           <Card
             title="Explainable 5-Point AI Integrity Evaluation"
-            subtitle="Deep neural baseline evaluation across computer vision, ROC corporate registry, and DSR baselines"
+            subtitle="Automated checks across photo evidence, cost benchmarks, vendor history, duplicate assets, and GPS bounds"
             icon={Sparkles}
           >
             <div className="space-y-2.5">

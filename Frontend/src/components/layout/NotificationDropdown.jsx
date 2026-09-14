@@ -47,6 +47,8 @@ export const NotificationDropdown = ({ isOpen, onClose }) => {
   return (
     <div
       ref={dropdownRef}
+      data-dropdown-menu="notif"
+      onMouseDown={(e) => e.stopPropagation()}
       className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden"
     >
       <div className="flex items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800">
@@ -96,9 +98,12 @@ export const NotificationDropdown = ({ isOpen, onClose }) => {
       <div className="p-2 bg-slate-950 border-t border-slate-800 text-center">
         <button
           type="button"
-          onClick={() => {
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
             markAllNotificationsAsRead();
-            onClose();
+            if (onClose) onClose();
           }}
           className="text-xs text-blue-400 hover:text-blue-300 font-medium py-1 cursor-pointer"
         >

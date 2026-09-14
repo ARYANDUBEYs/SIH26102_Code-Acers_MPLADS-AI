@@ -297,17 +297,37 @@ export const api = {
 
   getSLAAlerts: async () => {
     const p = await getRawProjects();
-    return {
-      success: true,
-      data: p.filter(x => x.slaDaysLeft < 14).map(x => ({
+    const alertProjects = p.filter(x => (x.slaDaysLeft !== undefined ? x.slaDaysLeft < 30 : true));
+    const list = (alertProjects.length > 0 ? alertProjects : p).map(x => {
+      const daysRemaining = x.slaDaysLeft ?? (x.targetDate ? Math.round((new Date(x.targetDate) - new Date()) / (1000 * 60 * 60 * 24)) : -45);
+      const deadline = x.targetDate || x.expected_completion_date || '2026-03-31';
+      const assignee = x.implementingAgency || `${x.district} Nodal Agency`;
+      const actionRequired = daysRemaining < 0
+        ? 'Urgent Milestone Audit & Treasury Freeze'
+        : daysRemaining <= 3
+        ? 'Critical 48h Statutory Escalation Memo'
+        : daysRemaining <= 10
+        ? 'Pre-Expiry Progress Inspection Notice'
+        : 'Standard Milestone Progress Verification';
+
+      return {
         id: `SLA-${x.id}`,
         projectId: x.id,
         district: x.district,
         state: x.state,
         projectName: x.name,
-        risk: x.riskScore >= 60 ? 'CRITICAL' : 'MEDIUM',
-        daysLeft: x.slaDaysLeft
-      }))
+        deadline,
+        daysRemaining,
+        daysLeft: daysRemaining,
+        risk: daysRemaining <= 3 || x.riskScore >= 60 ? 'CRITICAL' : daysRemaining <= 14 ? 'WARNING' : 'SAFE',
+        assignee,
+        actionRequired
+      };
+    });
+
+    return {
+      success: true,
+      data: list
     };
   },
 

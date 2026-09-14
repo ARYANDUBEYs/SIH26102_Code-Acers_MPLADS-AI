@@ -40,6 +40,8 @@ import {
 
 import { ScrollReveal } from '../../components/common/ScrollReveal';
 
+
+
 export const AdminDashboard = () => {
   const { t } = useLanguage();
   const [kpis, setKpis] = useState(null);
@@ -179,11 +181,19 @@ export const AdminDashboard = () => {
   return (
     <PageLayout
       title={t('nav_exec_dashboard', 'National Oversight Dashboard')}
-      subtitle="AI-Powered Continuous Forensic Vigilance & Anomaly Detection Layer for e-SAKSHI."
+      subtitle="AI-Powered Continuous Forensic Vigilance & Public Fund Integrity Command for e-SAKSHI."
       badge={
-        <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200">
-          MoSPI CENTRAL AUDIT
-        </span>
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
+          <img
+            src="/emblem_india.png"
+            alt="State Emblem of India"
+            className="h-8 w-auto object-contain shrink-0 filter drop-shadow-xs"
+          />
+          <div className="flex flex-col text-left">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Government of India</span>
+            <span className="text-xs font-mono font-black text-slate-900 tracking-tight leading-tight mt-0.5">MoSPI CENTRAL AUDIT</span>
+          </div>
+        </div>
       }
       actions={
         <div className="flex flex-wrap items-center gap-2.5">
@@ -277,25 +287,47 @@ export const AdminDashboard = () => {
           icon={AlertTriangle}
           className="lg:col-span-7"
           action={
-            <Link to="/analytics" className="text-xs text-blue-700 hover:underline flex items-center gap-1 font-semibold">
-              <span>Detailed Breakdown</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-3 text-xs font-semibold">
+                <span className="flex items-center gap-1.5 text-blue-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                  Operational
+                </span>
+                <span className="flex items-center gap-1.5 text-rose-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-600" />
+                  Critical Flags
+                </span>
+              </div>
+              <Link to="/analytics" className="text-xs text-blue-700 hover:underline flex items-center gap-1 font-semibold">
+                <span>Detailed Breakdown</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           }
         >
-          <div className="h-64 w-full">
+          <div className="h-72 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stateRisks} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
-                <XAxis dataKey="code" stroke="#64748B" fontSize={11} tickLine={false} />
+              <BarChart data={stateRisks} barGap={4} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="adminAnomBlue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#1D4ED8" stopOpacity={1} />
+                  </linearGradient>
+                  <linearGradient id="adminCritRose" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F43F5E" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#BE123C" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                <XAxis dataKey="code" stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
                 <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Cases`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
-                <Bar dataKey="anomalies" fill="#2563EB" radius={[4, 4, 0, 0]} name="Operational Anomalies" />
-                <Bar dataKey="highRisk" fill="#DC2626" radius={[4, 4, 0, 0]} name="Critical Audit Flags" />
+                <Bar dataKey="anomalies" fill="url(#adminAnomBlue)" barSize={13} radius={[4, 4, 0, 0]} name="Operational Anomalies" />
+                <Bar dataKey="highRisk" fill="url(#adminCritRose)" barSize={13} radius={[4, 4, 0, 0]} name="Critical Audit Flags" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -308,16 +340,16 @@ export const AdminDashboard = () => {
           icon={AlertOctagon}
           className="lg:col-span-5"
         >
-          <div className="h-64 w-full flex items-center justify-center">
+          <div className="h-56 w-full flex items-center justify-center relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={fraudData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={85}
-                  paddingAngle={4}
+                  innerRadius={68}
+                  outerRadius={92}
+                  paddingAngle={3}
                   dataKey="value"
                 >
                   {fraudData.map((entry, index) => (
@@ -329,14 +361,23 @@ export const AdminDashboard = () => {
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
+                <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-black font-mono fill-slate-900">
+                  183
+                </text>
+                <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="text-[10px] font-bold uppercase tracking-widest fill-slate-400">
+                  Total Flags
+                </text>
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600 mt-2 border-t border-slate-100 pt-3">
+          <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-700 mt-2 border-t border-slate-100 pt-3">
             {fraudData.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-1.5 truncate font-medium">
-                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                <span className="truncate">{item.name} ({item.value}%)</span>
+              <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 font-medium">
+                <div className="flex items-center gap-1.5 truncate">
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                  <span className="truncate text-slate-700">{item.name}</span>
+                </div>
+                <span className="font-mono font-bold text-slate-900 shrink-0 ml-1">{item.value}%</span>
               </div>
             ))}
           </div>
@@ -355,7 +396,7 @@ export const AdminDashboard = () => {
                 {highRiskProjects.length} Projects Flagged
               </span>
             </h3>
-            <p className="text-xs text-slate-500">Auto-ranked by Mathematical Composite Risk Formula (R = 0.35F + 0.25T + 0.20I + 0.20C)</p>
+            <p className="text-xs text-slate-500">Prioritized automatically based on duplicate photos, fund discrepancies, contractor cartels, and project delays.</p>
           </div>
 
           <Link to="/high-risk">
@@ -388,7 +429,7 @@ export const AdminDashboard = () => {
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900">{t('nav_risk_map', 'National Risk Heatmap')}</h4>
-              <p className="text-xs text-slate-500">Interactive GIS map of district & constituency threat levels</p>
+              <p className="text-xs text-slate-500">Live map of project locations, risk clusters, and delays across all states</p>
             </div>
           </div>
           <ChevronRight className="w-5 h-5 text-slate-400" />
@@ -404,7 +445,7 @@ export const AdminDashboard = () => {
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900">{t('nav_cartel_matrix', 'Vendor Cartel Matrix')}</h4>
-              <p className="text-xs text-slate-500">Bipartite graph exposing tender rotation & HHI monopoly</p>
+              <p className="text-xs text-slate-500">Identifies contractor rings, shared directors, and repeat tender wins</p>
             </div>
           </div>
           <ChevronRight className="w-5 h-5 text-slate-400" />
@@ -420,7 +461,7 @@ export const AdminDashboard = () => {
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900">{t('nav_evidence_lab', 'AI Forensic Evidence Lab')}</h4>
-              <p className="text-xs text-slate-500">Real OpenCV 64-bit dHash perceptual hashing inspection</p>
+              <p className="text-xs text-slate-500">Detects duplicate or manipulated completion photos across projects</p>
             </div>
           </div>
           <ChevronRight className="w-5 h-5 text-slate-400" />

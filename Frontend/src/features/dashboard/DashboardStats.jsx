@@ -25,7 +25,7 @@ export const DashboardStats = ({ kpis = {} }) => {
       trend: kpis.trends?.totalProjects,
       trendPositive: true,
       variant: "default",
-      onClick: () => navigate('/projects')
+      onClick: () => navigate('/high-risk')
     },
     {
       title: t('kpi_total_funds', 'Total Funds'),
@@ -45,7 +45,7 @@ export const DashboardStats = ({ kpis = {} }) => {
       trend: "Continuous AI Scan",
       trendPositive: true,
       variant: "success",
-      onClick: () => navigate('/projects')
+      onClick: () => navigate('/high-risk')
     },
     {
       title: t('kpi_anomalies', 'Anomalies Detected'),

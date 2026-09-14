@@ -146,7 +146,7 @@ export const HighRiskQueue = () => {
   return (
     <PageLayout
       title="High-Risk Project Triage Queue"
-      subtitle="Operational vigilance workflow prioritizing works flagged by multi-factor risk algorithms, OpenCV dHash similarity, and SLA breaches."
+      subtitle="Review works flagged by automated checks for duplicate photos, budget inflation, contractor monopolies, or timeline delays."
       breadcrumbs={['Dashboard', 'High-Risk Queue']}
       badge={
         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-50 text-rose-700 border border-rose-200">
@@ -165,8 +165,35 @@ export const HighRiskQueue = () => {
         </Button>
       }
     >
+      {/* 4 Modular Overview Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+        <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Priority Triage Works</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">{projects.length} Works</h3>
+          <p className="text-[11px] text-rose-700 mt-1 font-medium">Require Officer Audit Action</p>
+        </div>
+
+        <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Duplicate Photos</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">16 Works</h3>
+          <p className="text-[11px] text-amber-700 mt-1 font-medium">Cross-District Image Matches</p>
+        </div>
+
+        <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-blue-900">Budget Drift Alerts</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-blue-950 mt-0.5">14 Works</h3>
+          <p className="text-[11px] text-blue-700 mt-1 font-medium">&gt;20% Above Schedule Rates</p>
+        </div>
+
+        <div className="p-4 rounded-xl bg-purple-50/60 border border-purple-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-purple-900">Contractor Monopolies</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-900 mt-0.5">12 Syndicates</h3>
+          <p className="text-[11px] text-purple-700 mt-1 font-medium">Repeated Single-Vendor Wins</p>
+        </div>
+      </div>
+
       {/* Flagship Demo Shortcut Notice */}
-      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm border-l-4 border-l-gov-blue">
+      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm border-l-4 border-l-gov-blue mb-5">
         <div className="flex items-start gap-2.5">
           <Sparkles className="w-4 h-4 text-gov-blue shrink-0 mt-0.5" />
           <div className="text-xs text-gov-slate">
@@ -223,15 +250,15 @@ export const HighRiskQueue = () => {
           />
 
           <Dropdown
-            label="Anomaly Vector"
+            label="Flag Reason"
             value={anomalyFilter}
             onChange={setAnomalyFilter}
             options={[
-              { value: 'ALL', label: 'All Anomaly Types' },
-              { value: 'DUPLICATE_IMAGE', label: 'Duplicate Image Forensics' },
-              { value: 'COST_ANOMALY', label: 'Cost Baseline Discrepancy' },
-              { value: 'VENDOR_CARTEL', label: 'Vendor Cartel Collusion' },
-              { value: 'GEO_MISMATCH', label: 'Geotag Discrepancy' },
+              { value: 'ALL', label: 'All Flag Reasons' },
+              { value: 'DUPLICATE_IMAGE', label: 'Duplicate Photo Found' },
+              { value: 'COST_ANOMALY', label: 'Budget Drift / Overrun' },
+              { value: 'VENDOR_CARTEL', label: 'Contractor Monopoly' },
+              { value: 'GEO_MISMATCH', label: 'GPS Location Discrepancy' },
             ]}
           />
         </div>

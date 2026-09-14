@@ -23,5 +23,6 @@ async def get_notifications():
 @router.post("/notifications/{notification_id}/read")
 async def mark_notification_read(notification_id:str):
     for item in _notifications:
-        if item["id"] == notification_id: item["unread"] = False
+        if notification_id == "all" or item["id"] == notification_id:
+            item["unread"] = False
     return {"success":True}

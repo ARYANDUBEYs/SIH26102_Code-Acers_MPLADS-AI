@@ -143,8 +143,21 @@ export const Analytics = () => {
   return (
     <PageLayout
       title="National Analytics & Anomaly Intelligence"
-      subtitle="Multi-dimensional algorithmic breakdown of Scheme Guard expenditures, risk distributions, and forensic anomaly vectors."
+      subtitle="Clear trends, fund distributions, and risk patterns across all states and work categories."
       breadcrumbs={['Dashboard', 'Analytics']}
+      badge={
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
+          <img
+            src="/emblem_india.png"
+            alt="State Emblem of India"
+            className="h-8 w-auto object-contain shrink-0 filter drop-shadow-xs"
+          />
+          <div className="flex flex-col text-left">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Government of India</span>
+            <span className="text-xs font-mono font-black text-slate-900 tracking-tight leading-tight mt-0.5">MoSPI ANALYTICS CORPS</span>
+          </div>
+        </div>
+      }
       actions={
         <div className="flex items-center gap-3 flex-wrap">
           <Button
@@ -159,9 +172,38 @@ export const Analytics = () => {
         </div>
       }
     >
+      {/* 4 Modular KPI Quick Overview Cards */}
+      <ScrollReveal>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+          <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-blue-900">Total Monitored Outlay</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-blue-950 mt-0.5">₹2,486 Cr</h3>
+            <p className="text-[11px] text-blue-700 mt-1 font-medium">FY 2025-26 Active Projects</p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-emerald-50/60 border border-emerald-200">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Normal Low-Risk Works</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-emerald-800 mt-0.5">88.2%</h3>
+            <p className="text-[11px] text-emerald-700 mt-1 font-medium">Routine Milestone Progress</p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Escrow Hold Required</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">42 Works</h3>
+            <p className="text-[11px] text-rose-700 mt-1 font-medium">High/Critical Priority Flags</p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Remediation Turnaround</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">6.4 Days</h3>
+            <p className="text-[11px] text-amber-700 mt-1 font-medium">From Flag to Officer Sign-off</p>
+          </div>
+        </div>
+      </ScrollReveal>
+
       {/* Top Filter Bar */}
       <ScrollReveal>
-      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-wrap items-center gap-3 shadow-sm">
+      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-wrap items-center gap-3 shadow-sm mb-5">
         <div className="flex items-center gap-2 text-xs font-bold text-gov-navy uppercase tracking-wider">
           <Filter className="w-4 h-4 text-gov-blue" />
           <span>Filters:</span>
@@ -214,36 +256,59 @@ export const Analytics = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Chart 1: Monthly Anomaly Trends (ComposedChart with Area & Line) */}
         <Card
-          title="Monthly Forensic Anomaly Trends (FY 25-26)"
-          subtitle="Time-series progression of caught cost inflations, duplicate images, and cartel alerts"
+          title="Monthly Anomaly Velocity Trends (FY 25-26)"
+          subtitle="Multi-vector time series of caught cost inflations, duplicate images, and cartel alerts"
           icon={TrendingUp}
           className="lg:col-span-8"
+          action={
+            <div className="hidden sm:flex items-center gap-3 text-xs font-semibold">
+              <span className="flex items-center gap-1.5 text-blue-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+                Cost Drift
+              </span>
+              <span className="flex items-center gap-1.5 text-rose-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-600" />
+                Duplicate Photos
+              </span>
+              <span className="flex items-center gap-1.5 text-amber-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                Cartel Rings
+              </span>
+            </div>
+          }
         >
-          <div className="h-72 w-full">
+          <div className="h-72 w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={monthlyTrends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1D4ED8" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#1D4ED8" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#2563EB" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#2563EB" stopOpacity={0.02} />
                   </linearGradient>
                   <linearGradient id="dupGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#DC2626" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#DC2626" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#E11D48" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#E11D48" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
-                <XAxis dataKey="month" stroke="#64748B" fontSize={11} />
-                <YAxis stroke="#64748B" fontSize={11} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                <XAxis dataKey="month" stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Cases Detected`, name]}
-                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
-                  itemStyle={{ color: '#FFF' }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  itemStyle={{ color: '#0F172A' }}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Area type="monotone" dataKey="cost" stroke="#1D4ED8" fillOpacity={1} fill="url(#costGrad)" name="Cost Discrepancies" strokeWidth={2} />
-                <Area type="monotone" dataKey="duplicateImage" stroke="#DC2626" fillOpacity={1} fill="url(#dupGrad)" name="Duplicate Image Flags" strokeWidth={2} />
-                <Line type="monotone" dataKey="vendorCartel" stroke="#D97706" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} name="Cartel Collusion" />
+                <Area type="monotone" dataKey="cost" stroke="#2563EB" fillOpacity={1} fill="url(#costGrad)" name="Cost Discrepancies" strokeWidth={2.5} />
+                <Area type="monotone" dataKey="duplicateImage" stroke="#E11D48" fillOpacity={1} fill="url(#dupGrad)" name="Duplicate Image Flags" strokeWidth={2.5} />
+                <Line
+                  type="monotone"
+                  dataKey="vendorCartel"
+                  stroke="#D97706"
+                  strokeWidth={2.5}
+                  dot={{ r: 3, fill: '#D97706', stroke: '#FFF', strokeWidth: 1.5 }}
+                  activeDot={{ r: 6, fill: '#D97706', stroke: '#FFF', strokeWidth: 2 }}
+                  name="Cartel Collusion"
+                />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
@@ -267,15 +332,15 @@ export const Analytics = () => {
           icon={PieIcon}
           className="lg:col-span-4"
         >
-          <div className="h-56 w-full flex items-center justify-center">
+          <div className="h-56 w-full flex items-center justify-center relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={riskDistributionData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={50}
-                  outerRadius={75}
+                  innerRadius={68}
+                  outerRadius={94}
                   paddingAngle={3}
                   dataKey="value"
                 >
@@ -285,20 +350,26 @@ export const Analytics = () => {
                 </Pie>
                 <Tooltip
                   formatter={(val) => [`${val}% of Monitored Works`, 'Portfolio Share']}
-                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
-                  itemStyle={{ color: '#FFF' }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  itemStyle={{ color: '#0F172A' }}
                 />
+                <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-black font-mono fill-slate-900">
+                  12,482
+                </text>
+                <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="text-[10px] font-bold uppercase tracking-widest fill-slate-400">
+                  Total Works
+                </text>
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="space-y-1.5 text-xs mt-2 border-t border-slate-200 dark:border-slate-800 pt-3">
             {riskDistributionData.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between text-slate-600 dark:text-slate-400">
-                <span className="flex items-center gap-1.5">
+              <div key={idx} className="flex items-center justify-between p-1.5 rounded bg-slate-50/70 border border-slate-100 text-slate-700">
+                <span className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span>{item.name}</span>
+                  <span className="font-medium text-slate-800">{item.name}</span>
                 </span>
-                <span className="font-mono font-bold text-slate-900 dark:text-white">{item.value}%</span>
+                <span className="font-mono font-bold text-slate-900">{item.value}%</span>
               </div>
             ))}
           </div>
@@ -314,22 +385,51 @@ export const Analytics = () => {
           subtitle="Comparing sanctioned allocations against vendor release and physical MB certification"
           icon={IndianRupee}
           className="lg:col-span-6"
+          action={
+            <div className="hidden sm:flex items-center gap-3 text-xs font-semibold">
+              <span className="flex items-center gap-1.5 text-slate-800">
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-900" />
+                Sanctioned
+              </span>
+              <span className="flex items-center gap-1.5 text-sky-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-sky-600" />
+                Released
+              </span>
+              <span className="flex items-center gap-1.5 text-emerald-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
+                Utilized
+              </span>
+            </div>
+          }
         >
-          <div className="h-72 w-full">
+          <div className="h-72 w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={fundUtilizationData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
-                <XAxis dataKey="category" stroke="#64748B" fontSize={10} />
-                <YAxis stroke="#64748B" fontSize={11} />
+              <BarChart data={fundUtilizationData} barGap={3} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="sanctGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#1E293B" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#0F172A" stopOpacity={1} />
+                  </linearGradient>
+                  <linearGradient id="relGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#38BDF8" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#0284C7" stopOpacity={1} />
+                  </linearGradient>
+                  <linearGradient id="utilGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#34D399" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#059669" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                <XAxis dataKey="category" stroke="#64748B" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`₹${val} Crores`, name]}
-                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
-                  itemStyle={{ color: '#FFF' }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  itemStyle={{ color: '#0F172A' }}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="sanctioned" fill="#0B2545" name="Sanctioned" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="released" fill="#1D4ED8" name="Released (PFMS)" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="utilized" fill="#15803D" name="Physical MB Utilized" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="sanctioned" fill="url(#sanctGrad)" name="Sanctioned Outlay" barSize={11} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="released" fill="url(#relGrad)" name="Released (PFMS)" barSize={11} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="utilized" fill="url(#utilGrad)" name="Physical MB Utilized" barSize={11} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -351,21 +451,42 @@ export const Analytics = () => {
           subtitle="Distribution of flagged works across major jurisdictions"
           icon={BarChart3}
           className="lg:col-span-6"
+          action={
+            <div className="hidden sm:flex items-center gap-3 text-xs font-semibold">
+              <span className="flex items-center gap-1.5 text-amber-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                Operational
+              </span>
+              <span className="flex items-center gap-1.5 text-rose-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-600" />
+                Critical Flags
+              </span>
+            </div>
+          }
         >
-          <div className="h-72 w-full">
+          <div className="h-72 w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stateRisks} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#94A3B8" opacity={0.2} vertical={false} />
-                <XAxis dataKey="code" stroke="#64748B" fontSize={11} />
-                <YAxis stroke="#64748B" fontSize={11} />
+              <BarChart data={stateRisks} barGap={4} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="stateAnomAmber" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FBBF24" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#D97706" stopOpacity={1} />
+                  </linearGradient>
+                  <linearGradient id="stateCritRose" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F43F5E" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#BE123C" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                <XAxis dataKey="code" stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Projects`, name]}
-                  contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '6px', fontSize: '12px', color: '#FFF' }}
-                  itemStyle={{ color: '#FFF' }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  itemStyle={{ color: '#0F172A' }}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="anomalies" fill="#D97706" name="Total Anomalies" radius={[3, 3, 0, 0]} />
-                <Bar dataKey="highRisk" fill="#DC2626" name="Critical Triage Flags" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="anomalies" fill="url(#stateAnomAmber)" barSize={13} radius={[4, 4, 0, 0]} name="Total Anomalies" />
+                <Bar dataKey="highRisk" fill="url(#stateCritRose)" barSize={13} radius={[4, 4, 0, 0]} name="Critical Triage Flags" />
               </BarChart>
             </ResponsiveContainer>
           </div>

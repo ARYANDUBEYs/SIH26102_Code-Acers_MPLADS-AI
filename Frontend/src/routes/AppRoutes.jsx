@@ -32,6 +32,7 @@ const lazyWithRetry = (importFn) =>
 const Login = lazyWithRetry(() => import('../pages/Login/Login'));
 const Register = lazyWithRetry(() => import('../pages/Register/Register'));
 const DistrictDashboard = lazyWithRetry(() => import('../pages/Dashboard/DistrictDashboard'));
+const PendingSanctions = lazyWithRetry(() => import('../pages/District/PendingSanctions'));
 const CartelMatrix = lazyWithRetry(() => import('../pages/CartelMatrix/CartelMatrix'));
 const SLAMonitoring = lazyWithRetry(() => import('../pages/SLA/SLAMonitoring'));
 const AIPreScreening = lazyWithRetry(() => import('../pages/PreScreening/AIPreScreening'));
@@ -82,7 +83,7 @@ export const AppRoutes = () => {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/risk-map" element={<RiskMap />} />
             <Route path="/high-risk" element={<HighRiskQueue />} />
-            <Route path="/projects" element={<HighRiskQueue />} />
+            <Route path="/projects" element={<Navigate to="/high-risk" replace />} />
             <Route path="/project/:id" element={<ProjectDetails />} />
             <Route path="/evidence" element={<EvidenceVerification />} />
             <Route path="/cartel-matrix" element={<CartelMatrix />} />
@@ -92,7 +93,7 @@ export const AppRoutes = () => {
 
             {/* District Officer Specific Routes */}
             <Route path="/district" element={<DistrictDashboard />} />
-            <Route path="/district/pending" element={<DistrictDashboard />} />
+            <Route path="/district/pending" element={<PendingSanctions />} />
             <Route path="/district/pre-screening" element={<AIPreScreening />} />
             <Route path="/district/photo-validation" element={<PhotoValidation />} />
           </Route>

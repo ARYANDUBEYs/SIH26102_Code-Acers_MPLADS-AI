@@ -52,15 +52,36 @@ export const CartelMatrix = () => {
 
   return (
     <PageLayout
-      title="Vendor Cartel & Bipartite Collusion Matrix"
-      subtitle="NetworkX Bipartite Graph Intelligence calculating Herfindahl-Hirschman Index (HHI) to detect shadow directors, shell entities, and tender ring manipulation."
+      title="Vendor Cartel & Monopoly Matrix"
+      subtitle="Visual map of contractor networks showing shared company directors, repeat tender wins, and suspicious bidding rings."
       breadcrumbs={['Dashboard', 'Cartel Matrix']}
       badge={
         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">
-          NETWORKX GRAPH INTEL (HHI: 4,820)
+          MONOPOLY ALERT (HHI: 4,820)
         </span>
       }
     >
+      {/* 3 Modular Overview Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-5">
+        <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Monopolized Districts</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">3 Districts</h3>
+          <p className="text-[11px] text-rose-700 mt-1 font-medium">Varanasi, Jaunpur & Kamrup Metro</p>
+        </div>
+
+        <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Syndicate Tender Outlay</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">₹8.40 Cr</h3>
+          <p className="text-[11px] text-amber-700 mt-1 font-medium">17 Interlinked Public Works</p>
+        </div>
+
+        <div className="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-pink-900">Shared Company Directors</p>
+          <h3 className="text-xl sm:text-2xl font-black font-mono text-pink-900 mt-0.5">1 Shadow Ring</h3>
+          <p className="text-[11px] text-pink-700 mt-1 font-medium">R. K. Agarwal across 3 bidder firms</p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Main Network Graph Canvas */}
         <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-md p-4 shadow-sm relative flex flex-col min-h-[520px]">
@@ -68,7 +89,7 @@ export const CartelMatrix = () => {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border pb-3 mb-3">
             <div className="flex items-center gap-2">
               <Network className="w-5 h-5 text-gov-blue" />
-              <span className="text-sm font-bold text-gov-slateDark">Eastern UP Infrastructure Tender Bipartite Cluster</span>
+              <span className="text-sm font-bold text-gov-slateDark">Eastern UP Infrastructure Tender Syndicate Cluster</span>
             </div>
 
             <div className="flex items-center gap-3 text-[11px] font-bold text-gov-muted">
@@ -276,18 +297,18 @@ export const CartelMatrix = () => {
               <div className="flex items-center justify-between p-2.5 rounded bg-rose-50 border border-rose-200">
                 <div className="flex items-center gap-1.5 text-xs text-rose-800 font-bold">
                   <Scale className="w-3.5 h-3.5 text-rose-700" />
-                  <span>Herfindahl HHI Index:</span>
+                  <span>Market Concentration:</span>
                 </div>
-                <span className="text-sm font-black font-mono text-rose-800">
-                  4,820 (Severe Monopoly)
+                <span className="text-xs font-black font-mono text-rose-800">
+                  4,820 HHI (Severe Monopoly)
                 </span>
               </div>
 
               {selectedNode.risk && (
                 <div className="flex items-center justify-between p-2.5 rounded bg-gov-canvas border border-gov-border">
-                  <span className="text-xs text-gov-muted font-medium">Collusion Threat Index:</span>
+                  <span className="text-xs text-gov-muted font-medium">Collusion Threat Level:</span>
                   <span className="text-sm font-black font-mono text-rose-700">
-                    {selectedNode.risk} / 100
+                    {selectedNode.risk}% High Risk
                   </span>
                 </div>
               )}
@@ -298,7 +319,7 @@ export const CartelMatrix = () => {
 
               {selectedNode.districts && (
                 <div className="space-y-1.5">
-                  <span className="text-[11px] font-bold text-gov-slateDark uppercase tracking-wider">Monopolized Districts:</span>
+                  <span className="text-[11px] font-bold text-gov-slateDark uppercase tracking-wider">Affected Districts:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedNode.districts.map((d, i) => (
                       <span key={i} className="px-2 py-0.5 rounded text-xs bg-gov-subtle text-gov-slateDark border border-gov-border font-medium">
@@ -311,7 +332,7 @@ export const CartelMatrix = () => {
 
               {selectedNode.connectedVendors && (
                 <div className="space-y-1.5">
-                  <span className="text-[11px] font-bold text-pink-700 uppercase tracking-wider">Common Signatory Entities:</span>
+                  <span className="text-[11px] font-bold text-pink-700 uppercase tracking-wider">Related Partner Companies:</span>
                   <div className="space-y-1">
                     {selectedNode.connectedVendors.map((v, i) => (
                       <div key={i} className="p-2 rounded bg-gov-canvas text-xs text-gov-slateDark border border-gov-border flex items-center justify-between">
@@ -346,10 +367,10 @@ export const CartelMatrix = () => {
           {/* Institutional Statutory Guidance Box */}
           <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md space-y-1.5 text-xs text-gov-slate border-l-4 border-l-gov-blue">
             <span className="font-bold flex items-center gap-1.5 text-gov-navy">
-              <Info className="w-4 h-4 text-gov-blue" /> Statutory Audit Guidance:
+              <Info className="w-4 h-4 text-gov-blue" /> Why is this flagged?
             </span>
             <p className="text-gov-slate leading-relaxed">
-              Bipartite graph projections detect ring rotations where the same syndicate submits artificial L2/L3 cover bids to manipulate competitive bidding thresholds required under Central Vigilance Commission (CVC) guidelines.
+              When the same person or family owns multiple bidding companies, they submit fake higher bids to ensure their chosen company wins at inflated government rates without genuine competition.
             </p>
           </div>
         </div>

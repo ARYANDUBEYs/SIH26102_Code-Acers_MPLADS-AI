@@ -36,7 +36,6 @@ export const Sidebar = () => {
     { label: t('nav_risk_map', 'National Risk Map'), path: '/risk-map', icon: Map },
     { label: t('nav_high_risk', 'High-Risk Audit Queue'), path: '/high-risk', icon: AlertOctagon, badge: '42', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
     { label: t('nav_cartel_matrix', 'Cartel & Monopoly Matrix'), path: '/cartel-matrix', icon: Network, highlight: true },
-    { label: t('nav_all_works', 'All Works Directory'), path: '/projects', icon: FolderGit2 },
     { label: t('nav_evidence_lab', 'AI Forensic Evidence Lab'), path: '/evidence', icon: Camera, highlight: true },
     { label: t('nav_sla', 'SLA Delay Escalations'), path: '/sla', icon: Clock, badge: '12', badgeColor: 'bg-amber-50 text-amber-800 border border-amber-200' },
     { label: t('nav_public_reports', 'Public Vigilance Reports'), path: '/admin/grievances', icon: MessageSquareWarning, badge: 'New', badgeColor: 'bg-emerald-50 text-emerald-800 border border-emerald-200', highlight: true },
@@ -48,7 +47,6 @@ export const Sidebar = () => {
     { label: t('nav_sla_alerts', 'SLA Risk Alerts'), path: '/sla', icon: Clock, badge: '7', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
     { label: t('nav_pre_screening', 'AI Pre-Screening'), path: '/district/pre-screening', icon: Sparkles, highlight: true },
     { label: t('nav_photo_val', 'Photo Integrity Validation'), path: '/district/photo-validation', icon: Camera, highlight: true },
-    { label: t('nav_constituency_works', 'Constituency Works'), path: '/projects', icon: FolderGit2 },
   ];
 
   const citizenNavItems = [

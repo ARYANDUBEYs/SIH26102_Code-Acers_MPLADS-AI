@@ -49,26 +49,36 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   const fetchNotifications = async () => {
+    const isAllRead = localStorage.getItem('scheme_guard_notifications_read') === 'true';
     const res = await api.getNotifications();
-    if (res.success) {
-      setNotifications(res.data);
-      setUnreadCount(res.data.filter(n => n.unread).length);
+    if (res.success && Array.isArray(res.data)) {
+      const data = isAllRead ? res.data.map(n => ({ ...n, unread: false })) : res.data;
+      setNotifications(data);
+      setUnreadCount(data.filter(n => n.unread).length);
     }
   };
 
   const markNotificationAsRead = async (id) => {
-    await api.markNotificationRead(id);
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, unread: false } : n));
-    setUnreadCount(prev => Math.max(0, prev - 1));
+    try {
+      await api.markNotificationRead(id);
+    } catch (e) {}
+    setNotifications(prev => {
+      const updated = prev.map(n => n.id === id ? { ...n, unread: false } : n);
+      const remaining = updated.filter(n => n.unread).length;
+      setUnreadCount(remaining);
+      if (remaining === 0) {
+        localStorage.setItem('scheme_guard_notifications_read', 'true');
+      }
+      return updated;
+    });
   };
 
   const markAllNotificationsAsRead = async () => {
-    setNotifications(prev => {
-      prev.forEach(n => {
-        if (n.unread) api.markNotificationRead(n.id);
-      });
-      return prev.map(n => ({ ...n, unread: false }));
-    });
+    try {
+      await api.markNotificationRead('all');
+    } catch (e) {}
+    localStorage.setItem('scheme_guard_notifications_read', 'true');
+    setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
     setUnreadCount(0);
   };
 

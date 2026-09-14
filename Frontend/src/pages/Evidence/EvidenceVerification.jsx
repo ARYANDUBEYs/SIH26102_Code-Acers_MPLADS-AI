@@ -70,7 +70,7 @@ export const EvidenceVerification = () => {
   return (
     <PageLayout
       title="Digital Forensics Evidence Workbench"
-      subtitle="OpenCV 64-bit Perceptual Gradient Hash (dHash) & EXIF verification comparing active site milestone claims against national archival repositories."
+      subtitle="Automated photo analysis comparing newly submitted site progress against past works across India to detect duplicate or recycled photos."
       breadcrumbs={['Dashboard', 'AI Evidence Lab', project.id]}
       badge={
         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-50 text-rose-700 border border-rose-200">
@@ -84,7 +84,7 @@ export const EvidenceVerification = () => {
             size="sm"
             onClick={() => handleAction('INSPECT')}
             icon={MapPin}
-            className="border-slate-200 hover:bg-slate-50 text-slate-700 text-xs"
+            className="border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
           >
             Dispatch Inspection
           </Button>
@@ -93,7 +93,7 @@ export const EvidenceVerification = () => {
             size="sm"
             onClick={() => handleAction('FLAG')}
             icon={ShieldAlert}
-            className="bg-rose-600 hover:bg-rose-700 text-white text-xs"
+            className="bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold"
           >
             Freeze Milestone Funds
           </Button>
@@ -102,7 +102,7 @@ export const EvidenceVerification = () => {
             size="sm"
             onClick={() => handleAction('VERIFY')}
             icon={ShieldCheck}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold"
           >
             Digital Sign-Off
           </Button>
@@ -118,30 +118,30 @@ export const EvidenceVerification = () => {
         similarity={96}
       />
 
-      {/* AI Forensic Integrity Checklist */}
+      {/* Plain-English AI Forensic Integrity Checklist */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-rose-600">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">dHash Hamming Distance</span>
-          <h4 className="text-xl font-black font-mono text-rose-700">2 / 64 Bits</h4>
-          <p className="text-[11px] text-gov-slate font-medium">96.88% Structural Overlap (Threshold &le; 6)</p>
+        <div className="p-4 bg-rose-50/60 border border-rose-200 rounded-xl space-y-1 shadow-2xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Photo Similarity Check</span>
+          <h4 className="text-xl font-black font-mono text-rose-800">96.9% Match</h4>
+          <p className="text-xs text-rose-700 font-medium">Flagged: Image structurally matches an older project</p>
         </div>
 
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-emerald-600">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Geotag Coordinates</span>
-          <h4 className="text-xl font-black font-mono text-emerald-700">Matched (&lt;80m)</h4>
-          <p className="text-[11px] text-gov-slate font-medium">Inside boundary (Chiraigaon Block, Varanasi)</p>
+        <div className="p-4 bg-emerald-50/60 border border-emerald-200 rounded-xl space-y-1 shadow-2xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900">GPS Site Location</span>
+          <h4 className="text-xl font-black font-mono text-emerald-800">Coordinates Valid</h4>
+          <p className="text-xs text-emerald-700 font-medium">Taken within 80m of sanctioned road stretch</p>
         </div>
 
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-rose-600">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Repository History</span>
-          <h4 className="text-xl font-black font-mono text-rose-700">Cross-District Reuse</h4>
-          <p className="text-[11px] text-gov-slate font-medium">Identical photo claimed in Jaunpur (2024 work)</p>
+        <div className="p-4 bg-rose-50/60 border border-rose-200 rounded-xl space-y-1 shadow-2xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Prior Archive Record</span>
+          <h4 className="text-xl font-black font-mono text-rose-800">Cross-District Match</h4>
+          <p className="text-xs text-rose-700 font-medium">Same photo was submitted in Jaunpur (2024 work)</p>
         </div>
 
-        <div className="p-4 bg-gov-surface border border-gov-border rounded-md space-y-1 shadow-sm border-t-2 border-t-gov-blue">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gov-muted">Prescribed Action</span>
-          <h4 className="text-xl font-black font-mono text-rose-700">HOLD FUNDS</h4>
-          <p className="text-[11px] text-gov-slate font-medium">Withhold Stage-2 disbursal pending inspection</p>
+        <div className="p-4 bg-amber-50/60 border border-amber-200 rounded-xl space-y-1 shadow-2xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Recommended Action</span>
+          <h4 className="text-xl font-black font-mono text-amber-900">Hold Milestone Funds</h4>
+          <p className="text-xs text-amber-700 font-medium">Pause ₹14.2 Lakhs payout until verified on-site</p>
         </div>
       </div>
 

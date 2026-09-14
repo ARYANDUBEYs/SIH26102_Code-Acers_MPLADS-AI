@@ -16,15 +16,7 @@ import {
   ListFilter
 } from 'lucide-react';
 
-/**
- * National Emblem of India (Ashoka Lion Capital) Silhouette
- */
-const AshokaEmblem = ({ className = "w-9 h-11" }) => (
-  <svg viewBox="0 0 100 120" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
-    <path d="M50 6C41.2 6 34 13.2 34 22C34 25.5 35.2 28.7 37.2 31.2C33.2 33.6 30 38.2 30 43.5C30 48.8 33.2 53.4 37.4 55.8C35.3 58.2 34 61.4 34 65C34 72.8 39.8 79.2 47.5 80.8V84H34C28.5 84 24 88.5 24 94V99H76V94C76 88.5 71.5 84 66 84H52.5V80.8C60.2 79.2 66 72.8 66 65C66 61.4 64.7 58.2 62.6 55.8C66.8 53.4 70 48.8 70 43.5C70 38.2 66.8 33.6 62.8 31.2C64.8 28.7 66 25.5 66 22C66 13.2 58.8 6 50 6ZM47.5 16C47.5 14.6 48.6 13.5 50 13.5C51.4 13.5 52.5 14.6 52.5 16V26H47.5V16ZM40 38C42.8 38 45 40.2 45 43C45 45.8 42.8 48 40 48C37.2 48 35 45.8 35 43C35 40.2 37.2 38 40 38ZM60 38C62.8 38 65 40.2 65 43C65 45.8 62.8 48 60 48C57.2 48 55 45.8 55 43C55 40.2 57.2 38 60 38ZM50 88C57.2 88 63 90.8 63 94H37C37 90.8 42.8 88 50 88ZM28 103H72V107C72 109.2 70.2 111 68 111H32C29.8 111 28 109.2 28 107V103ZM44 113H56V117H44V113Z" />
-    <circle cx="50" cy="94" r="3.5" fill="none" stroke="currentColor" strokeWidth="1.2" />
-  </svg>
-);
+
 
 export const DistrictDashboard = () => {
   const [projects, setProjects] = useState([]);
@@ -92,11 +84,13 @@ export const DistrictDashboard = () => {
       {/* 1. TOP HEADER SECTION (MATCHING media_1789367492438.png)                 */}
       {/* ======================================================================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
-        {/* Left: Ashoka Emblem + Title + District Jurisdiction */}
+        {/* Left: Official State Emblem with Satyameva Jayate + Title + District Jurisdiction */}
         <div className="flex items-center gap-3.5">
-          <div className="text-[#0B2545] shrink-0">
-            <AshokaEmblem className="w-8 h-10 sm:w-9 sm:h-11 drop-shadow-xs" />
-          </div>
+          <img
+            src="/emblem_india.png"
+            alt="State Emblem of India"
+            className="h-14 w-auto object-contain shrink-0 filter drop-shadow-xs"
+          />
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
               District Executive Officer Cockpit
@@ -109,35 +103,22 @@ export const DistrictDashboard = () => {
           </div>
         </div>
 
-        {/* Right: Last Updated Status & + AI Pre-Screening Dark Pill Button */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-          {/* Refresh Circle & Last Updated text */}
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={loadDistrictData}
-              title="Refresh District Cockpit Data"
-              className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-2xs transition cursor-pointer active:scale-95"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-blue-600' : ''}`} />
-            </button>
-            <div className="text-left hidden sm:block">
-              <span className="text-[10px] text-slate-400 font-medium block leading-none">Last updated</span>
-              <span className="text-xs font-bold text-slate-700 block leading-tight mt-0.5">
-                Today, {lastUpdatedTime}
-              </span>
-            </div>
-          </div>
-
-          {/* Dark Navy Pill Button: + AI Pre-Screening */}
+        {/* Right: Last Updated Status (Adjusted cleanly to the right) */}
+        <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
           <button
             type="button"
-            onClick={() => navigate('/district/pre-screening')}
-            className="flex items-center gap-2 bg-[#0B2545] hover:bg-slate-800 active:scale-[0.98] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-sm cursor-pointer transition"
+            onClick={loadDistrictData}
+            title="Refresh District Cockpit Data"
+            className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-2xs transition cursor-pointer active:scale-95"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>+ AI Pre-Screening</span>
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-blue-600' : ''}`} />
           </button>
+          <div className="text-left">
+            <span className="text-[10px] text-slate-400 font-medium block leading-none">Last updated</span>
+            <span className="text-xs font-bold text-slate-700 block leading-tight mt-0.5">
+              Today, {lastUpdatedTime}
+            </span>
+          </div>
         </div>
       </div>
 
