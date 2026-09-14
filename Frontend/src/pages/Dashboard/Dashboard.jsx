@@ -6,14 +6,18 @@ import { DistrictDashboard } from './DistrictDashboard';
 import { PublicCommandDashboard } from './PublicCommandDashboard';
 
 export const Dashboard = () => {
-  const { role } = useAuth();
+  const { role, isAdmin } = useAuth();
 
-  if (role === ROLES.CITIZEN) {
-    return <PublicCommandDashboard />;
+  if (isAdmin || role === ROLES.MOSPI_ADMIN) {
+    return <AdminDashboard />;
   }
 
   if (role === ROLES.DISTRICT_OFFICER) {
     return <DistrictDashboard />;
+  }
+
+  if (role === ROLES.CITIZEN) {
+    return <PublicCommandDashboard />;
   }
 
   return <AdminDashboard />;

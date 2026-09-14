@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   :root {
@@ -16,7 +17,14 @@
 
   body {
     @apply bg-gov-canvas text-slate-800 font-sans antialiased;
-    overflow-x: hidden;
+    overflow-x: clip;
+    width: 100%;
+    position: relative;
+  }
+
+  #root {
+    overflow-x: clip;
+    width: 100%;
   }
 
   /* Custom Government Scrollbar */
@@ -377,16 +385,16 @@ main, section {
   background: linear-gradient(
     90deg,
     #FFFFFF 0%,
-    #FFFFFF 20%,
-    #FF9933 45%,
-    #FFFFFF 65%,
-    #138808 85%,
-    #FF9933 100%
+    #FF9933 28%,
+    #FFFFFF 50%,
+    #138808 72%,
+    #FFFFFF 100%
   );
-  background-size: 280% 100%;
+  background-size: 260% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: heroTricolorFlow 5s ease-in-out infinite alternate;
+  animation: heroTricolorFlow 4.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
 }
 
 @keyframes heroTricolorFlow {
@@ -396,6 +404,198 @@ main, section {
   100% {
     background-position: 100% 50%;
   }
+}
+
+/* ── Two-Color Animated Diagonal Gradient Background (Frutiger Aero Humanist Palette) ── */
+.home-moving-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Luminous Sky Ocean (#1d63b8) through Cyan Aqua (#0d9488) to Soft Meadow Mint (#10b981) */
+  background: linear-gradient(135deg, #1d63b8 0%, #0d9488 45%, #10b981 75%, #1d63b8 100%);
+  background-size: 200% 200%;
+  animation: dynamicGradientSweep 20s ease-in-out infinite alternate;
+  z-index: -10;
+  pointer-events: none;
+}
+
+@keyframes dynamicGradientSweep {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* ── Frutiger Aero Skeuomorphic Glossy Theme Styles ── */
+.frutiger-gloss-card {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.22) 48%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 14px 34px -6px rgba(0, 35, 75, 0.22),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1.5px 2px 0 rgba(0, 20, 50, 0.08);
+  border-radius: 1.25rem;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.frutiger-gloss-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 20px 42px -6px rgba(0, 45, 95, 0.32),
+    0 0 25px rgba(255, 255, 255, 0.45),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 1);
+}
+
+.frutiger-bubble-icon {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.45) 49%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.55) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 4px 14px rgba(0, 30, 60, 0.18),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95);
+}
+
+.frutiger-gloss-btn-primary {
+  background: linear-gradient(
+    180deg,
+    #38bdf8 0%,
+    #0284c7 49%,
+    #0369a1 50%,
+    #075985 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 6px 18px rgba(2, 132, 199, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+}
+
+.frutiger-gloss-btn-primary:hover {
+  background: linear-gradient(
+    180deg,
+    #7dd3fc 0%,
+    #0ea5e9 49%,
+    #0284c7 50%,
+    #0369a1 100%
+  );
+  box-shadow:
+    0 8px 24px rgba(2, 132, 199, 0.55),
+    0 0 16px rgba(56, 189, 248, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+}
+
+.frutiger-gloss-btn-glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.35) 49%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 4px 16px rgba(0, 30, 60, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.frutiger-gloss-btn-glass:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.5) 49%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.6) 100%
+  );
+  box-shadow:
+    0 6px 22px rgba(0, 30, 60, 0.22),
+    0 0 16px rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* ── Windows 7 Aero Glass Theme Styles ── */
+.aero-glass-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 12px 36px 0 rgba(0, 30, 70, 0.22), inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.75);
+}
+
+.aero-glass-button {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 16px rgba(0, 20, 50, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  color: #ffffff;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aero-glass-button:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.25) 100%);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+}
+
+.aero-glass-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.aero-glass-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 0 20px rgba(255, 255, 255, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.aero-glow-blue:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(59, 130, 246, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.aero-glow-green:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(16, 185, 129, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.aero-glow-amber:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(245, 158, 11, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.aero-glow-rose:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(244, 63, 94, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.7);
 }
 
 

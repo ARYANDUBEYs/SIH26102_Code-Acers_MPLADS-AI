@@ -21,13 +21,10 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
     <section className="space-y-6">
       {/* Header section matching reference */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200/80">
-        <div className="space-y-1.5">
+        <div>
           <h2 className="text-2xl sm:text-3xl font-black text-[#0B2545] tracking-tight">
             Smarter Monitoring. Transparent Funds.
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
-            AI finds risks, tracks progress and helps ensure MPLADS funds reach where they're needed.
-          </p>
         </div>
         <div className="text-right hidden sm:block">
           <span className="text-sm font-semibold text-blue-800 italic block font-serif">Real projects.</span>
@@ -44,17 +41,14 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         <div className="bg-white/95 rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
           <div className="space-y-4">
             {/* Header: Circle Number 1 & Title */}
-            <div className="flex items-start gap-3.5 pb-2">
+            <div className="flex items-center gap-3.5 pb-2">
               <div className="w-10 h-10 rounded-full bg-blue-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20">
                 1
               </div>
-              <div className="space-y-0.5">
-                <h3 className="text-base font-bold text-slate-900 tracking-tight leading-snug">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
                   Evidence & Fraud Checks
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Verifies photos, documents and maps to spot fake or reused content.
-                </p>
               </div>
             </div>
 
@@ -141,45 +135,32 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         <div className="bg-white/95 rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
           <div className="space-y-4">
             {/* Header: Circle Number 2 & Title */}
-            <div className="flex items-start gap-3.5 pb-2">
+            <div className="flex items-center gap-3.5 pb-2">
               <div className="w-10 h-10 rounded-full bg-purple-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm shadow-purple-500/20">
                 2
               </div>
-              <div className="space-y-0.5">
-                <h3 className="text-base font-bold text-slate-900 tracking-tight leading-snug">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
                   AI Risk Scoring Models
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Learns from data to spot unusual patterns and rank risks.
-                </p>
               </div>
             </div>
 
-            {/* Item 1: Isolation Forest with Anomaly Detection Badge */}
+            {/* Item 1: Isolation Forest */}
             <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1.5 border-l-4 border-l-purple-500">
-              <div className="flex items-center justify-between gap-2">
-                <h4 className="text-xs font-bold text-slate-900">
-                  Isolation Forest
-                </h4>
-                <span className="px-2 py-0.5 text-[10px] font-semibold text-purple-700 bg-purple-50 border border-purple-200/80 rounded-full">
-                  Anomaly Detection
-                </span>
-              </div>
+              <h4 className="text-xs font-bold text-slate-900">
+                Isolation Forest
+              </h4>
               <p className="text-[11px] text-slate-500 leading-snug">
                 Finds odd patterns in work, funds and flagged projects.
               </p>
             </div>
 
-            {/* Item 2: XGBoost Classifier with Risk Ranking Badge */}
+            {/* Item 2: XGBoost Classifier */}
             <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1.5 border-l-4 border-l-blue-500">
-              <div className="flex items-center justify-between gap-2">
-                <h4 className="text-xs font-bold text-slate-900">
-                  XGBoost Classifier
-                </h4>
-                <span className="px-2 py-0.5 text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 rounded-full">
-                  Risk Ranking
-                </span>
-              </div>
+              <h4 className="text-xs font-bold text-slate-900">
+                XGBoost Classifier
+              </h4>
               <p className="text-[11px] text-slate-500 leading-snug">
                 Scores each project's risk level using multiple factors.
               </p>
@@ -241,17 +222,14 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         <div className="bg-white/95 rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
           <div className="space-y-4">
             {/* Header: Circle Number 3 & Title */}
-            <div className="flex items-start gap-3.5 pb-2">
+            <div className="flex items-center gap-3.5 pb-2">
               <div className="w-10 h-10 rounded-full bg-emerald-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/20">
                 3
               </div>
-              <div className="space-y-0.5">
-                <h3 className="text-base font-bold text-slate-900 tracking-tight leading-snug">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
                   Interactive Dashboards & Voice AI
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Explore data, get insights and ask questions.
-                </p>
               </div>
             </div>
 

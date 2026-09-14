@@ -32,7 +32,7 @@ const itemVariants = {
   exit: { opacity: 0, x: -6 }
 };
 
-export const TopUtilityBar = ({ onOpenVoiceModal }) => {
+export const TopUtilityBar = ({ onOpenVoiceModal, sticky = true }) => {
   const { currentLanguage, setLanguage } = useLanguage();
   const { activeGlobalDropdown, toggleDropdown, closeDropdowns } = useApp();
   const location = useLocation();
@@ -67,7 +67,7 @@ export const TopUtilityBar = ({ onOpenVoiceModal }) => {
   const isLangOpen = activeGlobalDropdown === 'topLang';
 
   return (
-    <div className="w-full bg-[#07172B] text-slate-200 border-b border-slate-800 text-[11px] select-none sticky top-0 z-50">
+    <div className={`w-full bg-[#07172B]/60 backdrop-blur-md text-slate-100 border-b border-white/10 text-[11px] select-none ${sticky ? 'sticky top-0 z-50' : 'relative z-10'}`}>
       {/* National Tricolor Top Strip with Route Loading State */}
       <div
         className={`h-[3.5px] w-full transition-all duration-300 ${

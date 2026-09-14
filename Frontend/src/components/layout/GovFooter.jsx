@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const GovFooter = () => {
   return (
-    <footer className="w-full bg-[#07172B] text-slate-300 border-t border-slate-800">
+    <footer className="relative z-30 w-full bg-[#07172B] text-slate-300 border-t border-slate-800">
       {/* Upper Information Ribbon */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-xs">
         {/* Col 1: Government Masthead */}

@@ -131,6 +131,23 @@ export const PublicSearch = () => {
                 className="bg-gov-surface rounded-xl border border-gov-border hover:border-blue-500 hover:shadow-md transition-all p-5 flex flex-col justify-between cursor-pointer space-y-4 group"
               >
                 <div>
+                  {/* Photo Thumbnail */}
+                  <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200 bg-slate-100 mb-3">
+                    <img
+                      src={p.images?.uploaded || "/projects/ruralroad.jpg"}
+                      alt={p.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80";
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-xs text-white text-[10px] font-mono font-bold">
+                      <span className={`w-2 h-2 rounded-full ${p.riskScore >= 70 ? 'bg-rose-500' : p.riskScore >= 40 ? 'bg-amber-400' : 'bg-emerald-400'}`} />
+                      <span>{p.riskScore}/100 Risk</span>
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between pb-2 border-b border-gov-border">
                     <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
                       {p.id}

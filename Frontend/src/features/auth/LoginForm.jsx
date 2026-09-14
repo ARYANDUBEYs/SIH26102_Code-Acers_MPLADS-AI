@@ -54,15 +54,15 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
     setIsLoading(true);
 
     try {
-      // Determine role from selection or email
+      // Determine role strictly from selection, with email as supportive validation
       let targetRole = selectedRole;
       const em = email.toLowerCase().trim();
-      if (em.includes('district') || em.includes('collector') || em.includes('varanasi') || em.includes('dm')) {
-        targetRole = ROLES.DISTRICT_OFFICER;
-      } else if (em.includes('citizen') || em.includes('public') || em.includes('patel')) {
-        targetRole = ROLES.CITIZEN;
-      } else if (em.includes('admin') || em.includes('mospi')) {
+      if (selectedRole === ROLES.MOSPI_ADMIN || em.includes('admin') || em.includes('mospi')) {
         targetRole = ROLES.MOSPI_ADMIN;
+      } else if (selectedRole === ROLES.DISTRICT_OFFICER || em.includes('district') || em.includes('collector') || em.includes('varanasi') || em.includes('dm')) {
+        targetRole = ROLES.DISTRICT_OFFICER;
+      } else if (selectedRole === ROLES.CITIZEN || em.includes('citizen') || em.includes('public') || em.includes('patel')) {
+        targetRole = ROLES.CITIZEN;
       }
 
       await login(email, password, targetRole);

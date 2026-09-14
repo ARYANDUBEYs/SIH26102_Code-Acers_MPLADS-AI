@@ -60,14 +60,52 @@ function mapAssessment(a) {
 }
 
 function mapProject(p, assessment) {
-  const a = mapAssessment(assessment || { overall_risk_score: 50, risk_level: 'MEDIUM', explainable_flags: [] });
+  const fallback = FALLBACK_PROJECTS.find(fb => fb.id.toLowerCase() === (p.project_id || p.id || '').toLowerCase());
+  const a = mapAssessment(assessment || {
+    overall_risk_score: fallback?.riskScore || (p.image_anomaly_score > 50 ? 85 : 50),
+    risk_level: fallback?.riskLevel || (p.image_anomaly_score > 50 ? 'HIGH' : 'MEDIUM'),
+    explainable_flags: fallback?.anomalies?.map(x => x.title) || []
+  });
+
+  // Preserve image from fallback if configured (e.g. /projects/ruralroad.jpg), then evidence_image_url, then fallback
+  const uploadedImage = fallback?.images?.uploaded || p.evidence_image_url || p.images?.uploaded;
+
   return {
-    id: p.project_id, name: p.title, category: p.category, location: `${p.district}, ${p.state}`, district: p.district, state: p.state, mpName: p.constituency,
-    implementingAgency: 'MPLADS Implementing Agency', contractor: p.contractor_name, sanctionedAmount: p.sanctioned_amount, releasedAmount: p.funds_released, utilizedAmount: p.funds_utilized,
-    remainingAmount: Math.max(0, p.sanctioned_amount - p.funds_utilized), sanctionDate: p.sanction_date, startDate: p.sanction_date, targetDate: p.expected_completion_date,
-    currentStage: p.physical_progress_pct >= 100 ? 'Completed' : 'Work Progress', progressPercent: p.physical_progress_pct, status: p.status || (a.riskScore >= 60 ? 'FLAGGED' : 'MONITORED'),
-    riskScore: a.riskScore, riskLevel: a.riskLevel, coordinates: [p.latitude, p.longitude], lastUpdated: new Date().toISOString(),
-    slaDaysLeft: p.allocated_duration_days - p.days_elapsed, slaUrgency: (p.allocated_duration_days - p.days_elapsed) < 0 ? 'CRITICAL' : 'SAFE', images: { uploaded: p.evidence_image_url || undefined }, anomalies: a.anomalies, backendRecord: p, assessment
+    id: p.project_id || p.id,
+    name: p.title || p.name,
+    category: p.category,
+    location: `${p.district}, ${p.state}`,
+    district: p.district,
+    state: p.state,
+    mpName: p.constituency || p.mpName,
+    implementingAgency: p.implementingAgency || 'MPLADS Implementing Agency',
+    contractor: p.contractor_name || p.contractor,
+    sanctionedAmount: p.sanctioned_amount ?? p.sanctionedAmount ?? 0,
+    releasedAmount: p.funds_released ?? p.releasedAmount ?? 0,
+    utilizedAmount: p.funds_utilized ?? p.utilizedAmount ?? 0,
+    remainingAmount: Math.max(0, (p.sanctioned_amount || p.sanctionedAmount || 0) - (p.funds_utilized || p.utilizedAmount || 0)),
+    sanctionDate: p.sanction_date || p.sanctionDate,
+    startDate: p.sanction_date || p.startDate,
+    targetDate: p.expected_completion_date || p.targetDate,
+    currentStage: (p.physical_progress_pct || p.progressPercent) >= 100 ? 'Completed' : 'Work Progress',
+    progressPercent: p.physical_progress_pct ?? p.progressPercent ?? 50,
+    status: p.status || fallback?.status || (a.riskScore >= 60 ? 'FLAGGED' : 'MONITORED'),
+    riskScore: fallback ? fallback.riskScore : a.riskScore,
+    riskLevel: fallback ? fallback.riskLevel : a.riskLevel,
+    coordinates: p.latitude && p.longitude ? [p.latitude, p.longitude] : (fallback?.coordinates || [25.3176, 82.9739]),
+    lastUpdated: new Date().toISOString(),
+    slaDaysLeft: p.allocated_duration_days ? (p.allocated_duration_days - p.days_elapsed) : (fallback?.slaDaysLeft || 0),
+    slaUrgency: fallback?.slaUrgency || ((p.allocated_duration_days - p.days_elapsed) < 0 ? 'CRITICAL' : 'SAFE'),
+    images: {
+      uploaded: uploadedImage,
+      matched: fallback?.images?.matched,
+      uploadedMeta: fallback?.images?.uploadedMeta,
+      matchedMeta: fallback?.images?.matchedMeta
+    },
+    anomalies: fallback?.anomalies?.length ? fallback.anomalies : a.anomalies,
+    timeline: fallback?.timeline || [],
+    backendRecord: p,
+    assessment
   };
 }
 
@@ -80,11 +118,14 @@ async function getRawProjects(filters = {}) {
     const records = await request(`/analytics/projects${qs.toString() ? `?${qs}` : ''}`);
     if (Array.isArray(records) && records.length > 0) {
       const assessments = await Promise.all(
-        records.map(p => request(`/analytics/score-project/${encodeURIComponent(p.project_id)}`).catch(() => ({
-          overall_risk_score: p.image_anomaly_score > 50 ? 85 : 30,
-          risk_level: p.image_anomaly_score > 50 ? 'HIGH' : 'LOW',
-          explainable_flags: p.image_anomaly_score > 50 ? ['Duplicate Site Photograph Detected'] : ['Parameters Nominal']
-        })))
+        records.map(p => {
+          const fb = FALLBACK_PROJECTS.find(x => x.id.toLowerCase() === p.project_id.toLowerCase());
+          return request(`/analytics/score-project/${encodeURIComponent(p.project_id)}`, { timeout: 3500 }).catch(() => ({
+            overall_risk_score: fb?.riskScore || (p.image_anomaly_score > 50 ? 85 : 50),
+            risk_level: fb?.riskLevel || (p.image_anomaly_score > 50 ? 'HIGH' : 'LOW'),
+            explainable_flags: fb?.anomalies?.map(x => x.title) || (p.image_anomaly_score > 50 ? ['Duplicate Site Photograph Detected'] : ['Parameters Nominal'])
+          }));
+        })
       );
       return records.map((p, i) => mapProject(p, assessments[i]));
     }

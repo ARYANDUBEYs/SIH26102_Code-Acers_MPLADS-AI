@@ -415,6 +415,38 @@ export const ProjectDetails = () => {
             </div>
           </div>
 
+          {/* Card: Physical Progress Evidence Photo */}
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-4">
+            <div className="flex items-start justify-between border-l-4 border-purple-600 pl-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 tracking-tight">Field Progress Evidence</h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Geotagged site photograph submitted by executing agency.
+                </p>
+              </div>
+              <Link to="/evidence" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
+                <span>Forensic Lab</span>
+                <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </div>
+
+            <div className="relative rounded-xl overflow-hidden border border-slate-200 aspect-video bg-slate-100 group">
+              <img
+                src={project.images?.uploaded || "/projects/ruralroad.jpg"}
+                alt={project.name}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80";
+                }}
+                className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+              />
+              <div className="absolute bottom-2.5 left-2.5 bg-slate-950/80 backdrop-blur-xs text-white text-[11px] font-mono px-2.5 py-1 rounded-md flex items-center gap-2">
+                <Camera className="w-3.5 h-3.5 text-blue-400" />
+                <span>{project.id} • {project.district}</span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* ======================================================================= */}

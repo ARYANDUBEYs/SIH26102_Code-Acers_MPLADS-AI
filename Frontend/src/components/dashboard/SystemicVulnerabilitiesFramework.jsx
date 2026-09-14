@@ -107,16 +107,20 @@ export const SystemicVulnerabilitiesFramework = () => {
 
   const current = pillars[activeTab];
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-md overflow-hidden">
-      {/* Top Header */}
-      <div className="py-9 px-6 sm:px-10 bg-gradient-to-r from-[#0B2545] via-[#0F315E] to-[#133A6B] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h3 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-          How the System Protects Public Money
-        </h3>
+    <div className="bg-white/95 border border-sky-200/80 rounded-2xl shadow-lg overflow-hidden backdrop-blur-md">
+      {/* Top Header with Frutiger Aero Glossy Gradient */}
+      <div className="relative py-8 px-6 sm:px-10 bg-gradient-to-r from-[#0c4a6e] via-[#0284c7] to-[#0ea5e9] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
+        {/* Specular aurora highlight sheen */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative z-10">
+          <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
+            How the System Protects Public Money
+          </h3>
+        </div>
       </div>
 
-      {/* Tab Selector Buttons */}
-      <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50 p-2 gap-1.5 scrollbar-thin">
+      {/* Frutiger Aero Glossy Tab Selector Buttons */}
+      <div className="flex overflow-x-auto border-b border-sky-100 bg-sky-50/50 p-2.5 gap-2 scrollbar-thin">
         {pillars.map((p, idx) => {
           const Icon = p.icon;
           const isActive = idx === activeTab;
@@ -124,13 +128,13 @@ export const SystemicVulnerabilitiesFramework = () => {
             <button
               key={p.id}
               onClick={() => setActiveTab(idx)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-white text-[#0B2545] shadow-sm border border-slate-200 font-black'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-gradient-to-b from-white via-white to-sky-50 text-[#0c4a6e] shadow-md border border-sky-300 font-black scale-[1.02]'
+                  : 'text-slate-600 hover:text-sky-900 hover:bg-white/80 border border-transparent'
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-700' : 'text-slate-500'}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-sky-600' : 'text-slate-500'}`} />
               <span>{p.shortName}</span>
             </button>
           );
@@ -148,61 +152,59 @@ export const SystemicVulnerabilitiesFramework = () => {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            {/* Title */}
-            <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-800 flex items-center justify-center border border-blue-200 shrink-0">
-                <current.icon className="w-5 h-5 text-blue-700" />
+            {/* Title with Glossy Orb */}
+            <div className="flex items-center gap-3.5 border-b border-sky-100/80 pb-4">
+              <div className="w-11 h-11 rounded-full frutiger-bubble-icon text-sky-700 flex items-center justify-center shrink-0 shadow-sm">
+                <current.icon className="w-5 h-5 text-sky-700" />
               </div>
-              <h4 className="text-lg sm:text-xl font-black text-slate-900">{current.name}</h4>
+              <div>
+                <h4 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{current.name}</h4>
+              </div>
             </div>
 
-            {/* Split: Vulnerability vs Solution */}
+            {/* Split: Problem vs Solution in Harmonious Frutiger Aero Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Problem */}
-              <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200/80 space-y-2">
-                <div className="flex items-center gap-2 text-rose-800 text-xs font-bold uppercase tracking-wider">
-                  <span className="w-2 h-2 rounded-full bg-rose-500" />
-                  <span>The Problem It Solves</span>
+              {/* Problem Card */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-white via-white/95 to-rose-50/40 border border-rose-200/70 shadow-sm space-y-2.5 hover:shadow-md transition-shadow">
+                <div className="text-rose-700 text-xs font-bold uppercase tracking-wider">
+                  The Problem It Solves
                 </div>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
                   {current.vulnerability}
                 </p>
               </div>
 
-              {/* Solution */}
-              <div className="p-4 rounded-xl bg-emerald-50/60 border border-emerald-200/80 space-y-2">
-                <div className="flex items-center gap-2 text-emerald-800 text-xs font-bold uppercase tracking-wider">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>How We Solve It</span>
+              {/* Solution Card */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-white via-white/95 to-teal-50/40 border border-teal-200/70 shadow-sm space-y-2.5 hover:shadow-md transition-shadow">
+                <div className="text-teal-700 text-xs font-bold uppercase tracking-wider">
+                  How We Solve It
                 </div>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
                   {current.solution}
                 </p>
               </div>
             </div>
 
-            {/* Enforcement Rule Box */}
-            <div className="p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 space-y-2 shadow-inner">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold">
-                  Operational Rule
-                </span>
-                <span className="text-[10px] font-mono text-emerald-400">Strictly Enforced</span>
+            {/* Enforcement Rule Banner in Frutiger Aero Glass Security Style */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-sky-950 via-blue-900 to-indigo-950 text-white border border-sky-400/30 space-y-2.5 shadow-md backdrop-blur-md">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
+                High-Assurance Operational Rule
               </div>
-              <div className="text-xs sm:text-sm font-medium text-cyan-200 bg-slate-950/80 p-3 rounded border border-slate-800">
+              <div className="text-xs sm:text-sm font-medium text-sky-100 bg-white/10 p-3.5 rounded-xl border border-white/15 leading-relaxed shadow-inner">
                 {current.mathProof}
               </div>
             </div>
 
-            {/* Specific Implementation Countermeasures */}
-            <div className="space-y-2.5">
-              <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                Key Safeguard Measures
+            {/* Specific Implementation Countermeasures in Polished Cards */}
+            <div className="space-y-3">
+              <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <span className="w-1.5 h-3.5 bg-sky-600 rounded-full" />
+                <span>Key Safeguard Measures</span>
               </h5>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 {current.countermeasures.map((item, i) => (
-                  <div key={i} className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <div className="w-5 h-5 rounded bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                  <div key={i} className="p-4 rounded-xl bg-white border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-b from-sky-400 to-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-xs">
                       {i + 1}
                     </div>
                     <span className="text-xs text-slate-700 font-medium leading-relaxed">{item}</span>

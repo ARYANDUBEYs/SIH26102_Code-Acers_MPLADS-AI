@@ -26,7 +26,7 @@ export const FALLBACK_PROJECTS = [
     slaDaysLeft: -109,
     slaUrgency: "CRITICAL",
     images: {
-      uploaded: "/ruralroad.jpg"
+      uploaded: "/projects/ruralroad.jpg"
     },
     anomalies: [
       {
