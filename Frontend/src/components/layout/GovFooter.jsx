@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const GovFooter = () => {
   return (
-    <footer className="relative z-30 w-full bg-[#07172B] text-slate-300 border-t border-slate-800">
+    <footer id="contact" className="relative z-30 w-full bg-[#07172B] text-slate-300 border-t border-slate-800 scroll-mt-10">
       {/* Upper Information Ribbon */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-xs">
         {/* Col 1: Government Masthead */}
@@ -100,13 +100,6 @@ export const GovFooter = () => {
           <p className="text-center md:text-left">
             © Content Owned by Ministry of Statistics and Programme Implementation, Government of India.
           </p>
-          <div className="flex items-center gap-4 text-[10px] font-mono">
-            <span>NIC Standards Compliant</span>
-            <span>•</span>
-            <span>WCAG 2.1 AA Accessible</span>
-            <span>•</span>
-            <span className="text-slate-400">Built for SIH 2026</span>
-          </div>
         </div>
       </div>
     </footer>

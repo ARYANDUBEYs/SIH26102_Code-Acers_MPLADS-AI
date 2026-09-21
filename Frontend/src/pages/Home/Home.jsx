@@ -41,6 +41,7 @@ import { SarvamIndicModal } from '../../components/sarvam/SarvamIndicModal';
 import { AuthModal } from '../../components/common/AuthModal';
 import { TiltQuoteCard } from '../../components/common/TiltQuoteCard';
 import { GlowingParticlesBackground } from '../../components/common/GlowingParticlesBackground';
+import { HeroWavyBackground } from '../../components/common/HeroWavyBackground';
 import {
   AeroplaneArrow,
   AeroplaneSend,
@@ -148,6 +149,7 @@ const ScrollScalingHeading = ({ title = "About the MPLAD Scheme" }) => {
 
 export const Home = () => {
   const { user, isAuthenticated, isAdmin, isDistrictOfficer, logout, login } = useAuth();
+  const isOfficial = isAdmin || isDistrictOfficer;
   const { currentLanguage, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
 
@@ -208,19 +210,27 @@ export const Home = () => {
       setIsScrolled(scrollY > 50);
 
       if (isManualScrollRef.current) return;
-      const scrollPosition = scrollY + 180;
+
+      const contactElem = document.getElementById('contact');
       const aboutElem = document.getElementById('aboutus');
       const methodologyElem = document.getElementById('methodology');
 
-      if (aboutElem && scrollPosition >= aboutElem.offsetTop) {
+      // Check if user is scrolled to the bottom of the page or footer is in view
+      const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 150);
+      const contactTop = contactElem ? contactElem.getBoundingClientRect().top : Infinity;
+
+      if (isAtBottom || contactTop <= window.innerHeight * 0.75) {
+        setActiveNav('contact');
+      } else if (aboutElem && aboutElem.getBoundingClientRect().top <= 220) {
         setActiveNav('about');
-      } else if (methodologyElem && scrollPosition >= methodologyElem.offsetTop) {
+      } else if (methodologyElem && methodologyElem.getBoundingClientRect().top <= 220) {
         setActiveNav('methodology');
       } else {
         setActiveNav('home');
       }
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -258,14 +268,19 @@ export const Home = () => {
         <TopUtilityBar sticky={false} onOpenVoiceModal={() => setIsVoiceModalOpen(true)} />
       </div>
 
-      {/* 3. Official Masthead / Navbar with dynamic dark glass appearance on scroll - Fixed at top-0 */}
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 w-full ${
-          isScrolled
-            ? 'bg-slate-950/85 backdrop-blur-xl border-b border-white/15 shadow-xl text-white'
-            : 'bg-transparent border-transparent shadow-none text-white'
-        }`}
-      >
+      {/* Hero & Navbar Zone: Animated Parliament Wavy Background touches directly below TopUtilityBar */}
+      <div className="relative w-full">
+        {/* Animated Parliament Wavy Background - covers from below TopUtilityBar to bottom wave curve */}
+        <HeroWavyBackground />
+
+        {/* 3. Official Masthead / Navbar with dynamic glass appearance on scroll - Fixed at top-0 */}
+        <header
+          className={`sticky top-0 z-40 transition-all duration-300 w-full ${
+            isScrolled
+              ? 'bg-white/90 backdrop-blur-xl border-b border-purple-200/60 shadow-md text-slate-800'
+              : 'bg-transparent border-transparent shadow-none text-slate-800'
+          }`}
+        >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
           {/* Top-Left Brand Slot: Emerges from center-to-top-left morph animation ONLY when scrolled */}
@@ -279,27 +294,27 @@ export const Home = () => {
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-3"
             >
-              {/* Ashoka Lion / Shield Emblem in Aero Glass */}
-              <div className="w-11 h-11 rounded-xl aero-glass-button p-1 flex flex-col items-center justify-center text-white shrink-0 border border-white/40 shadow-md">
+              {/* Ashoka Lion / Shield Emblem */}
+              <div className="w-11 h-11 rounded-xl bg-[#0B2545] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-200/40 shadow-md">
                 <ShieldCheck className="w-5 h-5 text-amber-400" />
                 <span className="text-[7px] font-bold tracking-tighter uppercase font-mono text-white">MoSPI</span>
               </div>
 
               <div className="leading-tight">
                 <div className="flex items-center gap-2">
-                  <span className="font-black text-base sm:text-lg tracking-tight text-white drop-shadow-sm">
-                    Scheme Guard <span className="text-amber-400">2.0</span>
+                  <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 drop-shadow-xs">
+                    Scheme Guard <span className="text-purple-700">2.0</span>
                   </span>
                 </div>
-                <p className="text-[10px] text-white/80 font-medium tracking-wide">
+                <p className="text-[10px] text-slate-600 font-medium tracking-wide">
                   MoSPI • Govt. of India
                 </p>
               </div>
             </motion.div>
           </div>
 
-          {/* Authentic Clean Navigation Links with Aero Glass Button styling & Scroll-Spy */}
-          <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold p-1 rounded-full aero-glass-panel border-white/30 text-white">
+          {/* Clean Navigation Links with Frosted Glass styling & Scroll-Spy */}
+          <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold p-1 rounded-full bg-white/70 backdrop-blur-md border border-purple-200/80 shadow-sm text-slate-700">
             {/* 1. Home */}
             <button
               type="button"
@@ -315,19 +330,19 @@ export const Home = () => {
               className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
                 activeNav === 'home'
                   ? 'text-white'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
               }`}
             >
               {activeNav === 'home' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545]/90 rounded-full -z-10 shadow-sm border border-white/30"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'home' ? 'bg-emerald-400 scale-100' : 'bg-white/50 scale-75'
+                  activeNav === 'home' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>Home</span>
@@ -340,19 +355,19 @@ export const Home = () => {
               className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
                 activeNav === 'methodology'
                   ? 'text-white'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
               }`}
             >
               {activeNav === 'methodology' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545]/90 rounded-full -z-10 shadow-sm border border-white/30"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'methodology' ? 'bg-cyan-400 scale-100' : 'bg-white/50 scale-75'
+                  activeNav === 'methodology' ? 'bg-cyan-400 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>Methodology & Working Principle</span>
@@ -365,26 +380,51 @@ export const Home = () => {
               className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
                 activeNav === 'about'
                   ? 'text-white'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
               }`}
             >
               {activeNav === 'about' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545]/90 rounded-full -z-10 shadow-sm border border-white/30"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'about' ? 'bg-emerald-400 scale-100' : 'bg-white/50 scale-75'
+                  activeNav === 'about' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>About the Scheme</span>
             </button>
+
+            {/* 4. Contact */}
+            <button
+              type="button"
+              onClick={() => scrollToSection('contact', 'contact')}
+              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
+                activeNav === 'contact'
+                  ? 'text-white'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
+              }`}
+            >
+              {activeNav === 'contact' && (
+                <motion.div
+                  layoutId="homeNavIndicator"
+                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  activeNav === 'contact' ? 'bg-amber-400 scale-100' : 'bg-slate-400 scale-75'
+                }`}
+              />
+              <span>Contact</span>
+            </button>
           </nav>
 
-          {/* Top Right Controls (User Profile / Login - Zoom buttons removed per specification) */}
+          {/* Top Right Controls (User Profile / Login) */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* User Profile Avatar with Dropdown OR Login Button */}
             {user ? (
@@ -392,18 +432,18 @@ export const Home = () => {
                 <button
                   type="button"
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center gap-2 p-1.5 rounded-lg aero-glass-button border-white/30 text-white hover:bg-white/20 transition-colors cursor-pointer"
+                  className="flex items-center gap-2 p-1.5 rounded-lg bg-white/80 hover:bg-white border border-purple-200/80 text-slate-800 shadow-sm transition-colors cursor-pointer backdrop-blur-md"
                   title="Account Profile"
                 >
                   <img
                     src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
                     alt={user?.name || 'User'}
-                    className="w-7 h-7 rounded-md object-cover border border-white/40"
+                    className="w-7 h-7 rounded-md object-cover border border-purple-200/60"
                   />
-                  <span className="hidden sm:inline-block text-xs font-bold truncate max-w-[110px]">
+                  <span className="hidden sm:inline-block text-xs font-bold truncate max-w-[110px] text-slate-800">
                     {user?.name?.split(' ')[0]}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 opacity-80" />
+                  <ChevronDown className="w-3.5 h-3.5 opacity-80 text-slate-600" />
                 </button>
 
                 {isProfileDropdownOpen && (
@@ -445,21 +485,19 @@ export const Home = () => {
             ) : (
               <Link
                 to="/login"
-                className="aero-glass-button px-4 py-2 text-xs font-bold rounded-lg border-white/40 shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer text-white"
+                className="px-4 py-2 text-xs font-bold rounded-lg bg-white/80 hover:bg-white text-slate-800 border border-purple-200/80 shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer backdrop-blur-md hover:shadow"
               >
                 <span>Login</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 text-purple-700" />
               </Link>
             )}
           </div>
         </div>
       </header>
 
-      {/* 4. Main Content Area */}
-      <div className="w-full relative z-10">
-        {/* 5. Hero Section with Morphing Center Title and Windows 7 Aero Glass styling */}
-        <section className="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden text-center">
-          <div className="max-w-5xl mx-auto space-y-6 relative z-10">
+      {/* 5. Hero Section with Morphing Center Title and Windows 7 Aero Glass styling */}
+      <section className="relative pt-8 pb-8 px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-5xl mx-auto space-y-6 relative z-10">
             {/* Dynamic Center Title with Indian Tricolor Flow that smoothly morphs toward top-left navbar on scroll */}
             <motion.div
               animate={
@@ -481,12 +519,12 @@ export const Home = () => {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-4"
             >
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight drop-shadow-md text-white">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
                 <span className="hero-tricolor-text inline-block">
                   Scheme Guard: From Local Priorities to National Development
                 </span>
               </h1>
-              <p className="text-xs sm:text-sm text-white/90 font-medium max-w-2xl mx-auto drop-shadow-xs">
+              <p className="text-xs sm:text-sm text-slate-700 font-semibold max-w-2xl mx-auto drop-shadow-xs">
                 Algorithmic vigilance, real-time PFMS treasury tracking, and image forensics protecting public development assets across all 543 Lok Sabha Constituencies.
               </p>
             </motion.div>
@@ -521,9 +559,10 @@ export const Home = () => {
           </div>
         </section>
 
-        {/* 6. Four Independent Boxes in Frutiger Aero Theme (Glossy Skeuomorphic Acrylic Glass) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full -mt-4 relative z-20 mb-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* 6. Three Role-Aware Action Boxes in Solid White Theme - Inside Wavy Image Region */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20 pb-20 sm:pb-28">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {/* Box 1: Guidelines & Acts - Always Visible */}
             <motion.a
               href="#aboutus"
               onClick={(e) => {
@@ -532,7 +571,7 @@ export const Home = () => {
                 if (elem) elem.scrollIntoView({ behavior: 'smooth' });
               }}
               whileHover={{ y: -5, transition: { duration: 0.25 } }}
-              className="frutiger-gloss-card p-5 flex flex-col items-center text-center group cursor-pointer"
+              className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group cursor-pointer shadow-sm hover:shadow-lg"
             >
               <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-sky-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
                 <AnimatedFileText className="w-6 h-6 text-sky-700" />
@@ -543,11 +582,12 @@ export const Home = () => {
               <span className="text-[11px] text-slate-600 font-medium mt-0.5">2023 Revised Protocol</span>
             </motion.a>
 
+            {/* Box 2: Voice AI Assist - Always Visible */}
             <motion.button
               type="button"
               onClick={() => setIsVoiceModalOpen(true)}
               whileHover={{ y: -5, transition: { duration: 0.25 } }}
-              className="frutiger-gloss-card p-5 flex flex-col items-center text-center group cursor-pointer"
+              className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group cursor-pointer shadow-sm hover:shadow-lg"
             >
               <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-emerald-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
                 <AnimatedVoice className="w-6 h-6 text-emerald-700" />
@@ -558,44 +598,54 @@ export const Home = () => {
               <span className="text-[11px] text-slate-600 font-medium mt-0.5">8 Indic Languages</span>
             </motion.button>
 
-            <motion.button
-              type="button"
-              onClick={() => setIsCitizenModalOpen(true)}
-              whileHover={{ y: -5, transition: { duration: 0.25 } }}
-              className="frutiger-gloss-card p-5 flex flex-col items-center text-center group cursor-pointer"
-            >
-              <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-amber-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
-                <AeroplaneSend className="w-6 h-6 text-amber-700" />
-              </div>
-              <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 transition-colors">
-                Citizen Request
-              </span>
-              <span className="text-[11px] text-slate-600 font-medium mt-0.5">Local Area Proposal</span>
-            </motion.button>
-
-            <motion.div
-              whileHover={{ y: -5, transition: { duration: 0.25 } }}
-              className="h-full"
-            >
-              <Link
-                to="/project/MPLAD-2026-00124"
-                className="frutiger-gloss-card p-5 flex flex-col items-center text-center group h-full block"
+            {/* Box 3 for Citizens: Citizen Request */}
+            {!isOfficial && (
+              <motion.button
+                type="button"
+                onClick={() => setIsCitizenModalOpen(true)}
+                whileHover={{ y: -5, transition: { duration: 0.25 } }}
+                className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group cursor-pointer shadow-sm hover:shadow-lg"
               >
-                <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-rose-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
-                  <AnimatedAlertTriangle className="w-6 h-6 text-rose-600" />
+                <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-amber-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
+                  <AeroplaneSend className="w-6 h-6 text-amber-700" />
                 </div>
-                <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-rose-700 transition-colors">
-                  Live AI Audit Dossier
+                <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 transition-colors">
+                  Citizen Request
                 </span>
-                <span className="text-[11px] text-slate-600 font-medium mt-0.5">Flagged NANDURBAR</span>
-              </Link>
-            </motion.div>
+                <span className="text-[11px] text-slate-600 font-medium mt-0.5">Local Area Proposal</span>
+              </motion.button>
+            )}
+
+            {/* Box 3 for Admin & Officer: AI Audit Dossier */}
+            {isOfficial && (
+              <motion.div
+                whileHover={{ y: -5, transition: { duration: 0.25 } }}
+                className="h-full"
+              >
+                <Link
+                  to="/project/MPLAD-2026-00124"
+                  className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group h-full block shadow-sm hover:shadow-lg"
+                >
+                  <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-rose-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
+                    <AnimatedAlertTriangle className="w-6 h-6 text-rose-600" />
+                  </div>
+                  <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-rose-700 transition-colors">
+                    AI Audit Dossier
+                  </span>
+                  <span className="text-[11px] text-slate-600 font-medium mt-0.5">Flagged NANDURBAR</span>
+                </Link>
+              </motion.div>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Live Institutional Continuous Right-to-Left Marquee Announcement Ticker in Frutiger Aero */}
+      {/* 4. Main Content Area */}
+      <div className="w-full relative z-10">
+
+        {/* Live Institutional Continuous Right-to-Left Marquee Announcement Ticker */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-10">
-          <div className="frutiger-gloss-card p-3.5 flex items-center gap-3 overflow-hidden shadow-md">
+          <div className="frutiger-gloss-card bg-white p-3.5 flex items-center gap-3 overflow-hidden shadow-sm">
             <div className="px-3 py-1 bg-gradient-to-r from-sky-900 to-blue-900 text-white text-[10px] font-bold uppercase tracking-wider rounded-xl font-mono shrink-0 flex items-center gap-1.5 border border-sky-400/30 shadow-sm">
               <Activity className="w-3.5 h-3.5 text-sky-300 animate-pulse" />
               <span>Live Surveillance</span>
@@ -613,15 +663,15 @@ export const Home = () => {
           </div>
         </div>
 
-        {/* Dual-Mode 6-Stat KPI Ribbon in Frutiger Aero Theme */}
+        {/* Dual-Mode 6-Stat KPI Ribbon */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
-          <div className="frutiger-gloss-card rounded-3xl p-6 shadow-xl space-y-5">
+          <div className="frutiger-gloss-card bg-white rounded-3xl p-6 shadow-md space-y-5">
             
             {/* Header & Dual-Mode Controls */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-sky-100 pb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base sm:text-lg font-black text-[#0c4a6e] drop-shadow-xs">
+                  <h2 className="text-base sm:text-lg font-black text-[#0B2545]">
                     National Developmental Indicators & Fund Flow
                   </h2>
                 </div>
@@ -631,7 +681,7 @@ export const Home = () => {
               </div>
 
               {/* Mode Switcher Buttons */}
-              <div className="flex items-center gap-2 bg-sky-100/70 p-1 rounded-xl border border-sky-200 self-stretch sm:self-auto justify-center">
+              <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200 self-stretch sm:self-auto justify-center">
                 <button
                   type="button"
                   onClick={() => setKpiMode('statutory')}
@@ -667,7 +717,7 @@ export const Home = () => {
                   className={`px-3.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                     activeSabha === 'lok'
                       ? 'bg-gradient-to-b from-sky-900 to-[#0B2545] text-white border-transparent shadow-sm'
-                      : 'bg-white/80 text-slate-600 border-sky-200/80 hover:bg-white'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
                   Lok Sabha (543 MPs)
@@ -678,7 +728,7 @@ export const Home = () => {
                   className={`px-3.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                     activeSabha === 'rajya'
                       ? 'bg-gradient-to-b from-sky-900 to-[#0B2545] text-white border-transparent shadow-sm'
-                      : 'bg-white/80 text-slate-600 border-sky-200/80 hover:bg-white'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
                   Rajya Sabha (245 MPs)
@@ -686,41 +736,41 @@ export const Home = () => {
               </div>
             )}
 
-            {/* KPI Cards Grid in Polished Frutiger Aero Cards */}
+            {/* KPI Cards Grid in Polished Solid White Cards */}
             {kpiMode === 'statutory' ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="p-4 bg-white/80 border border-white/90 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Entitlement (FY)</p>
                   <h3 className="text-xl font-black font-mono text-[#0B2545]">₹5.00 Cr</h3>
                   <p className="text-[10px] text-slate-500 font-medium">Per MP / Year</p>
                 </div>
-                <div className="p-4 bg-white/80 border border-white/90 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">TSA Pooled Fund</p>
                   <h3 className="text-xl font-black font-mono text-[#0B2545]">₹{nationalKpis.totalFundsCr || '8,333.67'} Cr</h3>
                   <p className="text-[10px] text-slate-500 font-medium">Active Allocations</p>
                 </div>
-                <div className="p-4 bg-white/80 border border-white/90 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Works Recommended</p>
                   <h3 className="text-xl font-black font-mono text-[#0B2545]">
                     {activeSabha === 'lok' ? '33,123' : '8,410'}
                   </h3>
                   <p className="text-[10px] text-slate-500 font-medium">Digital Submissions</p>
                 </div>
-                <div className="p-4 bg-white/80 border border-white/90 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Works Sanctioned</p>
                   <h3 className="text-xl font-black font-mono text-[#0B2545]">
                     {activeSabha === 'lok' ? '28,450' : '6,920'}
                   </h3>
                   <p className="text-[10px] text-slate-500 font-medium">Feasibility Passed</p>
                 </div>
-                <div className="p-4 bg-gradient-to-br from-white/90 to-emerald-50/70 border border-emerald-200/80 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-emerald-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Works Completed</p>
                   <h3 className="text-xl font-black font-mono text-emerald-900">
                     {activeSabha === 'lok' ? '21,200' : '5,140'}
                   </h3>
                   <p className="text-[10px] text-emerald-700 font-medium">Assets Built & Verified</p>
                 </div>
-                <div className="p-4 bg-gradient-to-br from-white/90 to-blue-50/70 border border-blue-200/80 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-blue-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-blue-800 uppercase tracking-wider">Total Expenditure</p>
                   <h3 className="text-xl font-black font-mono text-blue-900">
                     {activeSabha === 'lok' ? '₹46,210 Cr' : '₹9,840 Cr'}
@@ -730,32 +780,32 @@ export const Home = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="p-4 bg-white/80 border border-sky-200 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-white border border-sky-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-sky-800 uppercase tracking-wider">AI Monitored Works</p>
                   <h3 className="text-xl font-black font-mono text-sky-950">{nationalKpis.projectsMonitored || 8420}</h3>
                   <p className="text-[10px] text-sky-700 font-mono">100% Geotagged MBs</p>
                 </div>
-                <div className="p-4 bg-rose-50/80 border border-rose-200 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">Anomalies Flagged</p>
                   <h3 className="text-xl font-black font-mono text-rose-950">{nationalKpis.anomaliesDetected || 142}</h3>
                   <p className="text-[10px] text-rose-700 font-mono">Continuous Watch</p>
                 </div>
-                <div className="p-4 bg-rose-50/80 border border-rose-200 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">High-Risk Queue</p>
                   <h3 className="text-xl font-black font-mono text-rose-950">{nationalKpis.highRiskProjects || 38}</h3>
                   <p className="text-[10px] text-rose-700 font-mono">Composite &gt; 70</p>
                 </div>
-                <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Cartels Detected</p>
                   <h3 className="text-xl font-black font-mono text-amber-950">14 Rings</h3>
                   <p className="text-[10px] text-amber-700 font-mono">HHI Index &gt; 2500</p>
                 </div>
-                <div className="p-4 bg-emerald-50/80 border border-emerald-200 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Duplicate Intercept</p>
                   <h3 className="text-xl font-black font-mono text-emerald-950">96.4%</h3>
                   <p className="text-[10px] text-emerald-700 font-mono">OpenCV 64-bit dHash</p>
                 </div>
-                <div className="p-4 bg-purple-50/80 border border-purple-200 rounded-2xl space-y-1 shadow-sm hover:shadow-md transition-all">
+                <div className="p-4 bg-purple-50 border border-purple-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-purple-800 uppercase tracking-wider">Disbursals on Hold</p>
                   <h3 className="text-xl font-black font-mono text-purple-950">₹412.5 Cr</h3>
                   <p className="text-[10px] text-purple-700 font-mono">Milestone Holds</p>
@@ -765,19 +815,8 @@ export const Home = () => {
           </div>
         </section>
 
-      {/* Organic Wave Transition Bridge from Hero Gradient to Methodology */}
-      <div className="relative z-20 w-full overflow-hidden leading-none pointer-events-none -mb-1">
-        <svg
-          className="w-full h-12 sm:h-20 md:h-28 text-[#e8f6f5] fill-current block drop-shadow-sm"
-          viewBox="0 0 1440 100"
-          preserveAspectRatio="none"
-        >
-          <path d="M0,28 C320,75 520,10 740,46 C960,82 1180,18 1440,38 L1440,100 L0,100 Z" />
-        </svg>
-      </div>
-
       {/* 6. Methodology & Working Principle Section (Systemic Vulnerabilities + Algorithmic Vigilance) */}
-      <section id="methodology" className="relative z-20 w-full bg-gradient-to-b from-[#e8f6f5] via-[#eef8fc] to-[#f4faff] border-b border-sky-200/60 pb-20 pt-2 mb-0 scroll-mt-24">
+      <section id="methodology" className="relative z-20 w-full bg-transparent pb-20 pt-8 mb-0 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-4xl mx-auto">
             <TypewriterHeading
@@ -814,10 +853,12 @@ export const Home = () => {
       </div>
 
       {/* Institutional Boundary Divider Between Methodology and Statutory Overview */}
-      <div className="relative z-20 w-full bg-slate-200 h-1.5 bg-gradient-to-r from-amber-400/50 via-slate-300 to-emerald-500/50" />
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6 w-full">
+        <div className="h-px bg-gradient-to-r from-transparent via-purple-300/60 to-transparent" />
+      </div>
 
       {/* 7. Statutory "About the Scheme" Section (Verbatim e-SAKSHI Narrative) */}
-      <section id="aboutus" className="relative z-20 w-full bg-white border-b border-slate-200 py-24 px-4 sm:px-6 lg:px-8 scroll-mt-32">
+      <section id="aboutus" className="relative z-20 w-full bg-transparent py-20 px-4 sm:px-6 lg:px-8 scroll-mt-32">
         <div className="max-w-6xl mx-auto space-y-16">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
@@ -849,7 +890,7 @@ export const Home = () => {
                 Since April 2025, the Scheme implemented the <b>TSA / Hybrid fund flow procedure</b>, achieving the goal of ‘just-in-time’ fund release directly to vendors through an integrated network of PFMS, RBI and State Bank of India (Scheduled Commercial Bank).
               </p>
 
-              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3.5">
+              <div className="p-4 bg-white border border-purple-200 rounded-xl flex items-center gap-3.5 shadow-sm">
                 <Award className="w-7 h-7 text-amber-600 shrink-0" />
                 <p className="text-xs text-slate-700">
                   <strong>Viksit Bharat @ 2047 Alignment: </strong>
