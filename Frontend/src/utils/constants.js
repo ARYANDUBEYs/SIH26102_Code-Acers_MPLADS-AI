@@ -13,11 +13,11 @@ export const ROLE_LABELS = {
 export const RISK_LEVELS = {
   LOW: {
     label: 'Low Risk',
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/10',
-    borderColor: 'border-emerald-500/30',
-    badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-    hex: '#22C55E',
+    color: 'text-emerald-700 dark:text-emerald-300',
+    bgColor: 'bg-emerald-50 dark:bg-emerald-950/30',
+    borderColor: 'border-emerald-200 dark:border-emerald-800',
+    badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
+    hex: '#15803D',
     range: '0 - 30',
   },
   MEDIUM: {

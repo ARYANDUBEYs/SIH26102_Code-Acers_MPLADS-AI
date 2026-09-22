@@ -52,7 +52,7 @@ export const AeroplaneSend = ({ className = "w-5 h-5 text-amber-700" }) => {
  * 3. Animated Eye with moving iris turning Red
  * Triggers when hovering anywhere on the button/card (.group:hover).
  */
-export const AnimatedEye = ({ className = "w-4 h-4 text-cyan-300" }) => {
+export const AnimatedEye = ({ className = "w-4 h-4 text-purple-300" }) => {
   return (
     <span className="relative inline-flex items-center justify-center w-5 h-5 shrink-0 pointer-events-none">
       <svg

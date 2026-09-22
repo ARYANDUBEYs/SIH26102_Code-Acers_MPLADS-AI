@@ -11,6 +11,40 @@ export const AppProvider = ({ children }) => {
   const [toast, setToast] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
+  // Persistent Gemini-style sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    try {
+      const saved = localStorage.getItem('scheme_guard_sidebar_open');
+      return saved !== null ? saved === 'true' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleSidebar = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsMobileMenuOpen(prev => !prev);
+    } else {
+      setIsSidebarOpen(prev => {
+        const next = !prev;
+        try {
+          localStorage.setItem('scheme_guard_sidebar_open', String(next));
+        } catch (e) {}
+        return next;
+      });
+    }
+  };
+
+  const setSidebarOpen = (valueOrFn) => {
+    setIsSidebarOpen(prev => {
+      const next = typeof valueOrFn === 'function' ? valueOrFn(prev) : valueOrFn;
+      try {
+        localStorage.setItem('scheme_guard_sidebar_open', String(next));
+      } catch (e) {}
+      return next;
+    });
+  };
+
   // Global active dropdown for 100% mutual exclusivity across header, topbar, public bars
   const [activeGlobalDropdown, setActiveGlobalDropdown] = useState(null);
 
@@ -89,12 +123,19 @@ export const AppProvider = ({ children }) => {
     }, duration);
   };
 
-  // Global keyboard shortcut for search (Ctrl+K / Cmd+K)
+  // Global keyboard shortcuts (Ctrl+K for search, Ctrl+B for sidebar toggle)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         setIsSearchOpen(prev => !prev);
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
+        const activeTag = document.activeElement?.tagName?.toLowerCase();
+        if (activeTag === 'input' || activeTag === 'textarea' || document.activeElement?.isContentEditable) {
+          return;
+        }
+        e.preventDefault();
+        toggleSidebar();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -122,6 +163,9 @@ export const AppProvider = ({ children }) => {
         showToast,
         isMobileMenuOpen,
         setIsMobileMenuOpen,
+        isSidebarOpen,
+        setIsSidebarOpen: setSidebarOpen,
+        toggleSidebar,
       }}
     >
       {children}

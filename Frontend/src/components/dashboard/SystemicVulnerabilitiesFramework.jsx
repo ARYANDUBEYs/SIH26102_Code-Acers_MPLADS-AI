@@ -124,9 +124,9 @@ export const SystemicVulnerabilitiesFramework = () => {
 
   const current = pillars[activeTab];
   return (
-    <div className="bg-white/95 border border-sky-200/80 rounded-2xl shadow-lg overflow-hidden backdrop-blur-md">
-      {/* Top Header with Frutiger Aero Glossy Gradient */}
-      <div className="relative py-8 px-6 sm:px-10 bg-gradient-to-r from-[#0c4a6e] via-[#0284c7] to-[#0ea5e9] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
+    <div className="bg-white/95 border border-slate-200 rounded-none shadow-lg overflow-hidden backdrop-blur-md">
+      {/* Top Header with Institutional Deep Gradient */}
+      <div className="relative py-8 px-6 sm:px-10 bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#3B1259] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
         {/* Specular aurora highlight sheen */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative z-10">
@@ -137,7 +137,7 @@ export const SystemicVulnerabilitiesFramework = () => {
       </div>
 
       {/* Frutiger Aero Glossy Tab Selector Buttons */}
-      <div className="flex overflow-x-auto border-b border-sky-100 bg-sky-50/50 p-2.5 gap-2 scrollbar-thin">
+      <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 p-2.5 gap-2 scrollbar-thin">
         {pillars.map((p, idx) => {
           const Icon = p.icon;
           const isActive = idx === activeTab;
@@ -147,11 +147,11 @@ export const SystemicVulnerabilitiesFramework = () => {
               onClick={() => setActiveTab(idx)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-gradient-to-b from-white via-white to-sky-50 text-[#0c4a6e] shadow-md border border-sky-300 font-black scale-[1.02]'
-                  : 'text-slate-600 hover:text-sky-900 hover:bg-white/80 border border-transparent'
+                  ? 'bg-gradient-to-b from-white via-white to-purple-50 text-[#2E1065] shadow-md border border-purple-200 font-black scale-[1.02]'
+                  : 'text-slate-600 hover:text-purple-900 hover:bg-white/80 border border-transparent'
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-sky-600' : 'text-slate-500'}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-purple-700' : 'text-slate-500'}`} />
               <span>{p.shortName}</span>
             </button>
           );
@@ -170,21 +170,21 @@ export const SystemicVulnerabilitiesFramework = () => {
             className="space-y-6"
           >
             {/* Title with Glossy Orb and Blue Circular Info Icon */}
-            <div className="flex items-center justify-between gap-3 border-b border-sky-100/80 pb-4">
+            <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-full frutiger-bubble-icon text-sky-700 flex items-center justify-center shrink-0 shadow-sm">
-                  <current.icon className="w-5 h-5 text-sky-700" />
+                <div className="w-11 h-11 rounded-full frutiger-bubble-icon text-purple-800 flex items-center justify-center shrink-0 shadow-sm">
+                  <current.icon className="w-5 h-5 text-purple-800" />
                 </div>
                 <div>
                   <h4 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{current.name}</h4>
                 </div>
               </div>
 
-              {/* Info Icon Button (Blue circle with "i" in the middle) */}
+              {/* Info Icon Button (Purple circle with "i" in the middle) */}
               <button
                 type="button"
                 onClick={() => setIsSafeguardModalOpen(true)}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white flex items-center justify-center shadow-md hover:shadow-lg ring-2 ring-blue-400/30 hover:ring-4 hover:ring-blue-300/40 transition-all hover:scale-110 cursor-pointer shrink-0"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2E1065] hover:bg-[#1E0A45] active:scale-95 text-white flex items-center justify-center shadow-md hover:shadow-lg ring-2 ring-purple-400/30 hover:ring-4 hover:ring-purple-300/40 transition-all hover:scale-110 cursor-pointer shrink-0"
                 title="View Key Safeguard Measures"
                 aria-label="View Key Safeguard Measures"
               >
@@ -205,8 +205,8 @@ export const SystemicVulnerabilitiesFramework = () => {
               </div>
 
               {/* Solution Card */}
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-white via-white/95 to-teal-50/40 border border-teal-200/70 shadow-sm space-y-2.5 hover:shadow-md transition-shadow">
-                <div className="text-teal-700 text-xs font-bold uppercase tracking-wider">
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-white via-white/95 to-emerald-50/30 border border-emerald-200/60 shadow-sm space-y-2.5 hover:shadow-md transition-shadow">
+                <div className="text-emerald-800 text-xs font-bold uppercase tracking-wider">
                   How We Solve It
                 </div>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
@@ -216,11 +216,11 @@ export const SystemicVulnerabilitiesFramework = () => {
             </div>
 
             {/* Enforcement Rule Banner in Frutiger Aero Glass Security Style */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-sky-950 via-blue-900 to-indigo-950 text-white border border-sky-400/30 space-y-2.5 shadow-md backdrop-blur-md">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#1E0A45] text-white border border-purple-400/20 space-y-2.5 shadow-md backdrop-blur-md">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 High-Assurance Operational Rule
               </div>
-              <div className="text-xs sm:text-sm font-medium text-sky-100 bg-white/10 p-3.5 rounded-xl border border-white/15 leading-relaxed shadow-inner">
+              <div className="text-xs sm:text-sm font-medium text-purple-100 bg-white/10 p-3.5 rounded-xl border border-white/15 leading-relaxed shadow-inner">
                 {current.mathProof}
               </div>
             </div>
@@ -241,59 +241,46 @@ export const SystemicVulnerabilitiesFramework = () => {
               className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
 
-            {/* White Modal Container */}
+            {/* White Modal Container - Compact with only heading, close cross, and 3 boxes in purple theme */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 350 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-white rounded-3xl p-6 sm:p-8 max-w-4xl w-full shadow-2xl border border-slate-200 z-10 space-y-6"
+              className="relative bg-white rounded-none p-5 sm:p-7 max-w-3xl w-full shadow-2xl border border-purple-200/80 z-10 space-y-5"
             >
-              {/* Modal Header */}
-              <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 font-mono">
-                      {current.shortName}
-                    </span>
-                    <span className="text-xs font-semibold text-slate-500">
-                      Institutional Defense System
-                    </span>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    Key Safeguard Measures
-                  </h3>
-                  <p className="text-xs text-slate-600 font-medium">
-                    Three automated institutional protocols active for <strong className="text-slate-800">{current.name}</strong>
-                  </p>
-                </div>
+              {/* Modal Header: ONLY heading 'Key Safeguard Measures' and close cross */}
+              <div className="flex items-center justify-between gap-4 border-b border-purple-100 pb-3.5">
+                <h3 className="text-xl sm:text-2xl font-black text-[#2E1065] tracking-tight">
+                  Key Safeguard Measures
+                </h3>
 
                 <button
                   type="button"
                   onClick={() => setIsSafeguardModalOpen(false)}
-                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  className="w-8 h-8 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-950 flex items-center justify-center transition-colors cursor-pointer shrink-0"
                   aria-label="Close Safeguards Modal"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* The three measures pop up (appear by enlarging) one by one side by side */}
+              {/* The three measures pop up (appear by enlarging) one by one side by side in purple theme */}
               <motion.div
                 variants={{
                   hidden: { opacity: 0 },
                   visible: {
                     opacity: 1,
                     transition: {
-                      staggerChildren: 0.18,
-                      delayChildren: 0.12,
+                      staggerChildren: 0.16,
+                      delayChildren: 0.1,
                     }
                   }
                 }}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5"
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
               >
                 {current.countermeasures.map((item, i) => (
                   <motion.div
@@ -312,43 +299,28 @@ export const SystemicVulnerabilitiesFramework = () => {
                       }
                     }}
                     whileHover={{ y: -4, scale: 1.02 }}
-                    className="p-5 rounded-2xl bg-gradient-to-b from-white via-white to-sky-50/40 border-2 border-sky-100 hover:border-sky-300 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+                    className="p-4 sm:p-5 rounded-xl bg-gradient-to-b from-white via-white to-purple-50/40 border border-purple-200 hover:border-purple-400 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white flex items-center justify-center font-black text-sm shadow-sm shadow-blue-500/30">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#581c87] to-[#2E1065] text-white flex items-center justify-center font-black text-xs shadow-sm shadow-purple-950/20">
                         0{i + 1}
                       </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-sky-800 font-mono bg-sky-100/70 px-2 py-0.5 rounded-md border border-sky-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-purple-900 font-mono bg-purple-100/80 px-2 py-0.5 rounded border border-purple-200">
                         Safeguard {i + 1}
                       </span>
                     </div>
 
-                    <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-relaxed flex-1">
+                    <p className="text-xs sm:text-[13px] font-semibold text-slate-800 leading-relaxed flex-1">
                       {item}
                     </p>
 
-                    <div className="pt-3 border-t border-sky-100 flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <div className="pt-3 border-t border-purple-100 flex items-center gap-1.5 text-[11px] font-bold text-purple-900">
+                      <ShieldCheck className="w-3.5 h-3.5 text-purple-700" />
                       <span>Automated MoSPI Verification</span>
                     </div>
                   </motion.div>
                 ))}
               </motion.div>
-
-              {/* Footer Confirmation Bar */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-xs text-slate-600">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-medium">All 3 measures execute automatically in real-time on every progress upload.</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsSafeguardModalOpen(false)}
-                  className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
-                >
-                  Got It
-                </button>
-              </div>
             </motion.div>
           </div>
         )}

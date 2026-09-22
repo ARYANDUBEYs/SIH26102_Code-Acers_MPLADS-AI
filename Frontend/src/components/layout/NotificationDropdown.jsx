@@ -30,9 +30,9 @@ export const NotificationDropdown = ({ isOpen, onClose }) => {
       case 'WARNING':
         return <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />;
       case 'SUCCESS':
-        return <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />;
+        return <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />;
       default:
-        return <Info className="w-4 h-4 text-blue-400 shrink-0" />;
+        return <Info className="w-4 h-4 text-purple-300 shrink-0" />;
     }
   };
 
@@ -49,11 +49,11 @@ export const NotificationDropdown = ({ isOpen, onClose }) => {
       ref={dropdownRef}
       data-dropdown-menu="notif"
       onMouseDown={(e) => e.stopPropagation()}
-      className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden"
+      className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-slate-700 rounded-none shadow-2xl z-50 overflow-hidden"
     >
       <div className="flex items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <Bell className="w-4 h-4 text-blue-400" />
+          <Bell className="w-4 h-4 text-purple-300" />
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-200">
             Intelligence Alerts
           </span>

@@ -133,7 +133,7 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
       {/* 1. SIGN IN VIEW (MATCHING media_1788637936688.png)           */}
       {/* ============================================================ */}
       {view === 'signin' && (
-        <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-100 p-7 sm:p-9 transition-all">
+        <div className="bg-white rounded-none shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-100 p-7 sm:p-9 transition-all">
           {/* Top Emblem: Black rounded square with official Scheme Guard Shield */}
           <div className="w-12 h-12 rounded-xl bg-[#111827] flex items-center justify-center shadow-sm mb-6 border border-slate-800">
             <ShieldCheck className="w-6 h-6 text-amber-400" />
@@ -275,7 +275,7 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
       {/* 2. RESET PASSWORD VIEW (MATCHING media_1788638383831.png)    */}
       {/* ============================================================ */}
       {view === 'forgot' && (
-        <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-100 p-7 sm:p-9 transition-all">
+        <div className="bg-white rounded-none shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-100 p-7 sm:p-9 transition-all">
           {/* Back Button */}
           <button
             type="button"
@@ -362,7 +362,7 @@ export const LoginForm = ({ onSuccess, initialRole = ROLES.MOSPI_ADMIN }) => {
       {/* 3. SIGN UP VIEW                                             */}
       {/* ============================================================ */}
       {view === 'signup' && (
-        <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-100 p-7 sm:p-9 transition-all">
+        <div className="bg-white rounded-none shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-100 p-7 sm:p-9 transition-all">
           <button
             type="button"
             onClick={() => setView('signin')}

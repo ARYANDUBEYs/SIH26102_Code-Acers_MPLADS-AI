@@ -70,7 +70,7 @@ export const RiskMap = () => {
       actions={
         <div className="flex items-center gap-2">
           {/* Risk Level Filter */}
-          <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-md p-1 text-xs shadow-sm">
+          <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-none p-1 text-xs shadow-sm">
             <button
               onClick={() => setRiskFilter('ALL')}
               className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
@@ -109,9 +109,9 @@ export const RiskMap = () => {
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Main Leaflet Map Container */}
-        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-sm relative flex flex-col min-h-[550px] lg:min-h-[640px]">
+        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-none overflow-hidden shadow-sm relative flex flex-col min-h-[550px] lg:min-h-[640px]">
           {/* Map Legend Overlay */}
-          <div className="absolute top-3 right-3 z-[400] bg-white/95 backdrop-blur-sm border border-gov-border rounded-md p-3 shadow-md space-y-1.5 text-xs">
+          <div className="absolute top-3 right-3 z-[400] bg-white/95 backdrop-blur-sm border border-gov-border rounded-none p-3 shadow-md space-y-1.5 text-xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gov-navy block font-mono">
               Surveillance Threat Index
             </span>
@@ -298,7 +298,7 @@ export const RiskMap = () => {
           )}
 
           {/* Regional Quick Selector */}
-          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md space-y-2 shadow-sm">
+          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none space-y-2 shadow-sm">
             <span className="text-xs font-bold text-gov-navy uppercase tracking-wider block font-mono">
               Monitored Jurisdictions ({filteredStates.length})
             </span>

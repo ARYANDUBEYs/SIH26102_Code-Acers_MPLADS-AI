@@ -58,7 +58,7 @@ export const Modal = ({
             exit={{ scale: 0.95, opacity: 0, y: 15 }}
             transition={{ type: 'spring', duration: 0.3, bounce: 0.1 }}
             className={cn(
-              'relative w-full bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-10 my-auto',
+              'relative w-full bg-slate-900 border border-slate-800 rounded-none shadow-2xl overflow-hidden z-10 my-auto',
               sizes[size],
               className
             )}

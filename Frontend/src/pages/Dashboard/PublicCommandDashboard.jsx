@@ -46,6 +46,7 @@ import {
 } from 'recharts';
 
 import { ScrollReveal } from '../../components/common/ScrollReveal';
+import { PentagonCard } from '../../components/common/PentagonCard';
 
 export const PublicCommandDashboard = () => {
   const { t } = useLanguage();
@@ -163,9 +164,9 @@ export const PublicCommandDashboard = () => {
           </Button>
           <Link
             to="/public/map"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#0B2545] hover:bg-[#081D37] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#2E1065] hover:bg-[#1E0A45] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
           >
-            <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+            <MapPin className="w-3.5 h-3.5 text-purple-300" />
             <span>Interactive Map</span>
           </Link>
         </div>
@@ -174,7 +175,7 @@ export const PublicCommandDashboard = () => {
       <div className="space-y-6">
         {/* Public Transparency Banner */}
         <ScrollReveal>
-          <div className="p-4 rounded-xl border border-blue-200 dark:border-blue-900 bg-gradient-to-r from-blue-50/80 via-white to-blue-50/40 dark:from-blue-950/40 dark:via-slate-900 dark:to-blue-950/20 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="p-4 rounded-none border border-blue-200 dark:border-blue-900 bg-gradient-to-r from-blue-50/80 via-white to-blue-50/40 dark:from-blue-950/40 dark:via-slate-900 dark:to-blue-950/20 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
               <div className="p-2 rounded-lg bg-blue-600 text-white shrink-0 mt-0.5">
                 <Info className="w-5 h-5" />
@@ -194,40 +195,44 @@ export const PublicCommandDashboard = () => {
           </div>
         </ScrollReveal>
 
-        {/* 4 Public Transparency Metric Cards */}
-        <ScrollReveal delay={0.1}>
+        {/* 4 Public Transparency Metric Cards (Pentagon with border on 1 & 2 only) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {publicKPIs.map((kpi, idx) => {
             const Icon = kpi.icon;
+            const borderColors = ['#7E22CE', '#059669', '#0D9488', '#D97706'];
+            const bgColors = ['bg-purple-50/60', 'bg-emerald-50/60', 'bg-teal-50/60', 'bg-amber-50/60'];
             return (
-              <div
+              <PentagonCard
                 key={idx}
-                className={`p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm border-l-4 ${kpi.color} space-y-2 hover:shadow-md transition-shadow`}
+                index={idx}
+                borderColor={borderColors[idx % 4]}
+                bgColor={bgColors[idx % 4]}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                    {kpi.title}
-                  </span>
-                  <Icon className="w-4 h-4 text-slate-400" />
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                      {kpi.title}
+                    </span>
+                    <Icon className="w-4 h-4 text-slate-500" />
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 tracking-tight font-mono">
+                    {kpi.value}
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-snug">
+                    {kpi.subtitle}
+                  </p>
                 </div>
-                <div className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                  {kpi.value}
-                </div>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
-                  {kpi.subtitle}
-                </p>
-              </div>
+              </PentagonCard>
             );
           })}
         </div>
-        </ScrollReveal>
 
         {/* Two-Column Structured Charts Section */}
         <ScrollReveal delay={0.2}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-w-0">
           
           {/* Chart 1: Sector-Wise Development Fund Flow (Left 7 Cols) */}
-          <div className="lg:col-span-7 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+          <div className="lg:col-span-7 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
@@ -250,7 +255,7 @@ export const PublicCommandDashboard = () => {
                   <XAxis dataKey="name" stroke="#64748B" fontSize={10} interval={0} angle={-15} textAnchor="end" />
                   <YAxis stroke="#64748B" fontSize={11} tickFormatter={(v) => `₹${v}`} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0B2545', borderColor: '#1E3A5F', borderRadius: '8px', fontSize: '12px', color: '#FFF' }}
+                    contentStyle={{ backgroundColor: '#2E1065', borderColor: '#4C1D95', borderRadius: '8px', fontSize: '12px', color: '#FFF' }}
                     formatter={(value) => [`₹${value} Crores`, 'Sanctioned Funds']}
                   />
                   <Bar dataKey="funds" fill="#2563EB" radius={[4, 4, 0, 0]} name="Sanctioned Funds (₹ Cr)" />
@@ -275,11 +280,11 @@ export const PublicCommandDashboard = () => {
           </div>
 
           {/* Chart 2: State Transparency & Verification Rate (Right 5 Cols) */}
-          <div className="lg:col-span-5 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+          <div className="lg:col-span-5 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-300" />
                   <span>State Public Verification Leaderboard</span>
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -293,7 +298,7 @@ export const PublicCommandDashboard = () => {
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between text-xs font-semibold">
                     <span className="text-slate-800 dark:text-slate-200">{st.state} ({st.code})</span>
-                    <span className="font-mono text-emerald-600 dark:text-emerald-400">{st.transparencyScore}% Verified</span>
+                    <span className="font-mono text-emerald-600 dark:text-emerald-300">{st.transparencyScore}% Verified</span>
                   </div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                     <div
@@ -303,7 +308,7 @@ export const PublicCommandDashboard = () => {
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
                     <span>{st.verified} of {st.works} works verified</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-medium">Audited & Clean</span>
+                    <span className="text-emerald-600 dark:text-emerald-300 font-medium">Audited & Clean</span>
                   </div>
                 </div>
               ))}
@@ -314,7 +319,7 @@ export const PublicCommandDashboard = () => {
 
         {/* Recent Transparent Works Directory */}
         <ScrollReveal delay={0.3}>
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none p-5 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-3">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">

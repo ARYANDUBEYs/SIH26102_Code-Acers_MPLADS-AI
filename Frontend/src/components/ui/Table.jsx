@@ -51,7 +51,7 @@ export const Table = ({
 
   if (isLoading) {
     return (
-      <div className="w-full bg-gov-surface border border-gov-border rounded-md p-8 shadow-sm">
+      <div className="w-full bg-gov-surface border border-gov-border rounded-none p-8 shadow-sm">
         <Loader text="Loading Project Intelligence..." />
       </div>
     );
@@ -62,7 +62,7 @@ export const Table = ({
   }
 
   return (
-    <div className={cn('w-full flex flex-col bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-sm', className)}>
+    <div className={cn('w-full flex flex-col bg-gov-surface border border-gov-border rounded-none overflow-hidden shadow-sm', className)}>
       <div className="w-full overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>

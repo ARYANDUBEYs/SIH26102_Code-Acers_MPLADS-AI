@@ -20,7 +20,7 @@ export const LanguageSelector = ({ variant = 'dark' }) => {
         }`}
         title="Translate Website (Sovereign Indic Languages)"
       >
-        <Globe className="w-3.5 h-3.5 text-emerald-400" />
+        <Globe className="w-3.5 h-3.5 text-purple-400" />
         <span className="font-mono text-[11px] truncate max-w-[85px]">
           {currentLangObj.flag} {currentLangObj.native}
         </span>
@@ -28,7 +28,7 @@ export const LanguageSelector = ({ variant = 'dark' }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-none shadow-xl z-50 py-1.5 divide-y divide-slate-100 animate-in fade-in zoom-in-95 duration-100">
           <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50 flex items-center justify-between">
             <span>Sovereign Indic Languages</span>
             <span className="font-mono text-[9px] bg-slate-200 px-1 rounded text-slate-700">8</span>

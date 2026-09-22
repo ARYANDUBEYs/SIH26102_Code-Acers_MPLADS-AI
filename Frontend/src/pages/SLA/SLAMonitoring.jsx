@@ -9,6 +9,7 @@ import { api } from '../../services/api';
 import { formatDate } from '../../utils/helpers';
 import { Clock, AlertTriangle, AlertCircle, RefreshCw, Send, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { PentagonCard } from '../../components/common/PentagonCard';
 
 export const SLAMonitoring = () => {
   const [slaAlerts, setSlaAlerts] = useState([]);
@@ -143,34 +144,52 @@ export const SLAMonitoring = () => {
         </Button>
       }
     >
-      {/* SLA Metric Summary */}
+      {/* SLA Metric Summary (Pentagon with border on 1 & 2 only) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 bg-gov-surface border border-rose-200 rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-rose-600">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-800">Critical / Imminent Breach (&le; 3 Days)</p>
-            <h3 className="text-2xl font-black font-mono text-rose-900 mt-0.5">{criticalCount || 2} Works</h3>
-            <p className="text-[11px] text-gov-muted mt-0.5">Automated Collector Escalation Alert Generated</p>
+        <PentagonCard
+          index={0}
+          bgColor="bg-rose-50/70"
+          borderColor="#E11D48"
+        >
+          <div className="flex items-center justify-between w-full h-full">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-rose-800">Critical / Imminent Breach (&le; 3 Days)</p>
+              <h3 className="text-2xl font-black font-mono text-rose-900 mt-0.5">{criticalCount || 2} Works</h3>
+              <p className="text-[11px] text-rose-700 mt-0.5">Automated Collector Escalation Alert Generated</p>
+            </div>
+            <AlertCircle className="w-8 h-8 text-rose-600/70 shrink-0" />
           </div>
-          <AlertCircle className="w-8 h-8 text-rose-600/70" />
-        </div>
+        </PentagonCard>
 
-        <div className="p-4 bg-gov-surface border border-amber-200 rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-amber-500">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Approaching Due Date (4–10 Days)</p>
-            <h3 className="text-2xl font-black font-mono text-amber-900 mt-0.5">{warningCount || 5} Works</h3>
-            <p className="text-[11px] text-gov-muted mt-0.5">Executive Engineer Reminders Pending</p>
+        <PentagonCard
+          index={1}
+          bgColor="bg-amber-50/70"
+          borderColor="#D97706"
+        >
+          <div className="flex items-center justify-between w-full h-full">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Approaching Due Date (4–10 Days)</p>
+              <h3 className="text-2xl font-black font-mono text-amber-900 mt-0.5">{warningCount || 5} Works</h3>
+              <p className="text-[11px] text-amber-700 mt-0.5">Executive Engineer Reminders Pending</p>
+            </div>
+            <Clock className="w-8 h-8 text-amber-600/70 shrink-0" />
           </div>
-          <Clock className="w-8 h-8 text-amber-600/70" />
-        </div>
+        </PentagonCard>
 
-        <div className="p-4 bg-gov-surface border border-emerald-200 rounded-md flex items-center justify-between shadow-sm border-l-4 border-l-emerald-600">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Average District Compliance</p>
-            <h3 className="text-2xl font-black font-mono text-emerald-900 mt-0.5">88.4%</h3>
-            <p className="text-[11px] text-gov-muted mt-0.5">Within 45-day statutory sanction ceiling</p>
+        <PentagonCard
+          index={2}
+          bgColor="bg-emerald-50/70"
+          borderColor="#059669"
+        >
+          <div className="flex items-center justify-between w-full h-full">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Average District Compliance</p>
+              <h3 className="text-2xl font-black font-mono text-emerald-900 mt-0.5">88.4%</h3>
+              <p className="text-[11px] text-emerald-700 mt-0.5">Within 45-day statutory sanction ceiling</p>
+            </div>
+            <CheckCircle2 className="w-8 h-8 text-emerald-600/70 shrink-0" />
           </div>
-          <CheckCircle2 className="w-8 h-8 text-emerald-600/70" />
-        </div>
+        </PentagonCard>
       </div>
 
       {/* SLA Table */}

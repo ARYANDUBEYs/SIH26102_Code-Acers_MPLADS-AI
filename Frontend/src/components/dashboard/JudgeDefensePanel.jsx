@@ -87,15 +87,15 @@ export const JudgeDefensePanel = () => {
         className="px-5 py-4 bg-slate-50 hover:bg-slate-100/80 border-b border-slate-200 flex items-center justify-between cursor-pointer transition-colors select-none"
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-900 text-blue-200">
-            <ShieldAlert className="w-4 h-4 text-blue-300" />
+          <div className="p-2 rounded-lg bg-purple-950 text-purple-200">
+            <ShieldAlert className="w-4 h-4 text-purple-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-black text-[#0B2545] tracking-tight">
+              <h3 className="text-sm font-black text-[#2E1065] tracking-tight">
                 {t('judge_title', 'Systemic Vulnerability & Judge Defense Mitigations')}
               </h3>
-              <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 rounded">
+              <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-purple-50 text-purple-700 border border-purple-200 rounded">
                 SIH Evaluator Defense
               </span>
             </div>

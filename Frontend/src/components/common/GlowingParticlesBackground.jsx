@@ -37,7 +37,7 @@ export const GlowingParticlesBackground = () => {
         radius: Math.random() * 2.2 + 1,
         baseAlpha: Math.random() * 0.5 + 0.3,
         pulseSpeed: Math.random() * 0.025 + 0.015,
-        color: Math.random() > 0.4 ? '255, 255, 255' : '110, 231, 183', // White and soft emerald
+        color: Math.random() > 0.4 ? '255, 255, 255' : '192, 132, 252', // White and subtle purple
       });
     }
 
@@ -66,9 +66,9 @@ export const GlowingParticlesBackground = () => {
       // Subtle cyber surveillance radar sweep aura around mouse
       const radarRadius = 180;
       const radarGradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, radarRadius);
-      radarGradient.addColorStop(0, 'rgba(56, 189, 248, 0.12)');
-      radarGradient.addColorStop(0.5, 'rgba(56, 189, 248, 0.04)');
-      radarGradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+      radarGradient.addColorStop(0, 'rgba(147, 51, 234, 0.08)');
+      radarGradient.addColorStop(0.5, 'rgba(147, 51, 234, 0.03)');
+      radarGradient.addColorStop(1, 'rgba(147, 51, 234, 0)');
       ctx.fillStyle = radarGradient;
       ctx.beginPath();
       ctx.arc(mouseX, mouseY, radarRadius, 0, Math.PI * 2);
@@ -83,7 +83,7 @@ export const GlowingParticlesBackground = () => {
 
           if (dist < 125) {
             const alpha = (1 - dist / 125) * 0.16;
-            ctx.strokeStyle = 'rgba(186, 230, 253, ' + alpha + ')';
+            ctx.strokeStyle = 'rgba(216, 180, 254, ' + alpha + ')';
             ctx.lineWidth = 0.85;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);

@@ -46,21 +46,19 @@ export const AdminDashboard = () => {
   const { t } = useLanguage();
   const [kpis, setKpis] = useState(null);
   const [highRiskProjects, setHighRiskProjects] = useState([]);
-  const [stateRisks, setStateRisks] = useState([]);
-  const [fraudData, setFraudData] = useState([]);
-  const [monthlyTrends, setMonthlyTrends] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const FRAUD_COLOR_MAP = {
+    'Duplicate Evidence': '#E11D48',
+    'Cost / Financial Anomalies': '#7E22CE',
+    'Vendor Concentration': '#D97706',
+    'Timeline / Overrun Risk': '#2563EB',
+  };
 
-  // Slide-over & voice modal state
-  const [isSlideOverOpen, setIsSlideOverOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
+  const defaultFraudData = [
+    { name: 'Duplicate Evidence', value: 38, count: 70, color: '#E11D48' },
+    { name: 'Cost / Financial Anomalies', value: 31, count: 57, color: '#7E22CE' },
+    { name: 'Vendor Concentration', value: 19, count: 35, color: '#D97706' },
+    { name: 'Timeline / Overrun Risk', value: 12, count: 21, color: '#2563EB' },
+  ];
 
   const defaultStateRisks = [
     { code: 'UP', state: 'Uttar Pradesh', totalProjects: 80, anomalies: 28, highRisk: 11, fraudRiskPct: 14 },
@@ -75,6 +73,22 @@ export const AdminDashboard = () => {
     { code: 'DL', state: 'Delhi UT', totalProjects: 7, anomalies: 4, highRisk: 2, fraudRiskPct: 29 },
   ];
 
+  const [stateRisks, setStateRisks] = useState(defaultStateRisks);
+  const [fraudData, setFraudData] = useState(defaultFraudData);
+  const [monthlyTrends, setMonthlyTrends] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Slide-over & voice modal state
+  const [isSlideOverOpen, setIsSlideOverOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
   const loadDashboardData = async () => {
     setIsLoading(true);
     try {
@@ -88,15 +102,34 @@ export const AdminDashboard = () => {
 
       if (kpiRes.success) setKpis(kpiRes.data);
       if (hrRes.success) setHighRiskProjects(hrRes.data);
-      if (stateRes.success && stateRes.data?.length >= 5) {
+      if (stateRes.success && stateRes.data?.length >= 8) {
         setStateRisks(stateRes.data);
       } else {
         setStateRisks(defaultStateRisks);
       }
-      if (fraudRes.success) setFraudData(fraudRes.data);
+
+      if (fraudRes.success && Array.isArray(fraudRes.data) && fraudRes.data.length > 0) {
+        const totalRaw = fraudRes.data.reduce((acc, curr) => acc + (Number(curr.value) || 0), 0);
+        const enriched = fraudRes.data.map((item, idx) => {
+          const color = item.color || FRAUD_COLOR_MAP[item.name] || ['#E11D48', '#7E22CE', '#D97706', '#2563EB'][idx % 4];
+          const pct = totalRaw > 0 ? Math.round(((Number(item.value) || 1) / totalRaw) * 100) : defaultFraudData[idx]?.value || 25;
+          const count = Math.round((pct / 100) * 183);
+          return {
+            ...item,
+            color,
+            value: pct,
+            count,
+          };
+        });
+        setFraudData(enriched);
+      } else {
+        setFraudData(defaultFraudData);
+      }
+
       if (trendRes.success) setMonthlyTrends(trendRes.data);
     } catch {
       setStateRisks(defaultStateRisks);
+      setFraudData(defaultFraudData);
     } finally {
       setIsLoading(false);
     }
@@ -220,13 +253,11 @@ export const AdminDashboard = () => {
     >
       <div className="space-y-6">
         {/* 6 Executive KPI Cards */}
-        <ScrollReveal>
-          <DashboardStats kpis={kpis || undefined} />
-        </ScrollReveal>
+        <DashboardStats kpis={kpis || undefined} />
 
         {/* Critical Urgent Investigation Alert Banner with Concise Plain Language */}
         <ScrollReveal delay={0.1}>
-          <div className="p-4 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 border-l-4 border-l-rose-600 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative overflow-hidden">
+          <div className="p-4 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 border-l-4 border-l-rose-600 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative overflow-hidden">
             <div className="flex items-start gap-3.5">
               <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 border border-rose-200 dark:border-rose-800 shrink-0 mt-0.5">
                 <ShieldAlert className="w-5 h-5 animate-pulse" />
@@ -305,9 +336,9 @@ export const AdminDashboard = () => {
             </div>
           }
         >
-          <div className="h-72 w-full pt-2">
+          <div className="h-[350px] w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stateRisks} barGap={4} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={stateRisks} barGap={5} margin={{ top: 16, right: 16, left: -10, bottom: 6 }}>
                 <defs>
                   <linearGradient id="adminAnomBlue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.95} />
@@ -319,15 +350,15 @@ export const AdminDashboard = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-                <XAxis dataKey="code" stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis dataKey="code" stroke="#475569" fontSize={12} fontWeight={600} tickLine={false} axisLine={{ stroke: '#E2E8F0' }} />
+                <YAxis stroke="#64748B" fontSize={12} fontWeight={600} tickLine={false} axisLine={false} />
                 <Tooltip
-                  formatter={(val, name) => [`${val} Cases`, name]}
+                  formatter={(val, name) => [`${val} Detected Issues`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
-                <Bar dataKey="anomalies" fill="url(#adminAnomBlue)" barSize={13} radius={[4, 4, 0, 0]} name="Operational Anomalies" />
-                <Bar dataKey="highRisk" fill="url(#adminCritRose)" barSize={13} radius={[4, 4, 0, 0]} name="Critical Audit Flags" />
+                <Bar dataKey="anomalies" fill="url(#adminAnomBlue)" barSize={18} radius={[4, 4, 0, 0]} name="Operational Anomalies" />
+                <Bar dataKey="highRisk" fill="url(#adminCritRose)" barSize={18} radius={[4, 4, 0, 0]} name="Critical Audit Flags" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -340,44 +371,44 @@ export const AdminDashboard = () => {
           icon={AlertOctagon}
           className="lg:col-span-5"
         >
-          <div className="h-56 w-full flex items-center justify-center relative">
+          <div className="h-[265px] w-full flex items-center justify-center relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={fraudData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={68}
-                  outerRadius={92}
-                  paddingAngle={3}
+                  innerRadius={72}
+                  outerRadius={105}
+                  paddingAngle={4}
                   dataKey="value"
                 >
                   {fraudData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={entry.color} stroke="#FFFFFF" strokeWidth={2} />
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(val, name) => [`${val}% of Total Risk`, name]}
+                  formatter={(val, name, item) => [`${val}% Portfolio Risk (${item?.payload?.count || Math.round((val/100)*183)} works)`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
-                <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-black font-mono fill-slate-900">
+                <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-black font-mono fill-slate-900">
                   183
                 </text>
-                <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="text-[10px] font-bold uppercase tracking-widest fill-slate-400">
+                <text x="50%" y="57%" textAnchor="middle" dominantBaseline="middle" className="text-[11px] font-bold uppercase tracking-wider fill-slate-500">
                   Total Flags
                 </text>
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-700 mt-2 border-t border-slate-100 pt-3">
+          <div className="grid grid-cols-2 gap-2.5 text-xs text-slate-700 mt-2 border-t border-slate-100 pt-3">
             {fraudData.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 font-medium">
-                <div className="flex items-center gap-1.5 truncate">
-                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                  <span className="truncate text-slate-700">{item.name}</span>
+              <div key={idx} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50/90 border border-slate-200/80 font-medium">
+                <div className="flex items-center gap-2 truncate">
+                  <span className="w-3 h-3 rounded-full shrink-0 shadow-2xs" style={{ backgroundColor: item.color }} />
+                  <span className="truncate text-slate-800 font-bold text-[11px]">{item.name}</span>
                 </div>
-                <span className="font-mono font-bold text-slate-900 shrink-0 ml-1">{item.value}%</span>
+                <span className="font-mono font-black text-slate-900 shrink-0 ml-1.5 text-xs">{item.value}%</span>
               </div>
             ))}
           </div>

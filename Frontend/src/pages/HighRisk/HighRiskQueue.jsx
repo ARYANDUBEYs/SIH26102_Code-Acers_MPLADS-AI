@@ -9,6 +9,7 @@ import { Button } from '../../components/common/Button';
 import { api } from '../../services/api';
 import { formatINR } from '../../utils/helpers';
 import { AlertOctagon, Filter, ShieldAlert, ArrowRight, RefreshCw, Eye, Sparkles } from 'lucide-react';
+import { PentagonCard } from '../../components/common/PentagonCard';
 
 export const HighRiskQueue = () => {
   const [projects, setProjects] = useState([]);
@@ -165,35 +166,59 @@ export const HighRiskQueue = () => {
         </Button>
       }
     >
-      {/* 4 Modular Overview Cards */}
+      {/* 4 Modular Overview Cards (Pentagon with border on 1 & 2 only) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
-        <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Priority Triage Works</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">{projects.length} Works</h3>
-          <p className="text-[11px] text-rose-700 mt-1 font-medium">Require Officer Audit Action</p>
-        </div>
+        <PentagonCard
+          index={0}
+          bgColor="bg-rose-50/70"
+          borderColor="#E11D48"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Priority Triage Works</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">{projects.length} Works</h3>
+            <p className="text-[11px] text-rose-700 mt-1 font-medium">Require Officer Audit Action</p>
+          </div>
+        </PentagonCard>
 
-        <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Duplicate Photos</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">16 Works</h3>
-          <p className="text-[11px] text-amber-700 mt-1 font-medium">Cross-District Image Matches</p>
-        </div>
+        <PentagonCard
+          index={1}
+          bgColor="bg-amber-50/70"
+          borderColor="#D97706"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Duplicate Photos</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">16 Works</h3>
+            <p className="text-[11px] text-amber-700 mt-1 font-medium">Cross-District Image Matches</p>
+          </div>
+        </PentagonCard>
 
-        <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-blue-900">Budget Drift Alerts</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-blue-950 mt-0.5">14 Works</h3>
-          <p className="text-[11px] text-blue-700 mt-1 font-medium">&gt;20% Above Schedule Rates</p>
-        </div>
+        <PentagonCard
+          index={2}
+          bgColor="bg-purple-50/60"
+          borderColor="#7E22CE"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-purple-950">Budget Drift Alerts</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-950 mt-0.5">14 Works</h3>
+            <p className="text-[11px] text-purple-700 mt-1 font-medium">&gt;20% Above Schedule Rates</p>
+          </div>
+        </PentagonCard>
 
-        <div className="p-4 rounded-xl bg-purple-50/60 border border-purple-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-purple-900">Contractor Monopolies</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-900 mt-0.5">12 Syndicates</h3>
-          <p className="text-[11px] text-purple-700 mt-1 font-medium">Repeated Single-Vendor Wins</p>
-        </div>
+        <PentagonCard
+          index={3}
+          bgColor="bg-purple-50/70"
+          borderColor="#581C87"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-purple-900">Contractor Monopolies</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-900 mt-0.5">12 Syndicates</h3>
+            <p className="text-[11px] text-purple-700 mt-1 font-medium">Repeated Single-Vendor Wins</p>
+          </div>
+        </PentagonCard>
       </div>
 
       {/* Flagship Demo Shortcut Notice */}
-      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm border-l-4 border-l-gov-blue mb-5">
+      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm border-l-4 border-l-gov-blue mb-5">
         <div className="flex items-start gap-2.5">
           <Sparkles className="w-4 h-4 text-gov-blue shrink-0 mt-0.5" />
           <div className="text-xs text-gov-slate">
@@ -212,7 +237,7 @@ export const HighRiskQueue = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 bg-gov-surface border border-gov-border rounded-md flex flex-col md:flex-row gap-3 items-center justify-between shadow-sm">
+      <div className="p-4 bg-gov-surface border border-gov-border rounded-none flex flex-col md:flex-row gap-3 items-center justify-between shadow-sm">
         <div className="w-full md:max-w-md">
           <SearchBar
             value={search}

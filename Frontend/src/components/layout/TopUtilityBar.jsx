@@ -67,12 +67,12 @@ export const TopUtilityBar = ({ onOpenVoiceModal, sticky = true }) => {
   const isLangOpen = activeGlobalDropdown === 'topLang';
 
   return (
-    <div className={`w-full bg-[#07172B]/60 backdrop-blur-md text-slate-100 border-b border-white/10 text-[11px] select-none ${sticky ? 'sticky top-0 z-50' : 'relative z-10'}`}>
+    <div className={`w-full bg-[#130624]/75 backdrop-blur-md text-slate-100 border-b border-purple-900/30 text-[11px] select-none ${sticky ? 'sticky top-0 z-50' : 'relative z-10'}`}>
       {/* National Tricolor Top Strip with Route Loading State */}
       <div
         className={`h-[3.5px] w-full transition-all duration-300 ${
           isPageLoading
-            ? 'animate-tricolor-loading shadow-[0_0_12px_rgba(56,189,248,0.7)]'
+            ? 'animate-tricolor-loading shadow-[0_0_12px_rgba(192,132,252,0.7)]'
             : 'bg-gradient-to-r from-[#FF9933] via-white to-[#138808]'
         }`}
       />
@@ -89,40 +89,40 @@ export const TopUtilityBar = ({ onOpenVoiceModal, sticky = true }) => {
             <button
               type="button"
               onClick={onOpenVoiceModal}
-              className="flex items-center gap-1.5 text-cyan-300 hover:text-cyan-200 bg-cyan-950/50 border border-cyan-700/60 hover:border-cyan-400 transition-all cursor-pointer px-2 py-0.5 rounded shadow-xs"
+              className="flex items-center gap-1.5 text-purple-200 hover:text-white bg-purple-950/70 border border-purple-600/60 hover:border-purple-400 transition-all cursor-pointer px-2 py-0.5 rounded shadow-xs"
               title="Vernacular Voice Briefing & Reader (Sarvam Indic Audio)"
             >
-              <Volume2 className="w-3.5 h-3.5 text-cyan-400" />
+              <Volume2 className="w-3.5 h-3.5 text-purple-300" />
               <span className="font-mono text-[10px] font-bold">Indic Voice</span>
             </button>
           )}
 
           {/* Font Resizer Buttons (A- | A | A+) */}
-          <div className="flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800">
+          <div className="flex items-center gap-1 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-900/60">
             <button
               type="button"
               onClick={() => handleFontSizeChange(-1)}
-              className={`px-1 font-bold transition-colors ${fontSizeLevel === -1 ? 'text-blue-400 font-black' : 'text-slate-400 hover:text-white'}`}
+              className={`px-1 font-bold transition-colors ${fontSizeLevel === -1 ? 'text-purple-300 font-black' : 'text-slate-400 hover:text-white'}`}
               title="Decrease Font Size"
               aria-label="Decrease Font Size"
             >
               A-
             </button>
-            <span className="text-slate-700">|</span>
+            <span className="text-purple-800">|</span>
             <button
               type="button"
               onClick={() => handleFontSizeChange(0)}
-              className={`px-1 font-bold transition-colors ${fontSizeLevel === 0 ? 'text-blue-400 font-black' : 'text-slate-400 hover:text-white'}`}
+              className={`px-1 font-bold transition-colors ${fontSizeLevel === 0 ? 'text-purple-300 font-black' : 'text-slate-400 hover:text-white'}`}
               title="Default Font Size"
               aria-label="Default Font Size"
             >
               A
             </button>
-            <span className="text-slate-700">|</span>
+            <span className="text-purple-800">|</span>
             <button
               type="button"
               onClick={() => handleFontSizeChange(1)}
-              className={`px-1 font-bold transition-colors ${fontSizeLevel > 0 ? 'text-blue-400 font-black' : 'text-slate-400 hover:text-white'}`}
+              className={`px-1 font-bold transition-colors ${fontSizeLevel > 0 ? 'text-purple-300 font-black' : 'text-slate-400 hover:text-white'}`}
               title="Increase Font Size"
               aria-label="Increase Font Size"
             >
@@ -138,14 +138,14 @@ export const TopUtilityBar = ({ onOpenVoiceModal, sticky = true }) => {
               onClick={() => toggleDropdown('topLang')}
               className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-all font-semibold cursor-pointer ${
                 isLangOpen
-                  ? 'bg-blue-900/80 text-white border border-blue-400'
-                  : 'bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200'
+                  ? 'bg-purple-900/90 text-white border border-purple-400'
+                  : 'bg-purple-950/90 hover:bg-purple-900/70 border border-purple-800/80 text-purple-100'
               }`}
               title="Select Sovereign Indic Language"
             >
-              <Globe className="w-3 h-3 text-emerald-400" />
+              <Globe className="w-3 h-3 text-purple-300" />
               <span className="font-mono text-[10px]">{currentLangObj.flag} {currentLangObj.native}</span>
-              <ChevronDown className={`w-2.5 h-2.5 text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-2.5 h-2.5 text-purple-300 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
             </button>
 
             <AnimatePresence>
@@ -156,7 +156,7 @@ export const TopUtilityBar = ({ onOpenVoiceModal, sticky = true }) => {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="absolute right-0 mt-1 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-2xl z-50 py-1 divide-y divide-slate-100 dark:divide-slate-800 max-h-72 overflow-y-auto text-slate-800 dark:text-slate-200 origin-top"
+                  className="absolute right-0 mt-1 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none shadow-2xl z-50 py-1 divide-y divide-slate-100 dark:divide-slate-800 max-h-72 overflow-y-auto text-slate-800 dark:text-slate-200 origin-top"
                 >
                   <div className="px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/60">
                     Sovereign Indic Languages (8)
@@ -169,8 +169,8 @@ export const TopUtilityBar = ({ onOpenVoiceModal, sticky = true }) => {
                             setLanguage(lang.code);
                             closeDropdowns();
                           }}
-                          className={`w-full flex items-center justify-between px-3 py-1.5 text-xs text-left hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer ${
-                            currentLanguage === lang.code ? 'font-bold text-blue-700 dark:text-blue-400 bg-blue-50/70 dark:bg-blue-950/40' : 'text-slate-700 dark:text-slate-300'
+                          className={`w-full flex items-center justify-between px-3 py-1.5 text-xs text-left hover:bg-purple-50 dark:hover:bg-purple-950/50 transition-colors cursor-pointer ${
+                            currentLanguage === lang.code ? 'font-bold text-purple-700 dark:text-purple-400 bg-purple-50/70 dark:bg-purple-950/40' : 'text-slate-700 dark:text-slate-300'
                           }`}
                         >
                           <span className="flex items-center gap-2">

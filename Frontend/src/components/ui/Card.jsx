@@ -24,14 +24,14 @@ export const Card = ({
   return (
     <div
       className={cn(
-        'bg-gov-surface border border-gov-border rounded-md shadow-sm transition-all duration-200 text-gov-slate',
+        'bg-gov-surface border border-gov-border rounded-none shadow-sm transition-all duration-200 text-gov-slate',
         riskAccent && riskBorderMap[riskAccent],
         className
       )}
       {...props}
     >
       {(title || subtitle || action || Icon) && (
-        <div className={cn('flex items-center justify-between px-4 py-3 border-b border-gov-border bg-gov-canvas/50 rounded-t-md', headerClassName)}>
+        <div className={cn('flex items-center justify-between px-4 py-3 border-b border-gov-border bg-gov-canvas/50 rounded-t-none', headerClassName)}>
           <div className="flex items-center gap-2.5">
             {Icon && (
               <div className="p-1.5 rounded bg-gov-subtle text-gov-navy border border-gov-border shrink-0">

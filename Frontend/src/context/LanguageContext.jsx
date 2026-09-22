@@ -14,7 +14,7 @@ export const SUPPORTED_LANGUAGES = [
 export const DICTIONARY = {
   'en-IN': {
     // Top Bar
-    brand_title: 'SCHEME GUARD 2.0',
+    brand_title: 'SCHEME GUARD',
     brand_tag: 'MoSPI e-SAKSHI Layer',
     brand_sub: 'Ministry of Statistics & Programme Implementation • Govt. of India',
     search_placeholder: 'Search project ID, district, contractor, cartel...',

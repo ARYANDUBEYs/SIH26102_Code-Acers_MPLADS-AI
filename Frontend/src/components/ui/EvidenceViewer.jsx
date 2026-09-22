@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ShieldAlert, ShieldCheck, MapPin, Smartphone, FileSearch, Sparkles, Upload, RefreshCw, Binary, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, MapPin, Smartphone, FileSearch, Sparkles, Upload, RefreshCw, CheckCircle2, AlertTriangle, Calendar } from 'lucide-react';
 import { cn } from '../../utils/helpers';
 
 const DEFAULT_ROAD_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><rect width='800' height='600' fill='%231e293b'/><polygon points='120,600 360,220 440,220 680,600' fill='%23334155'/><line x1='400' y1='220' x2='400' y2='600' stroke='%23fbbf24' stroke-width='8' stroke-dasharray='25,18'/><rect y='0' width='800' height='220' fill='%230f172a'/><circle cx='660' cy='90' r='45' fill='%23f59e0b' opacity='0.9'/><rect x='40' y='30' width='380' height='65' rx='8' fill='%230f172a' stroke='%2338bdf8' stroke-width='2'/><text x='55' y='60' fill='%23f8fafc' font-family='Arial,sans-serif' font-size='18' font-weight='bold'>MPLADS: Rural Road Infrastructure</text><text x='55' y='82' fill='%2338bdf8' font-family='Arial,sans-serif' font-size='13'>Chiraigaon Block, Varanasi (UP)</text></svg>";
@@ -80,10 +80,9 @@ export const EvidenceViewer = ({
   };
 
   const isFraud = similarity >= 75;
-  const hammingDist = isFraud ? Math.round((1 - similarity / 100) * 64) : 48;
 
   return (
-    <div className={cn('flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden shadow-gov-card', className)}>
+    <div className={cn('flex flex-col bg-white border border-slate-200 rounded-none overflow-hidden shadow-gov-card', className)}>
       {/* Header Banner */}
       <div className="flex flex-wrap items-center justify-between p-4 bg-slate-50 border-b border-slate-200 gap-3">
         <div className="flex items-center gap-3">
@@ -139,37 +138,21 @@ export const EvidenceViewer = ({
         </div>
       </div>
 
-      {/* Live 64-bit dHash Bitstream Comparison Strip */}
-      <div className="px-5 py-3 bg-slate-900 text-slate-100 border-b border-slate-800 text-xs font-mono">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Binary className="w-4 h-4 text-sky-400" />
-            <span className="font-bold text-sky-300">OpenCV 64-bit dHash Fingerprint Analysis:</span>
-          </div>
-          <div className="flex items-center gap-3 text-[11px]">
-            <span>Hamming Distance: <b className={isFraud ? "text-rose-400" : "text-emerald-400"}>{hammingDist} / 64 bits</b></span>
-            <span>Threshold Floor: <b>&le; 6 bits</b></span>
-            <span className={cn("px-2 py-0.5 rounded text-[10px] font-bold", isFraud ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30")}>
-              {isFraud ? 'CORRUPT CLUSTER DETECTED' : 'FINGERPRINT VERIFIED'}
-            </span>
-          </div>
-        </div>
-        <div className="mt-2 text-[10px] text-slate-400 truncate">
-          <span className="text-slate-500">Hash A:</span> 1101001011010011001100101101001010101010010101011100110011110000 &nbsp;|&nbsp; 
-          <span className="text-slate-500">Hash B:</span> {isFraud ? '1101001011010011001100101101001010101010010101011100110011110011' : '0010110100101100110011010010110101010101101010100011001100001111'}
-        </div>
-      </div>
-
       {/* Visual Side-by-Side Comparison Grid */}
       <div className="p-5 grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white">
         {/* Left: Uploaded Photo */}
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-blue-600" />
-              1. Newly Claimed Completion Photo (Varanasi)
-            </span>
-            <button type="button" onClick={() => uploadInputRef.current?.click()} className="text-[11px] text-blue-700 font-medium hover:underline flex items-center gap-1">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-600" />
+                1. Newly Claimed Completion Photo (Varanasi)
+              </span>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1 shadow-xs">
+                <Calendar className="w-3 h-3 text-blue-600" /> Submitted: 20 Aug 2026
+              </span>
+            </div>
+            <button type="button" onClick={() => uploadInputRef.current?.click()} className="text-[11px] text-blue-700 font-medium hover:underline flex items-center gap-1 cursor-pointer">
               <Upload className="w-3 h-3" /> Change File
             </button>
           </div>
@@ -182,19 +165,22 @@ export const EvidenceViewer = ({
             />
             {isMatching && (
               <>
-                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#06b6d4] animate-scanner pointer-events-none z-20" />
-                <div className="absolute inset-0 bg-slate-950/50 pointer-events-none z-10 flex flex-col items-center justify-center font-mono text-xs text-cyan-300">
-                  <RefreshCw className="w-5 h-5 animate-spin mb-1.5 text-cyan-400" />
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent shadow-[0_0_8px_rgba(147,51,234,0.3)] animate-scanner pointer-events-none z-20" />
+                <div className="absolute inset-0 bg-slate-950/50 pointer-events-none z-10 flex flex-col items-center justify-center font-mono text-xs text-purple-300">
+                  <RefreshCw className="w-5 h-5 animate-spin mb-1.5 text-purple-400" />
                   <span className="font-bold tracking-wider">COMPUTING 64-BIT DHASH</span>
                 </div>
               </>
             )}
-            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded text-xs font-mono font-bold text-slate-800 border border-slate-200 shadow-sm z-10">
-              Submitted: 20 Aug 2026
-            </div>
           </div>
 
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5 text-xs text-slate-700">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-blue-600" /> Submitted Date:
+              </span>
+              <span className="font-mono font-bold text-slate-800">20 Aug 2026</span>
+            </div>
             <div className="flex items-center justify-between">
               <span className="text-slate-500 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-blue-600" /> Geotag Coordinates:
@@ -212,17 +198,22 @@ export const EvidenceViewer = ({
 
         {/* Right: Matched Archive Photo */}
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-600" />
-              2. Matched Historical Work Record (Jaunpur)
-            </span>
-            <button type="button" onClick={() => matchInputRef.current?.click()} className="text-[11px] text-slate-600 font-medium hover:underline flex items-center gap-1">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-rose-600" />
+                2. Matched Historical Work Record (Jaunpur)
+              </span>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 flex items-center gap-1 shadow-xs">
+                <Calendar className="w-3 h-3 text-amber-600" /> Archive Date: 12 Nov 2024
+              </span>
+            </div>
+            <button type="button" onClick={() => matchInputRef.current?.click()} className="text-[11px] text-slate-600 font-medium hover:underline flex items-center gap-1 cursor-pointer">
               <Upload className="w-3 h-3" /> Change Reference
             </button>
           </div>
 
-          <div className={cn("relative rounded-lg overflow-hidden border-2 aspect-[4/3] group shadow-sm", isFraud ? "border-rose-400 bg-rose-50" : "border-emerald-400 bg-emerald-50")}>
+          <div className={cn("relative rounded-lg overflow-hidden border-2 aspect-[4/3] group shadow-sm", isFraud ? "border-rose-400 bg-rose-50" : "border-emerald-500/40 bg-emerald-50")}>
             <img
               src={matchedImg}
               alt="Matched Prior Project Photo"
@@ -230,22 +221,25 @@ export const EvidenceViewer = ({
             />
             {isMatching && (
               <>
-                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#06b6d4] animate-scanner pointer-events-none z-20" />
-                <div className="absolute inset-0 bg-slate-950/50 pointer-events-none z-10 flex flex-col items-center justify-center font-mono text-xs text-cyan-300">
-                  <RefreshCw className="w-5 h-5 animate-spin mb-1.5 text-cyan-400" />
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent shadow-[0_0_8px_rgba(147,51,234,0.3)] animate-scanner pointer-events-none z-20" />
+                <div className="absolute inset-0 bg-slate-950/50 pointer-events-none z-10 flex flex-col items-center justify-center font-mono text-xs text-purple-300">
+                  <RefreshCw className="w-5 h-5 animate-spin mb-1.5 text-purple-400" />
                   <span className="font-bold tracking-wider">COMPARING REPOSITORY HASHES</span>
                 </div>
               </>
             )}
-            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded text-xs font-mono font-bold text-slate-800 border border-slate-200 shadow-sm z-10">
-              Archive Date: 12 Nov 2024
-            </div>
             <div className={cn("absolute bottom-3 right-3 text-white font-mono text-xs font-bold px-2.5 py-1 rounded shadow-sm z-10", isFraud ? "bg-rose-600" : "bg-emerald-600")}>
               {similarity}% {isFraud ? 'Structural Duplication' : 'Distinct Geometry'}
             </div>
           </div>
 
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5 text-xs text-slate-700">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-amber-600" /> Archive Date:
+              </span>
+              <span className="font-mono font-bold text-slate-800">12 Nov 2024</span>
+            </div>
             <div className="flex items-center justify-between">
               <span className="text-slate-500 flex items-center gap-1.5">
                 <FileSearch className="w-3.5 h-3.5 text-indigo-600" /> Historical Project Record:

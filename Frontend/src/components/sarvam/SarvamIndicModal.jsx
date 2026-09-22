@@ -175,7 +175,7 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-2xl bg-white rounded-none shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Top Header with Tricolor accent */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
@@ -242,7 +242,7 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* District Vernacular Audit Card */}
-          <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-200/80 space-y-3">
+          <div className="p-4 rounded-none bg-orange-50/50 border border-orange-200/80 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-bold text-orange-950">
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
@@ -277,10 +277,10 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Sovereign Web Speech API Screen Reader (Read Entire Current Page) */}
-          <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="p-4 rounded-none bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
             <div className="space-y-0.5">
-              <h4 className="text-xs font-bold text-[#0B2545] flex items-center gap-1.5">
-                <Volume2 className="w-4 h-4 text-blue-600 shrink-0" />
+              <h4 className="text-xs font-bold text-[#2E1065] flex items-center gap-1.5">
+                <Volume2 className="w-4 h-4 text-purple-600 shrink-0" />
                 <span>Screen Reader • Read Current Page Aloud</span>
               </h4>
               <p className="text-[11px] text-slate-600 leading-relaxed">
@@ -293,7 +293,7 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
               className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition shrink-0 cursor-pointer shadow-sm ${
                 isReadingPage
                   ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse'
-                  : 'bg-[#0B2545] hover:bg-blue-900 text-white'
+                  : 'bg-[#2E1065] hover:bg-purple-900 text-white'
               }`}
             >
               {isReadingPage ? (
@@ -311,7 +311,7 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Citizen Vernacular Voice Grievance Simulator */}
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div className="p-4 rounded-none bg-slate-50 border border-slate-200 space-y-3">
             <div className="flex items-center gap-2">
               <Mic className="w-4 h-4 text-emerald-600" />
               <div>
@@ -323,14 +323,14 @@ export const SarvamIndicModal = ({ isOpen, onClose }) => {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => { setCustomText(t.sample1); handleAnalyzeGrievance(t.sample1); }}
-                className="text-left text-xs p-2 rounded bg-white border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 transition flex-1 min-w-[240px]"
+                className="text-left text-xs p-2 rounded bg-white border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50 transition flex-1 min-w-[240px]"
               >
                 <div className="font-semibold text-slate-800">Sample 1 (Stalled Work):</div>
                 <div className="text-slate-600 italic text-[11px] truncate">"{t.sample1}"</div>
               </button>
               <button
                 onClick={() => { setCustomText(t.sample2); handleAnalyzeGrievance(t.sample2); }}
-                className="text-left text-xs p-2 rounded bg-white border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 transition flex-1 min-w-[240px]"
+                className="text-left text-xs p-2 rounded bg-white border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50 transition flex-1 min-w-[240px]"
               >
                 <div className="font-semibold text-slate-800">Sample 2 (Substandard Material):</div>
                 <div className="text-slate-600 italic text-[11px] truncate">"{t.sample2}"</div>

@@ -133,7 +133,7 @@ export const ProjectDetails = () => {
       {/* ========================================================================= */}
       {/* HEADER SECTION with Breadcrumb, Title, Tag & Transparent Background Image */}
       {/* ========================================================================= */}
-      <div className="relative bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 overflow-hidden shadow-2xs">
+      <div className="relative bg-white rounded-none border border-slate-200/80 p-6 sm:p-8 overflow-hidden shadow-2xs">
         {/* Transparent Decorative Road & Trees Vector in the Upper Right Corner */}
         <div className="absolute right-0 top-0 bottom-0 w-80 sm:w-96 pointer-events-none opacity-20 overflow-hidden">
           <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full object-cover">
@@ -227,7 +227,7 @@ export const ProjectDetails = () => {
         <div className="lg:col-span-5 space-y-6">
           
           {/* Card 1: Risk Overview with Animated Circle Gauge */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-5">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-5">
             {/* Header with Orange Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-amber-500 pl-3">
               <div>
@@ -308,7 +308,7 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Card 2: Fund Utilization */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-5">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-5">
             {/* Header with Emerald Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-emerald-500 pl-3">
               <div>
@@ -377,9 +377,9 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Card: Project Details (Moved to Left Column opposite Verified Records) */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-4">
-            {/* Header with Dark Blue Accent Bar */}
-            <div className="flex items-start gap-3 border-l-4 border-[#0B2545] pl-3">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
+            {/* Header with Purple Accent Bar */}
+            <div className="flex items-start gap-3 border-l-4 border-[#2E1065] pl-3">
               <div>
                 <h3 className="text-base font-bold text-slate-900 tracking-tight">Project Details</h3>
                 <p className="text-xs text-slate-500 mt-0.5">
@@ -416,7 +416,7 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Card: Physical Progress Evidence Photo */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
             <div className="flex items-start justify-between border-l-4 border-purple-600 pl-3">
               <div>
                 <h3 className="text-base font-bold text-slate-900 tracking-tight">Field Progress Evidence</h3>
@@ -455,7 +455,7 @@ export const ProjectDetails = () => {
         <div className="lg:col-span-7 space-y-6">
           
           {/* Card 3: Project Progress with Step Horizontal Timeline Transition */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-5">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-5">
             {/* Header with Blue Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-blue-600 pl-3">
               <div>
@@ -575,7 +575,7 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Card 4: Why this project was flagged */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
             {/* Header with Orange Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-amber-500 pl-3">
               <div>
@@ -642,7 +642,7 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Card 5: Verified Records */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
             {/* Header with Emerald Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-emerald-500 pl-3">
               <div>

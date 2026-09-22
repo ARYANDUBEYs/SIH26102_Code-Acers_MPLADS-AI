@@ -40,9 +40,9 @@ export const DashboardStats = ({ kpis = {} }) => {
     {
       title: t('kpi_ai_monitored', 'AI Monitored'),
       value: kpis.projectsMonitored?.toLocaleString() || '11,920',
-      subtitle: t('kpi_ai_monitored_sub', '95.5% Data Coverage'),
+      subtitle: t('kpi_ai_monitored_sub', '95.5% Coverage'),
       icon: ShieldCheck,
-      trend: "Continuous AI Scan",
+      trend: "Live",
       trendPositive: true,
       variant: "success",
       onClick: () => navigate('/high-risk')
@@ -60,7 +60,7 @@ export const DashboardStats = ({ kpis = {} }) => {
     {
       title: t('kpi_high_risk', 'High Risk Projects'),
       value: kpis.highRiskProjects || '42',
-      subtitle: t('kpi_high_risk_sub', 'Requires immediate review'),
+      subtitle: t('kpi_high_risk_sub', 'Immediate review'),
       icon: AlertOctagon,
       trend: kpis.trends?.highRiskProjects,
       trendPositive: false,
@@ -80,13 +80,13 @@ export const DashboardStats = ({ kpis = {} }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 sm:gap-4">
       {cards.map((card, idx) => (
         <motion.div
           key={card.title}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, delay: idx * 0.04, ease: "easeOut" }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.65, delay: 0.06 + idx * 0.16, ease: [0.22, 1, 0.36, 1] }}
         >
           <DashboardCard {...card} />
         </motion.div>

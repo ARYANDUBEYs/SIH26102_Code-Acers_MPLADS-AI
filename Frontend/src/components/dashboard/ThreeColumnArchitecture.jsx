@@ -22,13 +22,13 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
       {/* Header section matching reference */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#0B2545] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-[#2E1065] tracking-tight">
             Smarter Monitoring. Transparent Funds.
           </h2>
         </div>
         <div className="text-right hidden sm:block">
-          <span className="text-sm font-semibold text-blue-800 italic block font-serif">Real projects.</span>
-          <span className="text-sm font-semibold text-blue-800 italic block font-serif">Real impact.</span>
+          <span className="text-sm font-semibold text-purple-800 italic block font-serif">Real projects.</span>
+          <span className="text-sm font-semibold text-purple-800 italic block font-serif">Real impact.</span>
         </div>
       </div>
 
@@ -38,11 +38,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         {/* ================================================================ */}
         {/* COLUMN 1: Evidence & Fraud Checks                                */}
         {/* ================================================================ */}
-        <div className="bg-white/95 rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
+        <div className="bg-white/95 rounded-none border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
           <div className="space-y-4">
             {/* Header: Circle Number 1 & Title */}
             <div className="flex items-center gap-3.5 pb-2">
-              <div className="w-10 h-10 rounded-full bg-blue-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20">
+              <div className="w-10 h-10 rounded-full bg-[#2E1065] text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
                 1
               </div>
               <div>
@@ -132,11 +132,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         {/* ================================================================ */}
         {/* COLUMN 2: AI Risk Scoring Models                                 */}
         {/* ================================================================ */}
-        <div className="bg-white/95 rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
+        <div className="bg-white/95 rounded-none border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
           <div className="space-y-4">
             {/* Header: Circle Number 2 & Title */}
             <div className="flex items-center gap-3.5 pb-2">
-              <div className="w-10 h-10 rounded-full bg-purple-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm shadow-purple-500/20">
+              <div className="w-10 h-10 rounded-full bg-purple-900 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
                 2
               </div>
               <div>
@@ -219,11 +219,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
         {/* ================================================================ */}
         {/* COLUMN 3: Interactive Dashboards & Voice AI                      */}
         {/* ================================================================ */}
-        <div className="bg-white/95 rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
+        <div className="bg-white/95 rounded-none border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
           <div className="space-y-4">
             {/* Header: Circle Number 3 & Title */}
             <div className="flex items-center gap-3.5 pb-2">
-              <div className="w-10 h-10 rounded-full bg-emerald-500 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/20">
+              <div className="w-10 h-10 rounded-full bg-emerald-800 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
                 3
               </div>
               <div>

@@ -89,7 +89,7 @@ export const AIPreScreening = () => {
       subtitle="Explainable 5-point automated verification evaluating budget benchmarks, photo uniqueness, and contractor history before fund release."
       breadcrumbs={['District Suite', 'AI Pre-Screening']}
       actions={
-        <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-md p-1 text-xs shadow-sm">
+        <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-none p-1 text-xs shadow-sm">
           <button
             onClick={() => setSelectedCase('clean')}
             className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${

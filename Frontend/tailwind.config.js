@@ -14,11 +14,11 @@ export default {
           subtle: '#F1F5F9',       // Subtle table striping / hover (slate-100)
           border: '#E2E8F0',       // Crisp 1px enterprise border (slate-200)
           borderStrong: '#CBD5E1', // Pronounced border (slate-300)
-          navy: '#0B2545',         // Official Indian Government Deep Navy
-          navyDark: '#081D37',     // Darker Navy for mastheads
-          navyLight: '#1E3A8A',    // Primary institutional blue
-          blue: '#1D4ED8',         // Action blue
-          sky: '#0284C7',          // Accent sky blue
+          navy: '#2E1065',         // Institutional Imperial Deep Purple
+          navyDark: '#1E0A45',     // Dark Midnight Purple for mastheads and sidebar
+          navyLight: '#4C1D95',    // Primary institutional purple
+          blue: '#7C3AED',         // Action purple
+          sky: '#9333EA',          // Vibrant purple accent
           slate: '#334155',        // High-contrast slate body text (slate-700)
           slateDark: '#0F172A',    // Main headings (slate-900)
           muted: '#64748B',        // Secondary labels (slate-500)
@@ -34,8 +34,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace']
+        sans: ['Public Sans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
+        archivo: ['Archivo', 'sans-serif'],
       },
       boxShadow: {
         'gov-sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',

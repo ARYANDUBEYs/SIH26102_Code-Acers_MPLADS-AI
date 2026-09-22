@@ -95,7 +95,7 @@ const TypewriterHeading = ({ text, className = '' }) => {
     <h2 ref={containerRef} className={className}>
       {hasStarted ? displayedText : text}
       {hasStarted && displayedText.length < text.length && (
-        <span className="inline-block w-1.5 h-6 sm:h-8 bg-blue-600 ml-1 animate-pulse align-middle" />
+        <span className="inline-block w-1.5 h-6 sm:h-8 bg-purple-700 ml-1 animate-pulse align-middle" />
       )}
     </h2>
   );
@@ -131,7 +131,7 @@ const ScrollScalingHeading = ({ title = "About the MPLAD Scheme" }) => {
   return (
     <div ref={ref} className="relative inline-block">
       <h2
-        className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0B2545] transition-transform duration-75 origin-left"
+        className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2E1065] transition-transform duration-75 origin-left"
         style={{ transform: `scale(${scale})` }}
       >
         {title}
@@ -274,14 +274,15 @@ export const Home = () => {
         <HeroWavyBackground />
 
         {/* 3. Official Masthead / Navbar with dynamic glass appearance on scroll - Fixed at top-0 */}
-        <header
-          className={`sticky top-0 z-40 transition-all duration-300 w-full ${
-            isScrolled
-              ? 'bg-white/90 backdrop-blur-xl border-b border-purple-200/60 shadow-md text-slate-800'
-              : 'bg-transparent border-transparent shadow-none text-slate-800'
-          }`}
-        >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="w-full h-20">
+          <header
+            className={`transition-all duration-300 w-full z-40 ${
+              isScrolled
+                ? 'fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-b border-purple-200/60 shadow-md text-slate-800'
+                : 'relative bg-transparent border-transparent shadow-none text-slate-800'
+            }`}
+          >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
           {/* Top-Left Brand Slot: Emerges from center-to-top-left morph animation ONLY when scrolled */}
           <div className="flex items-center gap-3.5 relative min-w-[120px] sm:min-w-[260px]">
@@ -295,7 +296,7 @@ export const Home = () => {
               className="flex items-center gap-3"
             >
               {/* Ashoka Lion / Shield Emblem */}
-              <div className="w-11 h-11 rounded-xl bg-[#0B2545] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-200/40 shadow-md">
+              <div className="w-11 h-11 rounded-xl bg-[#2E1065] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-200/40 shadow-md">
                 <ShieldCheck className="w-5 h-5 text-amber-400" />
                 <span className="text-[7px] font-bold tracking-tighter uppercase font-mono text-white">MoSPI</span>
               </div>
@@ -303,7 +304,7 @@ export const Home = () => {
               <div className="leading-tight">
                 <div className="flex items-center gap-2">
                   <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 drop-shadow-xs">
-                    Scheme Guard <span className="text-purple-700">2.0</span>
+                    Scheme Guard
                   </span>
                 </div>
                 <p className="text-[10px] text-slate-600 font-medium tracking-wide">
@@ -336,13 +337,13 @@ export const Home = () => {
               {activeNav === 'home' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'home' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
+                  activeNav === 'home' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>Home</span>
@@ -361,13 +362,13 @@ export const Home = () => {
               {activeNav === 'methodology' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'methodology' ? 'bg-cyan-400 scale-100' : 'bg-slate-400 scale-75'
+                  activeNav === 'methodology' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>Methodology & Working Principle</span>
@@ -386,13 +387,13 @@ export const Home = () => {
               {activeNav === 'about' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'about' ? 'bg-emerald-400 scale-100' : 'bg-slate-400 scale-75'
+                  activeNav === 'about' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>About the Scheme</span>
@@ -411,13 +412,13 @@ export const Home = () => {
               {activeNav === 'contact' && (
                 <motion.div
                   layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#0B2545] rounded-full -z-10 shadow-sm"
+                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               <span
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'contact' ? 'bg-amber-400 scale-100' : 'bg-slate-400 scale-75'
+                  activeNav === 'contact' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
                 }`}
               />
               <span>Contact</span>
@@ -447,7 +448,7 @@ export const Home = () => {
                 </button>
 
                 {isProfileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50 py-2 divide-y divide-white/10 animate-in fade-in zoom-in-95 duration-150 text-white">
+                  <div className="absolute right-0 mt-2 w-56 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-none shadow-2xl z-50 py-2 divide-y divide-white/10 animate-in fade-in zoom-in-95 duration-150 text-white">
                     <div className="px-4 py-2">
                       <p className="text-xs font-bold text-white">{user?.name}</p>
                       <p className="text-[11px] text-slate-300 truncate">{user?.designation || user?.email}</p>
@@ -494,6 +495,7 @@ export const Home = () => {
           </div>
         </div>
       </header>
+    </div>
 
       {/* 5. Hero Section with Morphing Center Title and Windows 7 Aero Glass styling */}
       <section className="relative pt-8 pb-8 px-4 sm:px-6 lg:px-8 text-center">
@@ -519,10 +521,11 @@ export const Home = () => {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-4"
             >
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-                <span className="hero-tricolor-text inline-block">
-                  Scheme Guard: From Local Priorities to National Development
-                </span>
+              <h1 
+                className="text-xl sm:text-3xl lg:text-[2.85rem] font-archivo font-black tracking-normal leading-snug sm:leading-tight lg:leading-[1.18] text-[#2E1065]"
+                style={{ fontFamily: "'Archivo', sans-serif" }}
+              >
+                Scheme Guard: From Local Priorities to <br className="hidden sm:inline" /> National Development
               </h1>
               <p className="text-xs sm:text-sm text-slate-700 font-semibold max-w-2xl mx-auto drop-shadow-xs">
                 Algorithmic vigilance, real-time PFMS treasury tracking, and image forensics protecting public development assets across all 543 Lok Sabha Constituencies.
@@ -645,9 +648,9 @@ export const Home = () => {
 
         {/* Live Institutional Continuous Right-to-Left Marquee Announcement Ticker */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-10">
-          <div className="frutiger-gloss-card bg-white p-3.5 flex items-center gap-3 overflow-hidden shadow-sm">
-            <div className="px-3 py-1 bg-gradient-to-r from-sky-900 to-blue-900 text-white text-[10px] font-bold uppercase tracking-wider rounded-xl font-mono shrink-0 flex items-center gap-1.5 border border-sky-400/30 shadow-sm">
-              <Activity className="w-3.5 h-3.5 text-sky-300 animate-pulse" />
+          <div className="frutiger-gloss-card bg-white rounded-none p-3.5 flex items-center gap-3 overflow-hidden shadow-sm">
+            <div className="px-3 py-1 bg-gradient-to-r from-purple-950 to-indigo-950 text-white text-[10px] font-bold uppercase tracking-wider rounded-xl font-mono shrink-0 flex items-center gap-1.5 border border-purple-400/40 shadow-sm">
+              <Activity className="w-3.5 h-3.5 text-purple-300 animate-pulse" />
               <span>Live Surveillance</span>
             </div>
             <div className="flex-1 overflow-hidden relative">
@@ -665,13 +668,13 @@ export const Home = () => {
 
         {/* Dual-Mode 6-Stat KPI Ribbon */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
-          <div className="frutiger-gloss-card bg-white rounded-3xl p-6 shadow-md space-y-5">
+          <div className="frutiger-gloss-card bg-white rounded-none p-6 shadow-md space-y-5">
             
             {/* Header & Dual-Mode Controls */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base sm:text-lg font-black text-[#0B2545]">
+                  <h2 className="text-base sm:text-lg font-black text-[#2E1065]">
                     National Developmental Indicators & Fund Flow
                   </h2>
                 </div>
@@ -687,8 +690,8 @@ export const Home = () => {
                   onClick={() => setKpiMode('statutory')}
                   className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     kpiMode === 'statutory'
-                      ? 'bg-white text-[#0B2545] shadow-sm font-black'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-[#2E1065] shadow-sm font-black'
+                      : 'text-slate-600 hover:text-slate-950'
                   }`}
                 >
                   Statutory e-SAKSHI View
@@ -716,7 +719,7 @@ export const Home = () => {
                   onClick={() => setActiveSabha('lok')}
                   className={`px-3.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                     activeSabha === 'lok'
-                      ? 'bg-gradient-to-b from-sky-900 to-[#0B2545] text-white border-transparent shadow-sm'
+                      ? 'bg-gradient-to-b from-purple-900 to-[#2E1065] text-white border-transparent shadow-sm'
                       : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
@@ -727,7 +730,7 @@ export const Home = () => {
                   onClick={() => setActiveSabha('rajya')}
                   className={`px-3.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                     activeSabha === 'rajya'
-                      ? 'bg-gradient-to-b from-sky-900 to-[#0B2545] text-white border-transparent shadow-sm'
+                      ? 'bg-gradient-to-b from-purple-900 to-[#2E1065] text-white border-transparent shadow-sm'
                       : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
@@ -741,24 +744,24 @@ export const Home = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                 <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Entitlement (FY)</p>
-                  <h3 className="text-xl font-black font-mono text-[#0B2545]">₹5.00 Cr</h3>
+                  <h3 className="text-xl font-black font-mono text-[#2E1065]">₹5.00 Cr</h3>
                   <p className="text-[10px] text-slate-500 font-medium">Per MP / Year</p>
                 </div>
                 <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">TSA Pooled Fund</p>
-                  <h3 className="text-xl font-black font-mono text-[#0B2545]">₹{nationalKpis.totalFundsCr || '8,333.67'} Cr</h3>
+                  <h3 className="text-xl font-black font-mono text-[#2E1065]">₹{nationalKpis.totalFundsCr || '8,333.67'} Cr</h3>
                   <p className="text-[10px] text-slate-500 font-medium">Active Allocations</p>
                 </div>
                 <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Works Recommended</p>
-                  <h3 className="text-xl font-black font-mono text-[#0B2545]">
+                  <h3 className="text-xl font-black font-mono text-[#2E1065]">
                     {activeSabha === 'lok' ? '33,123' : '8,410'}
                   </h3>
                   <p className="text-[10px] text-slate-500 font-medium">Digital Submissions</p>
                 </div>
                 <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Works Sanctioned</p>
-                  <h3 className="text-xl font-black font-mono text-[#0B2545]">
+                  <h3 className="text-xl font-black font-mono text-[#2E1065]">
                     {activeSabha === 'lok' ? '28,450' : '6,920'}
                   </h3>
                   <p className="text-[10px] text-slate-500 font-medium">Feasibility Passed</p>
@@ -821,7 +824,7 @@ export const Home = () => {
           <div className="text-center max-w-4xl mx-auto">
             <TypewriterHeading
               text="How It Works: Continuous Vigilance & Public Fund Safeguards"
-              className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0B2545] tracking-tight leading-tight"
+              className="text-lg sm:text-2xl lg:text-[1.85rem] font-extrabold text-[#2E1065] tracking-tight leading-snug"
             />
           </div>
 
@@ -865,7 +868,7 @@ export const Home = () => {
             {/* Left: Statutory Narrative */}
             <div className="lg:col-span-8 space-y-5 text-xs sm:text-sm text-slate-600 leading-relaxed">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-700 font-mono">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-700 font-mono">
                   Statutory Overview
                 </span>
                 <span className="text-slate-400">•</span>
@@ -890,7 +893,7 @@ export const Home = () => {
                 Since April 2025, the Scheme implemented the <b>TSA / Hybrid fund flow procedure</b>, achieving the goal of ‘just-in-time’ fund release directly to vendors through an integrated network of PFMS, RBI and State Bank of India (Scheduled Commercial Bank).
               </p>
 
-              <div className="p-4 bg-white border border-purple-200 rounded-xl flex items-center gap-3.5 shadow-sm">
+              <div className="p-4 bg-white border border-purple-200 rounded-none flex items-center gap-3.5 shadow-sm">
                 <Award className="w-7 h-7 text-amber-600 shrink-0" />
                 <p className="text-xs text-slate-700">
                   <strong>Viksit Bharat @ 2047 Alignment: </strong>

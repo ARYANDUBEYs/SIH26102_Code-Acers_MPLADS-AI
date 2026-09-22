@@ -27,6 +27,7 @@ import {
   UserCheck,
   ExternalLink
 } from 'lucide-react';
+import { PentagonCard } from '../../components/common/PentagonCard';
 
 export const PendingSanctions = () => {
   const [projects, setProjects] = useState([]);
@@ -256,64 +257,88 @@ export const PendingSanctions = () => {
       </div>
 
       {/* ======================================================================= */}
-      {/* 2. SUMMARY METRIC CARDS                                                 */}
+      {/* 2. SUMMARY PENTAGON METRIC CARDS (Border on 1 & 2 only)                 */}
       {/* ======================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#EEF6FF] border border-[#DCEBFE] rounded-2xl p-5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-full bg-[#DCEBFE] flex items-center justify-center text-[#2563EB]">
-              <CheckSquare className="w-5 h-5 text-[#2563EB]" />
+        <PentagonCard
+          index={0}
+          bgColor="bg-[#EEF6FF]"
+          borderColor="#2563EB"
+        >
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#DCEBFE] flex items-center justify-center text-[#2563EB] shrink-0">
+                <CheckSquare className="w-5 h-5 text-[#2563EB]" />
+              </div>
+              <span className="text-[11px] font-bold text-blue-800 bg-blue-100/90 px-2.5 py-0.5 rounded-full font-mono shrink-0">
+                ₹8.42 Cr Outlay
+              </span>
             </div>
-            <span className="text-[11px] font-bold text-blue-700 bg-blue-100/60 px-2 py-0.5 rounded-full font-mono">
-              ₹8.42 Cr Outlay
-            </span>
+            <p className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">24 Works</p>
+            <p className="text-xs font-bold text-slate-700">Total Pending Sanctions</p>
+            <p className="text-[11px] text-blue-700 font-semibold">+4 new proposals submitted today</p>
           </div>
-          <p className="text-3xl font-black text-slate-900 mt-3">24 Works</p>
-          <p className="text-xs font-semibold text-slate-600 mt-0.5">Total Pending Sanctions</p>
-          <p className="text-[11px] text-blue-600 font-medium mt-2">+4 new proposals submitted today</p>
-        </div>
+        </PentagonCard>
 
-        <div className="bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl p-5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A]">
-              <CheckCircle2 className="w-5 h-5 text-[#16A34A]" />
+        <PentagonCard
+          index={1}
+          bgColor="bg-[#F0FDF4]"
+          borderColor="#16A34A"
+        >
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A] shrink-0">
+                <CheckCircle2 className="w-5 h-5 text-[#16A34A]" />
+              </div>
+              <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100/90 px-2.5 py-0.5 rounded-full font-mono shrink-0">
+                Fast-Track
+              </span>
             </div>
-            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded-full font-mono">
-              Fast-Track
-            </span>
+            <p className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">18 Works</p>
+            <p className="text-xs font-bold text-slate-700">Pre-Screened Passed</p>
+            <p className="text-[11px] text-emerald-700 font-semibold">Zero flags • Ready for sign-off</p>
           </div>
-          <p className="text-3xl font-black text-slate-900 mt-3">18 Works</p>
-          <p className="text-xs font-semibold text-slate-600 mt-0.5">Pre-Screened Passed</p>
-          <p className="text-[11px] text-emerald-600 font-medium mt-2">Zero flags • Ready for immediate AS sign-off</p>
-        </div>
+        </PentagonCard>
 
-        <div className="bg-[#FFF1F2] border border-[#FFE2E5] rounded-2xl p-5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-full bg-[#FFE2E5] flex items-center justify-center text-[#E11D48]">
-              <AlertTriangle className="w-5 h-5 text-[#E11D48]" />
+        <PentagonCard
+          index={2}
+          bgColor="bg-[#FFF1F2]"
+          borderColor="#E11D48"
+        >
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#FFE2E5] flex items-center justify-center text-[#E11D48] shrink-0">
+                <AlertTriangle className="w-5 h-5 text-[#E11D48]" />
+              </div>
+              <span className="text-[11px] font-bold text-rose-800 bg-rose-100/90 px-2.5 py-0.5 rounded-full font-mono shrink-0">
+                Hold Enforced
+              </span>
             </div>
-            <span className="text-[11px] font-bold text-rose-700 bg-rose-100/60 px-2 py-0.5 rounded-full font-mono">
-              Hold Enforced
-            </span>
+            <p className="text-2xl sm:text-3xl font-black text-[#E11D48] font-mono tracking-tight">6 Works</p>
+            <p className="text-xs font-bold text-slate-700">Requires Physical Audit</p>
+            <p className="text-[11px] text-rose-700 font-semibold">Photo duplicate or cartel flag</p>
           </div>
-          <p className="text-3xl font-black text-[#E11D48] mt-3">6 Works</p>
-          <p className="text-xs font-semibold text-slate-600 mt-0.5">Requires Physical Audit</p>
-          <p className="text-[11px] text-rose-600 font-medium mt-2">Photo duplicate or cartel concentration flag</p>
-        </div>
+        </PentagonCard>
 
-        <div className="bg-[#FFFBEB] border border-[#FEF3C7] rounded-2xl p-5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-full bg-[#FEF3C7] flex items-center justify-center text-[#D97706]">
-              <Clock className="w-5 h-5 text-[#D97706]" />
+        <PentagonCard
+          index={3}
+          bgColor="bg-[#FFFBEB]"
+          borderColor="#D97706"
+        >
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#FEF3C7] flex items-center justify-center text-[#D97706] shrink-0">
+                <Clock className="w-5 h-5 text-[#D97706]" />
+              </div>
+              <span className="text-[11px] font-bold text-amber-800 bg-amber-100/90 px-2.5 py-0.5 rounded-full font-mono shrink-0">
+                MoSPI SLA
+              </span>
             </div>
-            <span className="text-[11px] font-bold text-amber-700 bg-amber-100/60 px-2 py-0.5 rounded-full font-mono">
-              MoSPI SLA
-            </span>
+            <p className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">14.2 Days</p>
+            <p className="text-xs font-bold text-slate-700">Average Turnaround</p>
+            <p className="text-[11px] text-amber-800 font-semibold">Within 45-day statutory ceiling</p>
           </div>
-          <p className="text-3xl font-black text-slate-900 mt-3">14.2 Days</p>
-          <p className="text-xs font-semibold text-slate-600 mt-0.5">Average District Turnaround</p>
-          <p className="text-[11px] text-amber-700 font-medium mt-2">Well within 45-day statutory ceiling</p>
-        </div>
+        </PentagonCard>
       </div>
 
       {/* ======================================================================= */}
@@ -527,7 +552,7 @@ export const PendingSanctions = () => {
                         <button
                           type="button"
                           onClick={() => handleOpenApproveModal(proposal)}
-                          className="px-4 py-2 rounded-xl bg-[#0B2545] hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+                          className="px-4 py-2 rounded-xl bg-[#2E1065] hover:bg-purple-900 text-white text-xs font-bold transition shadow-xs cursor-pointer"
                         >
                           Override & Sanction
                         </button>
@@ -618,9 +643,9 @@ export const PendingSanctions = () => {
               <button
                 type="button"
                 onClick={handleConfirmApproval}
-                className="px-4 py-2 rounded-xl bg-[#0B2545] hover:bg-slate-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl bg-[#2E1065] hover:bg-purple-900 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5"
               >
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-300" />
                 <span>Sign & Issue Sanction Order</span>
               </button>
             </div>

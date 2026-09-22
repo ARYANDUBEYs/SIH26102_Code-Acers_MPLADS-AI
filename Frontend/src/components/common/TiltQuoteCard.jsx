@@ -48,14 +48,14 @@ export const TiltQuoteCard = () => {
         }}
         whileHover={{
           scale: 1.04,
-          boxShadow: '0 25px 45px -12px rgba(11, 37, 69, 0.45), 0 0 30px 4px rgba(245, 158, 11, 0.45)',
+          boxShadow: '0 25px 45px -12px rgba(46, 16, 101, 0.45), 0 0 30px 4px rgba(245, 158, 11, 0.45)',
           borderColor: 'rgba(245, 158, 11, 0.85)'
         }}
-        className="w-full max-w-sm p-7 bg-gradient-to-br from-[#0B2545] via-[#0F315E] to-[#133A6B] text-white rounded-2xl shadow-xl space-y-5 border-2 border-blue-800/80 relative overflow-hidden cursor-pointer group select-none transition-colors duration-200"
+        className="w-full max-w-sm p-7 bg-gradient-to-br from-[#2E1065] via-[#3B1259] to-[#4C1D95] text-white rounded-none shadow-xl space-y-5 border-2 border-purple-800/80 relative overflow-hidden cursor-pointer group select-none transition-colors duration-200"
       >
         {/* Decorative radial glows */}
         <div className="w-36 h-36 bg-amber-500/15 rounded-full absolute -right-10 -bottom-10 blur-2xl group-hover:bg-amber-500/30 transition-all duration-300 pointer-events-none" />
-        <div className="w-28 h-28 bg-cyan-500/10 rounded-full absolute -left-8 -top-8 blur-xl pointer-events-none" />
+        <div className="w-28 h-28 bg-purple-500/15 rounded-full absolute -left-8 -top-8 blur-xl pointer-events-none" />
 
         <div
           style={{ transform: 'translateZ(30px)' }}

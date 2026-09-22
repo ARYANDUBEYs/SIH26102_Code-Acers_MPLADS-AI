@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
+import { PentagonCard } from '../../components/common/PentagonCard';
 
 export const Analytics = () => {
   const [stateRisks, setStateRisks] = useState([]);
@@ -173,37 +174,59 @@ export const Analytics = () => {
       }
     >
       {/* 4 Modular KPI Quick Overview Cards */}
-      <ScrollReveal>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
-          <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-blue-900">Total Monitored Outlay</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-blue-950 mt-0.5">₹2,486 Cr</h3>
-            <p className="text-[11px] text-blue-700 mt-1 font-medium">FY 2025-26 Active Projects</p>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+        <PentagonCard
+          index={0}
+          bgColor="bg-purple-50/60"
+          borderColor="#7E22CE"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-purple-950">Total Monitored Outlay</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-950 mt-0.5">₹2,486 Cr</h3>
+            <p className="text-[11px] text-purple-700 mt-1 font-medium">FY 2025-26 Active Projects</p>
           </div>
+        </PentagonCard>
 
-          <div className="p-4 rounded-xl bg-emerald-50/60 border border-emerald-200">
+        <PentagonCard
+          index={1}
+          bgColor="bg-emerald-50/70"
+          borderColor="#059669"
+        >
+          <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Normal Low-Risk Works</p>
             <h3 className="text-xl sm:text-2xl font-black font-mono text-emerald-800 mt-0.5">88.2%</h3>
             <p className="text-[11px] text-emerald-700 mt-1 font-medium">Routine Milestone Progress</p>
           </div>
+        </PentagonCard>
 
-          <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
+        <PentagonCard
+          index={2}
+          bgColor="bg-rose-50/70"
+          borderColor="#E11D48"
+        >
+          <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Escrow Hold Required</p>
             <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">42 Works</h3>
             <p className="text-[11px] text-rose-700 mt-1 font-medium">High/Critical Priority Flags</p>
           </div>
+        </PentagonCard>
 
-          <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
+        <PentagonCard
+          index={3}
+          bgColor="bg-amber-50/70"
+          borderColor="#D97706"
+        >
+          <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Remediation Turnaround</p>
             <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">6.4 Days</h3>
             <p className="text-[11px] text-amber-700 mt-1 font-medium">From Flag to Officer Sign-off</p>
           </div>
-        </div>
-      </ScrollReveal>
+        </PentagonCard>
+      </div>
 
       {/* Top Filter Bar */}
       <ScrollReveal>
-      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md flex flex-wrap items-center gap-3 shadow-sm mb-5">
+      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none flex flex-wrap items-center gap-3 shadow-sm mb-5">
         <div className="flex items-center gap-2 text-xs font-bold text-gov-navy uppercase tracking-wider">
           <Filter className="w-4 h-4 text-gov-blue" />
           <span>Filters:</span>
@@ -277,9 +300,9 @@ export const Analytics = () => {
             </div>
           }
         >
-          <div className="h-72 w-full pt-1">
+          <div className="h-[340px] w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={monthlyTrends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <ComposedChart data={monthlyTrends} margin={{ top: 12, right: 12, left: -15, bottom: 5 }}>
                 <defs>
                   <linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#2563EB" stopOpacity={0.35} />
@@ -291,8 +314,8 @@ export const Analytics = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-                <XAxis dataKey="month" stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis dataKey="month" stroke="#475569" fontSize={11} fontWeight={500} tickLine={false} axisLine={{ stroke: '#E2E8F0' }} />
+                <YAxis stroke="#64748B" fontSize={12} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Cases Detected`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
@@ -332,15 +355,15 @@ export const Analytics = () => {
           icon={PieIcon}
           className="lg:col-span-4"
         >
-          <div className="h-56 w-full flex items-center justify-center relative">
+          <div className="h-[250px] w-full flex items-center justify-center relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={riskDistributionData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={68}
-                  outerRadius={94}
+                  innerRadius={72}
+                  outerRadius={102}
                   paddingAngle={3}
                   dataKey="value"
                 >
@@ -402,9 +425,9 @@ export const Analytics = () => {
             </div>
           }
         >
-          <div className="h-72 w-full pt-1">
+          <div className="h-[370px] w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={fundUtilizationData} barGap={3} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+              <BarChart data={fundUtilizationData} barGap={5} margin={{ top: 15, right: 15, left: -10, bottom: 5 }}>
                 <defs>
                   <linearGradient id="sanctGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#1E293B" stopOpacity={0.95} />
@@ -420,22 +443,22 @@ export const Analytics = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-                <XAxis dataKey="category" stroke="#64748B" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis dataKey="category" stroke="#475569" fontSize={11} fontWeight={600} tickLine={false} axisLine={{ stroke: '#E2E8F0' }} />
+                <YAxis stroke="#64748B" fontSize={12} fontWeight={500} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`₹${val} Crores`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
-                <Bar dataKey="sanctioned" fill="url(#sanctGrad)" name="Sanctioned Outlay" barSize={11} radius={[4, 4, 0, 0]} />
-                <Bar dataKey="released" fill="url(#relGrad)" name="Released (PFMS)" barSize={11} radius={[4, 4, 0, 0]} />
-                <Bar dataKey="utilized" fill="url(#utilGrad)" name="Physical MB Utilized" barSize={11} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="sanctioned" fill="url(#sanctGrad)" name="Sanctioned Outlay" barSize={16} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="released" fill="url(#relGrad)" name="Released (PFMS)" barSize={16} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="utilized" fill="url(#utilGrad)" name="Physical MB Utilized" barSize={16} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           <div className="mt-3 p-2.5 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-md border border-emerald-200 dark:border-emerald-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-300 shrink-0 mt-0.5" />
             <div>
               <span className="font-bold text-emerald-950 dark:text-emerald-200">Expenditure Health: </span>
               <span>
@@ -464,9 +487,9 @@ export const Analytics = () => {
             </div>
           }
         >
-          <div className="h-72 w-full pt-1">
+          <div className="h-[370px] w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stateRisks} barGap={4} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+              <BarChart data={stateRisks} barGap={6} margin={{ top: 15, right: 15, left: -10, bottom: 5 }}>
                 <defs>
                   <linearGradient id="stateAnomAmber" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#FBBF24" stopOpacity={0.95} />
@@ -478,15 +501,15 @@ export const Analytics = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-                <XAxis dataKey="code" stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748B" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis dataKey="code" stroke="#475569" fontSize={12} fontWeight={600} tickLine={false} axisLine={{ stroke: '#E2E8F0' }} />
+                <YAxis stroke="#64748B" fontSize={12} fontWeight={500} tickLine={false} axisLine={false} />
                 <Tooltip
                   formatter={(val, name) => [`${val} Projects`, name]}
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
-                <Bar dataKey="anomalies" fill="url(#stateAnomAmber)" barSize={13} radius={[4, 4, 0, 0]} name="Total Anomalies" />
-                <Bar dataKey="highRisk" fill="url(#stateCritRose)" barSize={13} radius={[4, 4, 0, 0]} name="Critical Triage Flags" />
+                <Bar dataKey="anomalies" fill="url(#stateAnomAmber)" barSize={22} radius={[4, 4, 0, 0]} name="Total Anomalies" />
+                <Bar dataKey="highRisk" fill="url(#stateCritRose)" barSize={22} radius={[4, 4, 0, 0]} name="Critical Triage Flags" />
               </BarChart>
             </ResponsiveContainer>
           </div>

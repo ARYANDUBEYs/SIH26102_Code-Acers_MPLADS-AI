@@ -13,7 +13,9 @@ import {
   Sparkles,
   ExternalLink,
   Globe,
-  Home
+  Home,
+  PanelLeft,
+  PanelLeftClose
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -58,6 +60,8 @@ export const Navbar = () => {
     setIsSearchOpen,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
+    isSidebarOpen,
+    toggleSidebar,
     activeGlobalDropdown,
     toggleDropdown,
     closeDropdowns
@@ -74,26 +78,47 @@ export const Navbar = () => {
         <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex items-center justify-between h-14 gap-4">
             
-            {/* Brand / Logo */}
-            <div className="flex items-center gap-2.5 shrink-0">
+            {/* Brand / Logo + Gemini Sidebar Toggle */}
+            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+              {/* Gemini-Style Sidebar Collapse/Expand Button */}
               <button
                 type="button"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+                onClick={toggleSidebar}
+                className={cn(
+                  "p-2 rounded-lg transition-all duration-150 cursor-pointer flex items-center justify-center shrink-0 group",
+                  "text-slate-300 hover:text-white hover:bg-white/10 active:bg-white/15 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                )}
+                title={
+                  typeof window !== 'undefined' && window.innerWidth < 1024
+                    ? (isMobileMenuOpen ? "Close menu" : "Open menu")
+                    : (isSidebarOpen ? "Close sidebar (Ctrl+B)" : "Open sidebar (Ctrl+B)")
+                }
+                aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
               >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {/* Mobile View Toggle */}
+                <span className="lg:hidden flex items-center justify-center">
+                  {isMobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-slate-200" />}
+                </span>
+                {/* Desktop View Toggle (Gemini Panel Icon) */}
+                <span className="hidden lg:inline-flex items-center justify-center">
+                  {isSidebarOpen ? (
+                    <PanelLeftClose className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors" />
+                  ) : (
+                    <PanelLeft className="w-5 h-5 text-purple-300 group-hover:text-white transition-colors" />
+                  )}
+                </span>
               </button>
 
               <Link to="/" className="flex items-center gap-2.5 group shrink-0">
                 {/* National Emblem / Shield Icon */}
-                <div className="w-9 h-9 rounded-xl bg-[#0B2545] p-0.5 shadow-sm flex items-center justify-center shrink-0 border border-blue-900">
+                <div className="w-9 h-9 rounded-xl bg-[#2E1065] p-0.5 shadow-sm flex items-center justify-center shrink-0 border border-purple-800">
                   <ShieldCheck className="w-5 h-5 text-amber-400 group-hover:scale-105 transition-transform" />
                 </div>
 
                 <div className="shrink-0">
                   <div className="flex items-center gap-2 whitespace-nowrap">
                     <span className="font-extrabold text-sm sm:text-base tracking-tight text-white whitespace-nowrap">
-                      {t('brand_title', 'Scheme Guard 2.0')}
+                      {t('brand_title', 'Scheme Guard')}
                     </span>
                   </div>
                   <p className="text-[10px] text-slate-300 font-medium tracking-wide hidden lg:block whitespace-nowrap">
@@ -161,7 +186,7 @@ export const Navbar = () => {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl z-50 py-2 divide-y divide-slate-100 dark:divide-slate-800 origin-top overflow-hidden"
+                      className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none shadow-xl z-50 py-2 divide-y divide-slate-100 dark:divide-slate-800 origin-top overflow-hidden"
                     >
                       <motion.div variants={itemVariants} className="px-4 py-2">
                         <p className="text-xs font-bold text-slate-900 dark:text-white">{user?.name}</p>
@@ -204,7 +229,7 @@ export const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer whitespace-nowrap"
+                className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer whitespace-nowrap"
               >
                 Login
               </Link>

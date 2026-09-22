@@ -83,7 +83,7 @@ export const PublicHome = () => {
           {/* Citizen Search Bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className="p-1.5 bg-gov-canvas rounded-md border border-gov-border max-w-2xl mx-auto flex flex-col sm:flex-row gap-2 shadow-xs"
+            className="p-1.5 bg-gov-canvas rounded-none border border-gov-border max-w-2xl mx-auto flex flex-col sm:flex-row gap-2 shadow-xs"
           >
             <div className="flex-1 flex items-center px-3 gap-2 bg-gov-surface rounded border border-gov-border">
               <Search className="w-4 h-4 text-gov-muted shrink-0" />
@@ -145,7 +145,7 @@ export const PublicHome = () => {
             <div
               key={p.id}
               onClick={() => navigate(`/project/${p.id}`)}
-              className="bg-gov-surface rounded-md border border-gov-border hover:border-gov-navy hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between cursor-pointer group"
+              className="bg-gov-surface rounded-none border border-gov-border hover:border-gov-navy hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between cursor-pointer group"
             >
               <div>
                 {/* Photo Thumbnail */}
@@ -165,7 +165,7 @@ export const PublicHome = () => {
                           ? 'bg-rose-500 ring-rose-300 animate-pulse'
                           : p.riskScore >= 40
                           ? 'bg-amber-400 ring-amber-200'
-                          : 'bg-emerald-400 ring-emerald-200'
+                          : 'bg-emerald-600 ring-emerald-400/50'
                       }`}
                     />
                     <span>{p.riskScore}/100 Risk</span>

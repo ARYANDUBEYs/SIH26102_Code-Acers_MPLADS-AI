@@ -63,7 +63,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
             <div className="p-5 bg-slate-50 border-b border-slate-200 flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 text-xs font-mono font-black text-blue-800 bg-blue-100 border border-blue-200 rounded">
+                  <span className="px-2 py-0.5 text-xs font-mono font-black text-purple-800 bg-purple-100 border border-purple-200 rounded">
                     {demoProject.id}
                   </span>
                   <RiskBadge score={demoProject.riskScore} />
@@ -71,7 +71,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
                     Priority Audit
                   </span>
                 </div>
-                <h3 className="text-base font-black text-[#0B2545] leading-snug">
+                <h3 className="text-base font-black text-[#2E1065] leading-snug">
                   {demoProject.name}
                 </h3>
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
@@ -93,7 +93,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
             <div className="p-5 space-y-6">
 
               {/* 1. Mathematical Risk Engine Breakdown */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="p-4 rounded-none bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                     Mathematical Risk Decomposition ($R = 0.35F + 0.25T + 0.20I + 0.20C$)
@@ -132,7 +132,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
                   </span>
                 </div>
 
-                <div className="space-y-1.5 p-3.5 bg-white border border-slate-200 rounded-xl">
+                <div className="space-y-1.5 p-3.5 bg-white border border-slate-200 rounded-none">
                   <div className="flex justify-between text-xs text-slate-600">
                     <span>Funds Disbursed (85%)</span>
                     <span className="font-mono font-bold text-slate-900">{formatINR(demoProject.disbursedAmount)} of {formatINR(demoProject.sanctionedAmount)}</span>
@@ -225,7 +225,7 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
               </div>
 
               {/* 5. Contractor Cartel Dossier */}
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div className="p-3 rounded-none bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
                 <div>
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">Assigned Vendor</span>
                   <span className="font-bold text-slate-900">{demoProject.contractor}</span>
@@ -238,13 +238,13 @@ export const DrillDownSlideOver = ({ isOpen, onClose, project }) => {
               </div>
 
               {/* 6. Multi-Signature Dual-Auditor Sign-off (Judge Defense Mitigation) */}
-              <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 space-y-2.5">
+              <div className="p-3.5 rounded-none border border-purple-200 bg-purple-50/50 space-y-2.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#0B2545] flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-blue-700" />
+                  <span className="font-bold text-[#2E1065] flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-purple-700" />
                     Multi-Signature Protocol (Dual-Officer Sign-Off)
                   </span>
-                  <span className="text-[10px] font-mono text-blue-700">Tamper-Proof Audit Chain</span>
+                  <span className="text-[10px] font-mono text-purple-700">Tamper-Proof Audit Chain</span>
                 </div>
                 <div className="space-y-1.5 text-xs text-slate-600">
                   <div className="flex items-center justify-between p-2 bg-white border border-slate-200 rounded">

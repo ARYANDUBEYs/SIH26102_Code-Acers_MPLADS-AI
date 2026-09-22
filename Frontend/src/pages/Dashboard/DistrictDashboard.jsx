@@ -18,6 +18,8 @@ import {
 
 
 
+import { PentagonCard } from '../../components/common/PentagonCard';
+
 export const DistrictDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -123,80 +125,100 @@ export const DistrictDashboard = () => {
       </div>
 
       {/* ======================================================================= */}
-      {/* 2. FOUR PASTEL METRIC CARDS (MATCHING media_1789367492438.png)           */}
+      {/* 2. FOUR PASTEL PENTAGON METRIC CARDS (Border on 1 & 2 only)             */}
       {/* ======================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {/* Card 1: Pending Sanctions (Sky Blue) */}
-        <div
+        <PentagonCard
+          index={0}
           onClick={() => navigate('/district/pending')}
-          className="bg-[#EEF6FF] border border-[#DCEBFE] rounded-2xl p-5 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between group"
+          bgColor="bg-[#EEF6FF]"
+          borderColor="#2563EB"
+          className="group cursor-pointer"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#DCEBFE] flex items-center justify-center text-[#2563EB] shrink-0 group-hover:scale-105 transition-transform">
-              <ShieldCheck className="w-6 h-6 text-[#2563EB]" />
+          <div className="flex items-center justify-between w-full h-full">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-[#DCEBFE] flex items-center justify-center text-[#2563EB] shrink-0 group-hover:scale-105 transition-transform">
+                <ShieldCheck className="w-6 h-6 text-[#2563EB]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-700">Pending Sanctions</p>
+                <p className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">24</p>
+                <p className="text-xs font-semibold text-[#2563EB] mt-0.5">+4 new today</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-700">Pending Sanctions</p>
-              <p className="text-3xl font-black text-slate-900 mt-0.5">24</p>
-              <p className="text-xs font-semibold text-[#2563EB] mt-1">+4 new today</p>
-            </div>
+            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
-        </div>
+        </PentagonCard>
 
         {/* Card 2: SLA Breaches Imminent (Rose Pink) */}
-        <div
+        <PentagonCard
+          index={1}
           onClick={() => navigate('/sla')}
-          className="bg-[#FFF1F2] border border-[#FFE2E5] rounded-2xl p-5 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between group"
+          bgColor="bg-[#FFF1F2]"
+          borderColor="#E11D48"
+          className="group cursor-pointer"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#FFE2E5] flex items-center justify-center text-[#E11D48] shrink-0 group-hover:scale-105 transition-transform">
-              <Clock className="w-6 h-6 text-[#E11D48]" />
+          <div className="flex items-center justify-between w-full h-full">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-[#FFE2E5] flex items-center justify-center text-[#E11D48] shrink-0 group-hover:scale-105 transition-transform">
+                <Clock className="w-6 h-6 text-[#E11D48]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-700">SLA Breaches Imminent</p>
+                <p className="text-2xl sm:text-3xl font-black text-[#E11D48] mt-0.5">7</p>
+                <p className="text-xs font-semibold text-[#E11D48] mt-0.5">3 critical (&lt;48h)</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-700">SLA Breaches Imminent</p>
-              <p className="text-3xl font-black text-[#E11D48] mt-0.5">7</p>
-              <p className="text-xs font-semibold text-[#E11D48] mt-1">3 critical (&lt;48h)</p>
-            </div>
+            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
-        </div>
+        </PentagonCard>
 
         {/* Card 3: AI Photo Discrepancies (Soft Amber) */}
-        <div
+        <PentagonCard
+          index={2}
           onClick={() => navigate('/district/photo-validation')}
-          className="bg-[#FFFBEB] border border-[#FEF3C7] rounded-2xl p-5 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between group"
+          bgColor="bg-[#FFFBEB]"
+          borderColor="#D97706"
+          className="group cursor-pointer"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#FEF3C7] flex items-center justify-center text-[#D97706] shrink-0 group-hover:scale-105 transition-transform">
-              <AlertTriangle className="w-6 h-6 text-[#D97706]" />
+          <div className="flex items-center justify-between w-full h-full">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-[#FEF3C7] flex items-center justify-center text-[#D97706] shrink-0 group-hover:scale-105 transition-transform">
+                <AlertTriangle className="w-6 h-6 text-[#D97706]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-700">AI Photo Discrepancies</p>
+                <p className="text-2xl sm:text-3xl font-black text-[#B45309] mt-0.5">13</p>
+                <p className="text-xs font-semibold text-[#D97706] mt-0.5">Requires physical audit</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-700">AI Photo Discrepancies</p>
-              <p className="text-3xl font-black text-[#B45309] mt-0.5">13</p>
-              <p className="text-xs font-semibold text-[#D97706] mt-1">Requires physical audit</p>
-            </div>
+            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
-        </div>
+        </PentagonCard>
 
         {/* Card 4: Certified Completed Works (Soft Emerald) */}
-        <div
+        <PentagonCard
+          index={3}
           onClick={() => navigate('/projects')}
-          className="bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl p-5 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-between group"
+          bgColor="bg-[#F0FDF4]"
+          borderColor="#16A34A"
+          className="group cursor-pointer"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A] shrink-0 group-hover:scale-105 transition-transform">
-              <CheckCircle2 className="w-6 h-6 text-[#16A34A]" />
+          <div className="flex items-center justify-between w-full h-full">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A] shrink-0 group-hover:scale-105 transition-transform">
+                <CheckCircle2 className="w-6 h-6 text-[#16A34A]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-700">Certified Completed Works</p>
+                <p className="text-2xl sm:text-3xl font-black text-[#15803D] mt-0.5">148</p>
+                <p className="text-xs font-semibold text-[#16A34A] mt-0.5">+12 this month</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-700">Certified Completed Works</p>
-              <p className="text-3xl font-black text-[#15803D] mt-0.5">148</p>
-              <p className="text-xs font-semibold text-[#16A34A] mt-1">+12 this month</p>
-            </div>
+            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
-        </div>
+        </PentagonCard>
       </div>
 
       {/* ======================================================================= */}
@@ -204,7 +226,7 @@ export const DistrictDashboard = () => {
       {/* ======================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Desk 1: Pre-Screening Desk */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
+        <div className="bg-white rounded-none border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -275,7 +297,7 @@ export const DistrictDashboard = () => {
         </div>
 
         {/* Desk 2: Photo Evidence Forensic Desk */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
+        <div className="bg-white rounded-none border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -343,7 +365,7 @@ export const DistrictDashboard = () => {
       {/* ======================================================================= */}
       {/* 4. ROW 3: DISTRICT SANCTION & APPROVAL TRIAGE (MATCHING media_1789367492438.png) */}
       {/* ======================================================================= */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
+      <div className="bg-white rounded-none border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-3 pb-2">
           <div className="flex items-center gap-3">
@@ -446,7 +468,7 @@ export const DistrictDashboard = () => {
                           e.stopPropagation();
                           navigate('/district/pre-screening');
                         }}
-                        className="bg-[#0B2545] hover:bg-slate-800 active:scale-[0.98] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-2xs transition cursor-pointer"
+                        className="bg-[#2E1065] hover:bg-purple-900 active:scale-[0.98] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-2xs transition cursor-pointer"
                       >
                         Screen & Decide
                       </button>

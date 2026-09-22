@@ -55,7 +55,7 @@ export const PublicMap = () => {
       <PublicHeader activeSubtitle="Interactive Geospatial Map" />
 
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gov-surface p-3.5 rounded-md border border-gov-border shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gov-surface p-3.5 rounded-none border border-gov-border shadow-xs">
           <div>
             <h2 className="text-base font-bold text-gov-navy">Geospatial Project Surveillance & Mapping</h2>
             <p className="text-xs text-gov-muted">Visual distribution of sanctioned works across parliamentary constituencies</p>
@@ -74,7 +74,7 @@ export const PublicMap = () => {
           </div>
         </div>
 
-        <div className="w-full bg-gov-surface border border-gov-border rounded-md overflow-hidden shadow-xs h-[620px] relative isolate z-0">
+        <div className="w-full bg-gov-surface border border-gov-border rounded-none overflow-hidden shadow-xs h-[620px] relative isolate z-0">
           <MapContainer
             center={[22.9734, 78.6569]}
             zoom={5}

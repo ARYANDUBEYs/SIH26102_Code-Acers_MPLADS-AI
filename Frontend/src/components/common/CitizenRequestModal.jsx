@@ -325,7 +325,7 @@ export const CitizenRequestModal = ({ isOpen, onClose }) => {
               disabled={!formData.consent || isSubmitting}
               isLoading={isSubmitting}
               icon={Send}
-              className="bg-[#0B2545] hover:bg-[#081D37] text-white"
+              className="bg-[#2E1065] hover:bg-[#1E0A45] text-white"
             >
               Submit Citizen Recommendation
             </Button>

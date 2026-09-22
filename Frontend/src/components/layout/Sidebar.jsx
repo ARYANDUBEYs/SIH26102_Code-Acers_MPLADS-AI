@@ -17,7 +17,8 @@ import {
   Sliders,
   LogOut,
   ChevronRight,
-  FileCheck2
+  FileCheck2,
+  PanelLeftClose
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -26,7 +27,7 @@ import { cn } from '../../utils/helpers';
 
 export const Sidebar = () => {
   const { role, logout, isDistrictOfficer, isCitizen } = useAuth();
-  const { isMobileMenuOpen, setIsMobileMenuOpen } = useApp();
+  const { isMobileMenuOpen, setIsMobileMenuOpen, isSidebarOpen, toggleSidebar } = useApp();
   const { t } = useLanguage();
   const location = useLocation();
 
@@ -43,7 +44,7 @@ export const Sidebar = () => {
 
   const districtNavItems = [
     { label: t('nav_district_overview', 'District Overview'), path: '/district', icon: LayoutDashboard },
-    { label: t('nav_pending_sanctions', 'Pending Sanctions'), path: '/district/pending', icon: CheckSquare, badge: '24', badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200' },
+    { label: t('nav_pending_sanctions', 'Pending Sanctions'), path: '/district/pending', icon: CheckSquare, badge: '24', badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200' },
     { label: t('nav_sla_alerts', 'SLA Risk Alerts'), path: '/sla', icon: Clock, badge: '7', badgeColor: 'bg-rose-50 text-rose-700 border border-rose-200' },
     { label: t('nav_pre_screening', 'AI Pre-Screening'), path: '/district/pre-screening', icon: Sparkles, highlight: true },
     { label: t('nav_photo_val', 'Photo Integrity Validation'), path: '/district/photo-validation', icon: Camera, highlight: true },
@@ -69,62 +70,82 @@ export const Sidebar = () => {
       {isMobileMenuOpen && (
         <div
           onClick={() => setIsMobileMenuOpen(false)}
-          className="fixed inset-0 bg-slate-900/40 z-30 lg:hidden backdrop-blur-xs"
+          className="fixed inset-0 bg-slate-900/60 z-30 lg:hidden backdrop-blur-xs transition-opacity duration-300"
         />
       )}
 
       <aside
         className={cn(
-          'fixed lg:sticky top-[88px] z-30 h-[calc(100vh-88px)] w-64 bg-gov-navyDark border-r border-gov-navy flex flex-col justify-between transition-transform duration-300 ease-in-out',
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          'fixed lg:sticky top-[88px] z-30 h-[calc(100vh-88px)] bg-gov-navyDark border-r border-gov-navy flex flex-col justify-between transition-all duration-300 ease-in-out shrink-0 select-none',
+          // Desktop collapse / expand
+          isSidebarOpen
+            ? 'lg:w-64 lg:opacity-100'
+            : 'lg:w-0 lg:min-w-0 lg:max-w-0 lg:border-r-0 lg:opacity-0 lg:pointer-events-none lg:overflow-hidden',
+          // Mobile drawer
+          isMobileMenuOpen
+            ? 'w-64 translate-x-0 shadow-2xl'
+            : 'w-64 -translate-x-full lg:translate-x-0'
         )}
       >
-        {/* Navigation list */}
-        <div className="p-3.5 space-y-6 overflow-y-auto flex-1">
-          <div>
-            <div className="px-3 mb-2.5 flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                {isCitizen ? t('suite_citizen', 'Citizen Navigation') : isDistrictOfficer ? t('suite_district', 'District Officer Suite') : t('suite_admin', 'National Command Suite')}
-              </span>
+        <div className="w-64 h-full flex flex-col justify-between shrink-0 overflow-hidden">
+          {/* Navigation list */}
+          <div className="p-3.5 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
+            <div>
+              <div className="px-2 mb-2.5 flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  {isCitizen ? t('suite_citizen', 'Citizen Navigation') : isDistrictOfficer ? t('suite_district', 'District Officer Suite') : t('suite_admin', 'National Command Suite')}
+                </span>
+
+                {/* Gemini-style Close button inside sidebar header */}
+                <button
+                  type="button"
+                  onClick={toggleSidebar}
+                  className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  title="Close sidebar (Ctrl+B)"
+                  aria-label="Close sidebar"
+                >
+                  <PanelLeftClose className="w-4 h-4" />
+                </button>
+              </div>
+
+              <nav className="space-y-1.5">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = location.pathname === item.path;
+
+                  return (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 border',
+                        isActive
+                          ? 'bg-gov-blue/20 text-white border-gov-blue/50 shadow-[0_0_10px_rgba(124,58,237,0.35)] font-semibold'
+                          : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Icon
+                          className={cn(
+                            'w-4 h-4 shrink-0 transition-colors',
+                            isActive ? 'text-purple-300' : 'text-slate-500 group-hover:text-slate-300',
+                            item.highlight && !isActive && 'text-amber-500/70'
+                          )}
+                        />
+                        <span className="truncate">{item.label}</span>
+                      </div>
+
+                      {item.badge && (
+                        <span className={cn('px-1.5 py-0.5 text-[10px] font-mono rounded font-semibold leading-none', item.badgeColor)}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </NavLink>
+                  );
+                })}
+              </nav>
             </div>
-
-            <nav className="space-y-1.5">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-
-                return (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={cn(
-                      'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 border',
-                      isActive
-                        ? 'bg-gov-blue/20 text-white border-gov-blue/50 shadow-[0_0_10px_rgba(29,78,216,0.3)] font-semibold'
-                        : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
-                    )}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <Icon
-                        className={cn(
-                          'w-4 h-4 shrink-0 transition-colors',
-                          isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300',
-                          item.highlight && !isActive && 'text-amber-500/70'
-                        )}
-                      />
-                      <span className="truncate">{item.label}</span>
-                    </div>
-
-                    {item.badge && (
-                      <span className={cn('px-1.5 py-0.5 text-[10px] font-mono rounded font-semibold leading-none', item.badgeColor)}>
-                        {item.badge}
-                      </span>
-                    )}
-                  </NavLink>
-                );
-              })}
-            </nav>
           </div>
         </div>
       </aside>

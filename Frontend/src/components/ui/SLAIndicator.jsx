@@ -58,7 +58,7 @@ export const SLAIndicator = ({
         ) : urgency === 'warning' ? (
           <AlertTriangle className="w-3 h-3 shrink-0 text-amber-400" />
         ) : (
-          <Clock className="w-3 h-3 shrink-0 text-emerald-400" />
+          <Clock className="w-3 h-3 shrink-0 text-emerald-600 dark:text-emerald-300" />
         )
       )}
       <span>{text}</span>

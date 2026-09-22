@@ -16,6 +16,7 @@ import {
   Scale
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PentagonCard } from '../../components/common/PentagonCard';
 
 export const CartelMatrix = () => {
   const [networkData, setNetworkData] = useState(null);
@@ -61,30 +62,48 @@ export const CartelMatrix = () => {
         </span>
       }
     >
-      {/* 3 Modular Overview Cards */}
+      {/* 3 Modular Overview Cards (Pentagon with border on 1 & 2 only) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-5">
-        <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Monopolized Districts</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">3 Districts</h3>
-          <p className="text-[11px] text-rose-700 mt-1 font-medium">Varanasi, Jaunpur & Kamrup Metro</p>
-        </div>
+        <PentagonCard
+          index={0}
+          bgColor="bg-rose-50/70"
+          borderColor="#E11D48"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Monopolized Districts</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">3 Districts</h3>
+            <p className="text-[11px] text-rose-700 mt-1 font-medium">Varanasi, Jaunpur & Kamrup Metro</p>
+          </div>
+        </PentagonCard>
 
-        <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Syndicate Tender Outlay</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">₹8.40 Cr</h3>
-          <p className="text-[11px] text-amber-700 mt-1 font-medium">17 Interlinked Public Works</p>
-        </div>
+        <PentagonCard
+          index={1}
+          bgColor="bg-amber-50/70"
+          borderColor="#D97706"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Syndicate Tender Outlay</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">₹8.40 Cr</h3>
+            <p className="text-[11px] text-amber-700 mt-1 font-medium">17 Interlinked Public Works</p>
+          </div>
+        </PentagonCard>
 
-        <div className="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-pink-900">Shared Company Directors</p>
-          <h3 className="text-xl sm:text-2xl font-black font-mono text-pink-900 mt-0.5">1 Shadow Ring</h3>
-          <p className="text-[11px] text-pink-700 mt-1 font-medium">R. K. Agarwal across 3 bidder firms</p>
-        </div>
+        <PentagonCard
+          index={2}
+          bgColor="bg-purple-50/70"
+          borderColor="#7E22CE"
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-purple-900">Shared Company Directors</p>
+            <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-900 mt-0.5">1 Shadow Ring</h3>
+            <p className="text-[11px] text-purple-700 mt-1 font-medium">R. K. Agarwal across 3 bidder firms</p>
+          </div>
+        </PentagonCard>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Main Network Graph Canvas */}
-        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-md p-4 shadow-sm relative flex flex-col min-h-[520px]">
+        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-none p-4 shadow-sm relative flex flex-col min-h-[520px]">
           {/* Graph Title & Legend */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border pb-3 mb-3">
             <div className="flex items-center gap-2">
@@ -365,7 +384,7 @@ export const CartelMatrix = () => {
           )}
 
           {/* Institutional Statutory Guidance Box */}
-          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-md space-y-1.5 text-xs text-gov-slate border-l-4 border-l-gov-blue">
+          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none space-y-1.5 text-xs text-gov-slate border-l-4 border-l-gov-blue">
             <span className="font-bold flex items-center gap-1.5 text-gov-navy">
               <Info className="w-4 h-4 text-gov-blue" /> Why is this flagged?
             </span>

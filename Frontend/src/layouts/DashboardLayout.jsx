@@ -66,7 +66,7 @@ export const DashboardLayout = () => {
       <div className="flex-1 flex w-full max-w-[1920px] mx-auto">
         <Sidebar />
 
-        <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 pb-16">
+        <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 pb-16 transition-all duration-300 ease-in-out">
           <Outlet />
         </main>
       </div>
@@ -121,7 +121,7 @@ export const DashboardLayout = () => {
                             <p className="text-[11px] text-slate-500 mt-0.5">{p.district}, {p.state} • {p.contractor}</p>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className={cn('text-xs font-mono font-bold', p.riskScore >= 80 ? 'text-rose-400' : 'text-emerald-400')}>
+                            <span className={cn('text-xs font-mono font-bold', p.riskScore >= 80 ? 'text-rose-400' : 'text-emerald-300')}>
                               {p.riskScore}% Risk
                             </span>
                             <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
@@ -159,7 +159,7 @@ export const DashboardLayout = () => {
                 {/* Districts Section */}
                 {searchResults.districts.length > 0 && (
                   <div className="space-y-1.5 pt-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5" /> Monitored Districts
                     </span>
                     <div className="space-y-1">
@@ -173,7 +173,7 @@ export const DashboardLayout = () => {
                             <p className="text-xs font-bold text-slate-200">{d.name}, {d.state}</p>
                             <p className="text-[11px] text-slate-500">{d.anomalies} Anomalies Detected • {d.highRisk} High-Risk Triage</p>
                           </div>
-                          <span className="text-xs text-blue-400 group-hover:underline">View on Map →</span>
+                          <span className="text-xs text-purple-300 group-hover:underline">View on Map →</span>
                         </button>
                       ))}
                     </div>
@@ -187,13 +187,13 @@ export const DashboardLayout = () => {
 
       {/* Global Toast Message */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl animate-bounce">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-slate-900 border border-slate-700 rounded-none shadow-2xl animate-bounce">
           {toast.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-300" />
           ) : toast.type === 'error' ? (
             <AlertTriangle className="w-5 h-5 text-rose-400" />
           ) : (
-            <Info className="w-5 h-5 text-blue-400" />
+            <Info className="w-5 h-5 text-purple-300" />
           )}
           <span className="text-xs font-semibold text-slate-100">{toast.message}</span>
         </div>

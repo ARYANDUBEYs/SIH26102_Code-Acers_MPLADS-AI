@@ -84,7 +84,7 @@ export const PublicSearch = () => {
       {/* Search Header */}
       <div className="max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6 flex-1">
         <ScrollReveal>
-        <div className="bg-gov-surface p-4 rounded-xl border border-gov-border shadow-xs flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="bg-gov-surface p-4 rounded-none border border-gov-border shadow-xs flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="w-full md:max-w-md flex items-center bg-gov-canvas border border-gov-border rounded-lg px-3.5 py-2">
             <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
             <input
@@ -128,7 +128,7 @@ export const PublicSearch = () => {
               <div
                 key={p.id}
                 onClick={() => navigate(`/project/${p.id}`)}
-                className="bg-gov-surface rounded-xl border border-gov-border hover:border-blue-500 hover:shadow-md transition-all p-5 flex flex-col justify-between cursor-pointer space-y-4 group"
+                className="bg-gov-surface rounded-none border border-gov-border hover:border-blue-500 hover:shadow-md transition-all p-5 flex flex-col justify-between cursor-pointer space-y-4 group"
               >
                 <div>
                   {/* Photo Thumbnail */}
@@ -143,7 +143,7 @@ export const PublicSearch = () => {
                       className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                     />
                     <div className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-xs text-white text-[10px] font-mono font-bold">
-                      <span className={`w-2 h-2 rounded-full ${p.riskScore >= 70 ? 'bg-rose-500' : p.riskScore >= 40 ? 'bg-amber-400' : 'bg-emerald-400'}`} />
+                      <span className={`w-2 h-2 rounded-full ${p.riskScore >= 70 ? 'bg-rose-500' : p.riskScore >= 40 ? 'bg-amber-400' : 'bg-emerald-600'}`} />
                       <span>{p.riskScore}/100 Risk</span>
                     </div>
                   </div>
@@ -170,7 +170,7 @@ export const PublicSearch = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-slate-500 dark:text-slate-400 text-[11px]">Disbursed to Agency:</span>
-                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{formatINR(p.utilizedAmount)}</span>
+                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-300">{formatINR(p.utilizedAmount)}</span>
                   </div>
                 </div>
 

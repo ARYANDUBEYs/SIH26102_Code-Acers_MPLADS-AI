@@ -1,8 +1,8 @@
 :root {
-  --color-primary-navy: #0B2545;
-  --color-secondary-navy: #1E3A8A;
+  --color-primary-navy: #2E1065;
+  --color-secondary-navy: #4C1D95;
   --color-card-bg: #FFFFFF;
-  --color-accent-blue: #1D4ED8;
+  --color-accent-blue: #7C3AED;
   --color-canvas: #F8FAFC;
   --color-border: #E2E8F0;
   
@@ -11,7 +11,7 @@
   --risk-high: #EA580C;
   --risk-critical: #DC2626;
 
-  --gov-ashoka-blue: #0B2545;
+  --gov-ashoka-blue: #2E1065;
   --gov-gold: #D97706;
   --gov-saffron: #FF9933;
   --gov-green: #138808;

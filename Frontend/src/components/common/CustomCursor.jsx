@@ -113,13 +113,13 @@ export const CustomCursor = () => {
           borderColor: isHovered
             ? 'rgba(245, 158, 11, 0.85)' // Amber accent on interactive
             : isMoving
-            ? 'rgba(14, 165, 233, 0.75)' // Cyan glow during motion
-            : 'rgba(11, 37, 69, 0.65)',  // Institutional Navy at rest
+            ? 'rgba(124, 58, 237, 0.65)' // Purple glow during motion
+            : 'rgba(46, 16, 101, 0.65)',  // Institutional Navy/Purple at rest
           backgroundColor: isHovered
             ? 'rgba(245, 158, 11, 0.12)'
             : isMoving
-            ? 'rgba(56, 189, 248, 0.08)'
-            : 'rgba(11, 37, 69, 0.04)',
+            ? 'rgba(124, 58, 237, 0.08)'
+            : 'rgba(46, 16, 101, 0.04)',
           boxShadow: isHovered
             ? '0 0 12px rgba(245, 158, 11, 0.3)'
             : isMoving
@@ -133,8 +133,8 @@ export const CustomCursor = () => {
         ref={dotRef}
         className="absolute top-0 left-0 -mt-1 -ml-1 w-2 h-2 rounded-full will-change-transform transition-colors duration-150"
         style={{
-          backgroundColor: isHovered ? '#f59e0b' : '#0B2545',
-          boxShadow: isHovered ? '0 0 6px #f59e0b' : '0 0 4px rgba(11, 37, 69, 0.5)',
+          backgroundColor: isHovered ? '#f59e0b' : '#2E1065',
+          boxShadow: isHovered ? '0 0 6px #f59e0b' : '0 0 4px rgba(46, 16, 101, 0.5)',
         }}
       />
     </div>

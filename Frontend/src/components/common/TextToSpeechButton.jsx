@@ -89,7 +89,7 @@ export const TextToSpeechButton = ({ className = '', showLabel = true }) => {
         </>
       ) : (
         <>
-          <Volume2 className="w-3.5 h-3.5 text-cyan-300" />
+          <Volume2 className="w-3.5 h-3.5 text-purple-300" />
           {showLabel && <span className="font-mono text-[10px]">Read Page</span>}
         </>
       )}

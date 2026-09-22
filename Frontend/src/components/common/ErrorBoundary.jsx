@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { ShieldAlert, RefreshCw, Home, AlertTriangle } from 'lucide-react';
 
 export class ErrorBoundary extends React.Component {
@@ -34,7 +34,7 @@ export class ErrorBoundary extends React.Component {
                 <AlertTriangle className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-[#0B2545]">
+                <h2 className="text-lg font-black text-[#2E1065]">
                   Module Rendering Protected
                 </h2>
                 <p className="text-xs text-slate-500">
@@ -59,7 +59,7 @@ export class ErrorBoundary extends React.Component {
               <button
                 type="button"
                 onClick={this.handleReload}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B2545] hover:bg-[#081D37] text-white rounded-lg text-xs font-bold transition shadow-sm cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2E1065] hover:bg-[#1E0A45] text-white rounded-lg text-xs font-bold transition shadow-sm cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Reload Module</span>
