@@ -1,6 +1,19 @@
-# MPLADS-AI — AI-Assisted Public Fund Monitoring
+# 🏛️ MPLADS-AI — Continuous Infrastructure Surveillance & Cartel Anomaly Engine
 
-MPLADS-AI is a hackathon prototype for continuous monitoring of MPLADS works. It combines rule-based financial/timeline checks with lightweight machine-learning anomaly detection, duplicate-work text matching, contractor concentration analysis, and image-forensics checks.
+[![Live Portal](https://img.shields.io/badge/Live_Portal-Vercel_Active-brightgreen?style=for-the-badge&logo=vercel)](https://mplads-ai-surveillance-vigilance-po.vercel.app/)
+[![API Documentation](https://img.shields.io/badge/REST_API-Swagger_Active-blue?style=for-the-badge&logo=fastapi)](https://mplads-ai-backend-brqi.onrender.com/docs)
+[![Smart India Hackathon 2026](https://img.shields.io/badge/Hackathon-SIH_2026_(MoSPI)-FF6B6B?style=for-the-badge)](https://sih.gov.in)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+> **Institutional-Grade Decision Support, Computer Vision Duplicate Forensics, and Bipartite Cartel Graph Modeling for the Ministry of Statistics and Programme Implementation (MoSPI).**  
+> 🌐 **Live Personal Portal:** [https://mplads-ai-surveillance-vigilance-po.vercel.app/](https://mplads-ai-surveillance-vigilance-po.vercel.app/)  
+> 📑 **Interactive API Docs:** [https://mplads-ai-backend-brqi.onrender.com/docs](https://mplads-ai-backend-brqi.onrender.com/docs)  
+> 👥 **Team:** `Code-Acers` (ABES Engineering College)  
+> 🎯 **Architectural Contributions (Rohit Singh):** 64-bit Perceptual dHash Computer Vision Forensics, NetworkX Bipartite Cartel Graph, Composite Risk Engine ($R = 0.35F + 0.25T + 0.20I + 0.20C$), and Sovereign e-SAKSHI 2.0 UX.
+
+---
+
+MPLADS-AI is a full-stack governance intelligence platform for continuous monitoring of MPLADS works across Indian districts. It combines rule-based financial/timeline checks with lightweight machine-learning anomaly detection, duplicate-work text matching, contractor concentration analysis, and image-forensics checks.
 
 ## Architecture
 
