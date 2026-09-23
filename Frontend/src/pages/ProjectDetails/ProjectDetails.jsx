@@ -468,94 +468,104 @@ export const ProjectDetails = () => {
 
             {/* Animated Interactive Step Timeline with Full Sliding Active Orb */}
             <div className="pt-2 pb-2">
-              <div className="relative">
-                {/* Continuous Background Track Line across the grid */}
-                <div className="absolute top-[54px] left-[8.33%] right-[8.33%] h-1 bg-slate-200 rounded-full z-0 overflow-hidden">
-                  {/* Active progress bar filling left to right */}
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-emerald-500 via-blue-500 to-blue-600 rounded-full"
-                    initial={{ width: '0%' }}
-                    animate={{
-                      width: `${
-                        timelineSteps.length > 1
-                          ? (Math.max(0, timelineSteps.findIndex(s => s.status === 'in-progress')) / (timelineSteps.length - 1)) * 100
-                          : 0
-                      }%`
-                    }}
-                    transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </div>
-
-                {/* Gliding Full Active Circle Indicator that physically moves left-to-right to the current step */}
-                {(() => {
-                  const currentIdx = Math.max(0, timelineSteps.findIndex(s => s.status === 'in-progress'));
-                  const totalSteps = timelineSteps.length;
-                  // Calculate percentage position for current step center
-                  const targetLeftPct = (currentIdx / (totalSteps - 1)) * 100;
-
-                  return (
-                    <div className="absolute top-[42px] left-[8.33%] right-[8.33%] pointer-events-none z-20">
-                      <motion.div
-                        className="absolute -top-0.5 -ml-3.5 flex items-center justify-center"
-                        initial={{ left: '0%', scale: 0.8 }}
-                        animate={{ left: `${targetLeftPct}%`, scale: 1 }}
-                        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        {/* Outer radiating pulse */}
-                        <motion.span
-                          className="absolute w-8 h-8 rounded-full bg-blue-500/25"
-                          animate={{ scale: [1, 1.5, 1], opacity: [0.7, 0.1, 0.7] }}
-                          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-                        />
-                        {/* Main solid vibrant indicator circle */}
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 border-2 border-white shadow-md flex items-center justify-center">
-                          <div className="w-2.5 h-2.5 rounded-full bg-white shadow-xs" />
-                        </div>
-                      </motion.div>
-                    </div>
-                  );
-                })()}
-
-                {/* Steps Grid */}
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 relative z-10">
+              <div>
+                {/* Row 1: Step Labels (Titles and Dates) perfectly aligned */}
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 items-end mb-3">
                   {timelineSteps.map((step, idx) => {
                     const isDone = step.status === 'completed';
                     const isCurrent = step.status === 'in-progress';
-                    const currentIdx = timelineSteps.findIndex(s => s.status === 'in-progress');
 
                     return (
                       <div
                         key={idx}
-                        className="flex flex-col items-center text-center space-y-2 relative group"
+                        className="flex flex-col items-center justify-end text-center px-1"
                       >
-                        {/* Step Labels above line */}
-                        <div className="min-h-[36px] flex flex-col justify-end">
-                          <motion.span
-                            initial={{ opacity: 0.4 }}
-                            animate={{
-                              opacity: 1,
-                              fontWeight: isCurrent ? 800 : isDone ? 700 : 500,
-                              color: isCurrent ? '#1d4ed8' : isDone ? '#1e293b' : '#94a3b8'
-                            }}
-                            transition={{ duration: 0.5, delay: idx * 0.15 }}
-                            className="text-[11px] leading-tight transition-colors"
-                          >
-                            {step.stage}
-                          </motion.span>
-                          <span className="text-[10px] text-slate-400 font-mono mt-0.5">
-                            {step.date}
-                          </span>
-                        </div>
+                        <motion.span
+                          initial={{ opacity: 0.4 }}
+                          animate={{
+                            opacity: 1,
+                            fontWeight: isCurrent ? 800 : isDone ? 700 : 500,
+                            color: isCurrent ? '#1d4ed8' : isDone ? '#1e293b' : '#94a3b8'
+                          }}
+                          transition={{ duration: 0.5, delay: idx * 0.15 }}
+                          className="text-[11px] leading-tight transition-colors line-clamp-2"
+                        >
+                          {step.stage}
+                        </motion.span>
+                        <span className="text-[10px] text-slate-400 font-mono mt-0.5 whitespace-nowrap">
+                          {step.date}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
 
-                        {/* Station Anchor Node */}
-                        <div className="h-7 flex items-center justify-center relative">
+                {/* Row 2: Connecting Track Line + Node Stations (All sharing the exact 50% vertical center) */}
+                <div className="relative h-8 flex items-center">
+                  {/* Continuous Background Track Line across the grid */}
+                  <div className="absolute top-1/2 -translate-y-1/2 left-[8.33%] right-[8.33%] h-1 bg-slate-200 rounded-full z-0 overflow-hidden">
+                    {/* Active progress bar filling left to right */}
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-emerald-500 via-blue-500 to-blue-600 rounded-full"
+                      initial={{ width: '0%' }}
+                      animate={{
+                        width: `${
+                          timelineSteps.length > 1
+                            ? (Math.max(0, timelineSteps.findIndex(s => s.status === 'in-progress')) / (timelineSteps.length - 1)) * 100
+                            : 0
+                        }%`
+                      }}
+                      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  </div>
+
+                  {/* Gliding Full Active Circle Indicator that physically moves left-to-right to the current step */}
+                  {(() => {
+                    const currentIdx = Math.max(0, timelineSteps.findIndex(s => s.status === 'in-progress'));
+                    const totalSteps = timelineSteps.length;
+                    const targetLeftPct = (currentIdx / (totalSteps - 1)) * 100;
+
+                    return (
+                      <div className="absolute top-1/2 -translate-y-1/2 left-[8.33%] right-[8.33%] pointer-events-none z-20 flex items-center">
+                        <motion.div
+                          className="absolute -top-3.5 -ml-3.5 flex items-center justify-center"
+                          initial={{ left: '0%', scale: 0.8 }}
+                          animate={{ left: `${targetLeftPct}%`, scale: 1 }}
+                          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          {/* Outer radiating pulse */}
+                          <motion.span
+                            className="absolute w-8 h-8 rounded-full bg-blue-500/25"
+                            animate={{ scale: [1, 1.5, 1], opacity: [0.7, 0.1, 0.7] }}
+                            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                          />
+                          {/* Main solid vibrant indicator circle */}
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 border-2 border-white shadow-md flex items-center justify-center">
+                            <div className="w-2.5 h-2.5 rounded-full bg-white shadow-xs" />
+                          </div>
+                        </motion.div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Station Anchor Nodes */}
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 w-full h-8 relative z-10">
+                    {timelineSteps.map((step, idx) => {
+                      const isDone = step.status === 'completed';
+                      const isCurrent = step.status === 'in-progress';
+
+                      return (
+                        <div
+                          key={idx}
+                          className="h-full flex items-center justify-center relative group"
+                        >
                           {isDone ? (
                             <motion.div
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
                               transition={{ duration: 0.3, delay: idx * 0.18 }}
                               whileHover={{ scale: 1.25 }}
-                              className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-emerald-500 flex items-center justify-center shadow-xs"
+                              className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-emerald-500 flex items-center justify-center shadow-xs cursor-pointer"
                             >
                               <div className="w-1.5 h-1.5 rounded-full bg-white" />
                             </motion.div>
@@ -566,9 +576,9 @@ export const ProjectDetails = () => {
                             <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-300 bg-white group-hover:border-slate-400 transition-colors" />
                           )}
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

@@ -89,22 +89,36 @@ export const AIPreScreening = () => {
       subtitle="Explainable 5-point automated verification evaluating budget benchmarks, photo uniqueness, and contractor history before fund release."
       breadcrumbs={['District Suite', 'AI Pre-Screening']}
       actions={
-        <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-none p-1 text-xs shadow-sm">
+        <div className="flex items-center gap-1.5 bg-slate-100/90 p-1 rounded-xl border border-slate-200/90 shadow-2xs">
           <button
+            type="button"
             onClick={() => setSelectedCase('clean')}
-            className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${
-              selectedCase === 'clean' ? 'bg-emerald-600 text-white' : 'text-gov-slate hover:text-emerald-700'
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              selectedCase === 'clean'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
             }`}
           >
-            Clean Case (18% Low Risk)
+            <span className={`w-2 h-2 rounded-full transition-colors ${selectedCase === 'clean' ? 'bg-emerald-500 ring-2 ring-emerald-100' : 'bg-slate-300'}`} />
+            <span>Clean Case</span>
+            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-semibold ${selectedCase === 'clean' ? 'bg-emerald-50 text-emerald-700' : 'text-slate-400'}`}>
+              18% Risk
+            </span>
           </button>
           <button
+            type="button"
             onClick={() => setSelectedCase('suspicious')}
-            className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${
-              selectedCase === 'suspicious' ? 'bg-rose-600 text-white' : 'text-gov-slate hover:text-rose-700'
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              selectedCase === 'suspicious'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
             }`}
           >
-            Suspicious Case (87% High Risk)
+            <span className={`w-2 h-2 rounded-full transition-colors ${selectedCase === 'suspicious' ? 'bg-rose-500 ring-2 ring-rose-100' : 'bg-slate-300'}`} />
+            <span>Suspicious Case</span>
+            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-semibold ${selectedCase === 'suspicious' ? 'bg-rose-50 text-rose-700' : 'text-slate-400'}`}>
+              87% Risk
+            </span>
           </button>
         </div>
       }
@@ -116,71 +130,137 @@ export const AIPreScreening = () => {
             title={activeProject.name}
             subtitle={`Work ID: ${activeProject.id} • ${activeProject.location}`}
             icon={Building}
-            riskAccent={activeProject.riskLevel === 'HIGH' ? 'critical' : 'low'}
+            className="bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden"
+            headerClassName="bg-slate-50/70 border-b border-slate-200 px-5 py-3.5"
+            bodyClassName="p-5 space-y-4"
+            action={
+              <span className={`px-2.5 py-1 rounded-full text-[11px] font-mono font-bold flex items-center gap-1.5 border ${
+                activeProject.riskLevel === 'HIGH'
+                  ? 'bg-rose-50 text-rose-700 border-rose-200/80'
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200/80'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${activeProject.riskLevel === 'HIGH' ? 'bg-rose-500' : 'bg-emerald-500'}`} />
+                {activeProject.riskLevel === 'HIGH' ? 'HIGH RISK (87/100)' : 'LOW RISK (18/100)'}
+              </span>
+            }
           >
-            <div className="space-y-2.5 text-xs">
-              <div className="flex justify-between p-2.5 rounded bg-gov-canvas border border-gov-border">
-                <span className="text-gov-muted">Sanction Amount:</span>
-                <span className="font-mono font-bold text-gov-slateDark">{formatINR(activeProject.sanctionedAmount)}</span>
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                <span className="text-slate-500 font-medium">Sanction Amount:</span>
+                <span className="font-mono font-bold text-slate-900">{formatINR(activeProject.sanctionedAmount)}</span>
               </div>
-              <div className="flex justify-between p-2.5 rounded bg-gov-canvas border border-gov-border">
-                <span className="text-gov-muted">Implementing Agency:</span>
-                <span className="font-semibold text-gov-slateDark">{activeProject.agency}</span>
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                <span className="text-slate-500 font-medium">Implementing Agency:</span>
+                <span className="font-semibold text-slate-800 truncate ml-2 text-right">{activeProject.agency}</span>
               </div>
-              <div className="flex justify-between p-2.5 rounded bg-gov-canvas border border-gov-border">
-                <span className="text-gov-muted">Composite Threat Index:</span>
-                <span className={`font-mono font-bold ${activeProject.riskScore >= 60 ? 'text-rose-700' : 'text-emerald-700'}`}>
-                  {activeProject.riskScore} / 100 ({activeProject.riskLevel} TIER)
-                </span>
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/70">
+                <span className="text-slate-500 font-medium">Composite Threat Index:</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-slate-900">{activeProject.riskScore} / 100</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
+                    activeProject.riskScore >= 60
+                      ? 'bg-rose-50 text-rose-700 border-rose-200'
+                      : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  }`}>
+                    {activeProject.riskLevel} TIER
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Explainable Recommendation Banner */}
-            <div className={`mt-4 p-3.5 rounded border ${
+            <div className={`p-4 rounded-xl border transition-colors ${
               activeProject.recommendationTone === 'danger'
-                ? 'bg-rose-50 border-rose-200 text-rose-900 border-l-4 border-l-rose-600'
-                : 'bg-emerald-50 border-emerald-200 text-emerald-900 border-l-4 border-l-emerald-600'
+                ? 'bg-rose-50/35 border-rose-200/80 text-slate-800'
+                : 'bg-slate-50/90 border-slate-200/90 text-slate-800'
             }`}>
-              <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider mb-1">
-                <span>AI Recommendation (Predictive)</span>
-                <span className="font-mono">{activeProject.aiConfidence} Confidence</span>
+              <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider mb-1 text-slate-500">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-slate-400" />
+                  <span>AI Recommendation (Predictive)</span>
+                </div>
+                <span className="font-mono px-2 py-0.5 rounded text-[10px] font-bold bg-white text-slate-700 border border-slate-200/80 shadow-2xs">
+                  {activeProject.aiConfidence} Confidence
+                </span>
               </div>
-              <p className="text-xs font-bold leading-snug">
-                {activeProject.aiRecommendation}
-              </p>
-              <p className="text-[11px] opacity-80 mt-1">
+              <div className="mt-2 flex items-center gap-2 text-xs font-black tracking-tight">
+                <span className={`w-2 h-2 rounded-full shrink-0 ${activeProject.recommendationTone === 'danger' ? 'bg-rose-600' : 'bg-emerald-500'}`} />
+                <span className={activeProject.recommendationTone === 'danger' ? 'text-rose-900' : 'text-slate-900'}>
+                  {activeProject.aiRecommendation}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 leading-relaxed mt-2 pt-2 border-t border-slate-200/60">
                 Recommendation is algorithmic guidance under Human-in-the-Loop protocol; final statutory order requires District Officer digital signature.
               </p>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-gov-border flex flex-col gap-2">
-              <Button
-                variant={activeProject.riskScore >= 60 ? 'secondary' : 'success'}
-                size="md"
-                onClick={() => handleAction('APPROVE')}
-                icon={CheckCircle2}
-                className="w-full text-xs font-bold justify-center"
-              >
-                Approve Disbursal Order
-              </Button>
-              <Button
-                variant="warning"
-                size="md"
-                onClick={() => handleAction('REVIEW')}
-                icon={AlertTriangle}
-                className="w-full text-xs font-bold justify-center"
-              >
-                Dispatch Physical Field Inspection
-              </Button>
-              <Button
-                variant="danger"
-                size="md"
-                onClick={() => handleAction('REJECT')}
-                icon={XCircle}
-                className="w-full text-xs font-bold justify-center"
-              >
-                Freeze Payout & Issue Show-Cause Notice
-              </Button>
+            {/* Hierarchical Action Controls */}
+            <div className="pt-2 flex flex-col gap-2">
+              {selectedCase === 'clean' ? (
+                <>
+                  {/* Recommended Primary Button for Clean Case */}
+                  <button
+                    type="button"
+                    onClick={() => handleAction('APPROVE')}
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#2E1065] hover:bg-[#1E1B4B] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 transition cursor-pointer active:scale-[0.99]"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Approve Disbursal Order</span>
+                  </button>
+
+                  {/* Secondary Alternative Actions */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleAction('REVIEW')}
+                      className="py-2 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                    >
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Field Inspection</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAction('REJECT')}
+                      className="py-2 px-3 rounded-xl bg-white hover:bg-rose-50/60 text-slate-600 hover:text-rose-700 border border-slate-200/90 shadow-2xs text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                    >
+                      <XCircle className="w-3.5 h-3.5 text-rose-500" />
+                      <span>Freeze Payout</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Recommended Primary Button for Suspicious Case */}
+                  <button
+                    type="button"
+                    onClick={() => handleAction('REJECT')}
+                    className="w-full py-2.5 px-4 rounded-xl bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 transition cursor-pointer active:scale-[0.99]"
+                  >
+                    <XCircle className="w-4 h-4 text-rose-100" />
+                    <span>Freeze Payout & Issue Show-Cause Notice</span>
+                  </button>
+
+                  {/* Secondary Alternative Actions */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleAction('REVIEW')}
+                      className="py-2 px-3 rounded-xl bg-white hover:bg-amber-50/60 text-slate-700 hover:text-amber-800 border border-slate-200/90 shadow-2xs text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                    >
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Field Inspection</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAction('APPROVE')}
+                      className="py-2 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 border border-slate-200/90 shadow-2xs text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer opacity-80 hover:opacity-100"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Override & Approve</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </Card>
         </div>
@@ -191,41 +271,59 @@ export const AIPreScreening = () => {
             title="Explainable 5-Point AI Integrity Evaluation"
             subtitle="Automated checks across photo evidence, cost benchmarks, vendor history, duplicate assets, and GPS bounds"
             icon={Sparkles}
+            className="bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden"
+            headerClassName="bg-slate-50/70 border-b border-slate-200 px-5 py-3.5"
+            bodyClassName="p-5 space-y-3"
+            action={
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200/80">
+                {activeProject.checks.filter((c) => c.status === 'pass').length} of {activeProject.checks.length} Clear
+              </span>
+            }
           >
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {activeProject.checks.map((chk, i) => (
                 <div
                   key={i}
-                  className={`p-3.5 rounded border flex items-start gap-3 transition-colors ${
+                  className={`p-3.5 rounded-xl border flex items-start gap-3.5 transition-all ${
                     chk.status === 'pass'
-                      ? 'bg-gov-surface border-gov-border text-gov-slate'
-                      : 'bg-rose-50/70 border-rose-200 text-gov-slate border-l-4 border-l-rose-600'
+                      ? 'bg-white border-slate-200/80 shadow-2xs hover:border-slate-300'
+                      : 'bg-rose-50/30 border-rose-200/80 shadow-2xs hover:border-rose-300'
                   }`}
                 >
                   <div className="mt-0.5 shrink-0">
                     {chk.status === 'pass' ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                      <div className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-100/90 flex items-center justify-center text-emerald-600">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      </div>
                     ) : (
-                      <XCircle className="w-5 h-5 text-rose-600" />
+                      <div className="w-8 h-8 rounded-full bg-rose-50 border border-rose-200/90 flex items-center justify-center text-rose-600">
+                        <XCircle className="w-4 h-4 text-rose-600" />
+                      </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="text-xs font-bold text-gov-slateDark">{chk.name}</h4>
+                      <h4 className={`text-xs font-bold ${chk.status === 'pass' ? 'text-slate-900' : 'text-rose-950'}`}>
+                        {chk.name}
+                      </h4>
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <span className="text-[10px] font-mono text-gov-muted">{chk.confidence} match</span>
+                        <span className={`text-[10px] font-mono ${chk.status === 'pass' ? 'text-slate-400' : 'text-rose-400'}`}>
+                          {chk.confidence} match
+                        </span>
                         <span
-                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
                             chk.status === 'pass'
-                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                              : 'bg-rose-100 text-rose-800 border border-rose-300'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80'
+                              : 'bg-rose-100/90 text-rose-700 border-rose-200/90'
                           }`}
                         >
                           {chk.status === 'pass' ? 'PASSED' : 'FLAGGED'}
                         </span>
                       </div>
                     </div>
-                    <p className="text-xs text-gov-slate mt-1 leading-relaxed">{chk.detail}</p>
+                    <p className={`text-xs mt-1 leading-relaxed ${chk.status === 'pass' ? 'text-slate-600' : 'text-slate-700'}`}>
+                      {chk.detail}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -242,13 +340,13 @@ export const AIPreScreening = () => {
         subtitle={`Work Dossier: ${activeProject.id} (${activeProject.name})`}
         size="md"
       >
-        <div className="space-y-4">
-          <p className="text-xs text-gov-slate leading-relaxed">
-            You are recording an official order as <strong>District Project Officer</strong>. This statutory file notation will be recorded on the national e-SAKSHI ledger with cryptographic audit trail.
-          </p>
+        <div className="space-y-4 text-xs">
+          <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200/80 leading-relaxed text-slate-600">
+            You are recording an official order as <strong className="text-slate-900">District Project Officer</strong>. This statutory file notation will be recorded on the national e-SAKSHI ledger with cryptographic audit trail.
+          </div>
 
           <div>
-            <label className="text-xs font-bold text-gov-slateDark uppercase tracking-wider block mb-1.5">
+            <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
               Official Justification / Order Notation:
             </label>
             <textarea
@@ -256,28 +354,26 @@ export const AIPreScreening = () => {
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               placeholder="Enter official file notation, inspection order number, or reason for action..."
-              className="w-full bg-white border border-gov-border rounded p-2.5 text-xs text-gov-slateDark placeholder-gov-muted focus:outline-none focus:ring-1 focus:ring-gov-navy shadow-sm"
+              className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 shadow-2xs resize-none"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-gov-border">
-            <Button
-              variant="outline"
-              size="sm"
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
+            <button
+              type="button"
               onClick={() => setModalAction({ open: false, type: '' })}
-              className="border-gov-border text-gov-slate"
+              className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition cursor-pointer"
             >
               Cancel
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
+            </button>
+            <button
+              type="button"
               onClick={handleConfirmDecision}
-              icon={Send}
-              className="bg-gov-navy hover:bg-gov-navyDark text-white"
+              className="px-4 py-2 rounded-xl bg-[#2E1065] hover:bg-[#1E1B4B] text-white text-xs font-bold shadow-xs flex items-center gap-1.5 transition cursor-pointer"
             >
-              Execute Official Order
-            </Button>
+              <Send className="w-3.5 h-3.5" />
+              <span>Execute Official Order</span>
+            </button>
           </div>
         </div>
       </Modal>

@@ -27,7 +27,9 @@ import {
   Activity,
   Award,
   LogOut,
-  User
+  User,
+  Clock,
+  Camera
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../../components/common/Button';
@@ -42,6 +44,7 @@ import { AuthModal } from '../../components/common/AuthModal';
 import { TiltQuoteCard } from '../../components/common/TiltQuoteCard';
 import { GlowingParticlesBackground } from '../../components/common/GlowingParticlesBackground';
 import { HeroWavyBackground } from '../../components/common/HeroWavyBackground';
+import { PentagonCard } from '../../components/common/PentagonCard';
 import {
   AeroplaneArrow,
   AeroplaneSend,
@@ -739,82 +742,139 @@ export const Home = () => {
               </div>
             )}
 
-            {/* KPI Cards Grid in Polished Solid White Cards */}
-            {kpiMode === 'statutory' ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Entitlement (FY)</p>
-                  <h3 className="text-xl font-black font-mono text-[#2E1065]">₹5.00 Cr</h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Per MP / Year</p>
-                </div>
-                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">TSA Pooled Fund</p>
-                  <h3 className="text-xl font-black font-mono text-[#2E1065]">₹{nationalKpis.totalFundsCr || '8,333.67'} Cr</h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Active Allocations</p>
-                </div>
-                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Works Recommended</p>
-                  <h3 className="text-xl font-black font-mono text-[#2E1065]">
-                    {activeSabha === 'lok' ? '33,123' : '8,410'}
-                  </h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Digital Submissions</p>
-                </div>
-                <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Works Sanctioned</p>
-                  <h3 className="text-xl font-black font-mono text-[#2E1065]">
-                    {activeSabha === 'lok' ? '28,450' : '6,920'}
-                  </h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Feasibility Passed</p>
-                </div>
-                <div className="p-4 bg-white border border-emerald-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Works Completed</p>
-                  <h3 className="text-xl font-black font-mono text-emerald-900">
-                    {activeSabha === 'lok' ? '21,200' : '5,140'}
-                  </h3>
-                  <p className="text-[10px] text-emerald-700 font-medium">Assets Built & Verified</p>
-                </div>
-                <div className="p-4 bg-white border border-blue-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-blue-800 uppercase tracking-wider">Total Expenditure</p>
-                  <h3 className="text-xl font-black font-mono text-blue-900">
-                    {activeSabha === 'lok' ? '₹46,210 Cr' : '₹9,840 Cr'}
-                  </h3>
-                  <p className="text-[10px] text-blue-700 font-medium">PFMS Disbursals</p>
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="p-4 bg-white border border-sky-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-sky-800 uppercase tracking-wider">AI Monitored Works</p>
-                  <h3 className="text-xl font-black font-mono text-sky-950">{nationalKpis.projectsMonitored || 8420}</h3>
-                  <p className="text-[10px] text-sky-700 font-mono">100% Geotagged MBs</p>
-                </div>
-                <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">Anomalies Flagged</p>
-                  <h3 className="text-xl font-black font-mono text-rose-950">{nationalKpis.anomaliesDetected || 142}</h3>
-                  <p className="text-[10px] text-rose-700 font-mono">Continuous Watch</p>
-                </div>
-                <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-rose-800 uppercase tracking-wider">High-Risk Queue</p>
-                  <h3 className="text-xl font-black font-mono text-rose-950">{nationalKpis.highRiskProjects || 38}</h3>
-                  <p className="text-[10px] text-rose-700 font-mono">Composite &gt; 70</p>
-                </div>
-                <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Cartels Detected</p>
-                  <h3 className="text-xl font-black font-mono text-amber-950">14 Rings</h3>
-                  <p className="text-[10px] text-amber-700 font-mono">HHI Index &gt; 2500</p>
-                </div>
-                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Duplicate Intercept</p>
-                  <h3 className="text-xl font-black font-mono text-emerald-950">96.4%</h3>
-                  <p className="text-[10px] text-emerald-700 font-mono">OpenCV 64-bit dHash</p>
-                </div>
-                <div className="p-4 bg-purple-50 border border-purple-200 rounded-2xl space-y-1 shadow-xs hover:shadow-md transition-all">
-                  <p className="text-[10px] font-bold text-purple-800 uppercase tracking-wider">Disbursals on Hold</p>
-                  <h3 className="text-xl font-black font-mono text-purple-950">₹412.5 Cr</h3>
-                  <p className="text-[10px] text-purple-700 font-mono">Milestone Holds</p>
-                </div>
-              </div>
-            )}
+            {/* KPI Pentagon Cards Grid */}
+            <div
+              key={kpiMode + (kpiMode === 'statutory' ? activeSabha : '')}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5"
+            >
+              {kpiMode === 'statutory' ? (
+                <>
+                  <PentagonCard
+                    index={0}
+                    inView={true}
+                    title="Entitlement (FY)"
+                    value="₹5.00 Cr"
+                    subtitle="Per MP / Year"
+                    variant="purple"
+                    borderColor="#7e22ce"
+                    bgColor="bg-white"
+                  />
+                  <PentagonCard
+                    index={1}
+                    inView={true}
+                    title="TSA Pooled Fund"
+                    value={`₹${nationalKpis.totalFundsCr || '8,333.67'} Cr`}
+                    subtitle="Active Allocations"
+                    variant="blue"
+                    borderColor="#6b21a8"
+                    bgColor="bg-white"
+                  />
+                  <PentagonCard
+                    index={2}
+                    inView={true}
+                    title="Works Recommended"
+                    value={activeSabha === 'lok' ? '33,123' : '8,410'}
+                    subtitle="Digital Submissions"
+                    variant="default"
+                    borderColor="#94a3b8"
+                    bgColor="bg-white"
+                  />
+                  <PentagonCard
+                    index={3}
+                    inView={true}
+                    title="Works Sanctioned"
+                    value={activeSabha === 'lok' ? '28,450' : '6,920'}
+                    subtitle="Feasibility Passed"
+                    variant="purple"
+                    borderColor="#7e22ce"
+                    bgColor="bg-white"
+                  />
+                  <PentagonCard
+                    index={4}
+                    inView={true}
+                    title="Works Completed"
+                    value={activeSabha === 'lok' ? '21,200' : '5,140'}
+                    subtitle="Assets Built & Verified"
+                    variant="success"
+                    borderColor="#059669"
+                    bgColor="bg-white"
+                  />
+                  <PentagonCard
+                    index={5}
+                    inView={true}
+                    title="Total Expenditure"
+                    value={activeSabha === 'lok' ? '₹46,210 Cr' : '₹9,840 Cr'}
+                    subtitle="PFMS Disbursals"
+                    variant="warning"
+                    borderColor="#d97706"
+                    bgColor="bg-white"
+                  />
+                </>
+              ) : (
+                <>
+                  <PentagonCard
+                    index={0}
+                    inView={true}
+                    title="AI Monitored Works"
+                    value={String(nationalKpis.projectsMonitored || 8420)}
+                    subtitle="100% Geotagged MBs"
+                    variant="blue"
+                    borderColor="#0284c7"
+                    bgColor="bg-sky-50/60"
+                  />
+                  <PentagonCard
+                    index={1}
+                    inView={true}
+                    title="Anomalies Flagged"
+                    value={String(nationalKpis.anomaliesDetected || 142)}
+                    subtitle="Continuous Watch"
+                    variant="danger"
+                    borderColor="#e11d48"
+                    bgColor="bg-rose-50/60"
+                  />
+                  <PentagonCard
+                    index={2}
+                    inView={true}
+                    title="High-Risk Queue"
+                    value={String(nationalKpis.highRiskProjects || 38)}
+                    subtitle="Composite > 70"
+                    variant="danger"
+                    borderColor="#dc2626"
+                    bgColor="bg-rose-50/60"
+                  />
+                  <PentagonCard
+                    index={3}
+                    inView={true}
+                    title="Cartels Detected"
+                    value="14 Rings"
+                    subtitle="HHI Index > 2500"
+                    variant="warning"
+                    borderColor="#d97706"
+                    bgColor="bg-amber-50/60"
+                  />
+                  <PentagonCard
+                    index={4}
+                    inView={true}
+                    title="Duplicate Intercept"
+                    value="96.4%"
+                    subtitle="OpenCV 64-bit dHash"
+                    variant="success"
+                    borderColor="#059669"
+                    bgColor="bg-emerald-50/60"
+                  />
+                  <PentagonCard
+                    index={5}
+                    inView={true}
+                    title="Disbursals on Hold"
+                    value="₹412.5 Cr"
+                    subtitle="Milestone Holds"
+                    variant="purple"
+                    borderColor="#9333ea"
+                    bgColor="bg-purple-50/60"
+                  />
+                </>
+              )}
+            </div>
           </div>
         </section>
 

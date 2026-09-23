@@ -19,6 +19,8 @@ export const PentagonCard = ({
   onClick,
   index = 0,
   animate = true,
+  inView = false,
+  viewport = { once: true, amount: 0.2 },
 }) => {
   // Institutional styling variants matching SIH / MoSPI visual identity
   const variantStyles = {
@@ -77,15 +79,26 @@ export const PentagonCard = ({
 
   const MotionWrapper = animate ? motion.div : 'div';
   const motionProps = animate
-    ? {
-        initial: { opacity: 0, x: -50 },
-        animate: { opacity: 1, x: 0 },
-        transition: {
-          duration: 0.65,
-          delay: 0.06 + index * 0.18,
-          ease: [0.22, 1, 0.36, 1],
-        },
-      }
+    ? inView
+      ? {
+          initial: { opacity: 0, x: -60 },
+          whileInView: { opacity: 1, x: 0 },
+          viewport,
+          transition: {
+            duration: 0.7,
+            delay: 0.08 + index * 0.18,
+            ease: [0.22, 1, 0.36, 1],
+          },
+        }
+      : {
+          initial: { opacity: 0, x: -50 },
+          animate: { opacity: 1, x: 0 },
+          transition: {
+            duration: 0.65,
+            delay: 0.06 + index * 0.18,
+            ease: [0.22, 1, 0.36, 1],
+          },
+        }
     : {};
 
   return (
@@ -102,7 +115,7 @@ export const PentagonCard = ({
       <div
         style={clipPathStyle}
         className={cn(
-          'relative w-full h-full min-h-[102px] pl-4 pr-11 py-3.5 flex flex-col justify-between overflow-hidden',
+          'relative w-full h-full min-h-[98px] pl-3.5 pr-8 sm:pr-9 py-3 sm:py-3.5 flex flex-col justify-between overflow-hidden',
           bgClass,
           contentClassName
         )}
@@ -127,23 +140,21 @@ export const PentagonCard = ({
         {/* Content */}
         {children ? (
           children
-        ) : (
+        ) : Icon ? (
           <>
             <div className="flex items-start justify-between gap-2.5">
               <div className="space-y-0.5 min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 truncate">
                   {title}
                 </p>
-                <h3 className={cn('text-xl sm:text-2xl font-black font-mono tracking-tight truncate', style.value)}>
+                <h3 className={cn('text-lg sm:text-xl xl:text-[17px] 2xl:text-xl font-black font-mono tracking-tight truncate', style.value)}>
                   {value}
                 </h3>
               </div>
 
-              {Icon && (
-                <div className={cn('p-1.5 rounded-md border shrink-0', style.iconBg)}>
-                  <Icon className="w-4 h-4" />
-                </div>
-              )}
+              <div className={cn('p-1.5 rounded-md border shrink-0', style.iconBg)}>
+                <Icon className="w-4 h-4" />
+              </div>
             </div>
 
             <div className="mt-2.5 pt-2 border-t border-slate-100/90 flex items-center justify-between gap-2 text-xs">
@@ -166,6 +177,20 @@ export const PentagonCard = ({
               )}
             </div>
           </>
+        ) : (
+          <div className="flex flex-col justify-between h-full space-y-1">
+            <p className="text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-500 leading-tight">
+              {title}
+            </p>
+            <h3 className={cn('text-base sm:text-lg xl:text-lg 2xl:text-xl font-black font-mono tracking-tight leading-tight whitespace-nowrap', style.value)}>
+              {value}
+            </h3>
+            {subtitle && (
+              <p className="text-[10px] sm:text-[10.5px] text-slate-500 font-medium truncate">
+                {subtitle}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </MotionWrapper>
