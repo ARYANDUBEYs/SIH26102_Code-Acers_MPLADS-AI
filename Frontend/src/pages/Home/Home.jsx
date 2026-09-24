@@ -43,7 +43,6 @@ import { SarvamIndicModal } from '../../components/sarvam/SarvamIndicModal';
 import { AuthModal } from '../../components/common/AuthModal';
 import { TiltQuoteCard } from '../../components/common/TiltQuoteCard';
 import { GlowingParticlesBackground } from '../../components/common/GlowingParticlesBackground';
-import { HeroWavyBackground } from '../../components/common/HeroWavyBackground';
 import { PentagonCard } from '../../components/common/PentagonCard';
 import {
   AeroplaneArrow,
@@ -204,13 +203,15 @@ export const Home = () => {
   const isManualScrollRef = useRef(false);
   const manualScrollTimerRef = useRef(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const [currentZoom, setCurrentZoom] = useState(1);
 
   // Scroll listener: handle both scroll-spy and header merge / title shrink
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 50);
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
+      setIsScrolled(currentScrollY > 60);
 
       if (isManualScrollRef.current) return;
 
@@ -261,387 +262,382 @@ export const Home = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen relative text-slate-800 selection:bg-blue-600 selection:text-white flex flex-col font-sans overflow-x-clip">
-      {/* 1. Animated Moving Diagonal Gradient Background (Frutiger Aero Humanist Palette) */}
-      <div className="fixed inset-0 home-moving-gradient pointer-events-none -z-10" />
+  // Dynamic scroll progress for hero white shade expansion:
+  const heroScrollProgress = Math.min(1, Math.max(0, scrollY / 440));
 
-      {/* 2. Official Government Top Utility Bar */}
+  // Base linear gradient stops shift upward as user scrolls, shrinking the dark pitch purple band at the top
+  const darkShift = Math.round(-heroScrollProgress * 85);
+  const baseLinearBg = `linear-gradient(180deg, #06010F ${darkShift}%, #0D0322 ${darkShift + 25}%, #180538 ${darkShift + 50}%, #290858 ${darkShift + 75}%, #3B0D7D 100%)`;
+
+  // Concentrated radiant glow: lighter shade focused intensely on the middle of the bottom
+  // Initial rx is ~48% (focused on the middle, leaving left & right bottom corners dark)
+  // During scrolling, it expands upward and outward across the screen
+  const yCenter = 100 - heroScrollProgress * 45; // 100% -> 55%
+  const rx = 48 + heroScrollProgress * 205;      // 48% -> 253%
+  const ry = 56 + heroScrollProgress * 155;      // 56% -> 211%
+
+  const whiteCore = Math.min(100, Math.round(6 + heroScrollProgress * 45));
+  const lavenderStop = Math.min(100, Math.round(20 + heroScrollProgress * 46));
+  const softPurpleStop = Math.min(100, Math.round(38 + heroScrollProgress * 42));
+  const midPurpleStop = Math.min(100, Math.round(60 + heroScrollProgress * 30));
+  const outerTransp = Math.min(100, Math.round(80 + heroScrollProgress * 20));
+
+  let expandingGlowBg;
+  if (heroScrollProgress >= 1.0) {
+    expandingGlowBg = '#ffffff';
+  } else if (heroScrollProgress > 0.75) {
+    const whiteTakeover = (heroScrollProgress - 0.75) / 0.25;
+    const wPercent = Math.round(whiteCore + whiteTakeover * (100 - whiteCore));
+    expandingGlowBg = `radial-gradient(ellipse ${rx}% ${ry}% at 50% ${yCenter}%, #ffffff 0%, #ffffff ${wPercent}%, #f3e8ff ${Math.min(100, lavenderStop + 15)}%, rgba(216, 180, 254, ${1 - whiteTakeover}) 100%)`;
+  } else {
+    expandingGlowBg = `radial-gradient(ellipse ${rx}% ${ry}% at 50% ${yCenter}%, #ffffff 0%, #ffffff ${whiteCore}%, #f3e8ff ${lavenderStop}%, #d8b4fe ${softPurpleStop}%, rgba(147, 51, 234, ${0.45 * (1 - heroScrollProgress * 0.5)}) ${midPurpleStop}%, transparent ${outerTransp}%)`;
+  }
+
+  return (
+    <div className="min-h-screen relative text-slate-800 selection:bg-purple-600 selection:text-white flex flex-col font-sans overflow-x-clip bg-white">
+      {/* Official Government Top Utility Bar */}
       <div className="relative z-50">
         <TopUtilityBar sticky={false} onOpenVoiceModal={() => setIsVoiceModalOpen(true)} />
       </div>
 
-      {/* Hero & Navbar Zone: Animated Parliament Wavy Background touches directly below TopUtilityBar */}
-      <div className="relative w-full">
-        {/* Animated Parliament Wavy Background - covers from below TopUtilityBar to bottom wave curve */}
-        <HeroWavyBackground />
+      {/* Hero & Navbar Zone: Dark Pitch Purple with Bottom-Middle Luminous Glow & Capillary Ripples */}
+      <div
+        className="relative w-full overflow-hidden flex flex-col justify-between"
+        style={{
+          minHeight: '94vh',
+          backgroundColor: heroScrollProgress >= 1.0 ? '#ffffff' : '#070212'
+        }}
+      >
+        {/* Base Atmospheric Linear Gradient: Pitch Dark Purple down to Deep Violet */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0 transition-opacity duration-150"
+          style={{
+            background: baseLinearBg,
+            opacity: heroScrollProgress >= 1.0 ? 0 : 1
+          }}
+        />
 
-        {/* 3. Official Masthead / Navbar with dynamic glass appearance on scroll - Fixed at top-0 */}
-        <div className="w-full h-20">
+        {/* Radiant Bottom-Middle Luminous Glow: White shade becomes bigger & moves upward on scroll */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{
+            background: expandingGlowBg
+          }}
+        />
+
+        {/* Capillary Waves / Circular Ripples Originating from Bottom-Middle */}
+        <div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-0 h-0 pointer-events-none z-0"
+          style={{ opacity: Math.max(0, 1 - heroScrollProgress * 2.5) }}
+        >
+          {[0, 3.5, 7, 10.5].map((delay, idx) => (
+            <div
+              key={idx}
+              className="capillary-ripple-ring"
+              style={{ animationDelay: `${delay}s` }}
+            />
+          ))}
+        </div>
+
+        {/* Official Masthead / Navbar */}
+        <div className="w-full h-20 relative z-40">
           <header
             className={`transition-all duration-300 w-full z-40 ${
               isScrolled
-                ? 'fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-b border-purple-200/60 shadow-md text-slate-800'
-                : 'relative bg-transparent border-transparent shadow-none text-slate-800'
+                ? 'fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-purple-200/60 shadow-md text-slate-800'
+                : 'relative bg-transparent border-transparent shadow-none text-white'
             }`}
           >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-          
-          {/* Top-Left Brand Slot: Emerges from center-to-top-left morph animation ONLY when scrolled */}
-          <div className="flex items-center gap-3.5 relative min-w-[120px] sm:min-w-[260px]">
-            <motion.div
-              animate={
-                isScrolled
-                  ? { opacity: 1, scale: 1, x: 0, y: 0 }
-                  : { opacity: 0, scale: 1.6, x: 100, y: 50, pointerEvents: 'none' }
-              }
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-3"
-            >
-              {/* Ashoka Lion / Shield Emblem */}
-              <div className="w-11 h-11 rounded-xl bg-[#2E1065] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-200/40 shadow-md">
-                <ShieldCheck className="w-5 h-5 text-amber-400" />
-                <span className="text-[7px] font-bold tracking-tighter uppercase font-mono text-white">MoSPI</span>
-              </div>
-
-              <div className="leading-tight">
-                <div className="flex items-center gap-2">
-                  <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 drop-shadow-xs">
-                    Scheme Guard
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-600 font-medium tracking-wide">
-                  MoSPI • Govt. of India
-                </p>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Clean Navigation Links with Frosted Glass styling & Scroll-Spy */}
-          <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold p-1 rounded-full bg-white/70 backdrop-blur-md border border-purple-200/80 shadow-sm text-slate-700">
-            {/* 1. Home */}
-            <button
-              type="button"
-              onClick={() => {
-                setActiveNav('home');
-                isManualScrollRef.current = true;
-                if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
-                manualScrollTimerRef.current = setTimeout(() => {
-                  isManualScrollRef.current = false;
-                }, 850);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
-                activeNav === 'home'
-                  ? 'text-white'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-              }`}
-            >
-              {activeNav === 'home' && (
-                <motion.div
-                  layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'home' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
-                }`}
-              />
-              <span>Home</span>
-            </button>
-
-            {/* 2. Methodology & Working Principle */}
-            <button
-              type="button"
-              onClick={() => scrollToSection('methodology', 'methodology')}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
-                activeNav === 'methodology'
-                  ? 'text-white'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-              }`}
-            >
-              {activeNav === 'methodology' && (
-                <motion.div
-                  layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'methodology' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
-                }`}
-              />
-              <span>Methodology & Working Principle</span>
-            </button>
-
-            {/* 3. About the Scheme */}
-            <button
-              type="button"
-              onClick={() => scrollToSection('aboutus', 'about')}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
-                activeNav === 'about'
-                  ? 'text-white'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-              }`}
-            >
-              {activeNav === 'about' && (
-                <motion.div
-                  layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'about' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
-                }`}
-              />
-              <span>About the Scheme</span>
-            </button>
-
-            {/* 4. Contact */}
-            <button
-              type="button"
-              onClick={() => scrollToSection('contact', 'contact')}
-              className={`relative px-4 py-1.5 rounded-full flex items-center gap-1.5 font-bold transition-all duration-200 z-10 cursor-pointer ${
-                activeNav === 'contact'
-                  ? 'text-white'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-              }`}
-            >
-              {activeNav === 'contact' && (
-                <motion.div
-                  layoutId="homeNavIndicator"
-                  className="absolute inset-0 bg-[#2E1065] rounded-full -z-10 shadow-sm"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  activeNav === 'contact' ? 'bg-purple-300 scale-100' : 'bg-slate-400 scale-75'
-                }`}
-              />
-              <span>Contact</span>
-            </button>
-          </nav>
-
-          {/* Top Right Controls (User Profile / Login) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* User Profile Avatar with Dropdown OR Login Button */}
-            {user ? (
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center gap-2 p-1.5 rounded-lg bg-white/80 hover:bg-white border border-purple-200/80 text-slate-800 shadow-sm transition-colors cursor-pointer backdrop-blur-md"
-                  title="Account Profile"
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+              {/* Top-Left Brand Slot: Heading "Scheme Guard" with logo JUST APPEARS on scroll */}
+              <div className="flex items-center gap-3.5 relative min-w-[120px] sm:min-w-[260px]">
+                <div
+                  className="flex items-center gap-3 transition-all duration-300"
+                  style={{
+                    opacity: isScrolled ? 1 : 0,
+                    transform: isScrolled ? 'translateY(0)' : 'translateY(-6px)',
+                    pointerEvents: isScrolled ? 'auto' : 'none'
+                  }}
                 >
-                  <img
-                    src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
-                    alt={user?.name || 'User'}
-                    className="w-7 h-7 rounded-md object-cover border border-purple-200/60"
-                  />
-                  <span className="hidden sm:inline-block text-xs font-bold truncate max-w-[110px] text-slate-800">
-                    {user?.name?.split(' ')[0]}
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 opacity-80 text-slate-600" />
-                </button>
+                  {/* Ashoka Lion / Shield Emblem */}
+                  <div className="w-10 h-10 rounded-xl bg-[#2E1065] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-200/40 shadow-md">
+                    <ShieldCheck className="w-5 h-5 text-amber-400" />
+                    <span className="text-[7px] font-bold tracking-tighter uppercase font-mono text-white">MoSPI</span>
+                  </div>
 
-                {isProfileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-none shadow-2xl z-50 py-2 divide-y divide-white/10 animate-in fade-in zoom-in-95 duration-150 text-white">
-                    <div className="px-4 py-2">
-                      <p className="text-xs font-bold text-white">{user?.name}</p>
-                      <p className="text-[11px] text-slate-300 truncate">{user?.designation || user?.email}</p>
-                      <span className="mt-1 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/20 text-blue-200 border border-blue-400/30">
-                        {user?.badge || 'Authorized'}
+                  <div className="leading-tight">
+                    <div className="flex items-center gap-2">
+                      <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 drop-shadow-xs">
+                        Scheme Guard
                       </span>
                     </div>
-
-                    <div className="py-1">
-                      <Link
-                        to="/profile"
-                        onClick={() => setIsProfileDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-xs text-slate-200 hover:bg-white/10 transition-colors"
-                      >
-                        <User className="w-3.5 h-3.5 text-slate-400" />
-                        <span>Security & Profile</span>
-                      </Link>
-                    </div>
-
-                    <div className="pt-1">
-                      <button
-                        onClick={() => {
-                          logout();
-                          setIsProfileDropdownOpen(false);
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-300 hover:bg-rose-500/20 transition-colors text-left font-medium cursor-pointer"
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
+                    <p className="text-[10px] text-slate-500 font-medium tracking-wide">
+                      MoSPI • Govt. of India
+                    </p>
                   </div>
+                </div>
+              </div>
+
+              {/* Top-Right Navbar Text Links: "Home", "Methodology", "About", "Contact" */}
+              <nav className="hidden lg:flex items-center gap-7 sm:gap-9 text-sm font-medium">
+                {[
+                  {
+                    id: 'home',
+                    label: 'Home',
+                    action: () => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      setActiveNav('home');
+                    }
+                  },
+                  {
+                    id: 'methodology',
+                    label: 'Methodology',
+                    action: () => scrollToSection('methodology', 'methodology')
+                  },
+                  {
+                    id: 'about',
+                    label: 'About',
+                    action: () => scrollToSection('aboutus', 'about')
+                  },
+                  {
+                    id: 'contact',
+                    label: 'Contact',
+                    action: () => scrollToSection('contact', 'contact')
+                  }
+                ].map((item) => {
+                  const isActive = activeNav === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={item.action}
+                      className={`relative py-1 cursor-pointer transition-all duration-200 select-none ${
+                        isActive
+                          ? 'scale-105 font-bold'
+                          : 'opacity-80 hover:opacity-100 hover:scale-102'
+                      } ${
+                        isScrolled
+                          ? isActive
+                            ? 'text-[#2E1065]'
+                            : 'text-slate-700 hover:text-slate-950'
+                          : isActive
+                          ? 'text-white'
+                          : 'text-purple-100/80 hover:text-white'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeNavUnderline"
+                          className={`absolute -bottom-1.5 left-0 right-0 h-[2.5px] rounded-full ${
+                            isScrolled ? 'bg-[#2E1065]' : 'bg-purple-300'
+                          }`}
+                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Top Right Controls (User Profile / Login Button) */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                {user ? (
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                      className={`flex items-center gap-2 p-1.5 rounded-xl border transition-colors cursor-pointer backdrop-blur-md ${
+                        isScrolled
+                          ? 'bg-white/80 hover:bg-white border-purple-200/80 text-slate-800 shadow-sm'
+                          : 'bg-white/10 hover:bg-white/20 border-white/25 text-white shadow-sm'
+                      }`}
+                      title="Account Profile"
+                    >
+                      <img
+                        src={
+                          user?.avatar ||
+                          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+                        }
+                        alt={user?.name || 'User'}
+                        className="w-7 h-7 rounded-lg object-cover border border-purple-200/60"
+                      />
+                      <span className="hidden sm:inline-block text-xs font-bold truncate max-w-[110px]">
+                        {user?.name?.split(' ')[0]}
+                      </span>
+                      <ChevronDown className="w-3.5 h-3.5 opacity-80" />
+                    </button>
+
+                    {isProfileDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-56 bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50 py-2 divide-y divide-white/10 animate-in fade-in zoom-in-95 duration-150 text-white">
+                        <div className="px-4 py-2">
+                          <p className="text-xs font-bold text-white">{user?.name}</p>
+                          <p className="text-[11px] text-slate-300 truncate">
+                            {user?.designation || user?.email}
+                          </p>
+                          <span className="mt-1 inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/20 text-blue-200 border border-blue-400/30">
+                            {user?.badge || 'Authorized'}
+                          </span>
+                        </div>
+
+                        <div className="py-1">
+                          <Link
+                            to="/profile"
+                            onClick={() => setIsProfileDropdownOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2 text-xs text-slate-200 hover:bg-white/10 transition-colors"
+                          >
+                            <User className="w-3.5 h-3.5 text-slate-400" />
+                            <span>Security & Profile</span>
+                          </Link>
+                        </div>
+
+                        <div className="pt-1">
+                          <button
+                            onClick={() => {
+                              logout();
+                              setIsProfileDropdownOpen(false);
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-300 hover:bg-rose-500/20 transition-colors text-left font-medium cursor-pointer"
+                          >
+                            <LogOut className="w-3.5 h-3.5" />
+                            <span>Sign Out</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    className={`px-4 py-2 text-xs font-bold rounded-xl border transition inline-flex items-center gap-1.5 cursor-pointer shadow-sm ${
+                      isScrolled
+                        ? 'bg-[#2E1065] hover:bg-[#1E1B4B] text-white border-transparent'
+                        : 'bg-white/10 hover:bg-white/20 text-white border-white/25 backdrop-blur-md'
+                    }`}
+                  >
+                    <span>Login</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 )}
               </div>
-            ) : (
-              <Link
-                to="/login"
-                className="px-4 py-2 text-xs font-bold rounded-lg bg-white/80 hover:bg-white text-slate-800 border border-purple-200/80 shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer backdrop-blur-md hover:shadow"
-              >
-                <span>Login</span>
-                <ArrowRight className="w-3.5 h-3.5 text-purple-700" />
-              </Link>
-            )}
-          </div>
+            </div>
+          </header>
         </div>
-      </header>
-    </div>
 
-      {/* 5. Hero Section with Morphing Center Title and Windows 7 Aero Glass styling */}
-      <section className="relative pt-8 pb-8 px-4 sm:px-6 lg:px-8 text-center">
-        <div className="max-w-5xl mx-auto space-y-6 relative z-10">
-            {/* Dynamic Center Title with Indian Tricolor Flow that smoothly morphs toward top-left navbar on scroll */}
-            <motion.div
-              animate={
-                isScrolled
-                  ? {
-                      opacity: 0,
-                      y: -140,
-                      x: -240,
-                      scale: 0.45,
-                      pointerEvents: 'none'
-                    }
-                  : {
-                      opacity: 1,
-                      y: 0,
-                      x: 0,
-                      scale: 1
-                    }
-              }
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-4"
-            >
-              <h1 
-                className="text-xl sm:text-3xl lg:text-[2.85rem] font-archivo font-black tracking-normal leading-snug sm:leading-tight lg:leading-[1.18] text-[#2E1065]"
-                style={{ fontFamily: "'Archivo', sans-serif" }}
-              >
-                Scheme Guard: From Local Priorities to <br className="hidden sm:inline" /> National Development
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-700 font-semibold max-w-2xl mx-auto drop-shadow-xs">
-                Algorithmic vigilance, real-time PFMS treasury tracking, and image forensics protecting public development assets across all 543 Lok Sabha Constituencies.
-              </p>
-            </motion.div>
+        {/* Main Hero Center Content: Disappears slowly vanishing into the whiteness of the screen on scroll */}
+        <div
+          className="relative z-20 text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16 flex flex-col items-center justify-center flex-1 my-auto transition-transform"
+          style={{
+            opacity: Math.max(0, 1 - heroScrollProgress * 1.55),
+            transform: `translateY(-${heroScrollProgress * 36}px)`,
+            pointerEvents: heroScrollProgress > 0.65 ? 'none' : 'auto'
+          }}
+        >
+          {/* Centered Main Title */}
+          <h1
+            className="text-2xl sm:text-4xl lg:text-[3.25rem] font-archivo font-black tracking-normal leading-snug sm:leading-tight lg:leading-[1.18] text-white drop-shadow-md"
+            style={{ fontFamily: "'Archivo', sans-serif" }}
+          >
+            Scheme Guard: From Local Priorities to <br className="hidden sm:inline" /> National Development
+          </h1>
 
-            {/* Action Buttons in Frutiger Aero Glossy Skeuomorphic Style */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-wrap items-center justify-center gap-4 pt-2"
+          {/* Little Description right below it */}
+          <p className="text-xs sm:text-base text-purple-100/90 font-medium max-w-2xl mx-auto mt-4 drop-shadow-xs leading-relaxed">
+            Algorithmic vigilance, real-time PFMS treasury tracking, and image forensics protecting public development assets across all 543 Lok Sabha Constituencies.
+          </p>
+
+          {/* Role-Aware Command Button right below description */}
+          <div className="pt-6">
+            <button
+              type="button"
+              onClick={isOfficial ? handleLaunchAdminDemo : handleLaunchCitizenPortal}
+              className="px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white text-[#2E1065] hover:bg-purple-50 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 mx-auto cursor-pointer"
             >
+              <span>
+                {isDistrictOfficer
+                  ? 'Launch District Command'
+                  : isAdmin
+                  ? 'Launch MoSPI Central Command'
+                  : 'Explore Public Portal'}
+              </span>
+              <ArrowRight className="w-4 h-4 text-[#2E1065]" />
+            </button>
+          </div>
+
+          {/* Three Circular Buttons right below command button */}
+          <div className="pt-8 flex items-center justify-center gap-5 sm:gap-8">
+            {/* Circular Button 1: Guidelines & Acts */}
+            <div className="relative w-36 h-36 flex items-center justify-center">
               <button
                 type="button"
-                onClick={handleLaunchAdminDemo}
-                className="frutiger-gloss-btn-primary px-7 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 active:scale-95 cursor-pointer shadow-lg"
+                onClick={() => {
+                  const elem = document.getElementById('aboutus');
+                  if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group rounded-full bg-white shadow-lg border border-purple-200/80 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 w-14 h-14 hover:w-36 hover:h-36 hover:shadow-2xl hover:border-purple-300 p-2 z-10 hover:z-30 text-center"
+                title="Guidelines & Acts"
               >
-                <span>{isDistrictOfficer ? 'Launch District Command' : 'Launch MoSPI Central Command'}</span>
-                <AeroplaneArrow className="w-4 h-4 text-white" />
-              </button>
-
-              {!(isAdmin || isDistrictOfficer) && (
-                <button
-                  type="button"
-                  onClick={handleLaunchCitizenPortal}
-                  className="frutiger-gloss-btn-glass px-7 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 active:scale-95 cursor-pointer shadow-md"
-                >
-                  <AnimatedEye className="w-4 h-4 text-sky-700" />
-                  <span>Explore Public Portal</span>
-                </button>
-              )}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* 6. Three Role-Aware Action Boxes in Solid White Theme - Inside Wavy Image Region */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20 pb-20 sm:pb-28">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {/* Box 1: Guidelines & Acts - Always Visible */}
-            <motion.a
-              href="#aboutus"
-              onClick={(e) => {
-                e.preventDefault();
-                const elem = document.getElementById('aboutus');
-                if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-              }}
-              whileHover={{ y: -5, transition: { duration: 0.25 } }}
-              className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group cursor-pointer shadow-sm hover:shadow-lg"
-            >
-              <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-sky-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
-                <AnimatedFileText className="w-6 h-6 text-sky-700" />
-              </div>
-              <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-sky-700 transition-colors">
-                Guidelines & Acts
-              </span>
-              <span className="text-[11px] text-slate-600 font-medium mt-0.5">2023 Revised Protocol</span>
-            </motion.a>
-
-            {/* Box 2: Voice AI Assist - Always Visible */}
-            <motion.button
-              type="button"
-              onClick={() => setIsVoiceModalOpen(true)}
-              whileHover={{ y: -5, transition: { duration: 0.25 } }}
-              className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group cursor-pointer shadow-sm hover:shadow-lg"
-            >
-              <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-emerald-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
-                <AnimatedVoice className="w-6 h-6 text-emerald-700" />
-              </div>
-              <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                Voice AI Assist
-              </span>
-              <span className="text-[11px] text-slate-600 font-medium mt-0.5">8 Indic Languages</span>
-            </motion.button>
-
-            {/* Box 3 for Citizens: Citizen Request */}
-            {!isOfficial && (
-              <motion.button
-                type="button"
-                onClick={() => setIsCitizenModalOpen(true)}
-                whileHover={{ y: -5, transition: { duration: 0.25 } }}
-                className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group cursor-pointer shadow-sm hover:shadow-lg"
-              >
-                <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-amber-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
-                  <AeroplaneSend className="w-6 h-6 text-amber-700" />
-                </div>
-                <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 transition-colors">
-                  Citizen Request
+                <AnimatedFileText className="w-6 h-6 text-[#2E1065] shrink-0 transition-transform group-hover:scale-110 group-hover:mb-1" />
+                <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-16 transition-all duration-300 font-bold text-xs text-slate-900 leading-tight px-1 line-clamp-2">
+                  Guidelines & Acts
                 </span>
-                <span className="text-[11px] text-slate-600 font-medium mt-0.5">Local Area Proposal</span>
-              </motion.button>
-            )}
+                <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-6 transition-all duration-300 text-[10px] text-purple-700 font-semibold">
+                  2023 Protocol
+                </span>
+              </button>
+            </div>
 
-            {/* Box 3 for Admin & Officer: AI Audit Dossier */}
-            {isOfficial && (
-              <motion.div
-                whileHover={{ y: -5, transition: { duration: 0.25 } }}
-                className="h-full"
+            {/* Circular Button 2: Voice AI Assistant */}
+            <div className="relative w-36 h-36 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => setIsVoiceModalOpen(true)}
+                className="group rounded-full bg-white shadow-lg border border-purple-200/80 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 w-14 h-14 hover:w-36 hover:h-36 hover:shadow-2xl hover:border-purple-300 p-2 z-10 hover:z-30 text-center"
+                title="Voice AI Assistant"
               >
+                <AnimatedVoice className="w-6 h-6 text-[#2E1065] shrink-0 transition-transform group-hover:scale-110 group-hover:mb-1" />
+                <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-16 transition-all duration-300 font-bold text-xs text-slate-900 leading-tight px-1 line-clamp-2">
+                  Voice AI Assistant
+                </span>
+                <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-6 transition-all duration-300 text-[10px] text-purple-700 font-semibold">
+                  8 Indic Languages
+                </span>
+              </button>
+            </div>
+
+            {/* Circular Button 3: AI Audit Dossier (officials) or Citizen Request (citizens) */}
+            <div className="relative w-36 h-36 flex items-center justify-center">
+              {isOfficial ? (
                 <Link
                   to="/project/MPLAD-2026-00124"
-                  className="frutiger-gloss-card bg-white p-5 flex flex-col items-center text-center group h-full block shadow-sm hover:shadow-lg"
+                  className="group rounded-full bg-white shadow-lg border border-purple-200/80 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 w-14 h-14 hover:w-36 hover:h-36 hover:shadow-2xl hover:border-purple-300 p-2 z-10 hover:z-30 text-center"
+                  title="AI Audit Dossier"
                 >
-                  <div className="w-14 h-14 rounded-full frutiger-bubble-icon text-rose-700 flex items-center justify-center shrink-0 mb-3 group-hover:scale-110 transition-transform">
-                    <AnimatedAlertTriangle className="w-6 h-6 text-rose-600" />
-                  </div>
-                  <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-rose-700 transition-colors">
+                  <AnimatedAlertTriangle className="w-6 h-6 text-[#2E1065] shrink-0 transition-transform group-hover:scale-110 group-hover:mb-1" />
+                  <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-16 transition-all duration-300 font-bold text-xs text-slate-900 leading-tight px-1 line-clamp-2">
                     AI Audit Dossier
                   </span>
-                  <span className="text-[11px] text-slate-600 font-medium mt-0.5">Flagged NANDURBAR</span>
+                  <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-6 transition-all duration-300 text-[10px] text-purple-700 font-semibold">
+                    Flagged Works
+                  </span>
                 </Link>
-              </motion.div>
-            )}
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsCitizenModalOpen(true)}
+                  className="group rounded-full bg-white shadow-lg border border-purple-200/80 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 w-14 h-14 hover:w-36 hover:h-36 hover:shadow-2xl hover:border-purple-300 p-2 z-10 hover:z-30 text-center"
+                  title="Citizen Request"
+                >
+                  <AeroplaneSend className="w-6 h-6 text-[#2E1065] shrink-0 transition-transform group-hover:scale-110 group-hover:mb-1" />
+                  <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-16 transition-all duration-300 font-bold text-xs text-slate-900 leading-tight px-1 line-clamp-2">
+                    Citizen Request
+                  </span>
+                  <span className="opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-6 transition-all duration-300 text-[10px] text-purple-700 font-semibold">
+                    Area Proposal
+                  </span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

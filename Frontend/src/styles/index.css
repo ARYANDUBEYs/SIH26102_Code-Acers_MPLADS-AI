@@ -410,40 +410,34 @@ main, section {
   }
 }
 
-/* ── Two-Color Animated Moving Gradient Background (70% Light Purple & 30% White) ── */
-.home-moving-gradient {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(
-    -45deg,
-    #d8b4fe 0%,
-    #c4b5fd 18%,
-    #ddd6fe 35%,
-    #ffffff 45%,
-    #ffffff 55%,
-    #ddd6fe 65%,
-    #c4b5fd 82%,
-    #d8b4fe 100%
-  );
-  background-size: 280% 280%;
-  animation: dynamicGradientSweep 14s ease-in-out infinite alternate;
-  z-index: -10;
-  pointer-events: none;
-}
-
-@keyframes dynamicGradientSweep {
+/* ── Capillary Waves / Circular Ripples Originating from Bottom-Middle ── */
+@keyframes capillaryWave {
   0% {
-    background-position: 0% 0%;
+    width: 80px;
+    height: 50px;
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0.35);
   }
-  50% {
-    background-position: 100% 100%;
+  45% {
+    opacity: 0.35;
   }
   100% {
-    background-position: 0% 0%;
+    width: 2000px;
+    height: 1200px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.65);
   }
+}
+
+.capillary-ripple-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 9999px;
+  border: 1px solid rgba(216, 180, 254, 0.18);
+  box-shadow: 0 0 50px rgba(192, 132, 252, 0.18), inset 0 0 40px rgba(255, 255, 255, 0.10);
+  pointer-events: none;
+  animation: capillaryWave 14s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
 }
 
 /* ── Frutiger Aero Skeuomorphic Glossy Theme Styles ── */
