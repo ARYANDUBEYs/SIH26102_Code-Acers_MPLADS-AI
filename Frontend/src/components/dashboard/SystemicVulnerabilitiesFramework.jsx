@@ -15,11 +15,25 @@ import {
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BidirectionalReveal } from '../../hooks/useScrollReveal';
+import {
+  useSmoothScrollProgress,
+  getStageStyle,
+  TypewriterHeading
+} from '../../hooks/useScrollReveal';
 
-export const SystemicVulnerabilitiesFramework = () => {
+export const SystemicVulnerabilitiesFramework = ({ canAppear = true, onAppeared }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [isSafeguardModalOpen, setIsSafeguardModalOpen] = useState(false);
+  const [containerRef, progress] = useSmoothScrollProgress(240, 0, {
+    maxStep: 0.018,
+    enabled: canAppear
+  });
+
+  useEffect(() => {
+    if (onAppeared) {
+      onAppeared(progress >= 0.55);
+    }
+  }, [progress, onAppeared]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -126,114 +140,137 @@ export const SystemicVulnerabilitiesFramework = () => {
   const current = pillars[activeTab];
   return (
     <div className="relative">
-      <BidirectionalReveal
-        distance={260}
-        offset={0}
+      {/* Stage 1: Container Appears First (0.00 -> 0.20) */}
+      <div
+        ref={containerRef}
+        style={getStageStyle(progress, 0.0, 0.20, 24)}
         className="bg-white/95 border-[3px] border-[#2E1065] rounded-2xl shadow-xl overflow-hidden backdrop-blur-md"
       >
-      {/* Top Header with Institutional Deep Gradient */}
-      <div className="relative py-10 px-6 sm:px-12 bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#3B1259] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
-        {/* Specular aurora highlight sheen */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent pointer-events-none" />
-        <div className="relative z-10">
-          <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
-            How it Works?
-          </h3>
+        {/* Top Header with Institutional Deep Gradient */}
+        <div className="relative py-10 px-6 sm:px-12 bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#3B1259] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
+          {/* Specular aurora highlight sheen */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent pointer-events-none" />
+          <div className="relative z-10">
+            {/* Stage 2: Heading Appears by Left-to-Right Typing Transition (0.18 -> 0.44) */}
+            <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
+              <TypewriterHeading
+                text="How it Works?"
+                progress={progress}
+                start={0.18}
+                end={0.44}
+                cursorClassName="bg-amber-400"
+              />
+            </h3>
+          </div>
+        </div>
+
+        {/* Stage 3a: Tab Selector Buttons Appear One by One (0.42 -> 0.62) */}
+        <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 p-3.5 sm:p-4 gap-2.5 sm:gap-3.5 scrollbar-thin">
+          {pillars.map((p, idx) => {
+            const Icon = p.icon;
+            const isActive = idx === activeTab;
+            const tabStart = 0.42 + idx * 0.028;
+            const tabEnd = tabStart + 0.09;
+            return (
+              <button
+                key={p.id}
+                onClick={() => setActiveTab(idx)}
+                style={getStageStyle(progress, tabStart, tabEnd, 12)}
+                className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-gradient-to-b from-white via-white to-purple-50 text-[#2E1065] shadow-md border border-purple-200 font-black scale-[1.02]'
+                    : 'text-slate-600 hover:text-purple-900 hover:bg-white/80 border border-transparent'
+                }`}
+              >
+                <Icon className={`w-4 h-4 ${isActive ? 'text-purple-700' : 'text-slate-500'}`} />
+                <span>{p.shortName}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Stage 3b: Active Tab Content Elements Appear One by One (0.58 -> 0.99) */}
+        <div className="p-8 lg:p-12 space-y-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-8"
+            >
+              {/* Element 1: Title with Glossy Orb and Purple Circular Info Icon (0.58 -> 0.70) */}
+              <div
+                style={getStageStyle(progress, 0.58, 0.70, 16)}
+                className="flex items-center justify-between gap-4 border-b border-slate-100 pb-5"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full frutiger-bubble-icon text-purple-800 flex items-center justify-center shrink-0 shadow-sm">
+                    <current.icon className="w-6 h-6 text-purple-800" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{current.name}</h4>
+                  </div>
+                </div>
+
+                {/* Info Icon Button (Purple circle with "i" in the middle) */}
+                <button
+                  type="button"
+                  onClick={() => setIsSafeguardModalOpen(true)}
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#2E1065] hover:bg-[#1E0A45] active:scale-95 text-white flex items-center justify-center shadow-md hover:shadow-lg ring-2 ring-purple-400/30 hover:ring-4 hover:ring-purple-300/40 transition-all hover:scale-110 cursor-pointer shrink-0"
+                  title="View Key Safeguard Measures"
+                  aria-label="View Key Safeguard Measures"
+                >
+                  <span className="font-serif font-black italic text-base leading-none select-none">i</span>
+                </button>
+              </div>
+
+              {/* Split: Problem vs Solution Cards Appearing One by One */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7">
+                {/* Element 2: Problem Card (0.68 -> 0.80) */}
+                <div
+                  style={getStageStyle(progress, 0.68, 0.80, 18)}
+                  className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-white via-white/95 to-rose-50/40 border border-rose-200/70 shadow-sm space-y-3 hover:shadow-md transition-shadow"
+                >
+                  <div className="text-rose-700 text-xs font-bold uppercase tracking-wider">
+                    The Problem It Solves
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                    {current.vulnerability}
+                  </p>
+                </div>
+
+                {/* Element 3: Solution Card (0.78 -> 0.90) */}
+                <div
+                  style={getStageStyle(progress, 0.78, 0.90, 18)}
+                  className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-white via-white/95 to-emerald-50/30 border border-emerald-200/60 shadow-sm space-y-3 hover:shadow-md transition-shadow"
+                >
+                  <div className="text-emerald-800 text-xs font-bold uppercase tracking-wider">
+                    How We Solve It
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                    {current.solution}
+                  </p>
+                </div>
+              </div>
+
+              {/* Element 4: Enforcement Rule Banner (0.87 -> 0.99) */}
+              <div
+                style={getStageStyle(progress, 0.87, 0.99, 18)}
+                className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#1E0A45] text-white border border-purple-400/20 space-y-3 shadow-md backdrop-blur-md"
+              >
+                <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                  High-Assurance Operational Rule
+                </div>
+                <div className="text-xs sm:text-sm font-medium text-purple-100 bg-white/10 p-4 rounded-xl border border-white/15 leading-relaxed shadow-inner">
+                  {current.mathProof}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
-
-      {/* Frutiger Aero Glossy Tab Selector Buttons with generous padding */}
-      <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 p-3.5 sm:p-4 gap-2.5 sm:gap-3.5 scrollbar-thin">
-        {pillars.map((p, idx) => {
-          const Icon = p.icon;
-          const isActive = idx === activeTab;
-          return (
-            <button
-              key={p.id}
-              onClick={() => setActiveTab(idx)}
-              className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-gradient-to-b from-white via-white to-purple-50 text-[#2E1065] shadow-md border border-purple-200 font-black scale-[1.02]'
-                  : 'text-slate-600 hover:text-purple-900 hover:bg-white/80 border border-transparent'
-              }`}
-            >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-purple-700' : 'text-slate-500'}`} />
-              <span>{p.shortName}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Tab Content Display with increased breathing room */}
-      <div className="p-8 lg:p-12 space-y-8">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-8"
-          >
-            {/* Title with Glossy Orb and Blue Circular Info Icon */}
-            <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-5">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full frutiger-bubble-icon text-purple-800 flex items-center justify-center shrink-0 shadow-sm">
-                  <current.icon className="w-6 h-6 text-purple-800" />
-                </div>
-                <div>
-                  <h4 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{current.name}</h4>
-                </div>
-              </div>
-
-              {/* Info Icon Button (Purple circle with "i" in the middle) */}
-              <button
-                type="button"
-                onClick={() => setIsSafeguardModalOpen(true)}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#2E1065] hover:bg-[#1E0A45] active:scale-95 text-white flex items-center justify-center shadow-md hover:shadow-lg ring-2 ring-purple-400/30 hover:ring-4 hover:ring-purple-300/40 transition-all hover:scale-110 cursor-pointer shrink-0"
-                title="View Key Safeguard Measures"
-                aria-label="View Key Safeguard Measures"
-              >
-                <span className="font-serif font-black italic text-base leading-none select-none">i</span>
-              </button>
-            </div>
-
-            {/* Split: Problem vs Solution in Harmonious Frutiger Aero Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7">
-              {/* Problem Card */}
-              <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-white via-white/95 to-rose-50/40 border border-rose-200/70 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-                <div className="text-rose-700 text-xs font-bold uppercase tracking-wider">
-                  The Problem It Solves
-                </div>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-                  {current.vulnerability}
-                </p>
-              </div>
-
-              {/* Solution Card */}
-              <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-white via-white/95 to-emerald-50/30 border border-emerald-200/60 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-                <div className="text-emerald-800 text-xs font-bold uppercase tracking-wider">
-                  How We Solve It
-                </div>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-                  {current.solution}
-                </p>
-              </div>
-            </div>
-
-            {/* Enforcement Rule Banner in Frutiger Aero Glass Security Style */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#1E0A45] text-white border border-purple-400/20 space-y-3 shadow-md backdrop-blur-md">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
-                High-Assurance Operational Rule
-              </div>
-              <div className="text-xs sm:text-sm font-medium text-purple-100 bg-white/10 p-4 rounded-xl border border-white/15 leading-relaxed shadow-inner">
-                {current.mathProof}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </BidirectionalReveal>
 
       {/* Safeguard Measures Pop-Up Modal */}
       <AnimatePresence>

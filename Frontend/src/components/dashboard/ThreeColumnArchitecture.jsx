@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   FileText,
   MapPin,
@@ -9,44 +8,63 @@ import {
   FileCheck,
   ChevronRight,
   Shield,
-  Layers,
-  Sparkles
+  Layers
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { BidirectionalReveal } from '../../hooks/useScrollReveal';
+import {
+  useSmoothScrollProgress,
+  getStageStyle,
+  TypewriterHeading
+} from '../../hooks/useScrollReveal';
 
-export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) => {
+export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal, canAppear = true }) => {
   const { isAdmin, isDistrictOfficer } = useAuth();
+  const [gridRef, progress] = useSmoothScrollProgress(240, 0, {
+    maxStep: 0.018,
+    enabled: canAppear
+  });
 
   return (
-    <div className="space-y-6">
+    <div ref={gridRef} className="space-y-6">
       {/* The Three Sentinel Pillars Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
         
         {/* ================================================================ */}
         {/* COLUMN 1: Evidence & Fraud Checks                                */}
         {/* ================================================================ */}
-        <BidirectionalReveal
-          distance={240}
-          delay={0}
+        {/* Stage 1: Container 1 Appears First (0.00 -> 0.17) */}
+        <div
+          style={getStageStyle(progress, 0.0, 0.17, 24)}
           className="bg-white/95 rounded-2xl border-[3px] border-[#2E1065] shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow"
         >
           <div className="space-y-4">
-            {/* Header: Circle Number 1 & Title */}
+            {/* Header: Circle Number 1 & Left-to-Right Typing Heading (0.18 -> 0.42) */}
             <div className="flex items-center gap-3.5 pb-2">
-              <div className="w-10 h-10 rounded-full bg-[#2E1065] text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+              <div
+                style={getStageStyle(progress, 0.16, 0.26, 8)}
+                className="w-10 h-10 rounded-full bg-[#2E1065] text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm"
+              >
                 1
               </div>
               <div>
                 <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
-                  Evidence & Fraud Checks
+                  <TypewriterHeading
+                    text="Evidence & Fraud Checks"
+                    progress={progress}
+                    start={0.18}
+                    end={0.42}
+                    cursorClassName="bg-purple-600"
+                  />
                 </h3>
               </div>
             </div>
 
-            {/* Item 1: Duplicate Photo Detection with Image Thumbnail */}
-            <div className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors">
+            {/* Item 1: Duplicate Photo Detection with Image Thumbnail (0.44 -> 0.58) */}
+            <div
+              style={getStageStyle(progress, 0.44, 0.58, 16)}
+              className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors"
+            >
               <div className="w-16 h-12 rounded-lg overflow-hidden shrink-0 border border-slate-200 bg-slate-200">
                 <img
                   src="/projects/ruralroad.jpg"
@@ -68,8 +86,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </div>
             </div>
 
-            {/* Item 2: Contractor & Cartel Monitor */}
-            <div className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors">
+            {/* Item 2: Contractor & Cartel Monitor (0.56 -> 0.70) */}
+            <div
+              style={getStageStyle(progress, 0.56, 0.70, 16)}
+              className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors"
+            >
               <div className="w-12 h-12 rounded-xl bg-blue-50/80 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
                 <FileSpreadsheet className="w-6 h-6 text-blue-500" />
               </div>
@@ -83,8 +104,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </div>
             </div>
 
-            {/* Item 3: Fair Pricing & Location Check */}
-            <div className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors">
+            {/* Item 3: Fair Pricing & Location Check (0.68 -> 0.82) */}
+            <div
+              style={getStageStyle(progress, 0.68, 0.82, 16)}
+              className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors"
+            >
               <div className="w-12 h-12 rounded-xl bg-emerald-50/80 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
                 <MapPin className="w-6 h-6 text-emerald-500" />
               </div>
@@ -99,9 +123,9 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
             </div>
           </div>
 
-          {/* Action Footer: Open Forensic Evidence Lab (Visible to Admin & District Officer) */}
+          {/* Action Footer: Open Forensic Evidence Lab (0.80 -> 0.94) */}
           {(isAdmin || isDistrictOfficer) && (
-            <div className="pt-2">
+            <div style={getStageStyle(progress, 0.80, 0.94, 14)} className="pt-2">
               <Link
                 to="/evidence"
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-50/80 via-blue-50/40 to-indigo-50/80 hover:from-blue-100 hover:to-indigo-100 border border-blue-200/80 flex items-center justify-between text-left group transition-all"
@@ -120,31 +144,43 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </Link>
             </div>
           )}
-        </BidirectionalReveal>
+        </div>
 
         {/* ================================================================ */}
         {/* COLUMN 2: AI Risk Scoring Models                                 */}
         {/* ================================================================ */}
-        <BidirectionalReveal
-          distance={240}
-          delay={0.1}
+        {/* Stage 1: Container 2 Appears (0.03 -> 0.20) */}
+        <div
+          style={getStageStyle(progress, 0.03, 0.20, 24)}
           className="bg-white/95 rounded-2xl border-[3px] border-[#2E1065] shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow"
         >
           <div className="space-y-4">
-            {/* Header: Circle Number 2 & Title */}
+            {/* Header: Circle Number 2 & Left-to-Right Typing Heading (0.21 -> 0.45) */}
             <div className="flex items-center gap-3.5 pb-2">
-              <div className="w-10 h-10 rounded-full bg-purple-900 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+              <div
+                style={getStageStyle(progress, 0.19, 0.29, 8)}
+                className="w-10 h-10 rounded-full bg-purple-900 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm"
+              >
                 2
               </div>
               <div>
                 <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
-                  AI Risk Scoring Models
+                  <TypewriterHeading
+                    text="AI Risk Scoring Models"
+                    progress={progress}
+                    start={0.21}
+                    end={0.45}
+                    cursorClassName="bg-purple-600"
+                  />
                 </h3>
               </div>
             </div>
 
-            {/* Item 1: Isolation Forest */}
-            <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1.5 border-l-4 border-l-purple-500">
+            {/* Item 1: Isolation Forest (0.47 -> 0.61) */}
+            <div
+              style={getStageStyle(progress, 0.47, 0.61, 16)}
+              className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1.5 border-l-4 border-l-purple-500"
+            >
               <h4 className="text-xs font-bold text-slate-900">
                 Isolation Forest
               </h4>
@@ -153,8 +189,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </p>
             </div>
 
-            {/* Item 2: XGBoost Classifier */}
-            <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1.5 border-l-4 border-l-blue-500">
+            {/* Item 2: XGBoost Classifier (0.59 -> 0.73) */}
+            <div
+              style={getStageStyle(progress, 0.59, 0.73, 16)}
+              className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1.5 border-l-4 border-l-blue-500"
+            >
               <h4 className="text-xs font-bold text-slate-900">
                 XGBoost Classifier
               </h4>
@@ -163,8 +202,11 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </p>
             </div>
 
-            {/* Item 3: Three Clear Risk Levels (High, Warning, Safe) */}
-            <div className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-2">
+            {/* Item 3: Three Clear Risk Levels (0.71 -> 0.85) */}
+            <div
+              style={getStageStyle(progress, 0.71, 0.85, 16)}
+              className="p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl space-y-2"
+            >
               <div>
                 <h4 className="text-xs font-bold text-slate-900">
                   Three Clear Risk Levels
@@ -190,9 +232,9 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
             </div>
           </div>
 
-          {/* Action Footer: Inspect Model Performance (Visible to Admin Only) */}
+          {/* Action Footer: Inspect Model Performance (0.83 -> 0.96) */}
           {isAdmin && (
-            <div className="pt-2">
+            <div style={getStageStyle(progress, 0.83, 0.96, 14)} className="pt-2">
               <Link
                 to="/analytics"
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-50/80 via-purple-50/40 to-indigo-50/80 hover:from-purple-100 hover:to-indigo-100 border border-purple-200/80 flex items-center justify-between text-left group transition-all"
@@ -211,32 +253,42 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </Link>
             </div>
           )}
-        </BidirectionalReveal>
+        </div>
 
         {/* ================================================================ */}
         {/* COLUMN 3: Interactive Dashboards & Voice AI                      */}
         {/* ================================================================ */}
-        <BidirectionalReveal
-          distance={240}
-          delay={0.2}
+        {/* Stage 1: Container 3 Appears (0.06 -> 0.23) */}
+        <div
+          style={getStageStyle(progress, 0.06, 0.23, 24)}
           className="bg-white/95 rounded-2xl border-[3px] border-[#2E1065] shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow"
         >
           <div className="space-y-4">
-            {/* Header: Circle Number 3 & Title */}
+            {/* Header: Circle Number 3 & Left-to-Right Typing Heading (0.24 -> 0.48) */}
             <div className="flex items-center gap-3.5 pb-2">
-              <div className="w-10 h-10 rounded-full bg-emerald-800 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+              <div
+                style={getStageStyle(progress, 0.22, 0.32, 8)}
+                className="w-10 h-10 rounded-full bg-emerald-800 text-white font-black text-lg flex items-center justify-center shrink-0 shadow-sm"
+              >
                 3
               </div>
               <div>
                 <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">
-                  Interactive Dashboards & Voice AI
+                  <TypewriterHeading
+                    text="Interactive Dashboards & Voice AI"
+                    progress={progress}
+                    start={0.24}
+                    end={0.48}
+                    cursorClassName="bg-emerald-600"
+                  />
                 </h3>
               </div>
             </div>
 
-            {/* Item 1: Live Geospatial Map */}
+            {/* Item 1: Live Geospatial Map (0.50 -> 0.64) */}
             <Link
               to="/risk-map"
+              style={getStageStyle(progress, 0.50, 0.64, 16)}
               className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors block"
             >
               <div className="w-12 h-12 rounded-xl bg-emerald-50/80 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
@@ -252,9 +304,10 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </div>
             </Link>
 
-            {/* Item 2: One-Click Dossier */}
+            {/* Item 2: One-Click Dossier (0.62 -> 0.76) */}
             <div
               onClick={() => onOpenSlideOver && onOpenSlideOver()}
+              style={getStageStyle(progress, 0.62, 0.76, 16)}
               className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors cursor-pointer"
             >
               <div className="w-12 h-12 rounded-xl bg-blue-50/80 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
@@ -270,9 +323,10 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </div>
             </div>
 
-            {/* Item 3: Voice Assistant */}
+            {/* Item 3: Voice Assistant (0.74 -> 0.88) */}
             <div
               onClick={() => onOpenVoiceModal && onOpenVoiceModal()}
+              style={getStageStyle(progress, 0.74, 0.88, 16)}
               className="p-3 bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3.5 transition-colors cursor-pointer"
             >
               <div className="w-12 h-12 rounded-xl bg-purple-50/80 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100">
@@ -289,9 +343,9 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
             </div>
           </div>
 
-          {/* Action Footer: Open Sample Audit Dossier (Visible to Admin & District Officer) */}
+          {/* Action Footer: Open Sample Audit Dossier (0.86 -> 0.99) */}
           {(isAdmin || isDistrictOfficer) && (
-            <div className="pt-2">
+            <div style={getStageStyle(progress, 0.86, 0.99, 14)} className="pt-2">
               <button
                 type="button"
                 onClick={() => onOpenSlideOver && onOpenSlideOver()}
@@ -311,7 +365,7 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </button>
             </div>
           )}
-        </BidirectionalReveal>
+        </div>
 
       </div>
     </div>

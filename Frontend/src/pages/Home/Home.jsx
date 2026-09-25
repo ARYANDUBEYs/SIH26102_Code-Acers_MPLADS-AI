@@ -50,7 +50,8 @@ import {
   ConnectorLine2,
   ConnectorLine3
 } from '../../components/common/ConnectingTrailLine';
-import { BidirectionalReveal } from '../../hooks/useScrollReveal';
+import { BidirectionalReveal, useScrollReveal } from '../../hooks/useScrollReveal';
+import { AboutBackgroundTransition } from '../../components/common/AboutBackgroundTransition';
 import {
   AeroplaneArrow,
   AeroplaneSend,
@@ -211,6 +212,16 @@ export const Home = () => {
   const manualScrollTimerRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
   const [currentZoom, setCurrentZoom] = useState(1);
+
+  // Sequential pipeline states:
+  // 1. Live Surveillance appears first -> then Line 1 originates
+  // 2. Pointer reaches destination first -> then next container appears
+  const [liveSurveillanceAppeared, setLiveSurveillanceAppeared] = useState(false);
+  const [line1Reached, setLine1Reached] = useState(false);
+  const [indicatorsAppeared, setIndicatorsAppeared] = useState(false);
+  const [line2Reached, setLine2Reached] = useState(false);
+  const [howItWorksAppeared, setHowItWorksAppeared] = useState(false);
+  const [line3Reached, setLine3Reached] = useState(false);
 
   // Masthead pin and theme transitions:
   // Pin when utility bar scrolls out; switch to white theme and enlarge divider when screen turns white
@@ -671,7 +682,13 @@ export const Home = () => {
       <div className="w-full relative z-10 py-6">
 
         {/* Live Institutional Continuous Right-to-Left Marquee Announcement Ticker */}
-        <BidirectionalReveal distance={180} offset={0} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-0">
+        <BidirectionalReveal
+          distance={150}
+          offset={0}
+          enabled={true}
+          onAppeared={setLiveSurveillanceAppeared}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-0"
+        >
           <div className="relative bg-white/95 backdrop-blur-md rounded-lg border-[3px] border-[#2E1065] p-3 flex items-center gap-3 shadow-md">
             {/* Outward Capillary Ripple Waves */}
             <div className="surveillance-ripple-ring" style={{ animationDelay: '0s' }} />
@@ -695,7 +712,10 @@ export const Home = () => {
         </BidirectionalReveal>
 
         {/* Trail Connector 1: Live Surveillance -> National Indicators */}
-        <ConnectorLine1 />
+        <ConnectorLine1
+          canStart={liveSurveillanceAppeared}
+          onDestinationReached={setLine1Reached}
+        />
 
         {/* Dual-Mode 6-Stat KPI Ribbon & Development Video side-by-side */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -703,8 +723,10 @@ export const Home = () => {
             
             {/* Left Column (7 cols / ~58%): National Developmental Indicators & Fund Flow */}
             <BidirectionalReveal
-              distance={240}
+              distance={180}
               offset={0}
+              enabled={line1Reached}
+              onAppeared={setIndicatorsAppeared}
               className="lg:col-span-7 bg-white/95 rounded-2xl border-[3px] border-[#2E1065] p-4 sm:p-5 shadow-md flex flex-col justify-between space-y-3"
             >
               {/* Header & Dual-Mode Controls */}
@@ -889,9 +911,10 @@ export const Home = () => {
 
             {/* Right Column (5 cols / ~42%): Video in its Original Shape (no border, no container box) */}
             <BidirectionalReveal
-              distance={240}
+              distance={180}
               offset={0}
-              delay={0.1}
+              delay={0.06}
+              enabled={line1Reached}
               className="lg:col-span-5 flex items-center justify-center self-center"
             >
               <video
@@ -923,19 +946,29 @@ export const Home = () => {
         </section>
 
         {/* Trail Connector 2: National Indicators bottom-left -> How it Works? top-center */}
-        <ConnectorLine2 />
+        <ConnectorLine2
+          canStart={indicatorsAppeared}
+          onDestinationReached={setLine2Reached}
+        />
 
         {/* 5. How it Works? Section (Matrix Container) */}
         <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
-          <SystemicVulnerabilitiesFramework />
+          <SystemicVulnerabilitiesFramework
+            canAppear={line2Reached}
+            onAppeared={setHowItWorksAppeared}
+          />
         </section>
 
         {/* Trail Connector 3: Line starting directly from "How it Works?" and splitting into three to connect to the three boxes */}
-        <ConnectorLine3 />
+        <ConnectorLine3
+          canStart={howItWorksAppeared}
+          onDestinationReached={setLine3Reached}
+        />
 
         {/* 6. Three-Column Sentinel Pillars */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
           <ThreeColumnArchitecture
+            canAppear={line3Reached}
             onOpenSlideOver={() => handleOpenSlideOver({
               id: 'MPLAD-2026-00124',
               title: 'Construction of Sub-District Health Center & Oxygen Plant',
@@ -962,39 +995,44 @@ export const Home = () => {
       </div>
 
       {/* 7. Statutory "About the Scheme" Section (Verbatim e-SAKSHI Narrative) */}
-      <section id="aboutus" className="relative z-20 w-full bg-transparent py-24 sm:py-32 px-4 sm:px-6 lg:px-8 scroll-mt-32">
-        <BidirectionalReveal distance={260} offset={0} className="max-w-6xl mx-auto space-y-16">
+      <section id="aboutus" className="relative z-20 w-full bg-transparent py-24 sm:py-32 scroll-mt-32 overflow-hidden">
+        {/* Moving Transition Background with 6 Parliament Images & Symmetrical Full-Bleed Coverage */}
+        <AboutBackgroundTransition opacity={0.68} interval={5200} />
+
+        <BidirectionalReveal distance={260} offset={0} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
             {/* Left: Statutory Narrative */}
-            <div className="lg:col-span-8 space-y-5 text-xs sm:text-sm text-slate-600 leading-relaxed">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-purple-700 font-mono">
-                  Statutory Overview
-                </span>
-                <span className="text-slate-400">•</span>
-                <span className="text-xs font-semibold text-slate-500">Ministry of Statistics & Programme Implementation</span>
+            <div className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-purple-200/70 shadow-lg flex flex-col justify-between space-y-5 text-xs sm:text-sm text-slate-800 leading-relaxed">
+              <div className="space-y-5">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-700 font-mono">
+                    Statutory Overview
+                  </span>
+                  <span className="text-slate-400">•</span>
+                  <span className="text-xs font-semibold text-slate-500">Ministry of Statistics & Programme Implementation</span>
+                </div>
+
+                <ScrollScalingHeading title="About Scheme Guard" />
+
+                <p>
+                  <b>Scheme Guard (MPLADS Vigilance Framework)</b> is the AI-governed integrity and transparency layer for the Members of Parliament Local Area Development Scheme (MPLADS), a Central Sector Scheme fully funded by the Government of India, launched on 23 December 1993. The Scheme enables Members of Parliament (MPs) to recommend developmental works based on the locally felt needs of their constituencies, with a focus on creating durable community assets and improving essential public services such as health, sanitation, education, and drinking water infrastructure.
+                </p>
+
+                <p>
+                  At the time of its launch in 1993-94, each Member of Parliament was allocated ₹5 lakh per annum. The annual entitlement was subsequently enhanced to ₹1 crore in 1994-95, ₹2 crore in 1998-99, and <b>₹5 crore per annum</b> from the financial year 2011-12 onwards.
+                </p>
+
+                <p>
+                  In April 2023, MPLADS transitioned from a physical mode to a <b>fully digital end-to-end platform, e-SAKSHI</b>, comprising a web portal and companion mobile application. The platform provides dedicated login access to all stakeholders and facilitates transparent, efficient, and seamless implementation.
+                </p>
+
+                <p>
+                  Since April 2025, the Scheme implemented the <b>TSA / Hybrid fund flow procedure</b>, achieving the goal of ‘just-in-time’ fund release directly to vendors through an integrated network of PFMS, RBI and State Bank of India (Scheduled Commercial Bank).
+                </p>
               </div>
 
-              <ScrollScalingHeading title="About Scheme Guard" />
-
-              <p>
-                <b>Scheme Guard (MPLADS Vigilance Framework)</b> is the AI-governed integrity and transparency layer for the Members of Parliament Local Area Development Scheme (MPLADS), a Central Sector Scheme fully funded by the Government of India, launched on 23 December 1993. The Scheme enables Members of Parliament (MPs) to recommend developmental works based on the locally felt needs of their constituencies, with a focus on creating durable community assets and improving essential public services such as health, sanitation, education, and drinking water infrastructure.
-              </p>
-
-              <p>
-                At the time of its launch in 1993-94, each Member of Parliament was allocated ₹5 lakh per annum. The annual entitlement was subsequently enhanced to ₹1 crore in 1994-95, ₹2 crore in 1998-99, and <b>₹5 crore per annum</b> from the financial year 2011-12 onwards.
-              </p>
-
-              <p>
-                In April 2023, MPLADS transitioned from a physical mode to a <b>fully digital end-to-end platform, e-SAKSHI</b>, comprising a web portal and companion mobile application. The platform provides dedicated login access to all stakeholders and facilitates transparent, efficient, and seamless implementation.
-              </p>
-
-              <p>
-                Since April 2025, the Scheme implemented the <b>TSA / Hybrid fund flow procedure</b>, achieving the goal of ‘just-in-time’ fund release directly to vendors through an integrated network of PFMS, RBI and State Bank of India (Scheduled Commercial Bank).
-              </p>
-
-              <div className="p-4 bg-white border border-purple-200 rounded-none flex items-center gap-3.5 shadow-sm">
+              <div className="p-4 bg-white border border-purple-200 rounded-xl flex items-center gap-3.5 shadow-sm">
                 <Award className="w-7 h-7 text-amber-600 shrink-0" />
                 <p className="text-xs text-slate-700">
                   <strong>Viksit Bharat @ 2047 Alignment: </strong>
@@ -1003,9 +1041,53 @@ export const Home = () => {
               </div>
             </div>
 
-            {/* Right: Prime Minister's E-Governance Quote Card with Weighted Interactive 3D Tilt */}
-            <div className="lg:col-span-4 flex justify-center">
+            {/* Right: Symmetrical Column with Prime Minister's E-Governance Quote & Statutory Oversight Pillars */}
+            <div className="lg:col-span-5 flex flex-col justify-between gap-6">
               <TiltQuoteCard />
+
+              {/* Matching Institutional Architecture Card to Balance Column Symmetry */}
+              <div className="flex-1 p-6 sm:p-7 rounded-2xl bg-white/85 backdrop-blur-md border border-purple-200/70 shadow-lg flex flex-col justify-between space-y-4">
+                <div className="flex items-center justify-between border-b border-purple-100 pb-3">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-purple-700 shrink-0" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-purple-900 font-mono">
+                      Statutory Governance Architecture
+                    </span>
+                  </div>
+                  <span className="px-2 py-0.5 text-[10px] font-bold bg-purple-100 text-purple-800 rounded-md font-mono">
+                    e-SAKSHI 2.0
+                  </span>
+                </div>
+
+                <div className="space-y-3.5 text-xs text-slate-700">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p>
+                      <strong className="text-slate-900">Direct TSA Fund Routing:</strong> Vendor-level ‘just-in-time’ settlement via PFMS, Reserve Bank of India & SBI network.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p>
+                      <strong className="text-slate-900">543 Lok Sabha + 245 Rajya Sabha Seats:</strong> Universal digital recommendation, district sanction & live citizen audit.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <p>
+                      <strong className="text-slate-900">AI Forensic Verification:</strong> Automated duplicate photo detection, EXIF GPS validation & fund drift monitoring.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-purple-100 flex items-center justify-between text-[11px] font-semibold text-slate-600">
+                  <span>Annual Entitlement: <strong className="text-purple-900">₹5.00 Cr / MP</strong></span>
+                  <span className="text-emerald-700 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    100% Digital Trail
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 

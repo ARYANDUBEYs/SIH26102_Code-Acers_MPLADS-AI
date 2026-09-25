@@ -1,6 +1,44 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
+import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
+import { useSmoothScrollProgress } from '../../hooks/useScrollReveal';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+/**
+ * usePathPoint:
+ * Measures the exact SVG curved path and computes both the strokeDashoffset
+ * and the exact (x, y) percentage coordinates of the leading pointer tip.
+ * Guarantees the pointer glides smoothly around rounded Bezier turns without sharp corners.
+ */
+function usePathPoint(pathRef, progress, defaultX = '50%', defaultY = '0%') {
+  const [metrics, setMetrics] = useState({
+    left: defaultX,
+    top: defaultY,
+    totalLength: 1000,
+    dashOffset: 1000
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    const el = pathRef.current;
+    if (!el) return;
+    try {
+      const len = el.getTotalLength();
+      if (len > 0) {
+        const clamped = Math.max(0, Math.min(1, progress));
+        const pt = el.getPointAtLength(clamped * len);
+        setMetrics({
+          left: `${((pt.x / 1200) * 100).toFixed(2)}%`,
+          top: `${((pt.y / 100) * 100).toFixed(2)}%`,
+          totalLength: len,
+          dashOffset: len * (1 - clamped)
+        });
+      }
+    } catch (_) {
+      // Safe fallback prior to SVG layout
+    }
+  }, [progress, defaultX, defaultY]);
+
+  return metrics;
+}
 
 /**
  * RipplingPointer:
@@ -24,42 +62,29 @@ export const RipplingPointer = ({ className = '' }) => (
 /**
  * ConnectorLine1:
  * Connects Live Surveillance bottom-center directly to National Developmental Indicators.
- * - Originates at the bottom border of Live Surveillance (x = 50%, y = 0).
- * - Moves straight down to y = 45%.
- * - Takes a turn towards LEFT to the horizontal center of the Indicators container (x = 28.67% = 344px).
- * - Moves down and connects directly into the top border of National Indicators (y = 100%).
- * - Retracts in reverse motion when scrolling up.
+ * - canStart: only starts drawing after Live Surveillance is fully visible.
+ * - onDestinationReached: notifies when the pointer hits the top border of National Indicators.
  */
-export const ConnectorLine1 = () => {
-  const [containerRef, progress] = useScrollReveal(180, 0);
+export const ConnectorLine1 = ({ canStart = true, onDestinationReached }) => {
+  const [containerRef, effectiveProgress] = useSmoothScrollProgress(140, 0, {
+    maxStep: 0.022,
+    enabled: canStart
+  });
 
-  // Path segments: (600, 0) -> (600, 45) -> (344, 45) -> (344, 100)
-  // Lengths: 45, 256, 55. Total = 356.
-  const t1 = 0.126;
-  const t2 = 0.845;
-  let pointerLeft = '50%';
-  let pointerTop = '0%';
+  const pathRef = useRef(null);
+  const { left, top, totalLength, dashOffset } = usePathPoint(pathRef, effectiveProgress, '50%', '0%');
+  const pointerOpacity = effectiveProgress <= 0.01 ? 0 : Math.min(1, effectiveProgress * 5);
 
-  if (progress <= t1) {
-    pointerLeft = '50%';
-    const sub = t1 > 0 ? progress / t1 : 0;
-    pointerTop = `${sub * 45}%`;
-  } else if (progress <= t2) {
-    const sub = (progress - t1) / (t2 - t1);
-    pointerLeft = `${50 - sub * (50 - 28.67)}%`;
-    pointerTop = '45%';
-  } else {
-    const sub = (progress - t2) / (1 - t2);
-    pointerLeft = '28.67%';
-    pointerTop = `${45 + sub * 55}%`;
-  }
-
-  const pointerOpacity = progress === 0 ? 0 : Math.min(1, progress * 4);
+  useEffect(() => {
+    if (onDestinationReached) {
+      onDestinationReached(effectiveProgress >= 0.94);
+    }
+  }, [effectiveProgress, onDestinationReached]);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
     >
       <div className="relative w-full h-full">
         <svg
@@ -67,33 +92,32 @@ export const ConnectorLine1 = () => {
           preserveAspectRatio="none"
           className="w-full h-full overflow-visible"
         >
-          <motion.path
-            d="M 600 0 L 600 45 L 344 45 L 344 100"
+          <path
+            ref={pathRef}
+            d="M 600 0 L 600 22 Q 600 48 558 48 L 386 48 Q 344 48 344 74 L 344 100"
             fill="none"
             stroke="#2E1065"
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            initial={false}
-            animate={{ pathLength: progress }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
+            strokeDasharray={totalLength}
+            strokeDashoffset={dashOffset}
           />
         </svg>
 
-        {/* Single Moving Head Pointer - Follows path forward on scroll down, reverses on scroll up */}
-        <motion.div
+        {/* Single Moving Head Pointer locked to the curved path tip */}
+        <div
           className="absolute pointer-events-none"
-          initial={false}
-          animate={{
-            left: pointerLeft,
-            top: pointerTop,
-            opacity: pointerOpacity
+          style={{
+            left,
+            top,
+            opacity: pointerOpacity,
+            transform: 'translate(-50%, -50%)',
+            willChange: 'left, top, opacity'
           }}
-          transition={{ duration: 0.12, ease: 'easeOut' }}
-          style={{ transform: 'translate(-50%, -50%)' }}
         >
           <RipplingPointer />
-        </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -102,42 +126,29 @@ export const ConnectorLine1 = () => {
 /**
  * ConnectorLine2:
  * Connects bottom of National Indicators directly to "How it Works?" container.
- * - Originates at the bottom-middle of the National Indicators border (x = 28.67% = 344px, y = 0).
- * - Moves down some distance (y = 45).
- * - Turns RIGHT towards the center of "How it Works?" (x = 50% = 600px).
- * - Moves straight down to y = 100%, connecting directly into the top-center border of "How it Works?".
- * - Retracts in reverse motion when scrolling up.
+ * - canStart: only starts drawing after National Indicators is visible.
+ * - onDestinationReached: notifies when the pointer hits the top border of "How it Works?".
  */
-export const ConnectorLine2 = () => {
-  const [containerRef, progress] = useScrollReveal(180, 0);
+export const ConnectorLine2 = ({ canStart = true, onDestinationReached }) => {
+  const [containerRef, effectiveProgress] = useSmoothScrollProgress(140, 0, {
+    maxStep: 0.022,
+    enabled: canStart
+  });
 
-  // Path segments: (344, 0) -> (344, 45) -> (600, 45) -> (600, 100)
-  // Lengths: 45, 256, 55. Total = 356.
-  const t1 = 0.126;
-  const t2 = 0.845;
-  let pointerLeft = '28.67%';
-  let pointerTop = '0%';
+  const pathRef = useRef(null);
+  const { left, top, totalLength, dashOffset } = usePathPoint(pathRef, effectiveProgress, '28.67%', '0%');
+  const pointerOpacity = effectiveProgress <= 0.01 ? 0 : Math.min(1, effectiveProgress * 5);
 
-  if (progress <= t1) {
-    pointerLeft = '28.67%';
-    const sub = t1 > 0 ? progress / t1 : 0;
-    pointerTop = `${sub * 45}%`;
-  } else if (progress <= t2) {
-    const sub = (progress - t1) / (t2 - t1);
-    pointerLeft = `${28.67 + sub * (50 - 28.67)}%`;
-    pointerTop = '45%';
-  } else {
-    const sub = (progress - t2) / (1 - t2);
-    pointerLeft = '50%';
-    pointerTop = `${45 + sub * 55}%`;
-  }
-
-  const pointerOpacity = progress === 0 ? 0 : Math.min(1, progress * 4);
+  useEffect(() => {
+    if (onDestinationReached) {
+      onDestinationReached(effectiveProgress >= 0.94);
+    }
+  }, [effectiveProgress, onDestinationReached]);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
     >
       <div className="relative w-full h-full">
         <svg
@@ -145,33 +156,32 @@ export const ConnectorLine2 = () => {
           preserveAspectRatio="none"
           className="w-full h-full overflow-visible"
         >
-          <motion.path
-            d="M 344 0 L 344 45 L 600 45 L 600 100"
+          <path
+            ref={pathRef}
+            d="M 344 0 L 344 22 Q 344 48 386 48 L 558 48 Q 600 48 600 74 L 600 100"
             fill="none"
             stroke="#2E1065"
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            initial={false}
-            animate={{ pathLength: progress }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
+            strokeDasharray={totalLength}
+            strokeDashoffset={dashOffset}
           />
         </svg>
 
-        {/* Moving Head Pointer that reverses on scroll up */}
-        <motion.div
+        {/* Single Moving Head Pointer locked to the curved path tip */}
+        <div
           className="absolute pointer-events-none"
-          initial={false}
-          animate={{
-            left: pointerLeft,
-            top: pointerTop,
-            opacity: pointerOpacity
+          style={{
+            left,
+            top,
+            opacity: pointerOpacity,
+            transform: 'translate(-50%, -50%)',
+            willChange: 'left, top, opacity'
           }}
-          transition={{ duration: 0.12, ease: 'easeOut' }}
-          style={{ transform: 'translate(-50%, -50%)' }}
         >
           <RipplingPointer />
-        </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -179,59 +189,40 @@ export const ConnectorLine2 = () => {
 
 /**
  * ConnectorLine3:
- * Starts directly from bottom-center of "How it Works?" container border (x = 50%, y = 0).
- * Moves down, then splits into THREE branches connecting directly into the top borders of the three pillars:
- * - Branch Left (x = 16% = 192px): into Pillar 1 "1. Evidence & Fraud Checks"
- * - Branch Center (x = 50% = 600px): into Pillar 2 "2. AI Risk Scoring Models"
- * - Branch Right (x = 84% = 1008px): into Pillar 3 "3. Interactive Dashboards & Voice AI"
- * - Retracts in reverse motion when scrolling up.
+ * Starts directly from bottom-center of "How it Works?" container border (x = 50%, y = 0)
+ * and splits smoothly with rounded curves into THREE branches connecting to the three boxes.
+ * - canStart: only starts drawing after "How it Works?" is in view.
+ * - onDestinationReached: notifies when all 3 pointers reach the top borders of the 3 containers.
  */
-export const ConnectorLine3 = () => {
-  const [containerRef, progress] = useScrollReveal(200, 0);
+export const ConnectorLine3 = ({ canStart = true, onDestinationReached }) => {
+  const [containerRef, effectiveProgress] = useSmoothScrollProgress(140, 0, {
+    maxStep: 0.022,
+    enabled: canStart
+  });
 
-  // When progress <= 0.4: stem draws from y = 0 to 45
-  // When progress > 0.4: branches draw down to 100
-  const stemProgress = Math.min(1, progress / 0.4);
-  const branchProgress = progress <= 0.4 ? 0 : (progress - 0.4) / 0.6;
+  const centerPathRef = useRef(null);
+  const leftPathRef = useRef(null);
+  const rightPathRef = useRef(null);
 
-  // Center pointer
-  const centerPointerTop = progress <= 0.4
-    ? `${stemProgress * 45}%`
-    : `${45 + branchProgress * 55}%`;
+  const centerMetrics = usePathPoint(centerPathRef, effectiveProgress, '50%', '0%');
 
-  // Left pointer
-  let leftPointerX = '50%';
-  let leftPointerY = '45%';
-  if (branchProgress <= 0.6) {
-    const sub = branchProgress / 0.6;
-    leftPointerX = `${50 - sub * (50 - 16)}%`;
-    leftPointerY = '45%';
-  } else {
-    const sub = (branchProgress - 0.6) / 0.4;
-    leftPointerX = '16%';
-    leftPointerY = `${45 + sub * 55}%`;
-  }
+  const branchProgress = effectiveProgress <= 0.32 ? 0 : (effectiveProgress - 0.32) / 0.68;
+  const leftMetrics = usePathPoint(leftPathRef, branchProgress, '50%', '44%');
+  const rightMetrics = usePathPoint(rightPathRef, branchProgress, '50%', '44%');
 
-  // Right pointer
-  let rightPointerX = '50%';
-  let rightPointerY = '45%';
-  if (branchProgress <= 0.6) {
-    const sub = branchProgress / 0.6;
-    rightPointerX = `${50 + sub * (84 - 50)}%`;
-    rightPointerY = '45%';
-  } else {
-    const sub = (branchProgress - 0.6) / 0.4;
-    rightPointerX = '84%';
-    rightPointerY = `${45 + sub * 55}%`;
-  }
+  const mainOpacity = effectiveProgress <= 0.01 ? 0 : Math.min(1, effectiveProgress * 5);
+  const branchOpacity = branchProgress <= 0.01 ? 0 : Math.min(1, branchProgress * 4);
 
-  const mainOpacity = progress === 0 ? 0 : Math.min(1, progress * 4);
-  const branchPointersOpacity = branchProgress === 0 ? 0 : Math.min(1, branchProgress * 3);
+  useEffect(() => {
+    if (onDestinationReached) {
+      onDestinationReached(branchProgress >= 0.94);
+    }
+  }, [branchProgress, onDestinationReached]);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
     >
       <div className="relative w-full h-full">
         <svg
@@ -239,103 +230,88 @@ export const ConnectorLine3 = () => {
           preserveAspectRatio="none"
           className="w-full h-full overflow-visible"
         >
-          {/* Center Stem: (600, 0) -> (600, 45) */}
-          <motion.path
-            d="M 600 0 L 600 45"
+          {/* Center Full Path: (600, 0) -> (600, 100) */}
+          <path
+            ref={centerPathRef}
+            d="M 600 0 L 600 100"
             fill="none"
             stroke="#2E1065"
             strokeWidth="4.5"
             strokeLinecap="round"
-            initial={false}
-            animate={{ pathLength: stemProgress }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
+            strokeDasharray={centerMetrics.totalLength}
+            strokeDashoffset={centerMetrics.dashOffset}
           />
 
-          {/* Center Continuation: (600, 45) -> (600, 100) */}
-          <motion.path
-            d="M 600 45 L 600 100"
-            fill="none"
-            stroke="#2E1065"
-            strokeWidth="4.5"
-            strokeLinecap="round"
-            initial={false}
-            animate={{ pathLength: branchProgress }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-          />
-
-          {/* Left Branch: (600, 45) -> (192, 45) -> (192, 100) */}
-          <motion.path
-            d="M 600 45 L 192 45 L 192 100"
+          {/* Left Smooth Curved Branch: (600, 32) -> Q curve -> (192, 100) */}
+          <path
+            ref={leftPathRef}
+            d="M 600 32 Q 600 48 556 48 L 236 48 Q 192 48 192 74 L 192 100"
             fill="none"
             stroke="#2E1065"
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            initial={false}
-            animate={{ pathLength: branchProgress }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
+            strokeDasharray={leftMetrics.totalLength}
+            strokeDashoffset={leftMetrics.dashOffset}
           />
 
-          {/* Right Branch: (600, 45) -> (1008, 45) -> (1008, 100) */}
-          <motion.path
-            d="M 600 45 L 1008 45 L 1008 100"
+          {/* Right Smooth Curved Branch: (600, 32) -> Q curve -> (1008, 100) */}
+          <path
+            ref={rightPathRef}
+            d="M 600 32 Q 600 48 644 48 L 964 48 Q 1008 48 1008 74 L 1008 100"
             fill="none"
             stroke="#2E1065"
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            initial={false}
-            animate={{ pathLength: branchProgress }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
+            strokeDasharray={rightMetrics.totalLength}
+            strokeDashoffset={rightMetrics.dashOffset}
           />
         </svg>
 
-        {/* Three Pointers resting on the top borders of the three pillars */}
+        {/* Three Pointers smoothly gliding along the three curved branches */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           {/* Left Pointer */}
-          <motion.div
+          <div
             className="absolute"
-            initial={false}
-            animate={{
-              left: leftPointerX,
-              top: leftPointerY,
-              opacity: branchPointersOpacity
+            style={{
+              left: leftMetrics.left,
+              top: leftMetrics.top,
+              opacity: branchOpacity,
+              transform: 'translate(-50%, -50%)',
+              willChange: 'left, top, opacity'
             }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-            style={{ transform: 'translate(-50%, -50%)' }}
           >
             <RipplingPointer />
-          </motion.div>
+          </div>
 
           {/* Center Pointer */}
-          <motion.div
+          <div
             className="absolute"
-            initial={false}
-            animate={{
-              left: '50%',
-              top: centerPointerTop,
-              opacity: mainOpacity
+            style={{
+              left: centerMetrics.left,
+              top: centerMetrics.top,
+              opacity: mainOpacity,
+              transform: 'translate(-50%, -50%)',
+              willChange: 'left, top, opacity'
             }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-            style={{ transform: 'translate(-50%, -50%)' }}
           >
             <RipplingPointer />
-          </motion.div>
+          </div>
 
           {/* Right Pointer */}
-          <motion.div
+          <div
             className="absolute"
-            initial={false}
-            animate={{
-              left: rightPointerX,
-              top: rightPointerY,
-              opacity: branchPointersOpacity
+            style={{
+              left: rightMetrics.left,
+              top: rightMetrics.top,
+              opacity: branchOpacity,
+              transform: 'translate(-50%, -50%)',
+              willChange: 'left, top, opacity'
             }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-            style={{ transform: 'translate(-50%, -50%)' }}
           >
             <RipplingPointer />
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>
