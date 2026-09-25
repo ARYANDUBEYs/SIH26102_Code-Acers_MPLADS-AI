@@ -61,15 +61,7 @@ export const CurvedSquareCard = ({
   const style = variantStyles[variant] || variantStyles.default;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{
-        duration: 0.45,
-        delay: 0.04 + index * 0.05,
-        ease: [0.16, 1, 0.3, 1]
-      }}
+    <div
       className={`group relative rounded-xl bg-white ${compact ? 'p-2.5 sm:p-3 min-h-[76px] sm:min-h-[80px]' : 'p-5 min-h-[148px] rounded-2xl'} border ${style.border} shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between ${style.glow} ${className}`}
       style={{
         borderColor: borderColor || undefined
@@ -102,6 +94,6 @@ export const CurvedSquareCard = ({
           Verified
         </span>
       </div>
-    </motion.div>
+    </div>
   );
 };

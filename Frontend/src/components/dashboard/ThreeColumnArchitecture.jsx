@@ -18,11 +18,10 @@ import {
   TypewriterHeading
 } from '../../hooks/useScrollReveal';
 
-export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal, canAppear = true }) => {
+export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) => {
   const { isAdmin, isDistrictOfficer } = useAuth();
-  const [gridRef, progress] = useSmoothScrollProgress(240, 0, {
-    maxStep: 0.018,
-    enabled: canAppear
+  const [gridRef, progress] = useSmoothScrollProgress(250, 75, {
+    maxStep: 0.024
   });
 
   return (

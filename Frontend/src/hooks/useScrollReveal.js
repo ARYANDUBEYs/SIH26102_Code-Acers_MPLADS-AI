@@ -36,15 +36,14 @@ export function useScrollReveal(distance = 240, offset = 0) {
 
 /**
  * useSmoothScrollProgress:
- * Combines scroll-driven progress over `distance` with smooth time-based interpolation
- * via a high-frequency timer (16ms), guaranteeing slow, silky-smooth progression.
- * When `enabled` is false (e.g., waiting for a connector pointer to reach its destination),
- * target progress remains 0 and only begins animating once `enabled` becomes true.
+ * Continuous exponentially-damped scroll progress [0, 1] with ZERO hard snaps or velocity jumps.
+ * - Uses a smooth proportional damping factor (`diff * damping`) so slow scrolling is gentle
+ *   and fast scrolling glides smoothly to completion in ~220ms without any teleporting or jitter.
  */
 export function useSmoothScrollProgress(
-  distance = 380,
+  distance = 220,
   offset = 0,
-  { maxStep = 0.02, enabled = true } = {}
+  { damping = 0.14 } = {}
 ) {
   const ref = useRef(null);
   const [smoothed, setSmoothed] = useState(0);
@@ -53,11 +52,25 @@ export function useSmoothScrollProgress(
   const timerRef = useRef(null);
 
   useIsomorphicLayoutEffect(() => {
+    // Initialize to current scroll position on first mount so already-visible elements don't flash
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      const current = window.innerHeight - rect.top - offset;
+      const initialP = Math.max(0, Math.min(1, current / distance));
+      currentRef.current = initialP;
+      targetRef.current = initialP;
+      setSmoothed(initialP);
+    }
+
     const stepTick = () => {
       const diff = targetRef.current - currentRef.current;
-      if (Math.abs(diff) > 0.001) {
-        const delta = Math.sign(diff) * Math.min(Math.abs(diff), Math.max(0.004, Math.min(Math.abs(diff) * 0.14, maxStep)));
-        currentRef.current = Math.max(0, Math.min(1, currentRef.current + delta));
+      const absDiff = Math.abs(diff);
+
+      if (absDiff > 0.0015) {
+        // Pure continuous exponential damping — no abrupt threshold switches or hard snaps
+        const step = Math.sign(diff) * Math.max(0.0035, absDiff * damping);
+        const clampedDelta = Math.sign(diff) * Math.min(absDiff, Math.abs(step));
+        currentRef.current = Math.max(0, Math.min(1, currentRef.current + clampedDelta));
         setSmoothed(currentRef.current);
       } else {
         if (currentRef.current !== targetRef.current) {
@@ -72,17 +85,14 @@ export function useSmoothScrollProgress(
     };
 
     const updateTarget = () => {
-      if (!enabled) {
-        targetRef.current = 0;
-      } else if (ref.current) {
-        const rect = ref.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const current = windowHeight - rect.top - offset;
-        const p = Math.max(0, Math.min(1, current / distance));
-        targetRef.current = p;
-      }
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const current = windowHeight - rect.top - offset;
+      const p = Math.max(0, Math.min(1, current / distance));
+      targetRef.current = p;
 
-      if (!timerRef.current && Math.abs(targetRef.current - currentRef.current) > 0.001) {
+      if (!timerRef.current && Math.abs(targetRef.current - currentRef.current) > 0.0015) {
         timerRef.current = setInterval(stepTick, 16);
       }
     };
@@ -99,61 +109,45 @@ export function useSmoothScrollProgress(
         timerRef.current = null;
       }
     };
-  }, [distance, offset, maxStep, enabled]);
+  }, [distance, offset, damping]);
 
   return [ref, smoothed];
 }
 
 /**
  * getStageStyle:
- * Computes inline opacity, translateY, subtle blur, and smooth CSS transitions for a specific
+ * Computes GPU-accelerated inline opacity and translate3d for a specific
  * sub-stage [start, end] within a container's [0, 1] progress.
  */
-export function getStageStyle(progress, start, end, yOffset = 18) {
+export function getStageStyle(progress, start, end, yOffset = 14) {
   const stageProgress = Math.max(0, Math.min(1, (progress - start) / (end - start || 1)));
+  // Smooth cubic ease-out
   const eased = 1 - Math.pow(1 - stageProgress, 3);
   const y = (1 - eased) * yOffset;
-  const blur = (1 - eased) * 3.5;
 
   return {
     opacity: Number(eased.toFixed(3)),
-    transform: `translateY(${y.toFixed(2)}px)`,
-    filter: blur > 0.15 ? `blur(${blur.toFixed(1)}px)` : 'none',
+    transform: `translate3d(0, ${y.toFixed(2)}px, 0)`,
     pointerEvents: eased < 0.08 ? 'none' : 'auto',
-    transition: 'opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-    willChange: 'opacity, transform, filter'
+    willChange: 'opacity, transform'
   };
 }
 
 /**
  * TypewriterHeading:
- * Reveals heading text from left to right character-by-character with a pulsing cursor
- * during its active progress window [start, end], while keeping layout dimensions stable.
+ * Smoothly reveals heading text from left to right proportional to `progress` in `[start, end]`.
+ * Directly maps to the already-smoothed progress so there is no secondary timer fighting the scroll.
  */
 export function TypewriterHeading({
   text,
   progress,
   start = 0.18,
-  end = 0.45,
+  end = 0.48,
   className = '',
   cursorClassName = 'bg-amber-400'
 }) {
   const typingProgress = Math.max(0, Math.min(1, (progress - start) / (end - start || 1)));
-  const targetCount = Math.round(typingProgress * text.length);
-  const [displayedCount, setDisplayedCount] = useState(targetCount);
-
-  useEffect(() => {
-    if (displayedCount === targetCount) return;
-    const timer = setInterval(() => {
-      setDisplayedCount((prev) => {
-        if (prev < targetCount) return prev + 1;
-        if (prev > targetCount) return prev - 1;
-        return prev;
-      });
-    }, 32);
-    return () => clearInterval(timer);
-  }, [targetCount, displayedCount]);
-
+  const displayedCount = Math.round(typingProgress * text.length);
   const visibleText = text.slice(0, displayedCount);
   const hiddenText = text.slice(displayedCount);
   const isTyping = displayedCount > 0 && displayedCount < text.length;
@@ -177,39 +171,29 @@ export function TypewriterHeading({
 
 /**
  * BidirectionalReveal:
- * High-performance wrapper that smoothly fades in, translates up, and de-blurs as you
- * scroll down, and reverses the exact motion (fades out, translates down, blurs) as you scroll up.
+ * GPU-accelerated wrapper that smoothly fades in and translates up as you
+ * scroll down, and reverses the exact motion as you scroll up.
  */
 export function BidirectionalReveal({
   children,
   className = '',
-  distance = 200,
+  distance = 160,
   offset = 0,
-  yOffset = 24,
-  blurAmount = 6,
+  yOffset = 18,
   delay = 0,
-  enabled = true,
-  onAppeared,
   style = {}
 }) {
   const [ref, progress] = useSmoothScrollProgress(distance, offset, {
-    maxStep: 0.032,
-    enabled
+    damping: 0.15
   });
 
   const adjustedProgress = delay > 0
     ? Math.max(0, Math.min(1, (progress - delay * 0.15) / (1 - delay * 0.15 || 1)))
     : progress;
 
-  useEffect(() => {
-    if (onAppeared) {
-      onAppeared(adjustedProgress >= 0.85);
-    }
-  }, [adjustedProgress, onAppeared]);
-
-  const opacity = Number(adjustedProgress.toFixed(3));
-  const y = (1 - adjustedProgress) * yOffset;
-  const blur = (1 - adjustedProgress) * blurAmount;
+  const eased = 1 - Math.pow(1 - adjustedProgress, 3);
+  const opacity = Number(eased.toFixed(3));
+  const y = (1 - eased) * yOffset;
 
   return React.createElement(
     'div',
@@ -219,11 +203,9 @@ export function BidirectionalReveal({
       style: {
         ...style,
         opacity,
-        transform: `translateY(${y.toFixed(2)}px)`,
-        filter: blur > 0.08 ? `blur(${blur.toFixed(1)}px)` : 'none',
+        transform: `translate3d(0, ${y.toFixed(2)}px, 0)`,
         pointerEvents: opacity < 0.05 ? 'none' : 'auto',
-        transition: 'opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), filter 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
-        willChange: 'opacity, transform, filter'
+        willChange: 'opacity, transform'
       }
     },
     children

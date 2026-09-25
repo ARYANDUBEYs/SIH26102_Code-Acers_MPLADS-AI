@@ -21,19 +21,12 @@ import {
   TypewriterHeading
 } from '../../hooks/useScrollReveal';
 
-export const SystemicVulnerabilitiesFramework = ({ canAppear = true, onAppeared }) => {
+export const SystemicVulnerabilitiesFramework = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [isSafeguardModalOpen, setIsSafeguardModalOpen] = useState(false);
-  const [containerRef, progress] = useSmoothScrollProgress(240, 0, {
-    maxStep: 0.018,
-    enabled: canAppear
+  const [containerRef, progress] = useSmoothScrollProgress(250, 90, {
+    maxStep: 0.024
   });
-
-  useEffect(() => {
-    if (onAppeared) {
-      onAppeared(progress >= 0.55);
-    }
-  }, [progress, onAppeared]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {

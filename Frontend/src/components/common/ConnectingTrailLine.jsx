@@ -1,44 +1,6 @@
-import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
-import { useSmoothScrollProgress } from '../../hooks/useScrollReveal';
+import React, { useRef, useLayoutEffect, useEffect } from 'react';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-
-/**
- * usePathPoint:
- * Measures the exact SVG curved path and computes both the strokeDashoffset
- * and the exact (x, y) percentage coordinates of the leading pointer tip.
- * Guarantees the pointer glides smoothly around rounded Bezier turns without sharp corners.
- */
-function usePathPoint(pathRef, progress, defaultX = '50%', defaultY = '0%') {
-  const [metrics, setMetrics] = useState({
-    left: defaultX,
-    top: defaultY,
-    totalLength: 1000,
-    dashOffset: 1000
-  });
-
-  useIsomorphicLayoutEffect(() => {
-    const el = pathRef.current;
-    if (!el) return;
-    try {
-      const len = el.getTotalLength();
-      if (len > 0) {
-        const clamped = Math.max(0, Math.min(1, progress));
-        const pt = el.getPointAtLength(clamped * len);
-        setMetrics({
-          left: `${((pt.x / 1200) * 100).toFixed(2)}%`,
-          top: `${((pt.y / 100) * 100).toFixed(2)}%`,
-          totalLength: len,
-          dashOffset: len * (1 - clamped)
-        });
-      }
-    } catch (_) {
-      // Safe fallback prior to SVG layout
-    }
-  }, [progress, defaultX, defaultY]);
-
-  return metrics;
-}
 
 /**
  * RipplingPointer:
@@ -60,26 +22,126 @@ export const RipplingPointer = ({ className = '' }) => (
 );
 
 /**
+ * applyPathProgress:
+ * Updates an SVG <path> strokeDashoffset and its head pointer DOM node directly via refs
+ * without triggering any React state re-render.
+ */
+function applyPathProgress(pathEl, pointerEl, length, progress) {
+  if (!pathEl || !length) return;
+  const clamped = Math.max(0, Math.min(1, progress));
+  pathEl.style.strokeDasharray = `${length}`;
+  pathEl.style.strokeDashoffset = `${(length * (1 - clamped)).toFixed(2)}`;
+
+  if (pointerEl) {
+    try {
+      const pt = pathEl.getPointAtLength(clamped * length);
+      const leftPct = ((pt.x / 1200) * 100).toFixed(2);
+      const topPct = ((pt.y / 100) * 100).toFixed(2);
+      const opacity = clamped <= 0.01 ? 0 : Math.min(1, clamped * 5);
+      pointerEl.style.left = `${leftPct}%`;
+      pointerEl.style.top = `${topPct}%`;
+      pointerEl.style.opacity = `${opacity.toFixed(3)}`;
+    } catch (_) {
+      // Safe fallback prior to layout
+    }
+  }
+}
+
+/**
+ * useDirectPathAnimator:
+ * Drives smooth exponentially-damped progress [0, 1] directly onto SVG paths and pointer DOM nodes
+ * with zero React re-renders during scroll.
+ */
+function useDirectPathAnimator(containerRef, distance, offset, onFrame, damping = 0.13) {
+  const currentRef = useRef(0);
+  const targetRef = useRef(0);
+  const timerRef = useRef(null);
+  const onFrameRef = useRef(onFrame);
+  onFrameRef.current = onFrame;
+
+  useIsomorphicLayoutEffect(() => {
+    const stepTick = () => {
+      const diff = targetRef.current - currentRef.current;
+      const absDiff = Math.abs(diff);
+
+      if (absDiff > 0.0015) {
+        const step = Math.sign(diff) * Math.max(0.0035, absDiff * damping);
+        const clampedDelta = Math.sign(diff) * Math.min(absDiff, Math.abs(step));
+        currentRef.current = Math.max(0, Math.min(1, currentRef.current + clampedDelta));
+        onFrameRef.current(currentRef.current);
+      } else {
+        if (currentRef.current !== targetRef.current) {
+          currentRef.current = targetRef.current;
+          onFrameRef.current(currentRef.current);
+        }
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+      }
+    };
+
+    const updateTarget = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const current = window.innerHeight - rect.top - offset;
+      const p = Math.max(0, Math.min(1, current / distance));
+      targetRef.current = p;
+
+      if (!timerRef.current && Math.abs(targetRef.current - currentRef.current) > 0.0015) {
+        timerRef.current = setInterval(stepTick, 16);
+      }
+    };
+
+    // Initial synchronous setup
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const current = window.innerHeight - rect.top - offset;
+      const initialP = Math.max(0, Math.min(1, current / distance));
+      currentRef.current = initialP;
+      targetRef.current = initialP;
+      onFrameRef.current(initialP);
+    }
+
+    window.addEventListener('scroll', updateTarget, { passive: true });
+    window.addEventListener('resize', updateTarget, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', updateTarget);
+      window.removeEventListener('resize', updateTarget);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [containerRef, distance, offset, damping]);
+}
+
+/**
  * ConnectorLine1:
  * Connects Live Surveillance bottom-center directly to National Developmental Indicators.
- * - canStart: only starts drawing after Live Surveillance is fully visible.
- * - onDestinationReached: notifies when the pointer hits the top border of National Indicators.
  */
-export const ConnectorLine1 = ({ canStart = true, onDestinationReached }) => {
-  const [containerRef, effectiveProgress] = useSmoothScrollProgress(140, 0, {
-    maxStep: 0.022,
-    enabled: canStart
-  });
-
+export const ConnectorLine1 = () => {
+  const containerRef = useRef(null);
   const pathRef = useRef(null);
-  const { left, top, totalLength, dashOffset } = usePathPoint(pathRef, effectiveProgress, '50%', '0%');
-  const pointerOpacity = effectiveProgress <= 0.01 ? 0 : Math.min(1, effectiveProgress * 5);
+  const pointerRef = useRef(null);
+  const lengthRef = useRef(0);
 
-  useEffect(() => {
-    if (onDestinationReached) {
-      onDestinationReached(effectiveProgress >= 0.94);
+  useIsomorphicLayoutEffect(() => {
+    if (pathRef.current) {
+      try {
+        lengthRef.current = pathRef.current.getTotalLength() || 400;
+      } catch (_) {
+        lengthRef.current = 400;
+      }
     }
-  }, [effectiveProgress, onDestinationReached]);
+  }, []);
+
+  useDirectPathAnimator(containerRef, 135, 55, (progress) => {
+    const len = lengthRef.current || (pathRef.current ? pathRef.current.getTotalLength() : 400);
+    lengthRef.current = len;
+    applyPathProgress(pathRef.current, pointerRef.current, len, progress);
+  });
 
   return (
     <div
@@ -100,19 +162,17 @@ export const ConnectorLine1 = ({ canStart = true, onDestinationReached }) => {
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeDasharray={totalLength}
-            strokeDashoffset={dashOffset}
           />
         </svg>
 
-        {/* Single Moving Head Pointer locked to the curved path tip */}
         <div
+          ref={pointerRef}
           className="absolute pointer-events-none"
           style={{
-            left,
-            top,
-            opacity: pointerOpacity,
-            transform: 'translate(-50%, -50%)',
+            left: '50%',
+            top: '0%',
+            opacity: 0,
+            transform: 'translate3d(-50%, -50%, 0)',
             willChange: 'left, top, opacity'
           }}
         >
@@ -126,24 +186,28 @@ export const ConnectorLine1 = ({ canStart = true, onDestinationReached }) => {
 /**
  * ConnectorLine2:
  * Connects bottom of National Indicators directly to "How it Works?" container.
- * - canStart: only starts drawing after National Indicators is visible.
- * - onDestinationReached: notifies when the pointer hits the top border of "How it Works?".
  */
-export const ConnectorLine2 = ({ canStart = true, onDestinationReached }) => {
-  const [containerRef, effectiveProgress] = useSmoothScrollProgress(140, 0, {
-    maxStep: 0.022,
-    enabled: canStart
-  });
-
+export const ConnectorLine2 = () => {
+  const containerRef = useRef(null);
   const pathRef = useRef(null);
-  const { left, top, totalLength, dashOffset } = usePathPoint(pathRef, effectiveProgress, '28.67%', '0%');
-  const pointerOpacity = effectiveProgress <= 0.01 ? 0 : Math.min(1, effectiveProgress * 5);
+  const pointerRef = useRef(null);
+  const lengthRef = useRef(0);
 
-  useEffect(() => {
-    if (onDestinationReached) {
-      onDestinationReached(effectiveProgress >= 0.94);
+  useIsomorphicLayoutEffect(() => {
+    if (pathRef.current) {
+      try {
+        lengthRef.current = pathRef.current.getTotalLength() || 400;
+      } catch (_) {
+        lengthRef.current = 400;
+      }
     }
-  }, [effectiveProgress, onDestinationReached]);
+  }, []);
+
+  useDirectPathAnimator(containerRef, 135, 55, (progress) => {
+    const len = lengthRef.current || (pathRef.current ? pathRef.current.getTotalLength() : 400);
+    lengthRef.current = len;
+    applyPathProgress(pathRef.current, pointerRef.current, len, progress);
+  });
 
   return (
     <div
@@ -164,19 +228,17 @@ export const ConnectorLine2 = ({ canStart = true, onDestinationReached }) => {
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeDasharray={totalLength}
-            strokeDashoffset={dashOffset}
           />
         </svg>
 
-        {/* Single Moving Head Pointer locked to the curved path tip */}
         <div
+          ref={pointerRef}
           className="absolute pointer-events-none"
           style={{
-            left,
-            top,
-            opacity: pointerOpacity,
-            transform: 'translate(-50%, -50%)',
+            left: '28.67%',
+            top: '0%',
+            opacity: 0,
+            transform: 'translate3d(-50%, -50%, 0)',
             willChange: 'left, top, opacity'
           }}
         >
@@ -191,38 +253,46 @@ export const ConnectorLine2 = ({ canStart = true, onDestinationReached }) => {
  * ConnectorLine3:
  * Starts directly from bottom-center of "How it Works?" container border (x = 50%, y = 0)
  * and splits smoothly with rounded curves into THREE branches connecting to the three boxes.
- * - canStart: only starts drawing after "How it Works?" is in view.
- * - onDestinationReached: notifies when all 3 pointers reach the top borders of the 3 containers.
  */
-export const ConnectorLine3 = ({ canStart = true, onDestinationReached }) => {
-  const [containerRef, effectiveProgress] = useSmoothScrollProgress(140, 0, {
-    maxStep: 0.022,
-    enabled: canStart
-  });
-
+export const ConnectorLine3 = () => {
+  const containerRef = useRef(null);
   const centerPathRef = useRef(null);
   const leftPathRef = useRef(null);
   const rightPathRef = useRef(null);
 
-  const centerMetrics = usePathPoint(centerPathRef, effectiveProgress, '50%', '0%');
+  const centerPointerRef = useRef(null);
+  const leftPointerRef = useRef(null);
+  const rightPointerRef = useRef(null);
 
-  const branchProgress = effectiveProgress <= 0.32 ? 0 : (effectiveProgress - 0.32) / 0.68;
-  const leftMetrics = usePathPoint(leftPathRef, branchProgress, '50%', '44%');
-  const rightMetrics = usePathPoint(rightPathRef, branchProgress, '50%', '44%');
+  const lengthsRef = useRef({ center: 0, left: 0, right: 0 });
 
-  const mainOpacity = effectiveProgress <= 0.01 ? 0 : Math.min(1, effectiveProgress * 5);
-  const branchOpacity = branchProgress <= 0.01 ? 0 : Math.min(1, branchProgress * 4);
-
-  useEffect(() => {
-    if (onDestinationReached) {
-      onDestinationReached(branchProgress >= 0.94);
+  useIsomorphicLayoutEffect(() => {
+    try {
+      if (centerPathRef.current) lengthsRef.current.center = centerPathRef.current.getTotalLength() || 100;
+      if (leftPathRef.current) lengthsRef.current.left = leftPathRef.current.getTotalLength() || 480;
+      if (rightPathRef.current) lengthsRef.current.right = rightPathRef.current.getTotalLength() || 480;
+    } catch (_) {
+      lengthsRef.current = { center: 100, left: 480, right: 480 };
     }
-  }, [branchProgress, onDestinationReached]);
+  }, []);
+
+  useDirectPathAnimator(containerRef, 135, 55, (progress) => {
+    const cLen = lengthsRef.current.center || (centerPathRef.current ? centerPathRef.current.getTotalLength() : 100);
+    const lLen = lengthsRef.current.left || (leftPathRef.current ? leftPathRef.current.getTotalLength() : 480);
+    const rLen = lengthsRef.current.right || (rightPathRef.current ? rightPathRef.current.getTotalLength() : 480);
+    lengthsRef.current = { center: cLen, left: lLen, right: rLen };
+
+    applyPathProgress(centerPathRef.current, centerPointerRef.current, cLen, progress);
+
+    const branchProgress = progress <= 0.32 ? 0 : (progress - 0.32) / 0.68;
+    applyPathProgress(leftPathRef.current, leftPointerRef.current, lLen, branchProgress);
+    applyPathProgress(rightPathRef.current, rightPointerRef.current, rLen, branchProgress);
+  });
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-28 sm:h-32 -mt-[3px] -mb-[3px] z-20 overflow-visible pointer-events-none"
     >
       <div className="relative w-full h-full">
         <svg
@@ -238,8 +308,6 @@ export const ConnectorLine3 = ({ canStart = true, onDestinationReached }) => {
             stroke="#2E1065"
             strokeWidth="4.5"
             strokeLinecap="round"
-            strokeDasharray={centerMetrics.totalLength}
-            strokeDashoffset={centerMetrics.dashOffset}
           />
 
           {/* Left Smooth Curved Branch: (600, 32) -> Q curve -> (192, 100) */}
@@ -251,8 +319,6 @@ export const ConnectorLine3 = ({ canStart = true, onDestinationReached }) => {
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeDasharray={leftMetrics.totalLength}
-            strokeDashoffset={leftMetrics.dashOffset}
           />
 
           {/* Right Smooth Curved Branch: (600, 32) -> Q curve -> (1008, 100) */}
@@ -264,54 +330,52 @@ export const ConnectorLine3 = ({ canStart = true, onDestinationReached }) => {
             strokeWidth="4.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeDasharray={rightMetrics.totalLength}
-            strokeDashoffset={rightMetrics.dashOffset}
           />
         </svg>
 
-        {/* Three Pointers smoothly gliding along the three curved branches */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-          {/* Left Pointer */}
-          <div
-            className="absolute"
-            style={{
-              left: leftMetrics.left,
-              top: leftMetrics.top,
-              opacity: branchOpacity,
-              transform: 'translate(-50%, -50%)',
-              willChange: 'left, top, opacity'
-            }}
-          >
-            <RipplingPointer />
-          </div>
+        {/* Left Moving Head Pointer */}
+        <div
+          ref={leftPointerRef}
+          className="absolute pointer-events-none hidden lg:block"
+          style={{
+            left: '50%',
+            top: '32%',
+            opacity: 0,
+            transform: 'translate3d(-50%, -50%, 0)',
+            willChange: 'left, top, opacity'
+          }}
+        >
+          <RipplingPointer />
+        </div>
 
-          {/* Center Pointer */}
-          <div
-            className="absolute"
-            style={{
-              left: centerMetrics.left,
-              top: centerMetrics.top,
-              opacity: mainOpacity,
-              transform: 'translate(-50%, -50%)',
-              willChange: 'left, top, opacity'
-            }}
-          >
-            <RipplingPointer />
-          </div>
+        {/* Center Moving Head Pointer */}
+        <div
+          ref={centerPointerRef}
+          className="absolute pointer-events-none"
+          style={{
+            left: '50%',
+            top: '0%',
+            opacity: 0,
+            transform: 'translate3d(-50%, -50%, 0)',
+            willChange: 'left, top, opacity'
+          }}
+        >
+          <RipplingPointer />
+        </div>
 
-          {/* Right Pointer */}
-          <div
-            className="absolute"
-            style={{
-              left: rightMetrics.left,
-              top: rightMetrics.top,
-              opacity: branchOpacity,
-              transform: 'translate(-50%, -50%)',
-              willChange: 'left, top, opacity'
-            }}
-          >
-            <RipplingPointer />
-          </div>
+        {/* Right Moving Head Pointer */}
+        <div
+          ref={rightPointerRef}
+          className="absolute pointer-events-none hidden lg:block"
+          style={{
+            left: '50%',
+            top: '32%',
+            opacity: 0,
+            transform: 'translate3d(-50%, -50%, 0)',
+            willChange: 'left, top, opacity'
+          }}
+        >
+          <RipplingPointer />
         </div>
       </div>
     </div>

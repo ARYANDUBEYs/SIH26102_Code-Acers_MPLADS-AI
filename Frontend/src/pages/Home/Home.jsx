@@ -117,7 +117,8 @@ const TypewriterHeading = ({ text, className = '' }) => {
  */
 const ScrollScalingHeading = ({ title = "About the MPLAD Scheme" }) => {
   const ref = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const headingRef = useRef(null);
+  const underlineRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -127,7 +128,15 @@ const ScrollScalingHeading = ({ title = "About the MPLAD Scheme" }) => {
       const totalDist = windowHeight * 0.65;
       const current = windowHeight - rect.top;
       const progress = Math.max(0, Math.min(1, current / totalDist));
-      setScrollProgress(progress);
+      const scale = (0.94 + progress * 0.12).toFixed(3);
+
+      if (headingRef.current) {
+        headingRef.current.style.transform = `scale3d(${scale}, ${scale}, 1)`;
+      }
+      if (underlineRef.current) {
+        underlineRef.current.style.transform = `scale3d(${progress.toFixed(3)}, 1, 1)`;
+        underlineRef.current.style.opacity = `${(progress > 0.08 ? Math.min(1, progress * 1.2) : 0).toFixed(3)}`;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -135,22 +144,22 @@ const ScrollScalingHeading = ({ title = "About the MPLAD Scheme" }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scale = 0.92 + scrollProgress * 0.16;
-  const underlineWidth = `${Math.min(100, Math.round(scrollProgress * 100))}%`;
-
   return (
     <div ref={ref} className="relative inline-block">
       <h2
-        className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2E1065] transition-transform duration-75 origin-left"
-        style={{ transform: `scale(${scale})` }}
+        ref={headingRef}
+        className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2E1065] origin-left"
+        style={{ transform: 'scale3d(0.94, 0.94, 1)', willChange: 'transform' }}
       >
         {title}
       </h2>
       <div
-        className="h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full mt-2 transition-all duration-150 ease-out"
+        ref={underlineRef}
+        className="h-1 w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full mt-2 origin-left"
         style={{
-          width: underlineWidth,
-          opacity: scrollProgress > 0.1 ? Math.min(1, scrollProgress * 1.2) : 0,
+          transform: 'scale3d(0, 1, 1)',
+          opacity: 0,
+          willChange: 'transform, opacity'
         }}
       />
     </div>
@@ -210,30 +219,79 @@ export const Home = () => {
 
   const isManualScrollRef = useRef(false);
   const manualScrollTimerRef = useRef(null);
-  const [scrollY, setScrollY] = useState(0);
   const [currentZoom, setCurrentZoom] = useState(1);
 
-  // Sequential pipeline states:
-  // 1. Live Surveillance appears first -> then Line 1 originates
-  // 2. Pointer reaches destination first -> then next container appears
-  const [liveSurveillanceAppeared, setLiveSurveillanceAppeared] = useState(false);
-  const [line1Reached, setLine1Reached] = useState(false);
-  const [indicatorsAppeared, setIndicatorsAppeared] = useState(false);
-  const [line2Reached, setLine2Reached] = useState(false);
-  const [howItWorksAppeared, setHowItWorksAppeared] = useState(false);
-  const [line3Reached, setLine3Reached] = useState(false);
-
-  // Masthead pin and theme transitions:
-  // Pin when utility bar scrolls out; switch to white theme and enlarge divider when screen turns white
-  const isPinned = scrollY > 40;
-  const isScreenWhite = scrollY > 160;
+  // Masthead pin and theme transitions (only update state when crossing thresholds):
+  const [isPinned, setIsPinned] = useState(false);
+  const [isScreenWhite, setIsScreenWhite] = useState(false);
   const isScrolled = isScreenWhite;
 
-  // Scroll listener: handle both scroll-spy and header merge / title shrink
+  // Zero-rerender GPU-composited refs for the Hero background & content scroll transition
+  const heroBaseDarkRef = useRef(null);
+  const heroGlowRef = useRef(null);
+  const heroWhiteWashRef = useRef(null);
+  const heroRipplesRef = useRef(null);
+  const heroContentRef = useRef(null);
+
+  // Scroll listener: smoothly interpolates Hero GPU layers at 60fps without re-rendering Home
   useEffect(() => {
+    let currentHeroP = Math.min(1, Math.max(0, window.scrollY / 440));
+    let targetHeroP = currentHeroP;
+    let heroTimer = null;
+
+    const applyHeroFrame = (p) => {
+      if (heroBaseDarkRef.current) {
+        heroBaseDarkRef.current.style.opacity = `${Math.max(0, 1 - p * 1.15).toFixed(3)}`;
+      }
+      if (heroGlowRef.current) {
+        const sx = (1 + p * 3.8).toFixed(3);
+        const sy = (1 + p * 3.4).toFixed(3);
+        heroGlowRef.current.style.transform = `scale3d(${sx}, ${sy}, 1)`;
+      }
+      if (heroWhiteWashRef.current) {
+        const washOpacity = Math.pow(p, 1.25);
+        heroWhiteWashRef.current.style.opacity = `${washOpacity.toFixed(3)}`;
+      }
+      if (heroRipplesRef.current) {
+        heroRipplesRef.current.style.opacity = `${Math.max(0, 1 - p * 2.2).toFixed(3)}`;
+      }
+      if (heroContentRef.current) {
+        heroContentRef.current.style.opacity = `${Math.max(0, 1 - p * 1.45).toFixed(3)}`;
+        heroContentRef.current.style.transform = `translate3d(0, -${(p * 36).toFixed(2)}px, 0)`;
+        heroContentRef.current.style.pointerEvents = p > 0.65 ? 'none' : 'auto';
+      }
+    };
+
+    const tickHero = () => {
+      const diff = targetHeroP - currentHeroP;
+      const absDiff = Math.abs(diff);
+      if (absDiff > 0.0015) {
+        const step = Math.sign(diff) * Math.max(0.003, absDiff * 0.16);
+        const clamped = Math.sign(diff) * Math.min(absDiff, Math.abs(step));
+        currentHeroP = Math.max(0, Math.min(1, currentHeroP + clamped));
+        applyHeroFrame(currentHeroP);
+      } else {
+        currentHeroP = targetHeroP;
+        applyHeroFrame(currentHeroP);
+        if (heroTimer) {
+          clearInterval(heroTimer);
+          heroTimer = null;
+        }
+      }
+    };
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
+      targetHeroP = Math.min(1, Math.max(0, currentScrollY / 440));
+
+      if (!heroTimer && Math.abs(targetHeroP - currentHeroP) > 0.0015) {
+        heroTimer = setInterval(tickHero, 16);
+      }
+
+      const nextPinned = currentScrollY > 40;
+      const nextWhite = currentScrollY > 180;
+      setIsPinned((prev) => (prev !== nextPinned ? nextPinned : prev));
+      setIsScreenWhite((prev) => (prev !== nextWhite ? nextWhite : prev));
 
       if (isManualScrollRef.current) return;
 
@@ -241,25 +299,26 @@ export const Home = () => {
       const aboutElem = document.getElementById('aboutus');
       const methodologyElem = document.getElementById('methodology');
 
-      // Check if user is scrolled to the bottom of the page or footer is in view
-      const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 150);
+      const isAtBottom = (window.innerHeight + currentScrollY) >= (document.documentElement.scrollHeight - 150);
       const contactTop = contactElem ? contactElem.getBoundingClientRect().top : Infinity;
 
       if (isAtBottom || contactTop <= window.innerHeight * 0.75) {
-        setActiveNav('contact');
+        setActiveNav((prev) => (prev !== 'contact' ? 'contact' : prev));
       } else if (aboutElem && aboutElem.getBoundingClientRect().top <= 220) {
-        setActiveNav('about');
+        setActiveNav((prev) => (prev !== 'about' ? 'about' : prev));
       } else if (methodologyElem && methodologyElem.getBoundingClientRect().top <= 220) {
-        setActiveNav('methodology');
+        setActiveNav((prev) => (prev !== 'methodology' ? 'methodology' : prev));
       } else {
-        setActiveNav('home');
+        setActiveNav((prev) => (prev !== 'home' ? 'home' : prev));
       }
     };
 
+    applyHeroFrame(currentHeroP);
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      if (heroTimer) clearInterval(heroTimer);
       if (manualScrollTimerRef.current) clearTimeout(manualScrollTimerRef.current);
     };
   }, []);
@@ -284,37 +343,6 @@ export const Home = () => {
     }
   };
 
-  // Dynamic scroll progress for hero white shade expansion:
-  const heroScrollProgress = Math.min(1, Math.max(0, scrollY / 440));
-
-  // Base linear gradient stops shift upward as user scrolls, shrinking the dark pitch purple band at the top
-  const darkShift = Math.round(-heroScrollProgress * 85);
-  const baseLinearBg = `linear-gradient(180deg, #06010F ${darkShift}%, #0D0322 ${darkShift + 25}%, #180538 ${darkShift + 50}%, #290858 ${darkShift + 75}%, #3B0D7D 100%)`;
-
-  // Concentrated radiant glow: lighter shade focused intensely on the middle of the bottom
-  // Initial rx is ~48% (focused on the middle, leaving left & right bottom corners dark)
-  // During scrolling, it expands upward and outward across the screen
-  const yCenter = 100 - heroScrollProgress * 45; // 100% -> 55%
-  const rx = 48 + heroScrollProgress * 205;      // 48% -> 253%
-  const ry = 56 + heroScrollProgress * 155;      // 56% -> 211%
-
-  const whiteCore = Math.min(100, Math.round(6 + heroScrollProgress * 45));
-  const lavenderStop = Math.min(100, Math.round(20 + heroScrollProgress * 46));
-  const softPurpleStop = Math.min(100, Math.round(38 + heroScrollProgress * 42));
-  const midPurpleStop = Math.min(100, Math.round(60 + heroScrollProgress * 30));
-  const outerTransp = Math.min(100, Math.round(80 + heroScrollProgress * 20));
-
-  let expandingGlowBg;
-  if (heroScrollProgress >= 1.0) {
-    expandingGlowBg = '#ffffff';
-  } else if (heroScrollProgress > 0.75) {
-    const whiteTakeover = (heroScrollProgress - 0.75) / 0.25;
-    const wPercent = Math.round(whiteCore + whiteTakeover * (100 - whiteCore));
-    expandingGlowBg = `radial-gradient(ellipse ${rx}% ${ry}% at 50% ${yCenter}%, #ffffff 0%, #ffffff ${wPercent}%, #f3e8ff ${Math.min(100, lavenderStop + 15)}%, rgba(216, 180, 254, ${1 - whiteTakeover}) 100%)`;
-  } else {
-    expandingGlowBg = `radial-gradient(ellipse ${rx}% ${ry}% at 50% ${yCenter}%, #ffffff 0%, #ffffff ${whiteCore}%, #f3e8ff ${lavenderStop}%, #d8b4fe ${softPurpleStop}%, rgba(147, 51, 234, ${0.45 * (1 - heroScrollProgress * 0.5)}) ${midPurpleStop}%, transparent ${outerTransp}%)`;
-  }
-
   return (
     <div className="min-h-screen relative text-slate-800 selection:bg-purple-600 selection:text-white flex flex-col font-sans overflow-x-clip bg-white">
       {/* Official Government Top Utility Bar */}
@@ -322,35 +350,55 @@ export const Home = () => {
         <TopUtilityBar sticky={false} onOpenVoiceModal={() => setIsVoiceModalOpen(true)} />
       </div>
 
-      {/* Hero & Navbar Zone: Dark Pitch Purple with Bottom-Middle Luminous Glow & Capillary Ripples */}
+      {/* Hero & Navbar Zone: GPU-Composited Dark Pitch Purple with Bottom-Middle Luminous Glow & Smooth White Wash */}
       <div
-        className="relative w-full overflow-hidden flex flex-col justify-between"
-        style={{
-          minHeight: '94vh',
-          backgroundColor: heroScrollProgress >= 1.0 ? '#ffffff' : '#070212'
-        }}
+        className="relative w-full overflow-hidden flex flex-col justify-between bg-transparent border-0 outline-none"
+        style={{ minHeight: '94vh' }}
       >
-        {/* Base Atmospheric Linear Gradient: Pitch Dark Purple down to Deep Violet */}
+        {/* Layer 1: Static Base Atmospheric Linear Gradient (GPU translated & faded) */}
         <div
-          className="absolute inset-0 pointer-events-none z-0 transition-opacity duration-150"
+          ref={heroBaseDarkRef}
+          className="absolute -inset-px pointer-events-none z-0 border-0"
           style={{
-            background: baseLinearBg,
-            opacity: heroScrollProgress >= 1.0 ? 0 : 1
+            background: 'linear-gradient(180deg, #06010F 0%, #0D0322 25%, #180538 50%, #290858 75%, #3B0D7D 100%)',
+            willChange: 'transform, opacity'
           }}
         />
 
-        {/* Radiant Bottom-Middle Luminous Glow: White shade becomes bigger & moves upward on scroll */}
+        {/* Layer 2: Static Radiant Bottom-Middle Luminous Glow (GPU scaled outward & upward via scale3d) */}
         <div
-          className="absolute inset-0 pointer-events-none z-0"
+          ref={heroGlowRef}
+          className="absolute -inset-px pointer-events-none z-0 border-0"
           style={{
-            background: expandingGlowBg
+            background: 'radial-gradient(ellipse 48% 56% at 50% 100%, #ffffff 0%, #ffffff 10%, #f3e8ff 24%, #d8b4fe 44%, rgba(147, 51, 234, 0.45) 66%, transparent 88%)',
+            transformOrigin: '50% 100%',
+            willChange: 'transform'
           }}
         />
 
-        {/* Capillary Waves / Circular Ripples Originating from Bottom-Middle */}
+        {/* Layer 3: Pure White Wash Overlay (smoothly fades 0 -> 1 as Hero transitions into white canvas) */}
         <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-0 h-0 pointer-events-none z-0"
-          style={{ opacity: Math.max(0, 1 - heroScrollProgress * 2.5) }}
+          ref={heroWhiteWashRef}
+          className="absolute -inset-px bg-white pointer-events-none z-[1] border-0"
+          style={{
+            opacity: 0,
+            willChange: 'opacity'
+          }}
+        />
+
+        {/* Bottom Seamless Feather Edge: Eliminates any horizontal seam between Hero and White Canvas */}
+        <div
+          className="absolute -bottom-px left-0 right-0 h-20 pointer-events-none z-[3] border-0"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 35%, rgba(255, 255, 255, 0.68) 70%, rgba(255, 255, 255, 0.92) 88%, #ffffff 100%)'
+          }}
+        />
+
+        {/* Layer 4: Capillary Waves / Circular Ripples Originating from Bottom-Middle */}
+        <div
+          ref={heroRipplesRef}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-0 h-0 pointer-events-none z-[2]"
+          style={{ willChange: 'opacity' }}
         >
           {[0, 3.5, 7, 10.5].map((delay, idx) => (
             <div
@@ -560,13 +608,14 @@ export const Home = () => {
           </header>
         </div>
 
-        {/* Main Hero Center Content: Disappears slowly vanishing into the whiteness of the screen on scroll */}
+        {/* Main Hero Center Content: Disappears smoothly into the whiteness of the screen on scroll */}
         <div
-          className="relative z-20 text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16 flex flex-col items-center justify-center flex-1 my-auto transition-transform"
+          ref={heroContentRef}
+          className="relative z-20 text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16 flex flex-col items-center justify-center flex-1 my-auto"
           style={{
-            opacity: Math.max(0, 1 - heroScrollProgress * 1.55),
-            transform: `translateY(-${heroScrollProgress * 36}px)`,
-            pointerEvents: heroScrollProgress > 0.65 ? 'none' : 'auto'
+            opacity: 1,
+            transform: 'translate3d(0, 0px, 0)',
+            willChange: 'opacity, transform'
           }}
         >
           {/* Centered Main Title */}
@@ -683,10 +732,8 @@ export const Home = () => {
 
         {/* Live Institutional Continuous Right-to-Left Marquee Announcement Ticker */}
         <BidirectionalReveal
-          distance={150}
-          offset={0}
-          enabled={true}
-          onAppeared={setLiveSurveillanceAppeared}
+          distance={95}
+          offset={10}
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-0"
         >
           <div className="relative bg-white/95 backdrop-blur-md rounded-lg border-[3px] border-[#2E1065] p-3 flex items-center gap-3 shadow-md">
@@ -712,10 +759,7 @@ export const Home = () => {
         </BidirectionalReveal>
 
         {/* Trail Connector 1: Live Surveillance -> National Indicators */}
-        <ConnectorLine1
-          canStart={liveSurveillanceAppeared}
-          onDestinationReached={setLine1Reached}
-        />
+        <ConnectorLine1 />
 
         {/* Dual-Mode 6-Stat KPI Ribbon & Development Video side-by-side */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -723,10 +767,8 @@ export const Home = () => {
             
             {/* Left Column (7 cols / ~58%): National Developmental Indicators & Fund Flow */}
             <BidirectionalReveal
-              distance={180}
-              offset={0}
-              enabled={line1Reached}
-              onAppeared={setIndicatorsAppeared}
+              distance={150}
+              offset={90}
               className="lg:col-span-7 bg-white/95 rounded-2xl border-[3px] border-[#2E1065] p-4 sm:p-5 shadow-md flex flex-col justify-between space-y-3"
             >
               {/* Header & Dual-Mode Controls */}
@@ -911,10 +953,9 @@ export const Home = () => {
 
             {/* Right Column (5 cols / ~42%): Video in its Original Shape (no border, no container box) */}
             <BidirectionalReveal
-              distance={180}
-              offset={0}
-              delay={0.06}
-              enabled={line1Reached}
+              distance={150}
+              offset={90}
+              delay={0.05}
               className="lg:col-span-5 flex items-center justify-center self-center"
             >
               <video
@@ -946,29 +987,19 @@ export const Home = () => {
         </section>
 
         {/* Trail Connector 2: National Indicators bottom-left -> How it Works? top-center */}
-        <ConnectorLine2
-          canStart={indicatorsAppeared}
-          onDestinationReached={setLine2Reached}
-        />
+        <ConnectorLine2 />
 
         {/* 5. How it Works? Section (Matrix Container) */}
         <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
-          <SystemicVulnerabilitiesFramework
-            canAppear={line2Reached}
-            onAppeared={setHowItWorksAppeared}
-          />
+          <SystemicVulnerabilitiesFramework />
         </section>
 
         {/* Trail Connector 3: Line starting directly from "How it Works?" and splitting into three to connect to the three boxes */}
-        <ConnectorLine3
-          canStart={howItWorksAppeared}
-          onDestinationReached={setLine3Reached}
-        />
+        <ConnectorLine3 />
 
         {/* 6. Three-Column Sentinel Pillars */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
           <ThreeColumnArchitecture
-            canAppear={line3Reached}
             onOpenSlideOver={() => handleOpenSlideOver({
               id: 'MPLAD-2026-00124',
               title: 'Construction of Sub-District Health Center & Oxygen Plant',
@@ -1041,53 +1072,9 @@ export const Home = () => {
               </div>
             </div>
 
-            {/* Right: Symmetrical Column with Prime Minister's E-Governance Quote & Statutory Oversight Pillars */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-6">
+            {/* Right: Prime Minister's E-Governance Quote */}
+            <div className="lg:col-span-5 flex flex-col justify-center">
               <TiltQuoteCard />
-
-              {/* Matching Institutional Architecture Card to Balance Column Symmetry */}
-              <div className="flex-1 p-6 sm:p-7 rounded-2xl bg-white/85 backdrop-blur-md border border-purple-200/70 shadow-lg flex flex-col justify-between space-y-4">
-                <div className="flex items-center justify-between border-b border-purple-100 pb-3">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-purple-700 shrink-0" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-purple-900 font-mono">
-                      Statutory Governance Architecture
-                    </span>
-                  </div>
-                  <span className="px-2 py-0.5 text-[10px] font-bold bg-purple-100 text-purple-800 rounded-md font-mono">
-                    e-SAKSHI 2.0
-                  </span>
-                </div>
-
-                <div className="space-y-3.5 text-xs text-slate-700">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <p>
-                      <strong className="text-slate-900">Direct TSA Fund Routing:</strong> Vendor-level ‘just-in-time’ settlement via PFMS, Reserve Bank of India & SBI network.
-                    </p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <p>
-                      <strong className="text-slate-900">543 Lok Sabha + 245 Rajya Sabha Seats:</strong> Universal digital recommendation, district sanction & live citizen audit.
-                    </p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <p>
-                      <strong className="text-slate-900">AI Forensic Verification:</strong> Automated duplicate photo detection, EXIF GPS validation & fund drift monitoring.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-purple-100 flex items-center justify-between text-[11px] font-semibold text-slate-600">
-                  <span>Annual Entitlement: <strong className="text-purple-900">₹5.00 Cr / MP</strong></span>
-                  <span className="text-emerald-700 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    100% Digital Trail
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
