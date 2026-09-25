@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   FileText,
   MapPin,
@@ -13,32 +14,24 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { BidirectionalReveal } from '../../hooks/useScrollReveal';
 
 export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) => {
   const { isAdmin, isDistrictOfficer } = useAuth();
 
   return (
-    <section className="space-y-6">
-      {/* Header section matching reference */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200/80">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#2E1065] tracking-tight">
-            Smarter Monitoring. Transparent Funds.
-          </h2>
-        </div>
-        <div className="text-right hidden sm:block">
-          <span className="text-sm font-semibold text-purple-800 italic block font-serif">Real projects.</span>
-          <span className="text-sm font-semibold text-purple-800 italic block font-serif">Real impact.</span>
-        </div>
-      </div>
-
+    <div className="space-y-6">
       {/* The Three Sentinel Pillars Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
         
         {/* ================================================================ */}
         {/* COLUMN 1: Evidence & Fraud Checks                                */}
         {/* ================================================================ */}
-        <div className="bg-white/95 rounded-none border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
+        <BidirectionalReveal
+          distance={240}
+          delay={0}
+          className="bg-white/95 rounded-2xl border-[3px] border-[#2E1065] shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow"
+        >
           <div className="space-y-4">
             {/* Header: Circle Number 1 & Title */}
             <div className="flex items-center gap-3.5 pb-2">
@@ -127,12 +120,16 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </Link>
             </div>
           )}
-        </div>
+        </BidirectionalReveal>
 
         {/* ================================================================ */}
         {/* COLUMN 2: AI Risk Scoring Models                                 */}
         {/* ================================================================ */}
-        <div className="bg-white/95 rounded-none border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
+        <BidirectionalReveal
+          distance={240}
+          delay={0.1}
+          className="bg-white/95 rounded-2xl border-[3px] border-[#2E1065] shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow"
+        >
           <div className="space-y-4">
             {/* Header: Circle Number 2 & Title */}
             <div className="flex items-center gap-3.5 pb-2">
@@ -214,12 +211,16 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </Link>
             </div>
           )}
-        </div>
+        </BidirectionalReveal>
 
         {/* ================================================================ */}
         {/* COLUMN 3: Interactive Dashboards & Voice AI                      */}
         {/* ================================================================ */}
-        <div className="bg-white/95 rounded-none border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow">
+        <BidirectionalReveal
+          distance={240}
+          delay={0.2}
+          className="bg-white/95 rounded-2xl border-[3px] border-[#2E1065] shadow-sm p-6 flex flex-col justify-between space-y-5 hover:shadow-md transition-shadow"
+        >
           <div className="space-y-4">
             {/* Header: Circle Number 3 & Title */}
             <div className="flex items-center gap-3.5 pb-2">
@@ -310,9 +311,9 @@ export const ThreeColumnArchitecture = ({ onOpenSlideOver, onOpenVoiceModal }) =
               </button>
             </div>
           )}
-        </div>
+        </BidirectionalReveal>
 
       </div>
-    </section>
+    </div>
   );
 };

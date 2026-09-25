@@ -440,6 +440,60 @@ main, section {
   animation: capillaryWave 14s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
 }
 
+/* Moving Head Pointer Capillary Wave Ripples */
+@keyframes pointerRipple {
+  0% {
+    width: 6px;
+    height: 6px;
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  100% {
+    width: 68px;
+    height: 68px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.6);
+  }
+}
+
+.pointer-ripple-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 9999px;
+  border: 2.5px solid rgba(168, 85, 247, 0.75);
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.6);
+  pointer-events: none;
+  animation: pointerRipple 2.2s cubic-bezier(0.16, 0.8, 0.35, 1) infinite;
+}
+
+/* Live Surveillance Outward Radiating Capillary Waves */
+@keyframes barRipple {
+  0% {
+    inset: -2px;
+    opacity: 0.9;
+    border-radius: 0.65rem;
+    border-width: 3px;
+  }
+  100% {
+    inset: -20px;
+    opacity: 0;
+    border-radius: 1.35rem;
+    border-width: 1px;
+  }
+}
+
+.surveillance-ripple-ring {
+  position: absolute;
+  inset: 0;
+  border-style: solid;
+  border-color: rgba(168, 85, 247, 0.7);
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.45);
+  pointer-events: none;
+  border-radius: inherit;
+  animation: barRipple 3.2s cubic-bezier(0.16, 0.8, 0.35, 1) infinite;
+}
+
 /* ── Frutiger Aero Skeuomorphic Glossy Theme Styles ── */
 .frutiger-gloss-card {
   position: relative;

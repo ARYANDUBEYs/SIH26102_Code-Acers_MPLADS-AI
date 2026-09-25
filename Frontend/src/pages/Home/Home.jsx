@@ -44,6 +44,13 @@ import { AuthModal } from '../../components/common/AuthModal';
 import { TiltQuoteCard } from '../../components/common/TiltQuoteCard';
 import { GlowingParticlesBackground } from '../../components/common/GlowingParticlesBackground';
 import { PentagonCard } from '../../components/common/PentagonCard';
+import { CurvedSquareCard } from '../../components/common/CurvedSquareCard';
+import {
+  ConnectorLine1,
+  ConnectorLine2,
+  ConnectorLine3
+} from '../../components/common/ConnectingTrailLine';
+import { BidirectionalReveal } from '../../hooks/useScrollReveal';
 import {
   AeroplaneArrow,
   AeroplaneSend,
@@ -202,16 +209,20 @@ export const Home = () => {
 
   const isManualScrollRef = useRef(false);
   const manualScrollTimerRef = useRef(null);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [currentZoom, setCurrentZoom] = useState(1);
+
+  // Masthead pin and theme transitions:
+  // Pin when utility bar scrolls out; switch to white theme and enlarge divider when screen turns white
+  const isPinned = scrollY > 40;
+  const isScreenWhite = scrollY > 160;
+  const isScrolled = isScreenWhite;
 
   // Scroll listener: handle both scroll-spy and header merge / title shrink
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
-      setIsScrolled(currentScrollY > 60);
 
       if (isManualScrollRef.current) return;
 
@@ -342,36 +353,31 @@ export const Home = () => {
         {/* Official Masthead / Navbar */}
         <div className="w-full h-20 relative z-40">
           <header
-            className={`transition-all duration-300 w-full z-40 ${
-              isScrolled
-                ? 'fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-purple-200/60 shadow-md text-slate-800'
-                : 'relative bg-transparent border-transparent shadow-none text-white'
+            className={`transition-colors duration-300 w-full z-40 ${
+              isPinned
+                ? isScreenWhite
+                  ? 'fixed top-0 left-0 right-0 bg-white text-slate-800 shadow-none'
+                  : 'fixed top-0 left-0 right-0 bg-transparent text-white'
+                : 'relative bg-transparent text-white'
             }`}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-              {/* Top-Left Brand Slot: Heading "Scheme Guard" with logo JUST APPEARS on scroll */}
+              {/* Top-Left Brand Slot: "Scheme Guard" with logo */}
               <div className="flex items-center gap-3.5 relative min-w-[120px] sm:min-w-[260px]">
-                <div
-                  className="flex items-center gap-3 transition-all duration-300"
-                  style={{
-                    opacity: isScrolled ? 1 : 0,
-                    transform: isScrolled ? 'translateY(0)' : 'translateY(-6px)',
-                    pointerEvents: isScrolled ? 'auto' : 'none'
-                  }}
-                >
+                <div className="flex items-center gap-3 transition-colors duration-200">
                   {/* Ashoka Lion / Shield Emblem */}
-                  <div className="w-10 h-10 rounded-xl bg-[#2E1065] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-200/40 shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-[#2E1065] p-1 flex flex-col items-center justify-center text-white shrink-0 border border-purple-300/30 shadow-xs">
                     <ShieldCheck className="w-5 h-5 text-amber-400" />
                     <span className="text-[7px] font-bold tracking-tighter uppercase font-mono text-white">MoSPI</span>
                   </div>
 
                   <div className="leading-tight">
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-base sm:text-lg tracking-tight text-slate-900 drop-shadow-xs">
+                      <span className={`font-black text-base sm:text-lg tracking-tight ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
                         Scheme Guard
                       </span>
                     </div>
-                    <p className="text-[10px] text-slate-500 font-medium tracking-wide">
+                    <p className={`text-[10px] font-medium tracking-wide ${isScrolled ? 'text-slate-500' : 'text-purple-200/80'}`}>
                       MoSPI • Govt. of India
                     </p>
                   </div>
@@ -521,6 +527,25 @@ export const Home = () => {
                 )}
               </div>
             </div>
+
+            {/* Thin dark purple separation line: ends at points marked with blue marker, enlarges from center as screen becomes white */}
+            <div className="w-full absolute bottom-0 left-0 right-0 pointer-events-none flex justify-center">
+              <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8">
+                <motion.div
+                  className="h-[2px] bg-[#2E1065] w-full origin-center rounded-full"
+                  style={{ transformOrigin: 'center' }}
+                  initial={false}
+                  animate={{
+                    scaleX: isScreenWhite ? 1 : 0,
+                    opacity: isScreenWhite ? 1 : 0
+                  }}
+                  transition={{
+                    scaleX: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+                    opacity: { duration: 0.3, ease: 'easeOut' }
+                  }}
+                />
+              </div>
+            </div>
           </header>
         </div>
 
@@ -643,16 +668,20 @@ export const Home = () => {
       </div>
 
       {/* 4. Main Content Area */}
-      <div className="w-full relative z-10">
+      <div className="w-full relative z-10 py-6">
 
         {/* Live Institutional Continuous Right-to-Left Marquee Announcement Ticker */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-10">
-          <div className="frutiger-gloss-card bg-white rounded-none p-3.5 flex items-center gap-3 overflow-hidden shadow-sm">
-            <div className="px-3 py-1 bg-gradient-to-r from-purple-950 to-indigo-950 text-white text-[10px] font-bold uppercase tracking-wider rounded-xl font-mono shrink-0 flex items-center gap-1.5 border border-purple-400/40 shadow-sm">
+        <BidirectionalReveal distance={180} offset={0} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-0">
+          <div className="relative bg-white/95 backdrop-blur-md rounded-lg border-[3px] border-[#2E1065] p-3 flex items-center gap-3 shadow-md">
+            {/* Outward Capillary Ripple Waves */}
+            <div className="surveillance-ripple-ring" style={{ animationDelay: '0s' }} />
+            <div className="surveillance-ripple-ring" style={{ animationDelay: '1.5s' }} />
+
+            <div className="relative z-10 px-3.5 py-1.5 bg-gradient-to-r from-purple-950 to-indigo-950 text-white text-[10px] font-bold uppercase tracking-wider rounded-lg font-mono shrink-0 flex items-center gap-1.5 border border-purple-400/40 shadow-sm">
               <Activity className="w-3.5 h-3.5 text-purple-300 animate-pulse" />
               <span>Live Surveillance</span>
             </div>
-            <div className="flex-1 overflow-hidden relative">
+            <div className="relative z-10 flex-1 overflow-hidden">
               <div className="animate-marquee-smooth text-xs text-slate-800 font-medium">
                 <span className="pr-12">
                   🔔 <strong className="text-slate-900 font-bold">MoSPI e-SAKSHI 2.0 Alert:</strong> Surveillance active across 543 Lok Sabha Constituencies • ₹83,336.67 Cr funds continuously monitored • Project MPLAD-2026-00124 (Nandurbar) flagged with 87% composite risk due to duplicate image detection • TSA/Hybrid ‘just-in-time’ fund disbursal protocol integrated with PFMS, RBI and SBI.
@@ -663,262 +692,278 @@ export const Home = () => {
               </div>
             </div>
           </div>
-        </div>
+        </BidirectionalReveal>
 
-        {/* Dual-Mode 6-Stat KPI Ribbon */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
-          <div className="frutiger-gloss-card bg-white rounded-none p-6 shadow-md space-y-5">
+        {/* Trail Connector 1: Live Surveillance -> National Indicators */}
+        <ConnectorLine1 />
+
+        {/* Dual-Mode 6-Stat KPI Ribbon & Development Video side-by-side */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            {/* Header & Dual-Mode Controls */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-base sm:text-lg font-black text-[#2E1065]">
-                    National Developmental Indicators & Fund Flow
-                  </h2>
-                </div>
-                <p className="text-xs text-slate-600 font-medium mt-0.5">
-                  Live statistics of works recommended online by Hon'ble Members of Parliament under revised TSA fund procedure
-                </p>
-              </div>
-
-              {/* Mode Switcher Buttons */}
-              <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200 self-stretch sm:self-auto justify-center">
-                <button
-                  type="button"
-                  onClick={() => setKpiMode('statutory')}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    kpiMode === 'statutory'
-                      ? 'bg-white text-[#2E1065] shadow-sm font-black'
-                      : 'text-slate-600 hover:text-slate-950'
-                  }`}
-                >
-                  Statutory e-SAKSHI View
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setKpiMode('ai_vigilance')}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                    kpiMode === 'ai_vigilance'
-                      ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-sm font-black'
-                      : 'text-rose-700 hover:text-rose-900'
-                  }`}
-                >
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  <span>AI Vigilance Layer</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Sub-Tabs for Lok Sabha vs Rajya Sabha (Active in Statutory Mode) */}
-            {kpiMode === 'statutory' && (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setActiveSabha('lok')}
-                  className={`px-3.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                    activeSabha === 'lok'
-                      ? 'bg-gradient-to-b from-purple-900 to-[#2E1065] text-white border-transparent shadow-sm'
-                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                  }`}
-                >
-                  Lok Sabha (543 MPs)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveSabha('rajya')}
-                  className={`px-3.5 py-1 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                    activeSabha === 'rajya'
-                      ? 'bg-gradient-to-b from-purple-900 to-[#2E1065] text-white border-transparent shadow-sm'
-                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                  }`}
-                >
-                  Rajya Sabha (245 MPs)
-                </button>
-              </div>
-            )}
-
-            {/* KPI Pentagon Cards Grid */}
-            <div
-              key={kpiMode + (kpiMode === 'statutory' ? activeSabha : '')}
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5"
+            {/* Left Column (7 cols / ~58%): National Developmental Indicators & Fund Flow */}
+            <BidirectionalReveal
+              distance={240}
+              offset={0}
+              className="lg:col-span-7 bg-white/95 rounded-2xl border-[3px] border-[#2E1065] p-4 sm:p-5 shadow-md flex flex-col justify-between space-y-3"
             >
-              {kpiMode === 'statutory' ? (
-                <>
-                  <PentagonCard
-                    index={0}
-                    inView={true}
-                    title="Entitlement (FY)"
-                    value="₹5.00 Cr"
-                    subtitle="Per MP / Year"
-                    variant="purple"
-                    borderColor="#7e22ce"
-                    bgColor="bg-white"
-                  />
-                  <PentagonCard
-                    index={1}
-                    inView={true}
-                    title="TSA Pooled Fund"
-                    value={`₹${nationalKpis.totalFundsCr || '8,333.67'} Cr`}
-                    subtitle="Active Allocations"
-                    variant="blue"
-                    borderColor="#6b21a8"
-                    bgColor="bg-white"
-                  />
-                  <PentagonCard
-                    index={2}
-                    inView={true}
-                    title="Works Recommended"
-                    value={activeSabha === 'lok' ? '33,123' : '8,410'}
-                    subtitle="Digital Submissions"
-                    variant="default"
-                    borderColor="#94a3b8"
-                    bgColor="bg-white"
-                  />
-                  <PentagonCard
-                    index={3}
-                    inView={true}
-                    title="Works Sanctioned"
-                    value={activeSabha === 'lok' ? '28,450' : '6,920'}
-                    subtitle="Feasibility Passed"
-                    variant="purple"
-                    borderColor="#7e22ce"
-                    bgColor="bg-white"
-                  />
-                  <PentagonCard
-                    index={4}
-                    inView={true}
-                    title="Works Completed"
-                    value={activeSabha === 'lok' ? '21,200' : '5,140'}
-                    subtitle="Assets Built & Verified"
-                    variant="success"
-                    borderColor="#059669"
-                    bgColor="bg-white"
-                  />
-                  <PentagonCard
-                    index={5}
-                    inView={true}
-                    title="Total Expenditure"
-                    value={activeSabha === 'lok' ? '₹46,210 Cr' : '₹9,840 Cr'}
-                    subtitle="PFMS Disbursals"
-                    variant="warning"
-                    borderColor="#d97706"
-                    bgColor="bg-white"
-                  />
-                </>
-              ) : (
-                <>
-                  <PentagonCard
-                    index={0}
-                    inView={true}
-                    title="AI Monitored Works"
-                    value={String(nationalKpis.projectsMonitored || 8420)}
-                    subtitle="100% Geotagged MBs"
-                    variant="blue"
-                    borderColor="#0284c7"
-                    bgColor="bg-sky-50/60"
-                  />
-                  <PentagonCard
-                    index={1}
-                    inView={true}
-                    title="Anomalies Flagged"
-                    value={String(nationalKpis.anomaliesDetected || 142)}
-                    subtitle="Continuous Watch"
-                    variant="danger"
-                    borderColor="#e11d48"
-                    bgColor="bg-rose-50/60"
-                  />
-                  <PentagonCard
-                    index={2}
-                    inView={true}
-                    title="High-Risk Queue"
-                    value={String(nationalKpis.highRiskProjects || 38)}
-                    subtitle="Composite > 70"
-                    variant="danger"
-                    borderColor="#dc2626"
-                    bgColor="bg-rose-50/60"
-                  />
-                  <PentagonCard
-                    index={3}
-                    inView={true}
-                    title="Cartels Detected"
-                    value="14 Rings"
-                    subtitle="HHI Index > 2500"
-                    variant="warning"
-                    borderColor="#d97706"
-                    bgColor="bg-amber-50/60"
-                  />
-                  <PentagonCard
-                    index={4}
-                    inView={true}
-                    title="Duplicate Intercept"
-                    value="96.4%"
-                    subtitle="OpenCV 64-bit dHash"
-                    variant="success"
-                    borderColor="#059669"
-                    bgColor="bg-emerald-50/60"
-                  />
-                  <PentagonCard
-                    index={5}
-                    inView={true}
-                    title="Disbursals on Hold"
-                    value="₹412.5 Cr"
-                    subtitle="Milestone Holds"
-                    variant="purple"
-                    borderColor="#9333ea"
-                    bgColor="bg-purple-50/60"
-                  />
-                </>
+              {/* Header & Dual-Mode Controls */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-purple-100 pb-2.5">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-sm sm:text-base font-black text-[#2E1065]">
+                      National Developmental Indicators & Fund Flow
+                    </h2>
+                  </div>
+                  <p className="text-[10.5px] text-slate-500 font-medium mt-0.5">
+                    Live statistics of works recommended online by Hon'ble MPs under revised TSA fund procedure
+                  </p>
+                </div>
+
+                {/* Mode Switcher Buttons */}
+                <div className="flex items-center gap-1.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200 self-stretch sm:self-auto justify-center shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setKpiMode('statutory')}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+                      kpiMode === 'statutory'
+                        ? 'bg-white text-[#2E1065] shadow-xs font-black'
+                        : 'text-slate-600 hover:text-slate-950'
+                    }`}
+                  >
+                    Statutory View
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setKpiMode('ai_vigilance')}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      kpiMode === 'ai_vigilance'
+                        ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-xs font-black'
+                        : 'text-rose-700 hover:text-rose-900'
+                    }`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                    <span>AI Vigilance</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Sub-Tabs for Lok Sabha vs Rajya Sabha (Statutory Mode) */}
+              {kpiMode === 'statutory' && (
+                <div className="flex items-center gap-2 -mt-1">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSabha('lok')}
+                    className={`px-3 py-0.5 rounded-lg text-[11px] font-bold transition-all border cursor-pointer ${
+                      activeSabha === 'lok'
+                        ? 'bg-gradient-to-b from-purple-900 to-[#2E1065] text-white border-transparent shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    Lok Sabha (543 MPs)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveSabha('rajya')}
+                    className={`px-3 py-0.5 rounded-lg text-[11px] font-bold transition-all border cursor-pointer ${
+                      activeSabha === 'rajya'
+                        ? 'bg-gradient-to-b from-purple-900 to-[#2E1065] text-white border-transparent shadow-xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    Rajya Sabha (245 MPs)
+                  </button>
+                </div>
               )}
-            </div>
+
+              {/* 3 columns × 2 rows of Compact CurvedSquareCard (with upward blur reveal) */}
+              <div
+                key={kpiMode + (kpiMode === 'statutory' ? activeSabha : '')}
+                className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5"
+              >
+                {kpiMode === 'statutory' ? (
+                  <>
+                    <CurvedSquareCard
+                      index={0}
+                      title="Entitlement (FY)"
+                      value="₹5.00 Cr"
+                      subtitle="Per MP / Year"
+                      variant="purple"
+                      borderColor="#7e22ce"
+                    />
+                    <CurvedSquareCard
+                      index={1}
+                      title="TSA Pooled Fund"
+                      value={`₹${nationalKpis.totalFundsCr || '8,333.67'} Cr`}
+                      subtitle="Active Allocations"
+                      variant="blue"
+                      borderColor="#6b21a8"
+                    />
+                    <CurvedSquareCard
+                      index={2}
+                      title="Works Recommended"
+                      value={activeSabha === 'lok' ? '33,123' : '8,410'}
+                      subtitle="Digital Submissions"
+                      variant="default"
+                      borderColor="#94a3b8"
+                    />
+                    <CurvedSquareCard
+                      index={3}
+                      title="Works Sanctioned"
+                      value={activeSabha === 'lok' ? '28,450' : '6,920'}
+                      subtitle="Feasibility Passed"
+                      variant="purple"
+                      borderColor="#7e22ce"
+                    />
+                    <CurvedSquareCard
+                      index={4}
+                      title="Works Completed"
+                      value={activeSabha === 'lok' ? '21,200' : '5,140'}
+                      subtitle="Assets Built & Verified"
+                      variant="success"
+                      borderColor="#059669"
+                    />
+                    <CurvedSquareCard
+                      index={5}
+                      title="Total Expenditure"
+                      value={activeSabha === 'lok' ? '₹46,210 Cr' : '₹9,840 Cr'}
+                      subtitle="PFMS Disbursals"
+                      variant="warning"
+                      borderColor="#d97706"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <CurvedSquareCard
+                      index={0}
+                      title="AI Monitored Works"
+                      value={String(nationalKpis.projectsMonitored || 8420)}
+                      subtitle="100% Geotagged MBs"
+                      variant="blue"
+                      borderColor="#0284c7"
+                    />
+                    <CurvedSquareCard
+                      index={1}
+                      title="Anomalies Flagged"
+                      value={String(nationalKpis.anomaliesDetected || 142)}
+                      subtitle="Continuous Watch"
+                      variant="danger"
+                      borderColor="#e11d48"
+                    />
+                    <CurvedSquareCard
+                      index={2}
+                      title="High-Risk Queue"
+                      value={String(nationalKpis.highRiskProjects || 38)}
+                      subtitle="Composite > 70"
+                      variant="danger"
+                      borderColor="#dc2626"
+                    />
+                    <CurvedSquareCard
+                      index={3}
+                      title="Cartels Detected"
+                      value="14 Rings"
+                      subtitle="HHI Index > 2500"
+                      variant="warning"
+                      borderColor="#d97706"
+                    />
+                    <CurvedSquareCard
+                      index={4}
+                      title="Duplicate Intercept"
+                      value="96.4%"
+                      subtitle="OpenCV 64-bit dHash"
+                      variant="success"
+                      borderColor="#059669"
+                    />
+                    <CurvedSquareCard
+                      index={5}
+                      title="Disbursals on Hold"
+                      value="₹412.5 Cr"
+                      subtitle="Milestone Holds"
+                      variant="purple"
+                      borderColor="#9333ea"
+                    />
+                  </>
+                )}
+              </div>
+            </BidirectionalReveal>
+
+            {/* Right Column (5 cols / ~42%): Video in its Original Shape (no border, no container box) */}
+            <BidirectionalReveal
+              distance={240}
+              offset={0}
+              delay={0.1}
+              className="lg:col-span-5 flex items-center justify-center self-center"
+            >
+              <video
+                ref={(video) => {
+                  if (video) {
+                    video.defaultMuted = true;
+                    video.muted = true;
+                    video.play().catch(() => {});
+                    const resumeOnAction = () => {
+                      if (video.paused) {
+                        video.play().catch(() => {});
+                      }
+                    };
+                    window.addEventListener('scroll', resumeOnAction, { once: true, passive: true });
+                    window.addEventListener('click', resumeOnAction, { once: true, passive: true });
+                    window.addEventListener('touchstart', resumeOnAction, { once: true, passive: true });
+                  }
+                }}
+                src="/Development_illus_video.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                className="w-full h-auto max-w-full"
+              />
+            </BidirectionalReveal>
           </div>
         </section>
 
-      {/* 6. Methodology & Working Principle Section (Systemic Vulnerabilities + Algorithmic Vigilance) */}
-      <section id="methodology" className="relative z-20 w-full bg-transparent pb-20 pt-8 mb-0 scroll-mt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <TypewriterHeading
-              text="How It Works: Continuous Vigilance & Public Fund Safeguards"
-              className="text-lg sm:text-2xl lg:text-[1.85rem] font-extrabold text-[#2E1065] tracking-tight leading-snug"
-            />
-          </div>
+        {/* Trail Connector 2: National Indicators bottom-left -> How it Works? top-center */}
+        <ConnectorLine2 />
 
-          {/* Part A: Systemic Vulnerabilities & Countermeasures Matrix */}
+        {/* 5. How it Works? Section (Matrix Container) */}
+        <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
           <SystemicVulnerabilitiesFramework />
+        </section>
 
-          {/* Part B: Three-Column Core Intelligence Engine */}
-          <div className="pt-4">
-            <ThreeColumnArchitecture
-              onOpenSlideOver={() => handleOpenSlideOver({
-                id: 'MPLAD-2026-00124',
-                title: 'Construction of Sub-District Health Center & Oxygen Plant',
-                district: 'Nandurbar',
-                state: 'Maharashtra',
-                sanctionedAmount: 4850000,
-                disbursedAmount: 3637500,
-                spentAmount: 3880000,
-                status: 'IN_PROGRESS',
-                riskScore: 87,
-                riskLevel: 'HIGH',
-                contractor: 'Apex Infra & BuildTech Pvt Ltd',
-                flags: ['Duplicate Photo Reused from Solapur', 'Financial Drift +5.0%']
-              })}
-              onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
-            />
-          </div>
-        </div>
-      </section>
+        {/* Trail Connector 3: Line starting directly from "How it Works?" and splitting into three to connect to the three boxes */}
+        <ConnectorLine3 />
+
+        {/* 6. Three-Column Sentinel Pillars */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
+          <ThreeColumnArchitecture
+            onOpenSlideOver={() => handleOpenSlideOver({
+              id: 'MPLAD-2026-00124',
+              title: 'Construction of Sub-District Health Center & Oxygen Plant',
+              district: 'Nandurbar',
+              state: 'Maharashtra',
+              sanctionedAmount: 4850000,
+              disbursedAmount: 3637500,
+              spentAmount: 3880000,
+              status: 'IN_PROGRESS',
+              riskScore: 87,
+              riskLevel: 'HIGH',
+              contractor: 'Apex Infra & BuildTech Pvt Ltd',
+              flags: ['Duplicate Photo Reused from Solapur', 'Financial Drift +5.0%']
+            })}
+            onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+          />
+        </section>
+
       </div>
 
       {/* Institutional Boundary Divider Between Methodology and Statutory Overview */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6 w-full">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-16 sm:my-20 w-full">
         <div className="h-px bg-gradient-to-r from-transparent via-purple-300/60 to-transparent" />
       </div>
 
       {/* 7. Statutory "About the Scheme" Section (Verbatim e-SAKSHI Narrative) */}
-      <section id="aboutus" className="relative z-20 w-full bg-transparent py-20 px-4 sm:px-6 lg:px-8 scroll-mt-32">
-        <div className="max-w-6xl mx-auto space-y-16">
+      <section id="aboutus" className="relative z-20 w-full bg-transparent py-24 sm:py-32 px-4 sm:px-6 lg:px-8 scroll-mt-32">
+        <BidirectionalReveal distance={260} offset={0} className="max-w-6xl mx-auto space-y-16">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left: Statutory Narrative */}
@@ -964,7 +1009,7 @@ export const Home = () => {
             </div>
           </div>
 
-        </div>
+        </BidirectionalReveal>
       </section>
 
       {/* 8. Institutional Footer */}

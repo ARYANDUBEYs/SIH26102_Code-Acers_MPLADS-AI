@@ -15,6 +15,7 @@ import {
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BidirectionalReveal } from '../../hooks/useScrollReveal';
 
 export const SystemicVulnerabilitiesFramework = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -124,20 +125,25 @@ export const SystemicVulnerabilitiesFramework = () => {
 
   const current = pillars[activeTab];
   return (
-    <div className="bg-white/95 border border-slate-200 rounded-none shadow-lg overflow-hidden backdrop-blur-md">
+    <div className="relative">
+      <BidirectionalReveal
+        distance={260}
+        offset={0}
+        className="bg-white/95 border-[3px] border-[#2E1065] rounded-2xl shadow-xl overflow-hidden backdrop-blur-md"
+      >
       {/* Top Header with Institutional Deep Gradient */}
-      <div className="relative py-8 px-6 sm:px-10 bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#3B1259] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
+      <div className="relative py-10 px-6 sm:px-12 bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#3B1259] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden shadow-sm">
         {/* Specular aurora highlight sheen */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative z-10">
           <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
-            How the System Protects Public Money
+            How it Works?
           </h3>
         </div>
       </div>
 
-      {/* Frutiger Aero Glossy Tab Selector Buttons */}
-      <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 p-2.5 gap-2 scrollbar-thin">
+      {/* Frutiger Aero Glossy Tab Selector Buttons with generous padding */}
+      <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 p-3.5 sm:p-4 gap-2.5 sm:gap-3.5 scrollbar-thin">
         {pillars.map((p, idx) => {
           const Icon = p.icon;
           const isActive = idx === activeTab;
@@ -145,35 +151,35 @@ export const SystemicVulnerabilitiesFramework = () => {
             <button
               key={p.id}
               onClick={() => setActiveTab(idx)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+              className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-b from-white via-white to-purple-50 text-[#2E1065] shadow-md border border-purple-200 font-black scale-[1.02]'
                   : 'text-slate-600 hover:text-purple-900 hover:bg-white/80 border border-transparent'
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-purple-700' : 'text-slate-500'}`} />
+              <Icon className={`w-4 h-4 ${isActive ? 'text-purple-700' : 'text-slate-500'}`} />
               <span>{p.shortName}</span>
             </button>
           );
         })}
       </div>
 
-      {/* Tab Content Display */}
-      <div className="p-6 lg:p-8 space-y-6">
+      {/* Tab Content Display with increased breathing room */}
+      <div className="p-8 lg:p-12 space-y-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="space-y-6"
+            className="space-y-8"
           >
             {/* Title with Glossy Orb and Blue Circular Info Icon */}
-            <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
-              <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-full frutiger-bubble-icon text-purple-800 flex items-center justify-center shrink-0 shadow-sm">
-                  <current.icon className="w-5 h-5 text-purple-800" />
+            <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-5">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full frutiger-bubble-icon text-purple-800 flex items-center justify-center shrink-0 shadow-sm">
+                  <current.icon className="w-6 h-6 text-purple-800" />
                 </div>
                 <div>
                   <h4 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{current.name}</h4>
@@ -184,7 +190,7 @@ export const SystemicVulnerabilitiesFramework = () => {
               <button
                 type="button"
                 onClick={() => setIsSafeguardModalOpen(true)}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2E1065] hover:bg-[#1E0A45] active:scale-95 text-white flex items-center justify-center shadow-md hover:shadow-lg ring-2 ring-purple-400/30 hover:ring-4 hover:ring-purple-300/40 transition-all hover:scale-110 cursor-pointer shrink-0"
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#2E1065] hover:bg-[#1E0A45] active:scale-95 text-white flex items-center justify-center shadow-md hover:shadow-lg ring-2 ring-purple-400/30 hover:ring-4 hover:ring-purple-300/40 transition-all hover:scale-110 cursor-pointer shrink-0"
                 title="View Key Safeguard Measures"
                 aria-label="View Key Safeguard Measures"
               >
@@ -193,9 +199,9 @@ export const SystemicVulnerabilitiesFramework = () => {
             </div>
 
             {/* Split: Problem vs Solution in Harmonious Frutiger Aero Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7">
               {/* Problem Card */}
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-white via-white/95 to-rose-50/40 border border-rose-200/70 shadow-sm space-y-2.5 hover:shadow-md transition-shadow">
+              <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-white via-white/95 to-rose-50/40 border border-rose-200/70 shadow-sm space-y-3 hover:shadow-md transition-shadow">
                 <div className="text-rose-700 text-xs font-bold uppercase tracking-wider">
                   The Problem It Solves
                 </div>
@@ -205,7 +211,7 @@ export const SystemicVulnerabilitiesFramework = () => {
               </div>
 
               {/* Solution Card */}
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-white via-white/95 to-emerald-50/30 border border-emerald-200/60 shadow-sm space-y-2.5 hover:shadow-md transition-shadow">
+              <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-white via-white/95 to-emerald-50/30 border border-emerald-200/60 shadow-sm space-y-3 hover:shadow-md transition-shadow">
                 <div className="text-emerald-800 text-xs font-bold uppercase tracking-wider">
                   How We Solve It
                 </div>
@@ -216,17 +222,18 @@ export const SystemicVulnerabilitiesFramework = () => {
             </div>
 
             {/* Enforcement Rule Banner in Frutiger Aero Glass Security Style */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#1E0A45] text-white border border-purple-400/20 space-y-2.5 shadow-md backdrop-blur-md">
+            <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#1E0A45] via-[#2E1065] to-[#1E0A45] text-white border border-purple-400/20 space-y-3 shadow-md backdrop-blur-md">
               <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 High-Assurance Operational Rule
               </div>
-              <div className="text-xs sm:text-sm font-medium text-purple-100 bg-white/10 p-3.5 rounded-xl border border-white/15 leading-relaxed shadow-inner">
+              <div className="text-xs sm:text-sm font-medium text-purple-100 bg-white/10 p-4 rounded-xl border border-white/15 leading-relaxed shadow-inner">
                 {current.mathProof}
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
+    </BidirectionalReveal>
 
       {/* Safeguard Measures Pop-Up Modal */}
       <AnimatePresence>
