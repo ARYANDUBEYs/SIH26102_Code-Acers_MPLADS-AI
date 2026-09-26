@@ -81,11 +81,11 @@ export const DistrictDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
+    <div className="space-y-8 max-w-7xl mx-auto pb-16">
       {/* ======================================================================= */}
       {/* 1. TOP HEADER SECTION (MATCHING media_1789367492438.png)                 */}
       {/* ======================================================================= */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-2">
         {/* Left: Official State Emblem with Satyameva Jayate + Title + District Jurisdiction */}
         <div className="flex items-center gap-3.5">
           <img
@@ -125,112 +125,71 @@ export const DistrictDashboard = () => {
       </div>
 
       {/* ======================================================================= */}
-      {/* 2. FOUR PASTEL PENTAGON METRIC CARDS (Border on 1 & 2 only)             */}
+      {/* 2. FOUR METRIC CARDS (BankLY Pattern 1)                                   */}
       {/* ======================================================================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        {/* Card 1: Pending Sanctions (Sky Blue) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Card 1: Pending Sanctions */}
         <PentagonCard
           index={0}
           onClick={() => navigate('/district/pending')}
-          bgColor="bg-[#EEF6FF]"
-          borderColor="#2563EB"
-          className="group cursor-pointer"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-[#DCEBFE] flex items-center justify-center text-[#2563EB] shrink-0 group-hover:scale-105 transition-transform">
-                <ShieldCheck className="w-6 h-6 text-[#2563EB]" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-700">Pending Sanctions</p>
-                <p className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">24</p>
-                <p className="text-xs font-semibold text-[#2563EB] mt-0.5">+4 new today</p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
-          </div>
-        </PentagonCard>
+          title="Pending Sanctions"
+          value="24"
+          trend="+4 new today"
+          trendPositive={true}
+          icon={ShieldCheck}
+          variant="purple"
+          className="hover:border-blue-400/80"
+        />
 
-        {/* Card 2: SLA Breaches Imminent (Rose Pink) */}
+        {/* Card 2: SLA Breaches Imminent */}
         <PentagonCard
           index={1}
           onClick={() => navigate('/sla')}
-          bgColor="bg-[#FFF1F2]"
-          borderColor="#E11D48"
-          className="group cursor-pointer"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-[#FFE2E5] flex items-center justify-center text-[#E11D48] shrink-0 group-hover:scale-105 transition-transform">
-                <Clock className="w-6 h-6 text-[#E11D48]" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-700">SLA Breaches Imminent</p>
-                <p className="text-2xl sm:text-3xl font-black text-[#E11D48] mt-0.5">7</p>
-                <p className="text-xs font-semibold text-[#E11D48] mt-0.5">3 critical (&lt;48h)</p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
-          </div>
-        </PentagonCard>
+          title="SLA Breaches Imminent"
+          value="7"
+          trend="3 critical (<48h)"
+          trendPositive={false}
+          icon={Clock}
+          variant="danger"
+          className="hover:border-rose-400/80"
+        />
 
-        {/* Card 3: AI Photo Discrepancies (Soft Amber) */}
+        {/* Card 3: AI Photo Discrepancies */}
         <PentagonCard
           index={2}
           onClick={() => navigate('/district/photo-validation')}
-          bgColor="bg-[#FFFBEB]"
-          borderColor="#D97706"
-          className="group cursor-pointer"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-[#FEF3C7] flex items-center justify-center text-[#D97706] shrink-0 group-hover:scale-105 transition-transform">
-                <AlertTriangle className="w-6 h-6 text-[#D97706]" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-700">AI Photo Discrepancies</p>
-                <p className="text-2xl sm:text-3xl font-black text-[#B45309] mt-0.5">13</p>
-                <p className="text-xs font-semibold text-[#D97706] mt-0.5">Requires physical audit</p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
-          </div>
-        </PentagonCard>
+          title="AI Photo Discrepancies"
+          value="13"
+          subtitle="Requires physical audit"
+          icon={AlertTriangle}
+          variant="warning"
+          className="hover:border-amber-400/80"
+        />
 
-        {/* Card 4: Certified Completed Works (Soft Emerald) */}
+        {/* Card 4: Certified Completed Works */}
         <PentagonCard
           index={3}
           onClick={() => navigate('/projects')}
-          bgColor="bg-[#F0FDF4]"
-          borderColor="#16A34A"
-          className="group cursor-pointer"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A] shrink-0 group-hover:scale-105 transition-transform">
-                <CheckCircle2 className="w-6 h-6 text-[#16A34A]" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-700">Certified Completed Works</p>
-                <p className="text-2xl sm:text-3xl font-black text-[#15803D] mt-0.5">148</p>
-                <p className="text-xs font-semibold text-[#16A34A] mt-0.5">+12 this month</p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
-          </div>
-        </PentagonCard>
+          title="Certified Completed Works"
+          value="148"
+          trend="+12 this month"
+          trendPositive={true}
+          icon={CheckCircle2}
+          variant="success"
+          className="hover:border-emerald-400/80"
+        />
       </div>
 
       {/* ======================================================================= */}
-      {/* 3. ROW 2: TWO OPERATIONAL DESKS (MATCHING media_1789367492438.png)        */}
+      {/* 3. ROW 2: TWO OPERATIONAL DESKS (BankLY Pattern 5 & 10)                  */}
       {/* ======================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         {/* Desk 1: Pre-Screening Desk */}
-        <div className="bg-white rounded-none border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8 space-y-6">
           {/* Header */}
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-[#EFF6FF] flex items-center justify-center text-[#2563EB] shrink-0">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#2563EB] shrink-0 border border-blue-100">
                 <Tv className="w-5 h-5 text-[#2563EB]" />
               </div>
               <div>
@@ -243,7 +202,7 @@ export const DistrictDashboard = () => {
             <button
               type="button"
               onClick={() => navigate('/district/pre-screening')}
-              className="px-3.5 py-1.5 rounded-xl bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-bold border border-[#BFDBFE] flex items-center gap-1 transition cursor-pointer shrink-0"
+              className="px-3.5 py-1.5 rounded-xl bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-bold border border-[#BFDBFE] flex items-center gap-1.5 transition cursor-pointer shrink-0 shadow-2xs hover:shadow-xs"
             >
               <span>Launch Pre-Screening</span>
               <span aria-hidden="true">&rarr;</span>
@@ -251,19 +210,19 @@ export const DistrictDashboard = () => {
           </div>
 
           {/* List Rows */}
-          <div className="space-y-3 pt-1">
+          <div className="space-y-3 pt-2">
             {/* Row 1: Patna Smart Classroom (PASSED) */}
             <div
               onClick={() => navigate('/district/pre-screening')}
-              className="p-3.5 rounded-xl bg-[#F8FAFC] border border-slate-100 hover:border-slate-200 transition flex items-center justify-between gap-3 cursor-pointer"
+              className="p-4 sm:p-4.5 rounded-xl bg-slate-50/70 border border-slate-200/60 hover:border-slate-300 hover:bg-slate-50 transition flex items-center justify-between gap-4 cursor-pointer group"
             >
-              <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] shrink-0" />
+              <div className="flex items-center gap-3.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] shrink-0 ring-4 ring-emerald-50" />
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-slate-900">
+                  <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">
                     Patna Digital Smart Classroom (MPLAD-00089)
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-slate-500 mt-0.5">
                     All 5 AI integrity checks passed • 18/100 Low Risk
                   </p>
                 </div>
@@ -276,15 +235,15 @@ export const DistrictDashboard = () => {
             {/* Row 2: Varanasi Rural Road (AUDIT REQ) */}
             <div
               onClick={() => navigate('/project/MPLAD-2026-00124')}
-              className="p-3.5 rounded-xl bg-[#F8FAFC] border border-slate-100 hover:border-slate-200 transition flex items-center justify-between gap-3 cursor-pointer"
+              className="p-4 sm:p-4.5 rounded-xl bg-slate-50/70 border border-slate-200/60 hover:border-slate-300 hover:bg-slate-50 transition flex items-center justify-between gap-4 cursor-pointer group"
             >
-              <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#E11D48] shrink-0" />
+              <div className="flex items-center gap-3.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#E11D48] shrink-0 ring-4 ring-rose-50" />
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-slate-900">
+                  <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-rose-700 transition-colors">
                     Varanasi Rural Road (MPLAD-00124)
                   </p>
-                  <p className="text-[11px] text-rose-500 font-medium mt-0.5">
+                  <p className="text-[11px] text-rose-600 font-medium mt-0.5">
                     Photo duplicate detected (96%) • 87/100 High Risk
                   </p>
                 </div>
@@ -297,11 +256,11 @@ export const DistrictDashboard = () => {
         </div>
 
         {/* Desk 2: Photo Evidence Forensic Desk */}
-        <div className="bg-white rounded-none border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8 space-y-6">
           {/* Header */}
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-[#FAF5FF] flex items-center justify-center text-[#9333EA] shrink-0">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF5FF] flex items-center justify-center text-[#9333EA] shrink-0 border border-purple-100">
                 <Camera className="w-5 h-5 text-[#9333EA]" />
               </div>
               <div>
@@ -314,7 +273,7 @@ export const DistrictDashboard = () => {
             <button
               type="button"
               onClick={() => navigate('/district/photo-validation')}
-              className="px-3.5 py-1.5 rounded-xl bg-[#FAF5FF] hover:bg-[#F3E8FF] text-[#9333EA] text-xs font-bold border border-[#E9D5FF] flex items-center gap-1 transition cursor-pointer shrink-0"
+              className="px-3.5 py-1.5 rounded-xl bg-[#FAF5FF] hover:bg-[#F3E8FF] text-[#9333EA] text-xs font-bold border border-[#E9D5FF] flex items-center gap-1.5 transition cursor-pointer shrink-0 shadow-2xs hover:shadow-xs"
             >
               <span>Photo Lab</span>
               <span aria-hidden="true">&rarr;</span>
@@ -322,8 +281,8 @@ export const DistrictDashboard = () => {
           </div>
 
           {/* Photo Preview Item */}
-          <div className="pt-1">
-            <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-slate-100 flex items-center justify-between gap-4">
+          <div className="pt-2">
+            <div className="p-4 sm:p-4.5 rounded-xl bg-slate-50/70 border border-slate-200/60 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5 min-w-0">
                 <img
                   src="/projects/ruralroad.jpg"
@@ -332,7 +291,7 @@ export const DistrictDashboard = () => {
                     e.currentTarget.src = "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=300&auto=format&fit=crop&q=80";
                   }}
                   alt="Rural Road Progress Evidence"
-                  className="w-14 h-14 rounded-lg object-cover border border-slate-200 shadow-xs shrink-0"
+                  className="w-14 h-14 rounded-xl object-cover border border-slate-200 shadow-2xs shrink-0"
                 />
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
@@ -344,7 +303,7 @@ export const DistrictDashboard = () => {
                   <p className="text-xs sm:text-sm font-bold text-slate-900 truncate mt-1">
                     Rural Road Construction & Paver Block
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-slate-500 mt-0.5">
                     Location: Chiraigaon Block, Varanasi
                   </p>
                 </div>
@@ -353,7 +312,7 @@ export const DistrictDashboard = () => {
               <button
                 type="button"
                 onClick={() => navigate('/district/photo-validation')}
-                className="px-4 py-1.5 rounded-xl bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-semibold border border-[#BFDBFE] transition cursor-pointer shrink-0"
+                className="px-4 py-2 rounded-xl bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-xs font-bold border border-[#BFDBFE] transition cursor-pointer shrink-0 shadow-2xs hover:shadow-xs"
               >
                 Verify
               </button>
@@ -363,13 +322,13 @@ export const DistrictDashboard = () => {
       </div>
 
       {/* ======================================================================= */}
-      {/* 4. ROW 3: DISTRICT SANCTION & APPROVAL TRIAGE (MATCHING media_1789367492438.png) */}
+      {/* 4. ROW 3: DISTRICT SANCTION & APPROVAL TRIAGE (BankLY Pattern 5 & 10)    */}
       {/* ======================================================================= */}
-      <div className="bg-white rounded-none border border-slate-200/80 shadow-2xs p-5 sm:p-6 space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8 space-y-6">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 pb-2">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-[#EFF6FF] flex items-center justify-center text-[#2563EB] shrink-0">
+        <div className="flex items-start justify-between gap-4 pb-2">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-[#2563EB] shrink-0 border border-blue-100">
               <ListFilter className="w-5 h-5 text-[#2563EB]" />
             </div>
             <div>
@@ -391,16 +350,16 @@ export const DistrictDashboard = () => {
         </div>
 
         {/* Triage Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-slate-200/80">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-100 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                <th className="py-3 px-3">Project ID</th>
-                <th className="py-3 px-3">Project Name & Agency</th>
-                <th className="py-3 px-3">Sanction Amount</th>
-                <th className="py-3 px-3">AI Risk Level</th>
-                <th className="py-3 px-3">Action Needed</th>
-                <th className="py-3 px-3 text-right">Action</th>
+              <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <th className="py-3.5 px-4 sm:px-5">Project ID</th>
+                <th className="py-3.5 px-4 sm:px-5">Project Name & Agency</th>
+                <th className="py-3.5 px-4 sm:px-5">Sanction Amount</th>
+                <th className="py-3.5 px-4 sm:px-5">AI Risk Level</th>
+                <th className="py-3.5 px-4 sm:px-5">Action Needed</th>
+                <th className="py-3.5 px-4 sm:px-5 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
@@ -416,12 +375,12 @@ export const DistrictDashboard = () => {
                     onClick={() => navigate(`/project/${row.id}`)}
                   >
                     {/* Project ID */}
-                    <td className="py-3.5 px-3 font-mono font-bold text-[#2563EB] group-hover:underline whitespace-nowrap">
+                    <td className="py-4 px-4 sm:px-5 font-mono font-bold text-[#2563EB] group-hover:underline whitespace-nowrap">
                       {row.id}
                     </td>
 
                     {/* Project Name & Agency */}
-                    <td className="py-3.5 px-3 max-w-xs sm:max-w-md">
+                    <td className="py-4 px-4 sm:px-5 max-w-xs sm:max-w-md">
                       <p className="font-bold text-slate-900 truncate">{row.name}</p>
                       <p className="text-[11px] text-slate-400 mt-0.5 truncate">
                         {row.implementingAgency || 'MPLADS Implementing Agency'}
@@ -429,12 +388,12 @@ export const DistrictDashboard = () => {
                     </td>
 
                     {/* Sanction Amount */}
-                    <td className="py-3.5 px-3 font-black text-slate-900 font-mono whitespace-nowrap">
+                    <td className="py-4 px-4 sm:px-5 font-black text-slate-900 font-mono whitespace-nowrap">
                       {formatINR(row.sanctionedAmount || 4800000)}
                     </td>
 
                     {/* AI Risk Level Pill */}
-                    <td className="py-3.5 px-3 whitespace-nowrap">
+                    <td className="py-4 px-4 sm:px-5 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
                           isHighRisk
@@ -454,14 +413,14 @@ export const DistrictDashboard = () => {
                     </td>
 
                     {/* Action Needed */}
-                    <td className="py-3.5 px-3 whitespace-nowrap">
+                    <td className="py-4 px-4 sm:px-5 whitespace-nowrap">
                       <span className="inline-block px-3 py-1 rounded-xl bg-[#FEFCE8] text-[#A16207] border border-[#FEF08A] text-xs font-medium">
                         {row.actionNeeded || 'Stage-2 Disbursal Pre-Check'}
                       </span>
                     </td>
 
                     {/* Action Button */}
-                    <td className="py-3.5 px-3 text-right whitespace-nowrap">
+                    <td className="py-4 px-4 sm:px-5 text-right whitespace-nowrap">
                       <button
                         type="button"
                         onClick={(e) => {

@@ -51,7 +51,7 @@ export const Table = ({
 
   if (isLoading) {
     return (
-      <div className="w-full bg-gov-surface border border-gov-border rounded-none p-8 shadow-sm">
+      <div className="w-full bg-gov-surface border border-gov-border rounded-2xl p-8 shadow-xs">
         <Loader text="Loading Project Intelligence..." />
       </div>
     );
@@ -62,7 +62,7 @@ export const Table = ({
   }
 
   return (
-    <div className={cn('w-full flex flex-col bg-gov-surface border border-gov-border rounded-none overflow-hidden shadow-sm', className)}>
+    <div className={cn('w-full flex flex-col bg-gov-surface border border-gov-border rounded-2xl overflow-hidden shadow-xs', className)}>
       <div className="w-full overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
@@ -71,7 +71,7 @@ export const Table = ({
                 <th
                   key={idx}
                   className={cn(
-                    'px-4 py-3 select-none',
+                    'px-6 py-4 select-none',
                     col.sortable && 'cursor-pointer hover:text-gov-slateDark transition-colors',
                     col.className
                   )}
@@ -105,7 +105,7 @@ export const Table = ({
                 )}
               >
                 {columns.map((col, colIdx) => (
-                  <td key={colIdx} className={cn('px-4 py-3.5 text-slate-800 align-middle', col.cellClassName)}>
+                  <td key={colIdx} className={cn('px-6 py-4.5 text-slate-800 align-middle', col.cellClassName)}>
                     {col.cell ? col.cell(row) : row[col.accessor]}
                   </td>
                 ))}
@@ -116,7 +116,7 @@ export const Table = ({
       </div>
 
       {enablePagination && totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 bg-slate-50 text-xs text-slate-600">
+        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50 text-xs text-slate-600">
           <div>
             Showing <span className="font-semibold text-slate-900">{(currentPage - 1) * rowsPerPage + 1}</span> to{' '}
             <span className="font-semibold text-slate-900">{Math.min(currentPage * rowsPerPage, sortedData.length)}</span> of{' '}

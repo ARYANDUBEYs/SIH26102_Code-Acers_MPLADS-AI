@@ -89,18 +89,18 @@ export const Sidebar = () => {
       >
         <div className="w-64 h-full flex flex-col justify-between shrink-0 overflow-hidden">
           {/* Navigation list */}
-          <div className="p-3.5 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
+          <div className="p-4 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
             <div>
-              <div className="px-2 mb-2.5 flex items-center justify-between">
+              <div className="px-2 mb-3.5 flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   {isCitizen ? t('suite_citizen', 'Citizen Navigation') : isDistrictOfficer ? t('suite_district', 'District Officer Suite') : t('suite_admin', 'National Command Suite')}
                 </span>
 
-                {/* Gemini-style Close button inside sidebar header */}
+                {/* Collapse / Expand toggle button inside sidebar header */}
                 <button
                   type="button"
                   onClick={toggleSidebar}
-                  className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                   title="Close sidebar (Ctrl+B)"
                   aria-label="Close sidebar"
                 >
@@ -108,7 +108,7 @@ export const Sidebar = () => {
                 </button>
               </div>
 
-              <nav className="space-y-1.5">
+              <nav className="space-y-2">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.path;
@@ -119,13 +119,13 @@ export const Sidebar = () => {
                       to={item.path}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
-                        'group flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 border',
+                        'group flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-medium transition-all duration-150 border',
                         isActive
-                          ? 'bg-gov-blue/20 text-white border-gov-blue/50 shadow-[0_0_10px_rgba(124,58,237,0.35)] font-semibold'
+                          ? 'bg-white/12 text-white border-purple-500/40 shadow-xs font-bold'
                           : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
                       )}
                     >
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center gap-3.5 min-w-0">
                         <Icon
                           className={cn(
                             'w-4 h-4 shrink-0 transition-colors',
@@ -137,7 +137,7 @@ export const Sidebar = () => {
                       </div>
 
                       {item.badge && (
-                        <span className={cn('px-1.5 py-0.5 text-[10px] font-mono rounded font-semibold leading-none', item.badgeColor)}>
+                        <span className={cn('px-2 py-0.5 text-[10px] font-mono rounded-md font-semibold leading-none', item.badgeColor)}>
                           {item.badge}
                         </span>
                       )}

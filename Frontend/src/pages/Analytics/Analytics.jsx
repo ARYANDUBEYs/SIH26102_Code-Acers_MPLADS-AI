@@ -173,66 +173,62 @@ export const Analytics = () => {
         </div>
       }
     >
-      {/* 4 Modular KPI Quick Overview Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+      {/* 4 Modular KPI Quick Overview Cards (BankLY Pattern 1) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
         <PentagonCard
           index={0}
-          bgColor="bg-purple-50/60"
-          borderColor="#7E22CE"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-purple-950">Total Monitored Outlay</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-950 mt-0.5">₹2,486 Cr</h3>
-            <p className="text-[11px] text-purple-700 mt-1 font-medium">FY 2025-26 Active Projects</p>
-          </div>
-        </PentagonCard>
+          title="Total Monitored Outlay"
+          value="₹2,486 Cr"
+          subtitle="FY 2025-26 Active Projects"
+          icon={IndianRupee}
+          variant="purple"
+        />
 
         <PentagonCard
           index={1}
-          bgColor="bg-emerald-50/70"
-          borderColor="#059669"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-900">Normal Low-Risk Works</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-emerald-800 mt-0.5">88.2%</h3>
-            <p className="text-[11px] text-emerald-700 mt-1 font-medium">Routine Milestone Progress</p>
-          </div>
-        </PentagonCard>
+          title="Normal Low-Risk Works"
+          value="88.2%"
+          subtitle="Routine Milestone Progress"
+          trend="+2.4% vs prev Qtr"
+          trendPositive={true}
+          icon={ShieldCheck}
+          variant="success"
+        />
 
         <PentagonCard
           index={2}
-          bgColor="bg-rose-50/70"
-          borderColor="#E11D48"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Escrow Hold Required</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">42 Works</h3>
-            <p className="text-[11px] text-rose-700 mt-1 font-medium">High/Critical Priority Flags</p>
-          </div>
-        </PentagonCard>
+          title="Escrow Hold Required"
+          value="42 Works"
+          subtitle="High/Critical Priority Flags"
+          trend="-5 remediated"
+          trendPositive={true}
+          icon={AlertTriangle}
+          variant="danger"
+        />
 
         <PentagonCard
           index={3}
-          bgColor="bg-amber-50/70"
-          borderColor="#D97706"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Remediation Turnaround</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">6.4 Days</h3>
-            <p className="text-[11px] text-amber-700 mt-1 font-medium">From Flag to Officer Sign-off</p>
-          </div>
-        </PentagonCard>
+          title="Remediation Turnaround"
+          value="6.4 Days"
+          subtitle="From Flag to Sign-off"
+          trend="-1.2 days speedup"
+          trendPositive={true}
+          icon={TrendingUp}
+          variant="warning"
+        />
       </div>
 
-      {/* Top Filter Bar */}
+      {/* Top Filter Bar (BankLY Pattern 2 & 10) */}
       <ScrollReveal>
-      <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none flex flex-wrap items-center gap-3 shadow-sm mb-5">
-        <div className="flex items-center gap-2 text-xs font-bold text-gov-navy uppercase tracking-wider">
-          <Filter className="w-4 h-4 text-gov-blue" />
+      <div className="p-5 sm:p-6 bg-white border border-slate-200/80 rounded-2xl flex flex-wrap items-center gap-4 shadow-xs mb-8">
+        <div className="flex items-center gap-2.5 text-xs font-bold text-slate-800 uppercase tracking-wider">
+          <div className="p-2 rounded-xl bg-purple-50 text-purple-700 border border-purple-100">
+            <Filter className="w-4 h-4" />
+          </div>
           <span>Filters:</span>
         </div>
 
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-[300px]">
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 min-w-[300px]">
           <Dropdown
             label="Fiscal Year"
             value={selectedYear}
@@ -276,7 +272,7 @@ export const Analytics = () => {
 
       {/* Analytics Charts Grid */}
       <ScrollReveal delay={0.15}>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Chart 1: Monthly Anomaly Trends (ComposedChart with Area & Line) */}
         <Card
           title="Monthly Anomaly Velocity Trends (FY 25-26)"
@@ -336,11 +332,13 @@ export const Analytics = () => {
             </ResponsiveContainer>
           </div>
 
-          {/* Contextual Annotation */}
-          <div className="mt-3 p-2.5 bg-blue-50/70 dark:bg-blue-950/20 rounded-md border border-blue-200 dark:border-blue-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-            <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold text-blue-950 dark:text-blue-200">Surveillance Telemetry: </span>
+          {/* Contextual Annotation (BankLY Pattern 6) */}
+          <div className="mt-4 p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-xl flex items-start gap-3 text-xs text-slate-700">
+            <div className="p-1 rounded-lg bg-blue-100 text-blue-700 shrink-0 mt-0.5">
+              <Info className="w-3.5 h-3.5" />
+            </div>
+            <div className="leading-relaxed">
+              <span className="font-bold text-slate-900">Surveillance Telemetry: </span>
               <span>
                 Continuous monthly tracking of anomaly flags. Blue tracks invoices exceeding standard schedule rates, red catches identical photographic reuse across works, and orange highlights contractor bid collusion rings.
               </span>
@@ -348,7 +346,7 @@ export const Analytics = () => {
           </div>
         </Card>
 
-        {/* Chart 2: National Risk Distribution (Pie) */}
+        {/* Chart 2: National Risk Distribution (Pie - BankLY Pattern 4) */}
         <Card
           title="National Risk Portfolio Segmentation"
           subtitle="Proportion of monitored portfolio across algorithmic risk bands"
@@ -376,30 +374,33 @@ export const Analytics = () => {
                   contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E2E8F0', borderRadius: '8px', fontSize: '12px', color: '#0F172A', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#0F172A' }}
                 />
-                <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-black font-mono fill-slate-900">
+                <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-black font-mono fill-slate-900">
                   12,482
                 </text>
-                <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="text-[10px] font-bold uppercase tracking-widest fill-slate-400">
+                <text x="50%" y="58%" textAnchor="middle" dominantBaseline="middle" className="text-[10px] font-bold uppercase tracking-widest fill-slate-500">
                   Total Works
                 </text>
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="space-y-1.5 text-xs mt-2 border-t border-slate-200 dark:border-slate-800 pt-3">
+          <div className="grid grid-cols-2 gap-2 text-xs mt-3 border-t border-slate-100 pt-3">
             {riskDistributionData.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between p-1.5 rounded bg-slate-50/70 border border-slate-100 text-slate-700">
-                <span className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="font-medium text-slate-800">{item.name}</span>
+              <div key={idx} className="flex items-center justify-between p-2 rounded-xl bg-slate-50/80 border border-slate-200/70 text-slate-700">
+                <span className="flex items-center gap-1.5 truncate">
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                  <span className="font-semibold text-slate-800 text-[11px] truncate">{item.name}</span>
                 </span>
-                <span className="font-mono font-bold text-slate-900">{item.value}%</span>
+                <span className="font-mono font-bold text-slate-900 shrink-0 ml-1 text-xs">{item.value}%</span>
               </div>
             ))}
           </div>
 
-          <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-3 bg-slate-50 dark:bg-slate-800/60 p-2 rounded border border-slate-200 dark:border-slate-700">
-            💡 <strong>Portfolio Health:</strong> Over 88% of monitored works are within normal operational baselines. Only the 3% critical tier is placed under automated escrow hold for direct collector verification.
-          </p>
+          <div className="mt-4 p-3 bg-slate-50/90 rounded-xl border border-slate-200/80 flex items-start gap-2.5 text-xs text-slate-600">
+            <span className="text-sm shrink-0">💡</span>
+            <p className="leading-relaxed">
+              <strong className="text-slate-800">Portfolio Health:</strong> Over 88% of monitored works are within normal operational baselines. Only the 3% critical tier is placed under automated escrow hold for direct collector verification.
+            </p>
+          </div>
         </Card>
 
         {/* Chart 3: Fund Utilization by Category */}
@@ -457,10 +458,12 @@ export const Analytics = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="mt-3 p-2.5 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-md border border-emerald-200 dark:border-emerald-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-300 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold text-emerald-950 dark:text-emerald-200">Expenditure Health: </span>
+          <div className="mt-4 p-3.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl flex items-start gap-3 text-xs text-slate-700">
+            <div className="p-1 rounded-lg bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
+              <ShieldCheck className="w-3.5 h-3.5" />
+            </div>
+            <div className="leading-relaxed">
+              <span className="font-bold text-slate-900">Expenditure Health: </span>
               <span>
                 Roads & Bridges and Drinking Water receive the largest share of sanctioned development. The green bar ensures that public disbursements closely follow verified on-site milestone progress.
               </span>
@@ -514,10 +517,12 @@ export const Analytics = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="mt-3 p-2.5 bg-amber-50/70 dark:bg-amber-950/20 rounded-md border border-amber-200 dark:border-amber-900/40 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold text-amber-950 dark:text-amber-200">State Oversight: </span>
+          <div className="mt-4 p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-start gap-3 text-xs text-slate-700">
+            <div className="p-1 rounded-lg bg-amber-100 text-amber-800 shrink-0 mt-0.5">
+              <AlertTriangle className="w-3.5 h-3.5" />
+            </div>
+            <div className="leading-relaxed">
+              <span className="font-bold text-slate-900">State Oversight: </span>
               <span>
                 States with higher sanction volumes naturally record more automated checks. Critical red flags highlight works that require expedited field inspection by district collectors.
               </span>

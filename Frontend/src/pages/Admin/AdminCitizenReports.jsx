@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { PageLayout } from '../../components/layout/PageLayout';
 import { Card } from '../../components/ui/Card';
@@ -121,9 +121,9 @@ export const AdminCitizenReports = () => {
   }
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-8 pb-16">
       {/* Header Banner */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-2xs space-y-2">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-7 sm:p-9 shadow-2xs space-y-3">
         <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
           <Link to="/dashboard" className="hover:text-blue-600 transition-colors">
             Dashboard
@@ -132,7 +132,7 @@ export const AdminCitizenReports = () => {
           <span className="text-slate-600 font-semibold">Public Vigilance Reports</span>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-2">
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -142,13 +142,13 @@ export const AdminCitizenReports = () => {
                 Admin Clearance Only
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
               Real-time feed of ground audits, geotagged complaints, and whistleblower submissions filed by citizens across India.
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs font-mono font-bold bg-slate-100 px-3 py-1.5 rounded-lg text-slate-700">
+            <span className="text-xs font-mono font-bold bg-slate-100 px-3.5 py-2 rounded-xl text-slate-700">
               Total Logged: <strong className="text-blue-600">{reports.length}</strong>
             </span>
           </div>
@@ -156,24 +156,24 @@ export const AdminCitizenReports = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search report ID, project, district, or citizen..."
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3 py-2.5 text-xs font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
+        <div className="flex items-center gap-2.5 w-full sm:w-auto overflow-x-auto">
           {['ALL', 'PENDING', 'DISPATCHED', 'RESOLVED'].map((st) => (
             <button
               key={st}
               onClick={() => setSelectedStatus(st)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shrink-0 ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-colors shrink-0 ${
                 selectedStatus === st
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -194,7 +194,7 @@ export const AdminCitizenReports = () => {
           <p className="text-xs font-bold text-slate-700">No public vigilance reports matching your criteria.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredReports.map((rep) => {
             const isDispatched = rep.status === 'Inspection Dispatched' || rep.status === 'DISPATCHED';
             const isPending = rep.status === 'Under Verification' || rep.status === 'PENDING';
@@ -203,10 +203,10 @@ export const AdminCitizenReports = () => {
             return (
               <div
                 key={rep.id}
-                className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-2xs hover:border-blue-400 transition-all space-y-3.5 flex flex-col justify-between"
+                className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-2xs hover:border-blue-400 transition-all space-y-4 flex flex-col justify-between"
               >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-3">
+                <div className="space-y-3.5">
+                  <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-4">
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs font-extrabold text-blue-700">{rep.id}</span>
@@ -222,12 +222,12 @@ export const AdminCitizenReports = () => {
                           {rep.status}
                         </span>
                       </div>
-                      <p className="text-xs font-bold text-slate-900 mt-1 line-clamp-1">
+                      <p className="text-xs font-bold text-slate-900 mt-1.5 line-clamp-1">
                         {rep.projectName || rep.projectId}
                       </p>
                       <Link
                         to={`/project/${rep.projectId}`}
-                        className="text-[11px] font-mono text-slate-500 hover:text-blue-600 inline-flex items-center gap-1 mt-0.5"
+                        className="text-[11px] font-mono text-slate-500 hover:text-blue-600 inline-flex items-center gap-1 mt-1"
                       >
                         <span>Project: {rep.projectId}</span>
                         <ExternalLink className="w-3 h-3" />
@@ -239,7 +239,7 @@ export const AdminCitizenReports = () => {
                     </span>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1">
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-rose-700 block">
                       Discrepancy: {rep.issueType}
                     </span>
@@ -248,7 +248,7 @@ export const AdminCitizenReports = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600 pt-1">
+                  <div className="grid grid-cols-2 gap-3 text-[11px] text-slate-600 pt-1.5">
                     <div className="flex items-center gap-1.5 truncate">
                       <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span className="truncate">{rep.location}</span>
@@ -260,14 +260,14 @@ export const AdminCitizenReports = () => {
                   </div>
 
                   {rep.aiPreCheck && (
-                    <div className="text-[11px] p-2 rounded-lg bg-blue-50/70 border border-blue-100 text-blue-900 flex items-start gap-1.5">
+                    <div className="text-[11px] p-2.5 rounded-lg bg-blue-50/70 border border-blue-100 text-blue-900 flex items-start gap-1.5">
                       <span className="font-bold shrink-0">AI Sentinel Flag:</span>
                       <span className="line-clamp-1">{rep.aiPreCheck}</span>
                     </div>
                   )}
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
                   <Button
                     variant="outline"
                     size="sm"
@@ -300,8 +300,8 @@ export const AdminCitizenReports = () => {
           subtitle={`Citizen filing for Project ${selectedReport.projectId}`}
           size="md"
         >
-          <div className="space-y-4">
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-2">
+          <div className="space-y-5 p-1">
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2.5">
               <div>
                 <span className="text-slate-400 font-bold uppercase text-[10px] block">Project Name:</span>
                 <p className="font-bold text-slate-900">{selectedReport.projectName}</p>
@@ -310,43 +310,43 @@ export const AdminCitizenReports = () => {
                 <span className="text-slate-400 font-bold uppercase text-[10px] block">Citizen Observation:</span>
                 <p className="text-slate-700 italic">"{selectedReport.description}"</p>
               </div>
-              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200">
+              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1.5 border-t border-slate-200">
                 <span>GPS: {selectedReport.gps}</span>
                 <span>Filer: {selectedReport.citizenName}</span>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-1.5">
+              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-2">
                 Official Administrative Order:
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-3">
                 <button
                   type="button"
                   onClick={() => handleUpdateStatus('Inspection Dispatched')}
-                  className="p-2.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold text-center"
+                  className="p-3 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold text-center cursor-pointer transition"
                 >
                   Dispatch Field Audit
                 </button>
                 <button
                   type="button"
                   onClick={() => handleUpdateStatus('Verified & Cleared')}
-                  className="p-2.5 rounded-lg border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs font-bold text-center"
+                  className="p-3 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs font-bold text-center cursor-pointer transition"
                 >
                   Mark Resolved
                 </button>
                 <button
                   type="button"
                   onClick={() => handleUpdateStatus('Escalated to MoSPI Vigilance')}
-                  className="p-2.5 rounded-lg border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-bold text-center"
+                  className="p-3 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-900 text-xs font-bold text-center cursor-pointer transition"
                 >
                   Escalate to MoSPI
                 </button>
               </div>
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-1.5">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider block mb-1">
                 Notation for District Collector:
               </label>
               <textarea
@@ -354,11 +354,11 @@ export const AdminCitizenReports = () => {
                 value={actionNote}
                 onChange={(e) => setActionNote(e.target.value)}
                 placeholder="Enter mandatory administrative directives or field inspection memo reference..."
-                className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
+                className="w-full bg-white border border-slate-300 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
               <Button variant="outline" size="sm" onClick={() => setSelectedReport(null)}>
                 Close
               </Button>

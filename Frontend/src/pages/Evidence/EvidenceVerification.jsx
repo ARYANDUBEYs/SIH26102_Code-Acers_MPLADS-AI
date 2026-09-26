@@ -119,55 +119,43 @@ export const EvidenceVerification = () => {
         similarity={96}
       />
 
-      {/* Plain-English AI Forensic Integrity Checklist (Pentagon with border on 1 & 2 only) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+      {/* Plain-English AI Forensic Integrity Checklist (BankLY Pattern 1) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8">
         <PentagonCard
           index={0}
-          bgColor="bg-rose-50/70"
-          borderColor="#E11D48"
-        >
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Photo Similarity Check</span>
-            <h4 className="text-xl font-black font-mono text-rose-800">96.9% Match</h4>
-            <p className="text-xs text-rose-700 font-medium">Flagged: Image structurally matches an older project</p>
-          </div>
-        </PentagonCard>
+          title="Photo Similarity Check"
+          value="96.9% Match"
+          subtitle="Structurally matches older project"
+          icon={Camera}
+          variant="danger"
+        />
 
         <PentagonCard
           index={1}
-          bgColor="bg-emerald-50/70"
-          borderColor="#059669"
-        >
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900">GPS Site Location</span>
-            <h4 className="text-xl font-black font-mono text-emerald-800">Coordinates Valid</h4>
-            <p className="text-xs text-emerald-700 font-medium">Taken within 80m of sanctioned road stretch</p>
-          </div>
-        </PentagonCard>
+          title="GPS Site Location"
+          value="Coordinates Valid"
+          subtitle="Within 80m of sanctioned road"
+          icon={MapPin}
+          variant="success"
+        />
 
         <PentagonCard
           index={2}
-          bgColor="bg-rose-50/70"
-          borderColor="#E11D48"
-        >
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Prior Archive Record</span>
-            <h4 className="text-xl font-black font-mono text-rose-800">Cross-District Match</h4>
-            <p className="text-xs text-rose-700 font-medium">Same photo was submitted in Jaunpur (2024 work)</p>
-          </div>
-        </PentagonCard>
+          title="Prior Archive Record"
+          value="Cross-District Match"
+          subtitle="Submitted in Jaunpur (2024 work)"
+          icon={ShieldAlert}
+          variant="danger"
+        />
 
         <PentagonCard
           index={3}
-          bgColor="bg-amber-50/70"
-          borderColor="#D97706"
-        >
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Recommended Action</span>
-            <h4 className="text-xl font-black font-mono text-amber-900">Hold Milestone Funds</h4>
-            <p className="text-xs text-amber-700 font-medium">Pause ₹14.2 Lakhs payout until verified on-site</p>
-          </div>
-        </PentagonCard>
+          title="Recommended Action"
+          value="Hold Milestone Funds"
+          subtitle="Pause ₹14.2 Lakhs payout"
+          icon={ShieldCheck}
+          variant="warning"
+        />
       </div>
 
       {/* Action Confirmation Modal */}

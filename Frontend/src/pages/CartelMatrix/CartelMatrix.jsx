@@ -62,53 +62,46 @@ export const CartelMatrix = () => {
         </span>
       }
     >
-      {/* 3 Modular Overview Cards (Pentagon with border on 1 & 2 only) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-5">
+      {/* 3 Modular Overview Cards (BankLY Pattern 1) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
         <PentagonCard
           index={0}
-          bgColor="bg-rose-50/70"
-          borderColor="#E11D48"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-900">Monopolized Districts</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-rose-800 mt-0.5">3 Districts</h3>
-            <p className="text-[11px] text-rose-700 mt-1 font-medium">Varanasi, Jaunpur & Kamrup Metro</p>
-          </div>
-        </PentagonCard>
+          title="Monopolized Districts"
+          value="3 Districts"
+          subtitle="Varanasi, Jaunpur & Kamrup"
+          icon={MapPin}
+          variant="danger"
+        />
 
         <PentagonCard
           index={1}
-          bgColor="bg-amber-50/70"
-          borderColor="#D97706"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-900">Syndicate Tender Outlay</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-amber-900 mt-0.5">₹8.40 Cr</h3>
-            <p className="text-[11px] text-amber-700 mt-1 font-medium">17 Interlinked Public Works</p>
-          </div>
-        </PentagonCard>
+          title="Syndicate Tender Outlay"
+          value="₹8.40 Cr"
+          subtitle="17 Interlinked Public Works"
+          icon={Building}
+          variant="warning"
+        />
 
         <PentagonCard
           index={2}
-          bgColor="bg-purple-50/70"
-          borderColor="#7E22CE"
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-purple-900">Shared Company Directors</p>
-            <h3 className="text-xl sm:text-2xl font-black font-mono text-purple-900 mt-0.5">1 Shadow Ring</h3>
-            <p className="text-[11px] text-purple-700 mt-1 font-medium">R. K. Agarwal across 3 bidder firms</p>
-          </div>
-        </PentagonCard>
+          title="Shared Company Directors"
+          value="1 Shadow Ring"
+          subtitle="R. K. Agarwal across 3 firms"
+          icon={User}
+          variant="purple"
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* Main Network Graph Canvas */}
-        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-none p-4 shadow-sm relative flex flex-col min-h-[520px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Main Network Graph Canvas (BankLY Pattern 10) */}
+        <div className="lg:col-span-8 bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 shadow-xs relative flex flex-col min-h-[520px]">
           {/* Graph Title & Legend */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border pb-3 mb-3">
-            <div className="flex items-center gap-2">
-              <Network className="w-5 h-5 text-gov-blue" />
-              <span className="text-sm font-bold text-gov-slateDark">Eastern UP Infrastructure Tender Syndicate Cluster</span>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4.5 mb-4.5">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-purple-50 text-purple-700 border border-purple-100">
+                <Network className="w-5 h-5" />
+              </div>
+              <span className="text-sm font-bold text-slate-900">Eastern UP Infrastructure Tender Syndicate Cluster</span>
             </div>
 
             <div className="flex items-center gap-3 text-[11px] font-bold text-gov-muted">
@@ -383,12 +376,15 @@ export const CartelMatrix = () => {
             </Card>
           )}
 
-          {/* Institutional Statutory Guidance Box */}
-          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none space-y-1.5 text-xs text-gov-slate border-l-4 border-l-gov-blue">
-            <span className="font-bold flex items-center gap-1.5 text-gov-navy">
-              <Info className="w-4 h-4 text-gov-blue" /> Why is this flagged?
+          {/* Institutional Statutory Guidance Box (BankLY Pattern 6) */}
+          <div className="p-4 sm:p-5 bg-white border border-blue-200/80 rounded-2xl space-y-2 text-xs text-slate-600 border-l-4 border-l-blue-600 shadow-xs">
+            <span className="font-bold flex items-center gap-2 text-slate-900">
+              <div className="p-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-100">
+                <Info className="w-3.5 h-3.5" />
+              </div>
+              <span>Why is this flagged?</span>
             </span>
-            <p className="text-gov-slate leading-relaxed">
+            <p className="text-slate-600 leading-relaxed pl-7">
               When the same person or family owns multiple bidding companies, they submit fake higher bids to ensure their chosen company wins at inflated government rates without genuine competition.
             </p>
           </div>

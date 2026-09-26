@@ -129,11 +129,11 @@ export const ProjectDetails = () => {
   const strokeOffset = circumference - (riskScoreVal / 100) * circumference;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-8 pb-16">
       {/* ========================================================================= */}
       {/* HEADER SECTION with Breadcrumb, Title, Tag & Transparent Background Image */}
       {/* ========================================================================= */}
-      <div className="relative bg-white rounded-none border border-slate-200/80 p-6 sm:p-8 overflow-hidden shadow-2xs">
+      <div className="relative bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 overflow-hidden shadow-xs">
         {/* Transparent Decorative Road & Trees Vector in the Upper Right Corner */}
         <div className="absolute right-0 top-0 bottom-0 w-80 sm:w-96 pointer-events-none opacity-20 overflow-hidden">
           <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full object-cover">
@@ -173,14 +173,14 @@ export const ProjectDetails = () => {
 
           {/* Action Buttons for Authorized Officers */}
           {!isCitizen && (
-            <div className="relative z-10 flex flex-wrap items-center gap-2.5 pt-4 mt-2 border-t border-slate-100">
+            <div className="relative z-10 flex flex-wrap items-center gap-2.5 pt-4 mt-3 border-t border-slate-100">
               {isAdmin && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/admin/grievances')}
                   icon={FileText}
-                  className="text-xs font-semibold border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100"
+                  className="text-xs font-semibold border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 rounded-xl"
                 >
                   Public Vigilance Reports
                 </Button>
@@ -190,7 +190,7 @@ export const ProjectDetails = () => {
                 size="sm"
                 onClick={() => navigate('/cartel-matrix')}
                 icon={Network}
-                className="text-xs font-semibold border-slate-200 text-slate-700 hover:bg-slate-50"
+                className="text-xs font-semibold border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl"
               >
                 Cartel Graph
               </Button>
@@ -199,7 +199,7 @@ export const ProjectDetails = () => {
                 size="sm"
                 onClick={() => navigate('/evidence')}
                 icon={Camera}
-                className="text-xs font-semibold"
+                className="text-xs font-semibold rounded-xl"
               >
                 Verify AI Evidence
               </Button>
@@ -208,7 +208,7 @@ export const ProjectDetails = () => {
                 size="sm"
                 onClick={() => setIsDecisionModalOpen(true)}
                 icon={ShieldCheck}
-                className="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white"
+                className="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
               >
                 Take Official Action
               </Button>
@@ -219,15 +219,15 @@ export const ProjectDetails = () => {
       {/* ========================================================================= */}
       {/* 2-COLUMN MAIN GRID: Left (Risk + Funds) & Right (Progress + Why Flagged) */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         
         {/* ======================================================================= */}
         {/* LEFT COLUMN (5 of 12)                                                  */}
         {/* ======================================================================= */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-6 sm:space-y-8">
           
           {/* Card 1: Risk Overview with Animated Circle Gauge */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-5">
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             {/* Header with Orange Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-amber-500 pl-3">
               <div>
@@ -307,8 +307,8 @@ export const ProjectDetails = () => {
             </div>
           </div>
 
-          {/* Card 2: Fund Utilization */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-5">
+          {/* Card 2: Fund Utilization (BankLY Pattern 7) */}
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             {/* Header with Emerald Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-emerald-500 pl-3">
               <div>
@@ -320,34 +320,34 @@ export const ProjectDetails = () => {
             </div>
 
             {/* 4 Clean Value Metric Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="p-3 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1 text-left">
-                <span className="text-[10px] text-slate-400 font-semibold block">Sanctioned</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <div className="p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl space-y-1 text-left">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Sanctioned</span>
                 <span className="text-base font-black font-mono text-slate-900">₹{sanctionedLakh} Lakh</span>
               </div>
 
-              <div className="p-3 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1 text-left">
-                <span className="text-[10px] text-slate-400 font-semibold block">Released</span>
+              <div className="p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl space-y-1 text-left">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Released</span>
                 <span className="text-base font-black font-mono text-blue-700">₹{releasedLakh} Lakh</span>
               </div>
 
-              <div className="p-3 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1 text-left">
-                <span className="text-[10px] text-slate-400 font-semibold block">Utilized</span>
+              <div className="p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl space-y-1 text-left">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Utilized</span>
                 <span className="text-base font-black font-mono text-emerald-700">₹{utilizedLakh} Lakh</span>
               </div>
 
-              <div className="p-3 bg-slate-50/70 border border-slate-100 rounded-xl space-y-1 text-left">
-                <span className="text-[10px] text-slate-400 font-semibold block">Unspent</span>
+              <div className="p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl space-y-1 text-left">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Unspent</span>
                 <span className="text-base font-black font-mono text-amber-600">₹{unspentLakh} Lakh</span>
               </div>
             </div>
 
-            {/* Progress Bars for Funds Utilization & Physical Progress */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            {/* Progress Bars for Funds Utilization & Physical Progress (BankLY Pattern 7) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-slate-600">Funds Utilization</span>
-                  <span className="font-mono text-slate-900">{fundsUtilPct}%</span>
+                  <span className="text-slate-700">Funds Utilization</span>
+                  <span className="font-mono font-bold text-slate-900">{fundsUtilPct}%</span>
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                   <motion.div
@@ -357,12 +357,13 @@ export const ProjectDetails = () => {
                     transition={{ duration: 0.8, ease: 'easeOut' }}
                   />
                 </div>
+                <p className="text-[11px] text-slate-400 font-medium">₹{utilizedLakh}L utilized of ₹{sanctionedLakh}L total</p>
               </div>
 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-slate-600">Physical Progress</span>
-                  <span className="font-mono text-slate-900">{physicalProgressPct}%</span>
+                  <span className="text-slate-700">Physical Progress</span>
+                  <span className="font-mono font-bold text-slate-900">{physicalProgressPct}%</span>
                 </div>
                 <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                   <motion.div
@@ -372,12 +373,13 @@ export const ProjectDetails = () => {
                     transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
                   />
                 </div>
+                <p className="text-[11px] text-slate-400 font-medium">Verified by field monitoring & geotag</p>
               </div>
             </div>
           </div>
 
-          {/* Card: Project Details (Moved to Left Column opposite Verified Records) */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          {/* Card: Project Details (BankLY Pattern 10) */}
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             {/* Header with Purple Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-[#2E1065] pl-3">
               <div>
@@ -389,26 +391,26 @@ export const ProjectDetails = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1 text-xs">
-              <div className="space-y-1 p-2.5 bg-slate-50/70 border border-slate-100 rounded-xl">
-                <span className="text-slate-400 font-medium block text-[11px]">Implementing Agency</span>
+              <div className="space-y-1 p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl">
+                <span className="text-slate-400 font-semibold block text-[10px] uppercase tracking-wider">Implementing Agency</span>
                 <span className="text-slate-900 font-bold block">{project.implementingAgency || 'MPLADS Implementing Agency'}</span>
                 <span className="text-slate-400 text-[10px] block">(Govt. of {project.state || 'UP'})</span>
               </div>
 
-              <div className="space-y-1 p-2.5 bg-slate-50/70 border border-slate-100 rounded-xl">
-                <span className="text-slate-400 font-medium block text-[11px]">Contractor</span>
+              <div className="space-y-1 p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl">
+                <span className="text-slate-400 font-semibold block text-[10px] uppercase tracking-wider">Contractor</span>
                 <span className="text-slate-900 font-bold block">{project.contractor || 'Apex Infra & BuildTech Pvt Ltd'}</span>
                 <span className="text-slate-400 text-[10px] block">(Vendor ID: VEN-2024-81)</span>
               </div>
 
-              <div className="space-y-1 p-2.5 bg-slate-50/70 border border-slate-100 rounded-xl">
-                <span className="text-slate-400 font-medium block text-[11px]">Sponsoring MP</span>
+              <div className="space-y-1 p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl">
+                <span className="text-slate-400 font-semibold block text-[10px] uppercase tracking-wider">Sponsoring MP</span>
                 <span className="text-slate-900 font-bold block">{project.mpName || 'Shri Narendra Modi'}</span>
                 <span className="text-slate-400 text-[10px] block">({project.district || 'Varanasi'})</span>
               </div>
 
-              <div className="space-y-1 p-2.5 bg-slate-50/70 border border-slate-100 rounded-xl">
-                <span className="text-slate-400 font-medium block text-[11px]">District Authority</span>
+              <div className="space-y-1 p-3.5 bg-slate-50/80 border border-slate-200/70 rounded-xl">
+                <span className="text-slate-400 font-semibold block text-[10px] uppercase tracking-wider">District Authority</span>
                 <span className="text-slate-900 font-bold block">{project.district}, {project.state}</span>
                 <span className="text-slate-400 text-[10px] block">(District Collector)</span>
               </div>
@@ -416,7 +418,7 @@ export const ProjectDetails = () => {
           </div>
 
           {/* Card: Physical Progress Evidence Photo */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             <div className="flex items-start justify-between border-l-4 border-purple-600 pl-3">
               <div>
                 <h3 className="text-base font-bold text-slate-900 tracking-tight">Field Progress Evidence</h3>
@@ -452,10 +454,10 @@ export const ProjectDetails = () => {
         {/* ======================================================================= */}
         {/* RIGHT COLUMN (7 of 12)                                                 */}
         {/* ======================================================================= */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-6 sm:space-y-8">
           
           {/* Card 3: Project Progress with Step Horizontal Timeline Transition */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-5">
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             {/* Header with Blue Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-blue-600 pl-3">
               <div>
@@ -584,8 +586,8 @@ export const ProjectDetails = () => {
             </div>
           </div>
 
-          {/* Card 4: Why this project was flagged */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          {/* Card 4: Why this project was flagged (BankLY Pattern 5) */}
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             {/* Header with Orange Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-amber-500 pl-3">
               <div>
@@ -632,17 +634,17 @@ export const ProjectDetails = () => {
                     }
                   ]
               ).map((item, idx) => (
-                <div key={idx} className="py-3 flex items-center justify-between gap-4 text-xs">
-                  <span className="text-slate-800 font-medium">{item.title}</span>
+                <div key={idx} className="py-3.5 px-2 rounded-xl hover:bg-slate-50/70 transition-colors flex items-center justify-between gap-4 text-xs">
+                  <span className="text-slate-800 font-semibold">{item.title}</span>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider ${
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${
                       item.isCrit
                         ? 'bg-rose-50 text-rose-600 border border-rose-200'
                         : 'bg-amber-50 text-amber-700 border border-amber-200'
                     }`}>
                       {item.tag}
                     </span>
-                    <span className="font-mono text-slate-400 font-semibold text-[11px] w-8 text-right">
+                    <span className="font-mono text-slate-500 font-bold text-xs w-9 text-right">
                       {item.pct}
                     </span>
                   </div>
@@ -651,8 +653,8 @@ export const ProjectDetails = () => {
             </div>
           </div>
 
-          {/* Card 5: Verified Records */}
-          <div className="bg-white rounded-none border border-slate-200/80 p-6 shadow-2xs space-y-4">
+          {/* Card 5: Verified Records (BankLY Pattern 5) */}
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
             {/* Header with Emerald Accent Bar */}
             <div className="flex items-start gap-3 border-l-4 border-emerald-500 pl-3">
               <div>
@@ -665,21 +667,33 @@ export const ProjectDetails = () => {
 
             {/* Records List */}
             <div className="divide-y divide-slate-100 text-xs">
-              <div className="py-2.5 flex items-center justify-between">
-                <span className="text-slate-700 font-medium">Work order & agreement</span>
-                <span className="text-emerald-600 font-bold">Verified</span>
+              <div className="py-3 px-2 rounded-xl hover:bg-slate-50/70 transition-colors flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="text-slate-800 font-medium">Work order & agreement</span>
+                </div>
+                <span className="text-emerald-700 font-bold font-mono text-xs">Verified</span>
               </div>
-              <div className="py-2.5 flex items-center justify-between">
-                <span className="text-slate-700 font-medium">Payment records</span>
-                <span className="text-emerald-600 font-bold">Verified</span>
+              <div className="py-3 px-2 rounded-xl hover:bg-slate-50/70 transition-colors flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="text-slate-800 font-medium">Payment records</span>
+                </div>
+                <span className="text-emerald-700 font-bold font-mono text-xs">Verified</span>
               </div>
-              <div className="py-2.5 flex items-center justify-between">
-                <span className="text-slate-700 font-medium">Measurement book</span>
-                <span className="text-amber-600 font-bold">Pending</span>
+              <div className="py-3 px-2 rounded-xl hover:bg-slate-50/70 transition-colors flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-500" />
+                  <span className="text-slate-800 font-medium">Measurement book</span>
+                </div>
+                <span className="text-amber-700 font-bold font-mono text-xs">Pending</span>
               </div>
-              <div className="py-2.5 flex items-center justify-between">
-                <span className="text-slate-700 font-medium">Inspection reports</span>
-                <span className="text-emerald-600 font-bold">Verified</span>
+              <div className="py-3 px-2 rounded-xl hover:bg-slate-50/70 transition-colors flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="text-slate-800 font-medium">Inspection reports</span>
+                </div>
+                <span className="text-emerald-700 font-bold font-mono text-xs">Verified</span>
               </div>
             </div>
           </div>

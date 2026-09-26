@@ -251,66 +251,66 @@ export const AdminDashboard = () => {
         </div>
       }
     >
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* 6 Executive KPI Cards */}
         <DashboardStats kpis={kpis || undefined} />
 
-        {/* Critical Urgent Investigation Alert Banner with Concise Plain Language */}
+        {/* Critical Urgent Investigation Alert Banner with Concise Plain Language (Pattern 6) */}
         <ScrollReveal delay={0.1}>
-          <div className="p-4 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 border-l-4 border-l-rose-600 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative overflow-hidden">
-            <div className="flex items-start gap-3.5">
-              <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 border border-rose-200 dark:border-rose-800 shrink-0 mt-0.5">
+          <div className="p-6 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 border-l-4 border-l-rose-600 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs relative overflow-hidden">
+            <div className="flex items-start gap-4">
+              <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 border border-rose-200 dark:border-rose-800 shrink-0 mt-0.5">
                 <ShieldAlert className="w-5 h-5 animate-pulse" />
               </div>
-              <div>
+              <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-black text-rose-700 uppercase tracking-wider font-mono">
                     CRITICAL FORENSIC DISCREPANCY DETECTED
                   </span>
-                  <span className="px-2 py-0.5 text-[10px] font-mono bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-rose-200 rounded font-bold">
+                  <span className="px-2 py-0.5 text-[10px] font-mono bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-rose-200 rounded-md font-bold">
                     87% RISK SCORE
                   </span>
                 </div>
-                <h4 className="text-sm font-black text-slate-900 dark:text-white mt-1">
+                <h4 className="text-sm font-black text-slate-900 dark:text-white">
                   Project MPLAD-2026-00124: Rural Road Construction & Flood Drainage (₹48.5 Lakhs)
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed max-w-3xl">
-                  ⚠️ Audit Finding: Contractor uploaded a duplicate site photo matching another project 400km away in Jaunpur. Estimated costs exceed standard schedule of rates by 42%, and tender bidding shows high contractor cartel concentration.
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+                  ⚠️ <span className="font-semibold text-rose-700">Audit Finding:</span> Contractor uploaded a duplicate site photo matching another project 400km away in Jaunpur. Estimated costs exceed standard schedule of rates by 42%, and tender bidding shows high contractor cartel concentration.
                 </p>
               </div>
             </div>
 
-          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={() => handleOpenSlideOver({
-                id: 'MPLAD-2026-00124',
-                name: 'Rural Road Construction & Flood Drainage',
-                constituency: 'Varanasi',
-                district: 'Varanasi',
-                state: 'Uttar Pradesh',
-                sanctionedAmount: 4800000,
-                disbursedAmount: 4100000,
-                physicalProgress: 38,
-                riskScore: 87,
-                contractor: 'Apex Infra & BuildTech Pvt Ltd',
-                hhiScore: 2840,
-                warningTags: ['DUPLICATE_PHOTO_DHASH_EXACT', 'HHI_CARTEL_SYNDICATE_MONOPOLY', 'SLA_BREACH_IMMUTABLE']
-              })}
-              icon={ArrowRight}
-              iconPosition="right"
-              className="w-full sm:w-auto text-xs font-bold"
-            >
-              {t('btn_audit', 'Audit Dossier')}
-            </Button>
+            <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => handleOpenSlideOver({
+                  id: 'MPLAD-2026-00124',
+                  name: 'Rural Road Construction & Flood Drainage',
+                  constituency: 'Varanasi',
+                  district: 'Varanasi',
+                  state: 'Uttar Pradesh',
+                  sanctionedAmount: 4800000,
+                  disbursedAmount: 4100000,
+                  physicalProgress: 38,
+                  riskScore: 87,
+                  contractor: 'Apex Infra & BuildTech Pvt Ltd',
+                  hhiScore: 2840,
+                  warningTags: ['DUPLICATE_PHOTO_DHASH_EXACT', 'HHI_CARTEL_SYNDICATE_MONOPOLY', 'SLA_BREACH_IMMUTABLE']
+                })}
+                icon={ArrowRight}
+                iconPosition="right"
+                className="w-full sm:w-auto text-xs font-bold rounded-xl"
+              >
+                {t('btn_audit', 'Audit Dossier')}
+              </Button>
+            </div>
           </div>
-        </div>
         </ScrollReveal>
 
         {/* Charts Grid */}
         <ScrollReveal delay={0.2}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-0">
         {/* State Anomaly Bar Chart */}
         <Card
           title="Detected Anomalies by State"
@@ -418,7 +418,7 @@ export const AdminDashboard = () => {
 
       {/* Priority High-Risk Queue */}
       <ScrollReveal delay={0.15}>
-      <div className="space-y-3">
+      <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -449,54 +449,54 @@ export const AdminDashboard = () => {
 
       {/* Quick Navigation Panels */}
       <ScrollReveal delay={0.2}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
           onClick={() => navigate('/risk-map')}
-          className="cursor-pointer hover:border-blue-300 hover:shadow-gov-hover transition-all p-5 flex items-center justify-between"
+          className="cursor-pointer group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs hover:shadow-md hover:border-blue-300 transition-all duration-200 flex items-center justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-blue-50 text-blue-700 border border-blue-100">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <MapPin className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">{t('nav_risk_map', 'National Risk Heatmap')}</h4>
-              <p className="text-xs text-slate-500">Live map of project locations, risk clusters, and delays across all states</p>
+              <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{t('nav_risk_map', 'National Risk Heatmap')}</h4>
+              <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">Live map of project locations, risk clusters, and delays across all states</p>
             </div>
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400" />
-        </Card>
+          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-3" />
+        </div>
 
-        <Card
+        <div
           onClick={() => navigate('/cartel-matrix')}
-          className="cursor-pointer hover:border-amber-300 hover:shadow-gov-hover transition-all p-5 flex items-center justify-between"
+          className="cursor-pointer group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs hover:shadow-md hover:border-amber-300 transition-all duration-200 flex items-center justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-amber-50 text-amber-700 border border-amber-100">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 border border-amber-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <Network className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">{t('nav_cartel_matrix', 'Vendor Cartel Matrix')}</h4>
-              <p className="text-xs text-slate-500">Identifies contractor rings, shared directors, and repeat tender wins</p>
+              <h4 className="text-sm font-bold text-slate-900 group-hover:text-amber-700 transition-colors">{t('nav_cartel_matrix', 'Vendor Cartel Matrix')}</h4>
+              <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">Identifies contractor rings, shared directors, and repeat tender wins</p>
             </div>
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400" />
-        </Card>
+          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-3" />
+        </div>
 
-        <Card
+        <div
           onClick={() => navigate('/evidence')}
-          className="cursor-pointer hover:border-rose-300 hover:shadow-gov-hover transition-all p-5 flex items-center justify-between"
+          className="cursor-pointer group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs hover:shadow-md hover:border-rose-300 transition-all duration-200 flex items-center justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-100">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-700 border border-rose-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <Camera className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">{t('nav_evidence_lab', 'AI Forensic Evidence Lab')}</h4>
-              <p className="text-xs text-slate-500">Detects duplicate or manipulated completion photos across projects</p>
+              <h4 className="text-sm font-bold text-slate-900 group-hover:text-rose-700 transition-colors">{t('nav_evidence_lab', 'AI Forensic Evidence Lab')}</h4>
+              <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">Detects duplicate or manipulated completion photos across projects</p>
             </div>
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400" />
-        </Card>
+          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-3" />
+        </div>
       </div>
       </ScrollReveal>
       </div>

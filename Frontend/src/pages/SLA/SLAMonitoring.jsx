@@ -144,52 +144,34 @@ export const SLAMonitoring = () => {
         </Button>
       }
     >
-      {/* SLA Metric Summary (Pentagon with border on 1 & 2 only) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* SLA Metric Summary (BankLY Pattern 1) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
         <PentagonCard
           index={0}
-          bgColor="bg-rose-50/70"
-          borderColor="#E11D48"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-rose-800">Critical / Imminent Breach (&le; 3 Days)</p>
-              <h3 className="text-2xl font-black font-mono text-rose-900 mt-0.5">{criticalCount || 2} Works</h3>
-              <p className="text-[11px] text-rose-700 mt-0.5">Automated Collector Escalation Alert Generated</p>
-            </div>
-            <AlertCircle className="w-8 h-8 text-rose-600/70 shrink-0" />
-          </div>
-        </PentagonCard>
+          title="Critical / Imminent Breach (≤ 3 Days)"
+          value={`${criticalCount || 2} Works`}
+          subtitle="Automated Collector Escalation Alert Generated"
+          icon={AlertCircle}
+          variant="danger"
+        />
 
         <PentagonCard
           index={1}
-          bgColor="bg-amber-50/70"
-          borderColor="#D97706"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">Approaching Due Date (4–10 Days)</p>
-              <h3 className="text-2xl font-black font-mono text-amber-900 mt-0.5">{warningCount || 5} Works</h3>
-              <p className="text-[11px] text-amber-700 mt-0.5">Executive Engineer Reminders Pending</p>
-            </div>
-            <Clock className="w-8 h-8 text-amber-600/70 shrink-0" />
-          </div>
-        </PentagonCard>
+          title="Approaching Due Date (4–10 Days)"
+          value={`${warningCount || 5} Works`}
+          subtitle="Executive Engineer Reminders Pending"
+          icon={Clock}
+          variant="warning"
+        />
 
         <PentagonCard
           index={2}
-          bgColor="bg-emerald-50/70"
-          borderColor="#059669"
-        >
-          <div className="flex items-center justify-between w-full h-full">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Average District Compliance</p>
-              <h3 className="text-2xl font-black font-mono text-emerald-900 mt-0.5">88.4%</h3>
-              <p className="text-[11px] text-emerald-700 mt-0.5">Within 45-day statutory sanction ceiling</p>
-            </div>
-            <CheckCircle2 className="w-8 h-8 text-emerald-600/70 shrink-0" />
-          </div>
-        </PentagonCard>
+          title="Average District Compliance"
+          value="88.4%"
+          subtitle="Within 45-day statutory sanction ceiling"
+          icon={CheckCircle2}
+          variant="success"
+        />
       </div>
 
       {/* SLA Table */}

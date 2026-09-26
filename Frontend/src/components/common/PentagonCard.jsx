@@ -106,87 +106,70 @@ export const PentagonCard = ({
       {...motionProps}
       onClick={onClick}
       className={cn(
-        'relative select-none transition-all duration-200 group filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.09)]',
+        'relative rounded-2xl border shadow-xs hover:shadow-sm transition-all duration-200 select-none overflow-hidden group',
+        bgClass,
         onClick && 'cursor-pointer hover:-translate-y-0.5',
         className
       )}
+      style={{ borderColor: strokeColor ? `${strokeColor}40` : undefined }}
     >
-      {/* Pentagon Clipped Body */}
       <div
-        style={clipPathStyle}
         className={cn(
-          'relative w-full h-full min-h-[98px] pl-3.5 pr-8 sm:pr-9 py-3 sm:py-3.5 flex flex-col justify-between overflow-hidden',
-          bgClass,
+          'relative w-full h-full min-h-[112px] p-5 sm:p-6 flex flex-col justify-between',
           contentClassName
         )}
       >
-        {/* SVG Border ONLY on Edges 1 and 2 (numbered 1 & 2 in Image 3) */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-20"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-        >
-          <polyline
-            points="93,0 100,50 93,100"
-            fill="none"
-            stroke={strokeColor}
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-
         {/* Content */}
         {children ? (
           children
         ) : Icon ? (
           <>
-            <div className="flex items-start justify-between gap-2.5">
-              <div className="space-y-0.5 min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 truncate">
-                  {title}
-                </p>
-                <h3 className={cn('text-lg sm:text-xl xl:text-[17px] 2xl:text-xl font-black font-mono tracking-tight truncate', style.value)}>
-                  {value}
-                </h3>
-              </div>
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">
+                {title}
+              </p>
 
-              <div className={cn('p-1.5 rounded-md border shrink-0', style.iconBg)}>
+              <div className={cn('p-2 rounded-xl border shrink-0', style.iconBg)}>
                 <Icon className="w-4 h-4" />
               </div>
             </div>
 
-            <div className="mt-2.5 pt-2 border-t border-slate-100/90 flex items-center justify-between gap-2 text-xs">
+            <div className="mt-2.5">
+              <h3 className={cn('text-2xl sm:text-3xl font-black font-mono tracking-tight truncate', style.value)}>
+                {value}
+              </h3>
+            </div>
+
+            <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
               {trend && (
-                <div className="flex items-center gap-1 font-medium text-[11px] shrink-0">
+                <div className="flex items-center gap-1 font-semibold text-xs shrink-0">
                   {trendPositive ? (
                     <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
                   ) : (
                     <TrendingDown className="w-3.5 h-3.5 text-rose-600" />
                   )}
-                  <span className={trendPositive ? 'text-emerald-700 font-semibold' : 'text-rose-700 font-semibold'}>
+                  <span className={trendPositive ? 'text-emerald-700' : 'text-rose-700'}>
                     {trend}
                   </span>
                 </div>
               )}
               {subtitle && (
-                <span className="text-slate-500 truncate text-[11px] font-medium ml-auto text-right">
+                <span className="text-slate-500 truncate text-xs font-medium ml-auto text-right">
                   {subtitle}
                 </span>
               )}
             </div>
           </>
         ) : (
-          <div className="flex flex-col justify-between h-full space-y-1">
-            <p className="text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-500 leading-tight">
+          <div className="flex flex-col justify-between h-full space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 leading-tight">
               {title}
             </p>
-            <h3 className={cn('text-base sm:text-lg xl:text-lg 2xl:text-xl font-black font-mono tracking-tight leading-tight whitespace-nowrap', style.value)}>
+            <h3 className={cn('text-2xl sm:text-3xl font-black font-mono tracking-tight leading-tight whitespace-nowrap', style.value)}>
               {value}
             </h3>
             {subtitle && (
-              <p className="text-[10px] sm:text-[10.5px] text-slate-500 font-medium truncate">
+              <p className="text-xs text-slate-500 font-medium truncate pt-1 border-t border-slate-100">
                 {subtitle}
               </p>
             )}

@@ -69,36 +69,36 @@ export const RiskMap = () => {
       breadcrumbs={['Dashboard', 'National Risk Map']}
       actions={
         <div className="flex items-center gap-2">
-          {/* Risk Level Filter */}
-          <div className="flex items-center gap-1 bg-gov-surface border border-gov-border rounded-none p-1 text-xs shadow-sm">
+          {/* Risk Level Filter (BankLY Pattern 2) */}
+          <div className="flex items-center gap-1.5 bg-slate-100/90 border border-slate-200/90 rounded-xl p-1 text-xs shadow-2xs">
             <button
               onClick={() => setRiskFilter('ALL')}
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
-                riskFilter === 'ALL' ? 'bg-gov-navy text-white' : 'text-gov-slate hover:text-gov-slateDark'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                riskFilter === 'ALL' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               All States
             </button>
             <button
               onClick={() => setRiskFilter('CRITICAL')}
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
-                riskFilter === 'CRITICAL' ? 'bg-rose-600 text-white' : 'text-gov-slate hover:text-rose-600'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                riskFilter === 'CRITICAL' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Critical
             </button>
             <button
               onClick={() => setRiskFilter('HIGH')}
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
-                riskFilter === 'HIGH' ? 'bg-orange-600 text-white' : 'text-gov-slate hover:text-orange-600'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                riskFilter === 'HIGH' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-600 hover:text-amber-600'
               }`}
             >
               High
             </button>
             <button
               onClick={() => setRiskFilter('LOW')}
-              className={`px-2.5 py-1 rounded text-xs font-bold transition-colors ${
-                riskFilter === 'LOW' ? 'bg-emerald-600 text-white' : 'text-gov-slate hover:text-emerald-600'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                riskFilter === 'LOW' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-emerald-600'
               }`}
             >
               Normal
@@ -107,29 +107,29 @@ export const RiskMap = () => {
         </div>
       }
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* Main Leaflet Map Container */}
-        <div className="lg:col-span-8 bg-gov-surface border border-gov-border rounded-none overflow-hidden shadow-sm relative flex flex-col min-h-[550px] lg:min-h-[640px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Main Leaflet Map Container (BankLY Pattern 10) */}
+        <div className="lg:col-span-8 bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs relative flex flex-col min-h-[550px] lg:min-h-[640px]">
           {/* Map Legend Overlay */}
-          <div className="absolute top-3 right-3 z-[400] bg-white/95 backdrop-blur-sm border border-gov-border rounded-none p-3 shadow-md space-y-1.5 text-xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-gov-navy block font-mono">
+          <div className="absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-sm border border-slate-200/80 rounded-xl p-4 shadow-sm space-y-2.5 text-xs">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-900 block font-mono">
               Surveillance Threat Index
             </span>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping" />
-              <span className="text-gov-slateDark font-semibold">Critical Threat (&gt;85%)</span>
+              <span className="text-slate-800 font-semibold">Critical Threat (&gt;85%)</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-orange-600" />
-              <span className="text-gov-slate font-medium">High Risk (61-85%)</span>
+              <span className="text-slate-700 font-medium">High Risk (61-85%)</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              <span className="text-gov-slate font-medium">Watchlist (31-60%)</span>
+              <span className="text-slate-700 font-medium">Watchlist (31-60%)</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-              <span className="text-gov-slate font-medium">Normal Baseline (&le;30%)</span>
+              <span className="text-slate-700 font-medium">Normal Baseline (&le;30%)</span>
             </div>
           </div>
 
@@ -217,16 +217,16 @@ export const RiskMap = () => {
         </div>
 
         {/* Right Sidebar: Selected State Inspector */}
-        <div className="lg:col-span-4 space-y-4">
+        <div className="lg:col-span-4 space-y-6">
           {selectedState ? (
             <Card
               title={selectedState.state}
               subtitle="Jurisdictional Risk Profile & Threat Density"
               icon={MapPin}
               riskAccent={selectedState.riskLevel.toLowerCase()}
-              className="space-y-4"
+              className="space-y-5"
             >
-              <div className="flex items-center justify-between p-3 rounded bg-gov-canvas border border-gov-border">
+              <div className="flex items-center justify-between p-3.5 rounded bg-gov-canvas border border-gov-border">
                 <span className="text-xs text-gov-muted font-medium">Jurisdiction Severity:</span>
                 <span
                   className="px-2.5 py-0.5 rounded text-xs font-mono font-bold"
@@ -239,40 +239,40 @@ export const RiskMap = () => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5 text-center">
-                <div className="p-3 bg-gov-canvas border border-gov-border rounded">
-                  <span className="text-xl font-bold font-mono text-gov-slateDark">{selectedState.totalProjects}</span>
-                  <p className="text-[10px] uppercase text-gov-muted font-bold mt-0.5">Tracked Works</p>
+              <div className="grid grid-cols-2 gap-3.5 text-center">
+                <div className="p-3.5 sm:p-4 bg-slate-50/80 border border-slate-200/70 rounded-xl">
+                  <span className="text-xl font-bold font-mono text-slate-900">{selectedState.totalProjects}</span>
+                  <p className="text-[10px] uppercase text-slate-500 font-bold mt-0.5">Tracked Works</p>
                 </div>
-                <div className="p-3 bg-gov-canvas border border-gov-border rounded">
+                <div className="p-3.5 sm:p-4 bg-slate-50/80 border border-slate-200/70 rounded-xl">
                   <span className="text-xl font-bold font-mono text-amber-700">{selectedState.anomalies}</span>
-                  <p className="text-[10px] uppercase text-gov-muted font-bold mt-0.5">Anomalies</p>
+                  <p className="text-[10px] uppercase text-slate-500 font-bold mt-0.5">Anomalies</p>
                 </div>
-                <div className="p-3 bg-gov-canvas border border-gov-border rounded">
+                <div className="p-3.5 sm:p-4 bg-slate-50/80 border border-slate-200/70 rounded-xl">
                   <span className="text-xl font-bold font-mono text-rose-700">{selectedState.highRisk}</span>
-                  <p className="text-[10px] uppercase text-gov-muted font-bold mt-0.5">Critical Flags</p>
+                  <p className="text-[10px] uppercase text-slate-500 font-bold mt-0.5">Critical Flags</p>
                 </div>
-                <div className="p-3 bg-gov-canvas border border-gov-border rounded">
+                <div className="p-3.5 sm:p-4 bg-slate-50/80 border border-slate-200/70 rounded-xl">
                   <span className="text-xl font-bold font-mono text-blue-700">{selectedState.delayed}</span>
-                  <p className="text-[10px] uppercase text-gov-muted font-bold mt-0.5">SLA Breaches</p>
+                  <p className="text-[10px] uppercase text-slate-500 font-bold mt-0.5">SLA Breaches</p>
                 </div>
               </div>
 
               {/* Notable Flagged Case in this state */}
               {selectedState.code === 'UP' && (
-                <div className="p-3 bg-rose-50 border border-rose-200 rounded space-y-2 border-l-4 border-l-rose-600">
+                <div className="p-4 bg-rose-50/70 border border-rose-200 rounded-xl space-y-3 border-l-4 border-l-rose-600">
                   <div className="flex items-center gap-1.5 text-rose-800 text-xs font-bold">
                     <ShieldAlert className="w-4 h-4 text-rose-600" />
                     <span>Active Priority Flag: Varanasi Rural Road</span>
                   </div>
-                  <p className="text-xs text-gov-slate leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     MPLAD-2026-00124 flagged for 96% duplicate image forensic match with Jaunpur completion claim.
                   </p>
                   <Button
                     variant="danger"
                     size="sm"
                     onClick={() => navigate('/project/MPLAD-2026-00124')}
-                    className="w-full text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white"
+                    className="w-full text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl"
                   >
                     Open Investigation Dossier (87% Risk)
                   </Button>
@@ -283,7 +283,7 @@ export const RiskMap = () => {
                 variant="outline"
                 size="md"
                 onClick={() => navigate('/high-risk')}
-                className="w-full text-xs font-bold text-gov-slateDark border-gov-border hover:bg-gov-subtle"
+                className="w-full text-xs font-bold text-slate-700 border-slate-200 hover:bg-slate-50 rounded-xl"
                 icon={ArrowRight}
                 iconPosition="right"
               >
@@ -291,31 +291,31 @@ export const RiskMap = () => {
               </Button>
             </Card>
           ) : (
-            <Card className="text-center p-8">
-              <MapPin className="w-8 h-8 text-gov-muted mx-auto mb-2" />
-              <p className="text-xs text-gov-muted">Click any state cluster on the map to inspect regional data.</p>
+            <Card className="text-center p-10 sm:p-12">
+              <MapPin className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+              <p className="text-xs text-slate-500">Click any state cluster on the map to inspect regional data.</p>
             </Card>
           )}
 
-          {/* Regional Quick Selector */}
-          <div className="p-3.5 bg-gov-surface border border-gov-border rounded-none space-y-2 shadow-sm">
-            <span className="text-xs font-bold text-gov-navy uppercase tracking-wider block font-mono">
+          {/* Regional Quick Selector (BankLY Pattern 5 & 10) */}
+          <div className="p-5 sm:p-6 bg-white border border-slate-200/80 rounded-2xl space-y-3.5 shadow-xs">
+            <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block font-mono">
               Monitored Jurisdictions ({filteredStates.length})
             </span>
-            <div className="space-y-1 max-h-52 overflow-y-auto pr-1">
+            <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
               {filteredStates.map((st) => (
                 <button
                   key={st.code}
                   onClick={() => handleSelectState(st)}
-                  className={`w-full flex items-center justify-between p-2 rounded text-xs transition-colors text-left border ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-colors text-left border cursor-pointer ${
                     selectedState?.code === st.code
-                      ? 'bg-gov-subtle text-gov-navy border-gov-border font-bold'
-                      : 'text-gov-slate border-transparent hover:bg-gov-canvas'
+                      ? 'bg-slate-100 text-slate-900 border-slate-300 font-bold shadow-2xs'
+                      : 'text-slate-600 border-transparent hover:bg-slate-50'
                   }`}
                 >
                   <span className="truncate">{st.state}</span>
                   <span
-                    className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 ml-2"
+                    className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold shrink-0 ml-2"
                     style={{
                       backgroundColor: `${getMarkerColor(st.riskLevel)}15`,
                       color: getMarkerColor(st.riskLevel)

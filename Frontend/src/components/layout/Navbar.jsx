@@ -128,8 +128,20 @@ export const Navbar = () => {
               </Link>
             </div>
 
-          {/* Right Actions: Notifications & User Profile */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Right Actions Cluster: Search -> Notifications -> User Profile */}
+          <div className="flex items-center gap-3 sm:gap-3.5">
+            {/* Global Search Quick Trigger (Pattern 9) */}
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/8 hover:bg-white/15 border border-white/15 text-slate-300 hover:text-white text-xs transition-all cursor-pointer shadow-xs"
+              title="Search intelligence databases (Ctrl+K)"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-300" />
+              <span className="hidden md:inline text-xs font-medium text-slate-300">Search</span>
+              <kbd className="hidden md:inline px-1.5 py-0.5 rounded bg-white/12 text-[10px] font-mono text-slate-300">⌘K</kbd>
+            </button>
+
             {/* Notification Bell */}
             <div className="relative">
               <button
@@ -137,7 +149,7 @@ export const Navbar = () => {
                 data-dropdown-trigger="notif"
                 onClick={() => toggleDropdown('notif')}
                 className={cn(
-                  "relative p-2 rounded-lg transition-colors cursor-pointer",
+                  "relative p-2 rounded-xl transition-colors cursor-pointer",
                   activeGlobalDropdown === 'notif'
                     ? "bg-white/20 text-white border border-white/40"
                     : "text-slate-300 hover:text-white bg-white/5 border border-white/10 hover:border-white/30"
@@ -161,7 +173,7 @@ export const Navbar = () => {
                   data-dropdown-trigger="profile"
                   onClick={() => toggleDropdown('profile')}
                   className={cn(
-                    "flex items-center gap-2 p-1.5 rounded-lg transition-colors cursor-pointer",
+                    "flex items-center gap-2.5 p-1.5 pr-2.5 rounded-xl transition-colors cursor-pointer",
                     activeGlobalDropdown === 'profile'
                       ? "bg-white/20 border border-white/40"
                       : "bg-white/5 border border-white/10 hover:border-white/30"
@@ -170,12 +182,12 @@ export const Navbar = () => {
                   <img
                     src={user?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'}
                     alt={user?.name || 'User'}
-                    className="w-6 h-6 rounded-md object-cover border border-white/20"
+                    className="w-7 h-7 rounded-lg object-cover border border-white/20"
                   />
                   <span className="hidden md:inline-block text-xs font-semibold text-white truncate max-w-[120px]">
                     {user?.name?.split(' ')[0]}
                   </span>
-                  <ChevronDown className={cn("w-3 h-3 text-slate-400 transition-transform", activeGlobalDropdown === 'profile' && "rotate-180")} />
+                  <ChevronDown className={cn("w-3.5 h-3.5 text-slate-300 transition-transform", activeGlobalDropdown === 'profile' && "rotate-180")} />
                 </button>
 
                 <AnimatePresence>
@@ -186,7 +198,7 @@ export const Navbar = () => {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none shadow-xl z-50 py-2 divide-y divide-slate-100 dark:divide-slate-800 origin-top overflow-hidden"
+                      className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 py-2 divide-y divide-slate-100 dark:divide-slate-800 origin-top overflow-hidden"
                     >
                       <motion.div variants={itemVariants} className="px-4 py-2">
                         <p className="text-xs font-bold text-slate-900 dark:text-white">{user?.name}</p>

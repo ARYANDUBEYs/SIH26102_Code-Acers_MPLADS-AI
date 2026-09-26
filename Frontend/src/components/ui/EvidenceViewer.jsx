@@ -82,17 +82,17 @@ export const EvidenceViewer = ({
   const isFraud = similarity >= 75;
 
   return (
-    <div className={cn('flex flex-col bg-white border border-slate-200 rounded-none overflow-hidden shadow-gov-card', className)}>
+    <div className={cn('flex flex-col bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs', className)}>
       {/* Header Banner */}
-      <div className="flex flex-wrap items-center justify-between p-4 bg-slate-50 border-b border-slate-200 gap-3">
-        <div className="flex items-center gap-3">
-          <div className={cn('p-2.5 rounded-lg border shrink-0', isFraud ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200')}>
+      <div className="flex flex-wrap items-center justify-between p-6 sm:p-7 bg-slate-50/80 border-b border-slate-200/80 gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className={cn('p-3 rounded-xl border shrink-0', isFraud ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200')}>
             {isFraud ? <ShieldAlert className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
           </div>
           <div>
             <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <span>Digital Forensics Image Inspection Workbench</span>
-              <span className={cn('px-2.5 py-0.5 rounded text-[11px] font-mono font-bold border uppercase', isFraud ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200')}>
+              <span className={cn('px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase tracking-wider', isFraud ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200')}>
                 {isFraud ? 'CRITICAL DISCREPANCY: RECYCLED COMPLETION PHOTO' : 'VERIFIED: DISTINCT PHYSICAL WORK'}
               </span>
             </h4>
@@ -103,34 +103,34 @@ export const EvidenceViewer = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className={cn('flex items-center gap-2 px-3.5 py-1.5 border rounded-lg', isFraud ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700')}>
+          <div className={cn('flex items-center gap-2 px-4 py-2 border rounded-xl shadow-2xs', isFraud ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700')}>
             <Sparkles className="w-4 h-4" />
-            <span className="text-xs font-medium">Perceptual Match:</span>
+            <span className="text-xs font-semibold">Perceptual Match:</span>
             <span className="text-sm font-black font-mono">{similarity}%</span>
           </div>
         </div>
       </div>
 
       {/* Preset Test Case Selector & Manual Upload Bar */}
-      <div className="p-3.5 bg-slate-50/60 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2">
-          <span className="text-slate-600 font-bold uppercase tracking-wider text-[11px]">Audit Presets:</span>
-          <button type="button" onClick={() => loadPreset('road_dup')} className="px-2.5 py-1 bg-white hover:bg-rose-50 text-rose-700 rounded border border-rose-200 font-semibold shadow-gov-sm transition-colors">
+      <div className="p-4 sm:p-5 bg-slate-50/50 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-4 text-xs">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <span className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">Audit Presets:</span>
+          <button type="button" onClick={() => loadPreset('road_dup')} className="px-3.5 py-1.5 bg-white hover:bg-rose-50 text-rose-700 rounded-xl border border-rose-200 font-semibold shadow-2xs transition-colors cursor-pointer">
             🚨 Road Duplicate (96% Match)
           </button>
-          <button type="button" onClick={() => loadPreset('hall_dup')} className="px-2.5 py-1 bg-white hover:bg-amber-50 text-amber-800 rounded border border-amber-200 font-semibold shadow-gov-sm transition-colors">
+          <button type="button" onClick={() => loadPreset('hall_dup')} className="px-3.5 py-1.5 bg-white hover:bg-amber-50 text-amber-800 rounded-xl border border-amber-200 font-semibold shadow-2xs transition-colors cursor-pointer">
             ⚠️ Hall Recycled (91% Match)
           </button>
-          <button type="button" onClick={() => loadPreset('genuine')} className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-700 rounded border border-emerald-200 font-semibold shadow-gov-sm transition-colors">
+          <button type="button" onClick={() => loadPreset('genuine')} className="px-3.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-200 font-semibold shadow-2xs transition-colors cursor-pointer">
             ✅ Distinct Sites (14% Match)
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button type="button" onClick={() => uploadInputRef.current?.click()} className="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded-lg border border-slate-200 font-semibold shadow-gov-sm flex items-center gap-1.5 transition-colors">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button type="button" onClick={() => uploadInputRef.current?.click()} className="px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 rounded-xl border border-slate-200/80 font-semibold shadow-2xs flex items-center gap-1.5 transition-colors cursor-pointer">
             <Upload className="w-3.5 h-3.5 text-blue-600" /> Upload Live Field Photo
           </button>
-          <button type="button" onClick={handleRunAiComparison} disabled={isMatching} className="px-4 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg shadow-gov-sm flex items-center gap-1.5 transition-colors">
+          <button type="button" onClick={handleRunAiComparison} disabled={isMatching} className="px-4.5 py-2 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl shadow-2xs flex items-center gap-1.5 transition-colors cursor-pointer">
             <RefreshCw className={cn("w-3.5 h-3.5", isMatching && "animate-spin")} /> {isMatching ? 'Processing Gradients...' : 'Run Live OpenCV Scan'}
           </button>
           <input type="file" ref={uploadInputRef} onChange={handleUploadedChange} accept="image/*" className="hidden" />
@@ -139,16 +139,16 @@ export const EvidenceViewer = ({
       </div>
 
       {/* Visual Side-by-Side Comparison Grid */}
-      <div className="p-5 grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white">
+      <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white">
         {/* Left: Uploaded Photo */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-600" />
                 1. Newly Claimed Completion Photo (Varanasi)
               </span>
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1 shadow-xs">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1 shadow-2xs">
                 <Calendar className="w-3 h-3 text-blue-600" /> Submitted: 20 Aug 2026
               </span>
             </div>
@@ -157,7 +157,7 @@ export const EvidenceViewer = ({
             </button>
           </div>
 
-          <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-100 aspect-[4/3] group shadow-sm">
+          <div className="relative rounded-2xl overflow-hidden border border-slate-200/80 bg-slate-100 aspect-[4/3] group shadow-xs">
             <img
               src={uploadedImg}
               alt="Uploaded Project Progress"
@@ -174,21 +174,21 @@ export const EvidenceViewer = ({
             )}
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5 text-xs text-slate-700">
+          <div className="bg-slate-50/80 border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-2.5 text-xs text-slate-700">
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 flex items-center gap-1.5">
+              <span className="text-slate-500 flex items-center gap-1.5 font-medium">
                 <Calendar className="w-3.5 h-3.5 text-blue-600" /> Submitted Date:
               </span>
               <span className="font-mono font-bold text-slate-800">20 Aug 2026</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 flex items-center gap-1.5">
+              <span className="text-slate-500 flex items-center gap-1.5 font-medium">
                 <MapPin className="w-3.5 h-3.5 text-blue-600" /> Geotag Coordinates:
               </span>
               <span className="font-mono font-bold text-slate-800">{uploadedFileMeta.gps || '25.3190° N, 82.9810° E'}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 flex items-center gap-1.5">
+              <span className="text-slate-500 flex items-center gap-1.5 font-medium">
                 <Smartphone className="w-3.5 h-3.5 text-blue-600" /> Inspected Terminal:
               </span>
               <span className="font-mono font-medium text-slate-800">{uploadedFileMeta.device || 'Field Officer Tablet (ID: UP-VAR-42)'}</span>
@@ -197,14 +197,14 @@ export const EvidenceViewer = ({
         </div>
 
         {/* Right: Matched Archive Photo */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-rose-600" />
                 2. Matched Historical Work Record (Jaunpur)
               </span>
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 flex items-center gap-1 shadow-xs">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 flex items-center gap-1 shadow-2xs">
                 <Calendar className="w-3 h-3 text-amber-600" /> Archive Date: 12 Nov 2024
               </span>
             </div>
@@ -213,7 +213,7 @@ export const EvidenceViewer = ({
             </button>
           </div>
 
-          <div className={cn("relative rounded-lg overflow-hidden border-2 aspect-[4/3] group shadow-sm", isFraud ? "border-rose-400 bg-rose-50" : "border-emerald-500/40 bg-emerald-50")}>
+          <div className={cn("relative rounded-2xl overflow-hidden border-2 aspect-[4/3] group shadow-xs", isFraud ? "border-rose-400 bg-rose-50" : "border-emerald-500/40 bg-emerald-50")}>
             <img
               src={matchedImg}
               alt="Matched Prior Project Photo"
@@ -228,26 +228,26 @@ export const EvidenceViewer = ({
                 </div>
               </>
             )}
-            <div className={cn("absolute bottom-3 right-3 text-white font-mono text-xs font-bold px-2.5 py-1 rounded shadow-sm z-10", isFraud ? "bg-rose-600" : "bg-emerald-600")}>
+            <div className={cn("absolute bottom-3 right-3 text-white font-mono text-xs font-bold px-3 py-1.5 rounded-xl shadow-xs z-10", isFraud ? "bg-rose-600" : "bg-emerald-600")}>
               {similarity}% {isFraud ? 'Structural Duplication' : 'Distinct Geometry'}
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5 text-xs text-slate-700">
+          <div className="bg-slate-50/80 border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-2.5 text-xs text-slate-700">
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 flex items-center gap-1.5">
+              <span className="text-slate-500 flex items-center gap-1.5 font-medium">
                 <Calendar className="w-3.5 h-3.5 text-amber-600" /> Archive Date:
               </span>
               <span className="font-mono font-bold text-slate-800">12 Nov 2024</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 flex items-center gap-1.5">
+              <span className="text-slate-500 flex items-center gap-1.5 font-medium">
                 <FileSearch className="w-3.5 h-3.5 text-indigo-600" /> Historical Project Record:
               </span>
               <span className="font-semibold text-slate-800">Gram Panchayat Road, Jaunpur (MPLAD-2024-0891)</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500 flex items-center gap-1.5">
+              <span className="text-slate-500 flex items-center gap-1.5 font-medium">
                 <ShieldAlert className="w-3.5 h-3.5 text-rose-600" /> Forensic Verification:
               </span>
               <span className={cn("font-bold", isFraud ? "text-rose-700" : "text-emerald-700")}>

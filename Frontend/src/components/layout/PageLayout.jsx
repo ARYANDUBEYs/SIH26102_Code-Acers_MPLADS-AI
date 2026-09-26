@@ -11,10 +11,10 @@ export const PageLayout = ({
   breadcrumbs = [],
 }) => {
   return (
-    <div className={cn('space-y-4 pb-8', className)}>
+    <div className={cn('space-y-8 pb-12', className)}>
       {/* Page Header */}
       {(title || subtitle || actions || breadcrumbs.length > 0) && (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gov-border pb-4 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b border-gov-border pb-5 mb-6">
           <div className="space-y-1">
             {breadcrumbs.length > 0 && (
               <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium uppercase tracking-wider">

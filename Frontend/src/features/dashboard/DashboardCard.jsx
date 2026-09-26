@@ -63,66 +63,50 @@ export const DashboardCard = ({
     <div
       onClick={onClick}
       className={cn(
-        'relative select-none transition-all duration-200 group filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.05)] hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.09)]',
+        'relative bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-sm transition-all duration-200 select-none p-5 sm:p-6 flex flex-col justify-between overflow-hidden group',
         onClick && 'cursor-pointer hover:-translate-y-0.5',
         className
       )}
     >
-      {/* Pentagon Clipped Body */}
-      <div
-        style={clipPathStyle}
-        className={cn(
-          'relative w-full h-full min-h-[96px] pl-4 pr-10 py-3.5 flex flex-col justify-between overflow-hidden',
-          style.bg
-        )}
-      >
-        {/* SVG Border ONLY on Edges 1 and 2 */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-20"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-        >
-          <polyline
-            points="93,0 100,50 93,100"
-            fill="none"
-            stroke={style.stroke}
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
+      {/* Top Header: Label on Left, Icon/Badge pinned on Top-Right */}
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">
+          {title}
+        </p>
 
-        <div className="flex items-start justify-between gap-2.5">
-          <div className="space-y-0.5 min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 truncate">{title}</p>
-            <h3 className={cn('text-xl sm:text-2xl font-black font-mono tracking-tight truncate', style.value)}>
-              {value}
-            </h3>
+        {Icon && (
+          <div className={cn('p-2 rounded-xl border shrink-0', style.icon)}>
+            <Icon className="w-4 h-4" />
           </div>
+        )}
+      </div>
 
-          {Icon && (
-            <div className={cn('p-1.5 rounded-md border shrink-0', style.icon)}>
-              <Icon className="w-4 h-4" />
-            </div>
-          )}
-        </div>
+      {/* Main Anchor: Large Bold Number directly below label */}
+      <div className="mt-2.5">
+        <h3 className={cn('text-2xl sm:text-3xl font-black font-mono tracking-tight truncate', style.value)}>
+          {value}
+        </h3>
+      </div>
 
-        <div className="mt-2.5 pt-2 border-t border-slate-100/90 flex items-center justify-between gap-2 text-xs">
-          {trend && (
-            <div className="flex items-center gap-1 font-medium text-[11px] shrink-0">
-              {trendPositive ? (
-                <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
-              ) : (
-                <TrendingDown className="w-3.5 h-3.5 text-rose-600" />
-              )}
-              <span className={trendPositive ? 'text-emerald-700 font-semibold' : 'text-rose-700 font-semibold'}>
-                {trend}
-              </span>
-            </div>
-          )}
-          {subtitle && <span className="text-slate-500 truncate text-[11px] font-medium ml-auto text-right">{subtitle}</span>}
-        </div>
+      {/* Bottom Footer: Delta/Trend Indicator + Comparison Caption */}
+      <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+        {trend && (
+          <div className="flex items-center gap-1 font-semibold text-xs shrink-0">
+            {trendPositive ? (
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+            ) : (
+              <TrendingDown className="w-3.5 h-3.5 text-rose-600" />
+            )}
+            <span className={trendPositive ? 'text-emerald-700' : 'text-rose-700'}>
+              {trend}
+            </span>
+          </div>
+        )}
+        {subtitle && (
+          <span className="text-slate-500 truncate text-xs font-medium ml-auto text-right">
+            {subtitle}
+          </span>
+        )}
       </div>
     </div>
   );

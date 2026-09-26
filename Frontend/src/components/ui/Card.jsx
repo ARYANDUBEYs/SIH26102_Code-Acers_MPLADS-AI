@@ -24,17 +24,17 @@ export const Card = ({
   return (
     <div
       className={cn(
-        'bg-gov-surface border border-gov-border rounded-none shadow-sm transition-all duration-200 text-gov-slate',
+        'bg-gov-surface border border-gov-border rounded-2xl shadow-xs transition-all duration-200 text-gov-slate overflow-hidden',
         riskAccent && riskBorderMap[riskAccent],
         className
       )}
       {...props}
     >
       {(title || subtitle || action || Icon) && (
-        <div className={cn('flex items-center justify-between px-4 py-3 border-b border-gov-border bg-gov-canvas/50 rounded-t-none', headerClassName)}>
-          <div className="flex items-center gap-2.5">
+        <div className={cn('flex items-center justify-between px-6 py-4.5 border-b border-gov-border bg-gov-canvas/30 rounded-t-2xl', headerClassName)}>
+          <div className="flex items-center gap-3">
             {Icon && (
-              <div className="p-1.5 rounded bg-gov-subtle text-gov-navy border border-gov-border shrink-0">
+              <div className="p-2 rounded-xl bg-gov-subtle text-gov-navy border border-gov-border shrink-0">
                 <Icon className="w-4 h-4" />
               </div>
             )}
@@ -46,7 +46,7 @@ export const Card = ({
           {action && <div className="shrink-0">{action}</div>}
         </div>
       )}
-      <div className={cn('p-4', bodyClassName)}>{children}</div>
+      <div className={cn('p-6 sm:p-7', bodyClassName)}>{children}</div>
     </div>
   );
 };

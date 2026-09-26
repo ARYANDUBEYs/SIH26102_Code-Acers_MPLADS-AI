@@ -123,16 +123,16 @@ export const AIPreScreening = () => {
         </div>
       }
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left: Project Dossier */}
-        <div className="lg:col-span-5 space-y-4">
+        <div className="lg:col-span-5 space-y-6">
           <Card
             title={activeProject.name}
             subtitle={`Work ID: ${activeProject.id} • ${activeProject.location}`}
             icon={Building}
             className="bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden"
-            headerClassName="bg-slate-50/70 border-b border-slate-200 px-5 py-3.5"
-            bodyClassName="p-5 space-y-4"
+            headerClassName="bg-slate-50/70 border-b border-slate-200 px-6 py-4.5"
+            bodyClassName="p-6 sm:p-7 space-y-6"
             action={
               <span className={`px-2.5 py-1 rounded-full text-[11px] font-mono font-bold flex items-center gap-1.5 border ${
                 activeProject.riskLevel === 'HIGH'
@@ -266,25 +266,25 @@ export const AIPreScreening = () => {
         </div>
 
         {/* Right: 5-Point AI Integrity Checks Checklist */}
-        <div className="lg:col-span-7 space-y-4">
+        <div className="lg:col-span-7 space-y-6">
           <Card
             title="Explainable 5-Point AI Integrity Evaluation"
             subtitle="Automated checks across photo evidence, cost benchmarks, vendor history, duplicate assets, and GPS bounds"
             icon={Sparkles}
             className="bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden"
-            headerClassName="bg-slate-50/70 border-b border-slate-200 px-5 py-3.5"
-            bodyClassName="p-5 space-y-3"
+            headerClassName="bg-slate-50/70 border-b border-slate-200 px-6 py-4.5"
+            bodyClassName="p-6 sm:p-7 space-y-4"
             action={
               <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200/80">
                 {activeProject.checks.filter((c) => c.status === 'pass').length} of {activeProject.checks.length} Clear
               </span>
             }
           >
-            <div className="space-y-3">
+            <div className="space-y-4">
               {activeProject.checks.map((chk, i) => (
                 <div
                   key={i}
-                  className={`p-3.5 rounded-xl border flex items-start gap-3.5 transition-all ${
+                  className={`p-4 sm:p-4.5 rounded-xl border flex items-start gap-4 transition-all ${
                     chk.status === 'pass'
                       ? 'bg-white border-slate-200/80 shadow-2xs hover:border-slate-300'
                       : 'bg-rose-50/30 border-rose-200/80 shadow-2xs hover:border-rose-300'

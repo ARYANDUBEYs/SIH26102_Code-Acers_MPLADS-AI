@@ -66,7 +66,7 @@ export const DashboardLayout = () => {
       <div className="flex-1 flex w-full max-w-[1920px] mx-auto">
         <Sidebar />
 
-        <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-6 pb-16 transition-all duration-300 ease-in-out">
+        <main className="flex-1 min-w-0 px-6 sm:px-8 lg:px-12 py-8 pb-20 transition-all duration-300 ease-in-out">
           <Outlet />
         </main>
       </div>
